@@ -1,14 +1,14 @@
 ---
 id: NAVIGATION-DOCUMENT-MAP-001
 type: controlled_document_map
-status: draft_for_agreement
-version: 0.2
+status: working_baseline
+version: 0.3
 parent: NAVIGATION
 ---
 
 # BlueSky PRO — Navigation Document Map
 
-## 1. Purpose
+## 1. Назначение
 
 Единая карта существующей документации блока Navigation. Не заменяет первичные документы и не создаёт второй authority требований.
 
@@ -48,16 +48,17 @@ parent: NAVIGATION
 | NAV-DOC-004 | `NAVIGATION_MATHEMATICAL_SPECIFICATION_001.md` | mathematical basis |
 | NAV-DOC-005 | `Navigation_Knowledge_Map.md` | knowledge relationships |
 | NAV-DOC-006 | `NAVIGATION_BASELINE_RECONCILIATION.md` | consolidation/reconciliation |
+| NAV-DOC-007 | `NAVIGATION_DOCUMENT_MAP.md` | controlled document map |
 
 ### Module specifications
 
-| ID | Module | Record |
-|---|---|---|
-| NAV-MOD-001 | Position | `NAVIGATION_POSITION_MODULE_SPECIFICATION.md` |
-| NAV-MOD-002 | Velocity / Speed | `NAVIGATION_VELOCITY_SPEED_MODULE_SPECIFICATION.md` |
-| NAV-MOD-003 | Heading | `NAVIGATION_HEADING_MODULE_SPECIFICATION.md` |
-| NAV-MOD-004 | Track / Course | `NAVIGATION_TRACK_COURSE_MODULE_SPECIFICATION.md` |
-| NAV-MOD-005 | Wind | `NAVIGATION_WIND_MODULE_SPECIFICATION.md` |
+| ID | Module | Record | State |
+|---|---|---|---|
+| NAV-MOD-001 | Position | `NAVIGATION_POSITION_MODULE_SPECIFICATION.md` | RECONCILIATION |
+| NAV-MOD-002 | Velocity / Speed | `NAVIGATION_VELOCITY_SPEED_MODULE_SPECIFICATION.md` | RECONCILIATION |
+| NAV-MOD-003 | Heading | `NAVIGATION_HEADING_MODULE_SPECIFICATION.md` | RECONCILIATION |
+| NAV-MOD-004 | Track / Course | `NAVIGATION_TRACK_COURSE_MODULE_SPECIFICATION.md` | RECONCILIATION |
+| NAV-MOD-005 | Wind | `NAVIGATION_WIND_MODULE_SPECIFICATION.md` | RECONCILIATION |
 
 Module specifications are derived design records. They must reference the existing authoritative records and must not silently create new requirements or architecture.
 
@@ -70,6 +71,10 @@ Authoritative system requirement record:
 System requirements specification:
 
 `01_REQUIREMENTS/SYSTEM/SYSTEM_REQUIREMENTS_SPECIFICATION.md`
+
+Safety requirements baseline:
+
+`01_REQUIREMENTS/SAFETY/SAFETY_REQUIREMENTS_BASELINE.md`
 
 Navigation candidate requirement family `NAV-REQ-*` is provisional until reconciliation against existing system and safety requirements is completed.
 
@@ -86,13 +91,15 @@ Navigation statement
 
 Regulatory authority remains outside the module specification:
 
-```text
-01_REQUIREMENTS/REGULATORY/REGULATORY_SOURCE_REGISTER.md
-→ REGULATORY_CLAUSE_MAPPING_001.md
-→ applicable 06_CERTIFICATION/ records
+`01_REQUIREMENTS/REGULATORY/REGULATORY_SOURCE_REGISTER.md`
+
+→ `01_REQUIREMENTS/REGULATORY/REGULATORY_CLAUSE_MAPPING_001.md`
+
+→ applicable `06_CERTIFICATION/` records
+
 → requirement / interface constraint
+
 → Navigation allocation
-```
 
 External requirements are not silently converted into internal Navigation functions.
 
@@ -151,8 +158,8 @@ Module documents must reuse these semantics rather than define competing ones.
 ```text
 Architecture → existing basis
 Core Navigation records → existing
-Module specifications → created as derived records
-Requirements linkage → reconciliation required
+Module specifications → derived records
+Requirements linkage → reconciliation in progress
 Regulatory applicability → clause-level reconciliation required
 HMI linkage → allocation required
 Verification linkage → matrix/model reuse required
@@ -194,4 +201,27 @@ UPDATE / LINK EXISTING RECORD
 ONLY IF ABSENT → CREATE NEW RECORD
 ```
 
-**Status: DRAFT_FOR_AGREEMENT**
+## 13. Document integrity rule
+
+Every new or materially revised document shall be integrated into the project structure before it is considered a project record:
+
+```text
+existence check
+→ duplicate/overlap check
+→ correct folder
+→ unique ID / document number
+→ document type
+→ status
+→ version / baseline information
+→ parent object
+→ source / authority
+→ internal and external references
+→ requirement / architecture allocation
+→ HMI / interface / verification links where applicable
+→ Master Document Index update
+→ integrity check
+```
+
+A document without the required attributes and links is not considered integrated documentation.
+
+**Status: WORKING_BASELINE**
