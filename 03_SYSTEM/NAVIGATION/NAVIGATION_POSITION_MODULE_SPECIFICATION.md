@@ -2,349 +2,156 @@
 id: NAVIGATION-POSITION-MODULE-001
 type: navigation_module_specification
 status: draft_for_agreement
-authority: derived_from_navigation_state_model_rules_algorithm_icd
+version: 0.2
+parent: NAVIGATION
+authority: NAVIGATION_STATE_MODEL; NAVIGATION_RULES; NAVIGATION_ALGORITHM; NAVIGATION_MATHEMATICAL_SPECIFICATION_001
 ---
 
 # BlueSky PRO — Navigation / Position Module Specification
 
-## 1. Purpose
+## 1. Назначение
+Определить модуль `Position` блока `Navigation` как источник и обработчик пространственного положения БВС в составе Navigation State.
 
-Определить первый детализируемый модуль блока Navigation — `Position` — без введения неподтверждённых требований и без изменения общей архитектурной границы.
+Модуль не является исполнительным контуром управления, Safety Gate или Authorization layer.
 
-## 2. Responsibility
-
-Модуль Position отвечает за представление текущего положения БВС в навигационном состоянии и передачу его потребителям с сохранением качества и происхождения данных.
-
-Модуль не определяет:
-
-- выполнение команд БВС;
-- разрешение на выполнение миссии;
-- Safety Gate;
-- Authorization;
-- самостоятельное изменение маршрута;
-- самостоятельное управление БВС.
-
-Это соответствует установленной границе `Navigation State ≠ Execution Authority`.
-
-## 3. Position data model
-
-Минимальная логическая запись:
-
+## 2. Архитектурная граница
 ```text
-Position
-├── value
-├── horizontalReference
-├── verticalReference
-├── units
-├── timestamp
-├── source
-├── freshness
-├── validity
-└── confidence
+Position sources
+      ↓
+ POSITION MODULE
+      ↓
+ Navigation State
+      ↓
+ Planning / Guidance / Safety / HMI
 ```
 
-Точный состав полей API и внутреннего storage является предметом Software Design.
+## 3. Семантика Position
+Положение должно однозначно описываться координатами, системой отсчёта, качеством, источником, временной меткой, свежестью, валидностью и confidence.
 
-## 4. Source semantics
+Сохраняется различие `PLANNED / SIMULATED / ACTUAL`.
 
-Position может поступать из одного или нескольких навигационных источников.
+## 4. Источники и provenance
+Потенциальные источники определяются существующей архитектурой и конфигурацией конкретного БВС. При нескольких источниках применяется согласованная source/fusion policy; конкретные приоритеты не фиксируются без основания.
 
-Для каждого существенного значения необходимо сохранять:
+Для существенного значения сохраняются `source`, `timestamp`, `freshness`, `validity`, `confidence`.
 
+## 5. Quality states
+Используется общая модель Navigation State: `VALID / DEGRADED / STALE / INVALID / UNAVAILABLE / CONFLICTING`.
+
+Качество является самостоятельным атрибутом данных.
+
+## 6. Входы и выходы
+Входы: position source(s), time, source metadata, altitude/reference information, mission/navigation state.
+
+Выходы: `Position`, `Position Quality`, `Position Provenance`, `Timestamp`, `Freshness`, `Confidence` и явно маркированные derived products.
+
+## 7. Связи
+`Position` используется совместно с Velocity/Speed, Heading, Track/Course и Wind через общий Navigation State.
+
+Изменение положения во времени может давать derived Ground Velocity:
 ```text
-source
- timestamp
- freshness
- validity
- confidence
+Position(t1) + Position(t2) + Δt → derived Ground Velocity
 ```
 
-Источник не считается достоверным только из-за наличия значения.
+Конкретная математика находится в `NAVIGATION_MATHEMATICAL_SPECIFICATION_001.md`.
 
-При нескольких источниках результат должен сохранять возможность восстановить происхождение исходных значений и итогового результата.
+Route Planning использует Position для текущего положения БВС, контроля маршрута, waypoint proximity, route deviation и связанных расчётов.
 
-Алгоритм выбора приоритетного источника и fusion пока не фиксируется.
+Dynamic Return использует актуальное Position с quality/freshness/provenance. Модуль предоставляет данные и не принимает решение о возврате.
 
-## 5. Reference frame / coordinate model
+## 8. Multi-UAV
+Для каждого БВС сохраняется индивидуальное состояние `UAV[i].Position`, включая quality и provenance. Fleet aggregation не должна уничтожать индивидуальные сведения.
 
-До отдельного согласования не фиксируется конкретный CRS.
-
-Обязательными атрибутами остаются:
-
+## 9. Offline и отказные состояния
+При потере внешней связи используются доступные локальные/onboard источники. Состояния явно деградируют:
 ```text
-horizontal CRS = TBD
-vertical reference / altitude datum = TBD
-axis convention = TBD
-units = TBD
-precision = TBD
-valid range = TBD
+NO SOURCE → UNAVAILABLE
+STALE DATA → STALE
+INVALID DATA → INVALID
+DEGRADED SOURCE → DEGRADED
 ```
 
-Запрещается молча преобразовывать или смешивать координаты разных reference frames.
+Конфликт источников обрабатывается установленной fusion policy. Численные пороги без подтверждённого основания не вводятся.
 
-## 6. Position quality state
-
-Модуль должен поддерживать состояния:
-
+## 10. Safety boundary
 ```text
-VALID
-DEGRADED
-STALE
-INVALID
-UNAVAILABLE
-CONFLICTING
+Position → Navigation State → Dependent calculations → Validation → Safety / Decision layers
 ```
 
-Переходы и численные thresholds не определяются до отдельного согласования requirements/design.
+Position Module самостоятельно не изменяет маршрут, не разрешает полёт, не выдаёт authorization и не управляет исполнительными механизмами.
 
-Критически важное правило:
+## 11. HMI
+Эксплуатационный HMI отображает только необходимые оператору пространственные данные и эксплуатационное качество. Конкретный layout и визуальная кодировка определяются общей HMI-проработкой Navigation.
 
+## 12. Verification
+Проверки должны охватывать nominal position, updates, source loss, stale/invalid/degraded states, source conflict, time consistency, derived velocity, route deviation, waypoint proximity, Dynamic Return input, offline operation и Multi-UAV state.
+
+Конкретные Test ID назначаются через существующий Verification Register.
+
+## 13. Regulatory applicability
+Применимость устанавливается только через:
 ```text
-INVALID / STALE / UNAVAILABLE
-        ≠
-VALID
+Official source / clause → regulated object → BlueSky role → system boundary → applicability → requirement → module allocation → verification
 ```
 
-Система должна передавать downstream consumers состояние качества, а не только координаты.
+Тематическое совпадение само по себе не создаёт требования Position.
 
-## 7. Planned / Actual / Simulated
-
-Position должен быть различим по контексту:
-
+## 14. Traceability
 ```text
-PLANNED
-SIMULATED
-ACTUAL
+NAVIGATION_STATE_MODEL
+        ↓
+NAVIGATION_RULES
+        ↓
+NAVIGATION_ALGORITHM
+        ↓
+NAVIGATION_MATHEMATICAL_SPECIFICATION_001
+        ↓
+POSITION MODULE
+        ↓
+NAVIGATION HMI / INTERFACES
+        ↓
+NAVIGATION_VERIFICATION_MODEL
+        ↓
+NAVIGATION_TRACEABILITY_MATRIX_001
 ```
 
-`SIMULATED` и `PLANNED` не становятся `ACTUAL` без фактического подтверждения.
+Связь с системными и нормативными требованиями определяется записями Master Requirements Register и allocation records; неподтверждённые ссылки не создаются.
 
-Actual Position должна иметь timestamp и provenance.
-
-## 8. Route / Mission context
-
-При использовании Position для расчёта отклонения или навигационного контекста должны быть доступны идентификаторы контекста:
-
+## 15. Open items
 ```text
-Mission ID
-Route ID
-Route Version
-Active WP
-WP Version
-Navigation State Timestamp
+NAV-POS-OPEN-001  authoritative position source set
+NAV-POS-OPEN-002  source priority / fusion policy
+NAV-POS-OPEN-003  reference-frame details
+NAV-POS-OPEN-004  altitude semantics
+NAV-POS-OPEN-005  precision / accuracy thresholds
+NAV-POS-OPEN-006  freshness / latency thresholds
+NAV-POS-OPEN-007  confidence model
+NAV-POS-OPEN-008  exact verification Test IDs
+NAV-POS-OPEN-009  HMI thresholds / presentation
 ```
 
-Это необходимо для исключения сравнения Actual Position с устаревшей версией маршрута.
+Открытый вопрос не считается GAP автоматически.
 
-## 9. Data flow
-
-```text
-External / UAV Navigation Source
-             ↓
-       Position Input
-             ↓
-        Source Check
-             ↓
-      Quality Assessment
-             ↓
-       Navigation State
-             ↓
-   ┌─────────┼──────────┐
-   ↓         ↓          ↓
- Route     Mission    Safety Validation
- Planning    /HMI          / other consumers
-```
-
-Position Module не является конечным authority layer.
-
-## 10. Interfaces
-
-Предварительные интерфейсы по действующему ICD:
-
-```text
-IF-NAV-xxx  Navigation internal/external interface
-IF-HW-001   Aviation system ↔ UAV / onboard equipment
-IF-NAV-001  Aviation system ↔ Navigation sources
-```
-
-Точные Interface IDs, transport, protocol, schema, timing и failure behaviour должны быть назначены в ICD после согласования design.
-
-## 11. Downstream consumers
-
-Position используется как часть Navigation State для:
-
-```text
-Route Planning
-Dynamic Return
-Collision Avoidance
-Mission Calculation
-Mission Execution context
-Multi-UAV Coordination
-Map / Dashboard
-Safety Validation
-```
-
-Каждый consumer получает семантически определённые данные, включая quality/provenance, когда они существенны.
-
-## 12. Failure behaviour
-
-### Missing
-
-Если Position отсутствует:
-
-```text
-Position unavailable
-→ quality = UNAVAILABLE
-→ impact assessment
-```
-
-### Stale
-
-Если Position перестала удовлетворять установленному freshness criterion:
-
-```text
-quality = STALE
-→ impact assessment
-```
-
-### Invalid
-
-При признании значения недействительным:
-
-```text
-quality = INVALID
-→ value не рассматривается как VALID
-→ defined downstream response
-```
-
-### Conflicting
-
-При наличии противоречащих источников:
-
-```text
-sources preserved
-→ conflict detected
-→ source/fusion policy
-→ impact assessment
-```
-
-Конкретная policy остаётся TBD.
-
-## 13. Safety boundary
-
-Position failure не должен скрываться от Validation/Safety цепочки:
-
-```text
-Position
- ↓
-Validation
- ↓
-Navigation State Quality
- ↓
-Readiness / Safety assessment
- ↓
-Safety Gate
-```
-
-Модуль не принимает самостоятельно safety decision, если такая authority ему не выделена.
-
-## 14. HMI allocation
-
-Для оператора Position должна представляться как часть общего навигационного состояния, а не как необработанный поток внутренних технических полей.
-
-Минимально пользователь должен иметь возможность понять:
-
-- текущее положение БВС;
-- актуальность положения;
-- наличие деградации навигации, если она влияет на эксплуатационное решение;
-- связь положения с активной миссией/маршрутом.
-
-Точный layout, размеры, typography, цветовая семантика и interaction model определяются на HMI-проработке соответствующего блока и не должны противоречить утверждённой общей HMI-концепции.
-
-## 15. Verification mapping
-
-Связанные существующие проверки:
-
-```text
-NAV-TV-006  Cross-track geometry
-NAV-TV-007  Along-track geometry
-NAV-TV-010  Coordinate reference
-NAV-V06     Route deviation
-NAV-V08     Stale navigation
-NAV-V09     Invalid navigation
-NAV-V10     Missing critical input
-NAV-V11     Conflicting sources
-NAV-V12     Degraded source
-NAV-V16     Material runtime change
-NAV-V20     Planned / Simulated / Actual
-```
-
-Часть проверок зависит от ещё не утверждённых CRS, datum, precision и quality thresholds.
-
-## 16. Regulatory applicability
-
-На текущем уровне анализа не переносим в Position требования к внешним объектам или организациям.
-
-Приказ Минтранса №142 относится к функционированию линий C2 и контролю БАС; его применимость к конкретному Position interface определяется через System Boundary и роль соответствующего интерфейса. Он не является основанием автоматически превращать весь Navigation Position model в отдельный нормативный набор требований.
-
-Regulatory applicability для каждого конкретного требования должна пройти цепочку:
-
-```text
-Official clause
-→ regulated object
-→ BlueSky role
-→ system boundary
-→ applicability
-→ requirement/interface constraint
-```
-
-## 17. Open items
-
-```text
-NAV-POS-OPEN-001  Horizontal CRS
-NAV-POS-OPEN-002  Vertical reference / datum
-NAV-POS-OPEN-003  Units
-NAV-POS-OPEN-004  Precision / storage precision
-NAV-POS-OPEN-005  Valid range
-NAV-POS-OPEN-006  Freshness thresholds
-NAV-POS-OPEN-007  Degraded thresholds
-NAV-POS-OPEN-008  Source priority
-NAV-POS-OPEN-009  Multi-source fusion
-NAV-POS-OPEN-010  Confidence calculation
-NAV-POS-OPEN-011  Exact interface schema
-NAV-POS-OPEN-012  Timing / latency
-```
-
-Открытый вопрос не считается GAP автоматически. Сначала устанавливается его основание и необходимость.
-
-## 18. Completion gate
-
-Position Module может считаться `DESIGN-READY` после закрытия:
-
+## 16. Completion gate
 ```text
 [ ] responsibility
-[ ] data semantics
-[ ] source/provenance
-[ ] quality model
+[ ] position semantics
 [ ] coordinate/reference model
-[ ] interfaces
+[ ] source model
+[ ] provenance
+[ ] quality model
+[ ] temporal consistency
+[ ] Velocity relationship
+[ ] Heading / Track relationship
+[ ] Wind relationship
+[ ] Planning interface
+[ ] Dynamic Return interface
 [ ] failure behaviour
 [ ] safety allocation
 [ ] HMI allocation
-[ ] verification cases
+[ ] verification mapping
+[ ] regulatory applicability
 [ ] requirement traceability
 ```
 
-Фактическая implementation начинается после прохождения соответствующего design gate.
-
-## 19. Status
-
-**DRAFT_FOR_AGREEMENT**
-
-Новых SYS-REQ данным документом не создаётся.
-
-Следующий модуль Navigation:
-
-```text
-VELOCITY / SPEED
-```
+До закрытия применимых пунктов статус остаётся `DRAFT_FOR_AGREEMENT`.
