@@ -2,7 +2,7 @@
 id: NAVIGATION-DOCUMENT-MAP-001
 type: controlled_document_map
 status: working_baseline
-version: 0.3
+version: 0.4
 parent: NAVIGATION
 ---
 
@@ -76,11 +76,16 @@ Safety requirements baseline:
 
 `01_REQUIREMENTS/SAFETY/SAFETY_REQUIREMENTS_BASELINE.md`
 
+Navigation allocation record:
+
+`05_VERIFICATION/NAVIGATION/NAVIGATION_REQUIREMENT_ALLOCATION_001.md`
+
 Navigation candidate requirement family `NAV-REQ-*` is provisional until reconciliation against existing system and safety requirements is completed.
 
 ```text
 Navigation statement
 → existing requirement search
+→ exact wording / basis check
 → regulatory applicability
 → safety allocation
 → architecture allocation
@@ -119,7 +124,15 @@ No nonexistent generic `SYSTEM_ARCHITECTURE_BASELINE.md` or `INTERFACE_CONTROL_D
 
 ## 7. Verification linkage
 
+Verification identity is controlled through:
+
+`05_VERIFICATION/VERIFICATION_REGISTER.md`
+
+Navigation-specific verification definition and allocation:
+
 ```text
+05_VERIFICATION/VERIFICATION_REGISTER.md
+                    ↓
 05_VERIFICATION/NAVIGATION/NAVIGATION_TRACEABILITY_MATRIX_001.md
                     ↓
 05_VERIFICATION/NAVIGATION/NAVIGATION_VERIFICATION_MODEL.md
@@ -153,16 +166,17 @@ Navigation State ≠ Execution Authority
 
 Module documents must reuse these semantics rather than define competing ones.
 
-## 10. Completion state
+## 10. Current integration state
 
 ```text
 Architecture → existing basis
 Core Navigation records → existing
 Module specifications → derived records
-Requirements linkage → reconciliation in progress
+Requirements allocation → controlled working record
 Regulatory applicability → clause-level reconciliation required
 HMI linkage → allocation required
-Verification linkage → matrix/model reuse required
+Verification identity → controlled register
+Verification execution → not implied
 Evidence → only after execution
 ```
 
