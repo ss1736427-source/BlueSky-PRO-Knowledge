@@ -1,0 +1,221 @@
+{
+  "main": {
+    "id": "881176f34f6d8c6b",
+    "type": "split",
+    "children": [
+      {
+        "id": "faff853c6015a302",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "058fcba7e26ecc4b",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Граф"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "9693aff4e98aefb2",
+    "type": "split",
+    "children": [
+      {
+        "id": "545e7fa8da7d4070",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "0edc1e8c7f140214",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Файловый менеджер"
+            }
+          },
+          {
+            "id": "7d15fd7ca6664610",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Поиск"
+            }
+          },
+          {
+            "id": "1e285b159e119a28",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-bookmark",
+              "title": "Закладки"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 408.2869682312012
+  },
+  "right": {
+    "id": "92649558e411b8a1",
+    "type": "split",
+    "children": [
+      {
+        "id": "6a8a12701eeb8f7a",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "c6e425761b90146e",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "01_REQUIREMENTS/TRACEABILITY/REQUIREMENTS_CONSOLIDATION_REPORT.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Обратные ссылки"
+            }
+          },
+          {
+            "id": "5e3d80c5b5c3610f",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "01_REQUIREMENTS/TRACEABILITY/REQUIREMENTS_CONSOLIDATION_REPORT.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Исходящие ссылки"
+            }
+          },
+          {
+            "id": "26446a4518ebac4b",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Теги"
+            }
+          },
+          {
+            "id": "ded0f0a43957185a",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "Все свойства"
+            }
+          },
+          {
+            "id": "0fbac89010389c02",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "01_REQUIREMENTS/TRACEABILITY/REQUIREMENTS_CONSOLIDATION_REPORT.md",
+                "followCursor": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Структура"
+            }
+          }
+        ],
+        "currentTab": 2
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Меню быстрого перехода": false,
+      "graph:Граф": false,
+      "canvas:Создать новый холст": false,
+      "daily-notes:Сегодняшняя заметка": false,
+      "templates:Вставить шаблон": false,
+      "command-palette:Открыть палитру команд": false,
+      "bases:Создать новую базу": false
+    }
+  },
+  "active": "058fcba7e26ecc4b",
+  "lastOpenFiles": [
+    "TRACEABILITY/REPOSITORY_REQUIREMENTS_AUDIT_REPORT_001.md",
+    "TRACEABILITY",
+    "05_VERIFICATION/VERIFICATION_REGISTER.md",
+    "05_VERIFICATION/NAVIGATION/NAVIGATION_REQUIREMENT_ALLOCATION_001.md",
+    "03_SYSTEM/NAVIGATION/NAVIGATION_DOCUMENT_MAP.md",
+    "03_SYSTEM/NAVIGATION/NAVIGATION_BASELINE_RECONCILIATION.md",
+    "02_ARCHITECTURE/SYSTEM/AVIATION_SYSTEM_DEFINITION.md",
+    "02_ARCHITECTURE/SYSTEM",
+    "01_REQUIREMENTS/TRACEABILITY/TRACEABILITY_CLOSURE_STATUS_004.md",
+    "01_REQUIREMENTS/TRACEABILITY/TRACEABILITY_CLOSURE_PASS_004.md",
+    "01_REQUIREMENTS/TRACEABILITY/TRACEABILITY_CLOSURE_PASS_002.md",
+    "01_REQUIREMENTS/TRACEABILITY/CONTROLLED_WORDING_RECONCILIATION_001.md",
+    "00_PROJECT/KNOWLEDGE/PROJECT_KNOWLEDGE_BASE.md",
+    "00_PROJECT/GOVERNANCE/TERMINOLOGY.md",
+    "00_PROJECT/GOVERNANCE/SOURCE_INDEX.md",
+    "00_PROJECT/GOVERNANCE/PROJECT_WORK_ORDER.md",
+    "00_PROJECT/GOVERNANCE/PROJECT_RULES.md",
+    "00_PROJECT/GOVERNANCE/MASTER_DOCUMENT_INDEX.md",
+    "00_PROJECT/GOVERNANCE/DOCUMENT_CONTROL_AND_BASELINE_PROCESS.md",
+    "00_PROJECT/GOVERNANCE/DECISIONS.md",
+    "00_PROJECT/GOVERNANCE/CHANGE_AND_PROBLEM_PROCESS.md",
+    "00_PROJECT/GOVERNANCE/CHANGELOG.md",
+    "00_PROJECT/GOVERNANCE/BLUE_SKY_WORK_PLAN.md",
+    "00_PROJECT/GOVERNANCE/BLUE_SKY_PROJECT_STATE.md",
+    "00_PROJECT/GOVERNANCE/BLUE_SKY_DOCUMENT_CONTROL_MAP.md",
+    "00_PROJECT/GOVERNANCE/BLUE_SKY_DECISIONS_LOG.md",
+    "00_PROJECT/GOVERNANCE",
+    "00_PROJECT/CONFIGURATION/CONFIGURATION_ITEM_REGISTER.md",
+    "00_PROJECT/CONFIGURATION/CONFIGURATION_BASELINE.md",
+    "00_PROJECT/CONFIGURATION"
+  ]
+}
