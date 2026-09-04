@@ -2,7 +2,9 @@
 id: NAVIGATION-VELOCITY-SPEED-MODULE-001
 type: navigation_module_specification
 status: draft_for_agreement
-authority: derived_from_navigation_state_model_rules_algorithm
+version: 0.2
+parent: NAVIGATION
+authority: derived_from_master_requirements_system_architecture_navigation_state_model_rules_algorithm_mathematics
 ---
 
 # BlueSky PRO — Navigation / Velocity & Speed Module Specification
@@ -240,7 +242,7 @@ ACTUAL
 ```text
 planned.speed
 simulated.airspeed
-a actual.groundspeed
+actual.groundspeed
 ```
 
 не являются взаимозаменяемыми сущностями.
@@ -509,7 +511,23 @@ NAV-VEL-OPEN-014  HMI thresholds / presentation
 [ ] requirement traceability
 ```
 
-## 25. Status
+## 25. Controlled references
+
+- `01_REQUIREMENTS/SYSTEM/MASTER_REQUIREMENTS_REGISTER.md`
+- `01_REQUIREMENTS/SYSTEM/SYSTEM_REQUIREMENTS_SPECIFICATION.md`
+- `01_REQUIREMENTS/SAFETY/SAFETY_REQUIREMENTS_BASELINE.md`
+- `02_ARCHITECTURE/SYSTEM/AVIATION_SYSTEM_DEFINITION.md`
+- `03_SYSTEM/NAVIGATION/NAVIGATION_STATE_MODEL.md`
+- `03_SYSTEM/NAVIGATION/NAVIGATION_RULES.md`
+- `03_SYSTEM/NAVIGATION/NAVIGATION_ALGORITHM.md`
+- `03_SYSTEM/NAVIGATION/NAVIGATION_MATHEMATICAL_SPECIFICATION_001.md`
+- `05_VERIFICATION/NAVIGATION/NAVIGATION_TRACEABILITY_MATRIX_001.md`
+- `05_VERIFICATION/NAVIGATION/NAVIGATION_VERIFICATION_MODEL.md`
+- `05_VERIFICATION/NAVIGATION/TEST_VECTORS/NAVIGATION_TEST_VECTORS_001.md`
+- `05_VERIFICATION/EVIDENCE/VERIFICATION_EVIDENCE_INDEX.md`
+- `08_HMI/`
+
+## 26. Status
 
 **DRAFT_FOR_AGREEMENT**
 
