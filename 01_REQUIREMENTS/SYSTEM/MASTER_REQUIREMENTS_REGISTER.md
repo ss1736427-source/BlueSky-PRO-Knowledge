@@ -583,13 +583,46 @@ The next operation is now **content reconciliation**, not creation of another re
 10. Baseline only after review.
 ```
 
-## 23. Status
+## 23. Audit result — Requirements Register
+
+Дата: 2026-09-04.
+
+### Проверено
+
+- `MASTER-REQUIREMENTS-REGISTER-001` является единственным authoritative register идентичности системных требований.
+- Существующие `SYS-REQ-*` и `SAF-REQ-*` должны сохранять идентичность при консолидации.
+- Диапазоны `SYS-REQ-*` в разделе 7 являются inventory, а не доказательством существования каждого номера внутри диапазона.
+- Семейства `NAV-REQ-*` и другие семейства из нового SRS имеют статус candidate до overlap/source analysis.
+- Требования не должны получать статус `VERIFIED` без результата и evidence.
+
+### Выявлено
+
+```text
+REQ-AUD-001  полный текст всех SYS-REQ/SAF-REQ ещё требует построчного inventory;
+REQ-AUD-002  candidate families нельзя считать baseline requirements;
+REQ-AUD-003  verification linkage должен использовать отдельный Verification Register;
+REQ-AUD-004  regulatory source/clause должен быть подтверждён до compliance claim;
+REQ-AUD-005  требования без фактической allocation/verification/evidence остаются незакрытыми.
+```
+
+### Решение
+
+```text
+KEEP existing requirement identities
+DO NOT renumber
+DO NOT duplicate
+DO NOT promote candidate IDs automatically
+USE VERIFICATION-REGISTER-001 for verification identity
+CONTINUE exact content reconciliation
+```
+
+## 24. Status
 
 **DRAFT_FOR_AGREEMENT**
 
 
-## C2 в„–142 вЂ” CONTROLLED INTEGRATION
-Source: РџСЂРёРєР°Р· РњРёРЅС‚СЂР°РЅСЃР° Р РѕСЃСЃРёРё РѕС‚ 24.04.2025 в„–142.
+## C2 №142 — CONTROLLED INTEGRATION
+Source: Приказ Минтранса России от 24.04.2025 №142.
 Integration record: C2-WP142-CLAUSE-RECON-001.
 Status: WORKING / NOT BASELINED.
 
@@ -599,6 +632,6 @@ SYS-REQ-080, SYS-REQ-081, SYS-REQ-082, SYS-REQ-085, SYS-REQ-086, SYS-REQ-091, SY
 Derived SRS records: SRS-C2-001..007.
 
 Baseline gate:
-authority в†’ applicability в†’ safety в†’ architecture в†’ verification в†’ evidence в†’ configuration.
+authority → applicability → safety → architecture → verification → evidence → configuration.
 
 No certification claim is made by this integration.
