@@ -2,8 +2,8 @@
 id: NAVIGATION-TRACEABILITY-MATRIX-001
 type: navigation_traceability_matrix
 status: working_baseline
-version: 0.2
-authority: derived_from_navigation_state_model_rules_algorithm_verification_model
+version: 0.3
+authority: derived_from_navigation_state_model_rules_algorithm_verification_model_verification_register
 parent: NAVIGATION
 ---
 
@@ -40,7 +40,11 @@ MODULE SPECIFICATION
         ↓
 HMI / INTERFACE
         ↓
-VERIFICATION
+VERIFICATION REGISTER
+        ↓
+VERIFICATION CASE / TEST VECTOR
+        ↓
+EXECUTION RESULT
         ↓
 EVIDENCE
 ```
@@ -64,20 +68,21 @@ EVIDENCE
 | Navigation algorithm | `03_SYSTEM/NAVIGATION/NAVIGATION_ALGORITHM.md` |
 | Navigation mathematics | `03_SYSTEM/NAVIGATION/NAVIGATION_MATHEMATICAL_SPECIFICATION_001.md` |
 | Navigation verification model | `05_VERIFICATION/NAVIGATION/NAVIGATION_VERIFICATION_MODEL.md` |
+| Verification identity register | `05_VERIFICATION/VERIFICATION_REGISTER.md` |
 | Navigation test vectors | `05_VERIFICATION/NAVIGATION/TEST_VECTORS/NAVIGATION_TEST_VECTORS_001.md` |
 | Verification evidence index | `05_VERIFICATION/EVIDENCE/VERIFICATION_EVIDENCE_INDEX.md` |
 
-**Важно:** универсальные `SYSTEM_ARCHITECTURE_BASELINE.md` и `INTERFACE_CONTROL_DOCUMENT.md` в текущем дереве не существуют и больше не указываются как фактические файлы. Их наличие/необходимость является отдельным проектным решением, а не основанием для выдуманной ссылки.
+**Важно:** универсальные `SYSTEM_ARCHITECTURE_BASELINE.md` и `INTERFACE_CONTROL_DOCUMENT.md` в текущем дереве не существуют и не указываются как фактические файлы.
 
 ## 4. Module allocation
 
 | Module | Module specification | Existing engineering basis | Verification allocation | Status |
 |---|---|---|---|---|
 | Position | `03_SYSTEM/NAVIGATION/NAVIGATION_POSITION_MODULE_SPECIFICATION.md` | State Model / Rules / Algorithm / available interface basis | NAV-V06, V08–V12, V16, V20; NAV-TV-006, 007, 010 | RECONCILIATION |
-| Velocity / Speed | `03_SYSTEM/NAVIGATION/NAVIGATION_VELOCITY_SPEED_MODULE_SPECIFICATION.md` | State Model / Rules / Algorithm / Mathematics | NAV-V01–V04, V08–V12, V15–V17, V19, V20 | RECONCILIATION |
-| Heading | `03_SYSTEM/NAVIGATION/NAVIGATION_HEADING_MODULE_SPECIFICATION.md` | State Model / Rules / Algorithm / Mathematics | integration and quality cases; exact allocation pending | RECONCILIATION |
-| Track / Course | `03_SYSTEM/NAVIGATION/NAVIGATION_TRACK_COURSE_MODULE_SPECIFICATION.md` | State Model / Rules / Algorithm / Mathematics | NAV-V01–V04, V06–V12, V15–V20 | RECONCILIATION |
-| Wind | `03_SYSTEM/NAVIGATION/NAVIGATION_WIND_MODULE_SPECIFICATION.md` | State Model / Rules / Algorithm / Mathematics | wind influence, quality, return and ETA cases; exact IDs pending | RECONCILIATION |
+| Velocity / Speed | `03_SYSTEM/NAVIGATION/NAVIGATION_VELOCITY_SPEED_MODULE_SPECIFICATION.md` | State Model / Rules / Algorithm / Mathematics | NAV-V01–V04, V08–V12, V15–V17, V19, V20; NAV-TV-001, 002 | RECONCILIATION |
+| Heading | `03_SYSTEM/NAVIGATION/NAVIGATION_HEADING_MODULE_SPECIFICATION.md` | State Model / Rules / Algorithm / Mathematics | NAV-V01–V05, V08–V12, V20; NAV-TV-004, 005 | RECONCILIATION |
+| Track / Course | `03_SYSTEM/NAVIGATION/NAVIGATION_TRACK_COURSE_MODULE_SPECIFICATION.md` | State Model / Rules / Algorithm / Mathematics | NAV-V01–V04, V06–V12, V15–V20; NAV-TV-003, 005, 006, 007 | RECONCILIATION |
+| Wind | `03_SYSTEM/NAVIGATION/NAVIGATION_WIND_MODULE_SPECIFICATION.md` | State Model / Rules / Algorithm / Mathematics | NAV-V01–V05, V08–V12, V15, V20; NAV-TV-001, 004, 005 | RECONCILIATION |
 
 ## 5. Existing rule → algorithm → verification
 
@@ -85,24 +90,24 @@ EVIDENCE
 |---|---|---|---|---|
 | N-001 Planned ≠ Actual | `NAVIGATION_STATE_MODEL` / state construction | NAV-V20 | Position, Velocity, Heading, Track/Course, Wind | COVERED |
 | N-002 Course / Heading / Track distinct | State Model / reference-frame relationship | NAV-V01, V02, V06 | Heading, Track/Course | COVERED; numerical convention open |
-| N-003 Bearing distinct | Navigation semantics | V3 | Track/Course / Navigation State | COVERED |
+| N-003 Bearing distinct | Navigation semantics | NAV-V03 | Track/Course / Navigation State | COVERED |
 | N-004 Airspeed ≠ Groundspeed | Wind relationship | NAV-V01…V04 | Velocity/Speed, Wind | COVERED; formula verification pending |
-| N-005 Drift derived | Derived navigation values | V3, V4 | Track/Course / Wind | COVERED; exact convention open |
-| N-006 Reference Frame explicit | Reference frame | NAV-V02, V3 | Position, Heading, Track/Course | COVERED; project convention pending |
-| N-007 Provenance | Source validation | V1, V5 | All Navigation modules | COVERED |
+| N-005 Drift derived | Derived navigation values | NAV-V03, V04 | Track/Course / Wind | COVERED; exact convention open |
+| N-006 Reference Frame explicit | Reference frame | NAV-V02, V03 | Position, Heading, Track/Course | COVERED; project convention pending |
+| N-007 Provenance | Source validation | NAV-V08…V12 | All Navigation modules | COVERED |
 | N-008 Navigation ≠ Execution Authority | Safety boundary | NAV-V18 | All Navigation modules | COVERED |
 | N-009 Actual ↔ Planned | Deviation calculation | NAV-V06, V07 | Position, Velocity, Track/Course | COVERED |
 | N-010 Route/WP version context | Route/WP state | NAV-V07 | Position, Track/Course | COVERED |
 | N-011 Measured / Estimated / Derived / Predicted | State construction | NAV-V20 | All modules | COVERED |
 | N-012 Quality states | Source validation / quality | NAV-V08…V12 | All modules | COVERED; thresholds open |
-| N-013 Common Navigation State | Integration | V6 | All modules | COVERED |
+| N-013 Common Navigation State | Integration | NAV-V06 | All modules | COVERED |
 | N-014 Dynamic Return uses Actual State | Feasibility / Dynamic Return | NAV-V15 | Position, Velocity, Track/Course, Wind | COVERED; formula details open |
 | N-015 Individual UAV state | Multi-UAV | NAV-V19 | All applicable modules | COVERED |
 | N-016 Material change → revalidation | Runtime adaptation | NAV-V16, V17 | Navigation block | COVERED |
 | N-017 Map/WP Table common state | Route/WP integration | NAV-V07 | Position, Track/Course | COVERED |
 | N-018 Safety priority | Safety boundary | NAV-V18 | Navigation block | COVERED |
 | N-019 AI has no execution authority | Safety / authorization | NAV-V18 | Navigation block / AI integration | COVERED |
-| N-020 Knowledge provenance | Traceability | Evidence chain | Navigation documentation | COVERED |
+| N-020 Knowledge provenance | Traceability | verification evidence chain | Navigation documentation | COVERED |
 
 ## 6. Requirement reconciliation rule
 
@@ -173,9 +178,9 @@ Verification definitions are not evidence.
 ```text
 Requirement / design statement
         ↓
-Verification method
+Verification Register
         ↓
-Test case / test vector
+Verification case / test vector
         ↓
 Execution
         ↓
@@ -265,7 +270,7 @@ Navigation is complete only when:
 [ ] common semantics consistent
 [ ] interfaces controlled
 [ ] HMI allocated
-[ ] verification mapped
+[ ] verification mapped in VERIFICATION-REGISTER-001
 [ ] evidence status controlled
 [ ] open parameters resolved or formally accepted
 [ ] master index updated
