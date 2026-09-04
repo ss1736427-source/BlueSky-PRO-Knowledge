@@ -119,14 +119,27 @@ ORIGINAL SOURCE
 | DOC-VER-002 | VERIFICATION_EVIDENCE_INDEX.md | EVD | 05_VERIFICATION/EVIDENCE/ |
 | DOC-KB-001 | Самолетовождение_Черный_Кораблин_1973_KNOWLEDGE_BASE.md | KB | 00_PROJECT/ |
 | DOC-KB-002 | Navigation_Knowledge_Map.md | KB | 03_SYSTEM/NAVIGATION/ |
+| DOC-NAV-001 | NAVIGATION_DOCUMENT_MAP.md | MAP | 03_SYSTEM/NAVIGATION/ |
+| DOC-NAV-002 | NAVIGATION_BASELINE_RECONCILIATION.md | RECON | 03_SYSTEM/NAVIGATION/ |
+| DOC-NAV-003 | NAVIGATION_POSITION_MODULE_SPECIFICATION.md | MODULE | 03_SYSTEM/NAVIGATION/ |
+| DOC-NAV-004 | NAVIGATION_VELOCITY_SPEED_MODULE_SPECIFICATION.md | MODULE | 03_SYSTEM/NAVIGATION/ |
+| DOC-NAV-005 | NAVIGATION_HEADING_MODULE_SPECIFICATION.md | MODULE | 03_SYSTEM/NAVIGATION/ |
+| DOC-NAV-006 | NAVIGATION_TRACK_COURSE_MODULE_SPECIFICATION.md | MODULE | 03_SYSTEM/NAVIGATION/ |
+| DOC-NAV-007 | NAVIGATION_WIND_MODULE_SPECIFICATION.md | MODULE | 03_SYSTEM/NAVIGATION/ |
 
 ## 5. Navigation working set
 
 ```text
 03_SYSTEM/NAVIGATION/
+├── NAVIGATION_DOCUMENT_MAP.md
+├── NAVIGATION_BASELINE_RECONCILIATION.md
 ├── NAVIGATION_ALGORITHM.md
 ├── NAVIGATION_MATHEMATICAL_SPECIFICATION_001.md
 ├── NAVIGATION_POSITION_MODULE_SPECIFICATION.md
+├── NAVIGATION_VELOCITY_SPEED_MODULE_SPECIFICATION.md
+├── NAVIGATION_HEADING_MODULE_SPECIFICATION.md
+├── NAVIGATION_TRACK_COURSE_MODULE_SPECIFICATION.md
+├── NAVIGATION_WIND_MODULE_SPECIFICATION.md
 ├── NAVIGATION_RULES.md
 ├── NAVIGATION_STATE_MODEL.md
 └── Navigation_Knowledge_Map.md
@@ -141,7 +154,7 @@ ORIGINAL SOURCE
     └── NAVIGATION_TEST_VECTORS_001.md
 ```
 
-Navigation materials are kept separated by role: system/module design, project knowledge/review, and verification.
+Navigation materials are kept separated by role: system/module design, project knowledge/review, and verification. The Document Map and Baseline Reconciliation documents provide the cross-document linkage; they do not replace authoritative requirements, architecture or verification records.
 
 ## 6. C2 working set
 
@@ -243,6 +256,8 @@ First structural cleanup completed:
 [✓] C2 materials separated by role
 [✓] Certification materials separated
 [✓] Repair backups archived
+[✓] Navigation document map added
+[✓] Navigation baseline reconciliation added
 ```
 
 The cleanup did not delete historical project content. Files were structurally relocated; Git history remains available.
