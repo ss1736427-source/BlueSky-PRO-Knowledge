@@ -2,6 +2,7 @@
 id: NAVIGATION-DOCUMENT-MAP-001
 type: controlled_document_map
 status: draft_for_agreement
+version: 0.2
 parent: NAVIGATION
 ---
 
@@ -9,185 +10,177 @@ parent: NAVIGATION
 
 ## 1. Purpose
 
-This is the integration map for the existing Navigation documentation set. It does not replace any source document or create a second requirements authority.
+Единая карта существующей документации блока Navigation. Не заменяет первичные документы и не создаёт второй authority требований.
 
-Its purpose is to make the Navigation workstream structurally traceable and to prevent duplication.
-
-## 2. Authority model
+## 2. Authority chain
 
 ```text
-REGULATORY / OFFICIAL SOURCES
+01_REQUIREMENTS/REGULATORY/
         ↓
-CERTIFICATION BASIS
+06_CERTIFICATION/
         ↓
-MASTER REQUIREMENTS REGISTER
+01_REQUIREMENTS/SYSTEM/MASTER_REQUIREMENTS_REGISTER.md
         ↓
-SYSTEM REQUIREMENTS SPECIFICATION
+01_REQUIREMENTS/SYSTEM/SYSTEM_REQUIREMENTS_SPECIFICATION.md
         ↓
-SYSTEM ARCHITECTURE
+02_ARCHITECTURE/SYSTEM/AVIATION_SYSTEM_DEFINITION.md
         ↓
-NAVIGATION STATE / RULES / ALGORITHM / MATH
+03_SYSTEM/NAVIGATION/
         ↓
-NAVIGATION MODULE SPECIFICATIONS
+08_HMI/ + 02_ARCHITECTURE/INTERFACES/
         ↓
-HMI / INTERFACES
+05_VERIFICATION/NAVIGATION/
         ↓
-VERIFICATION
-        ↓
-EVIDENCE
+05_VERIFICATION/EVIDENCE/
 ```
 
-No lower-level document creates a new authoritative requirement merely by containing a statement.
+Нижний уровень не становится authoritative только потому, что создан позднее.
 
-## 3. Existing Navigation records
+## 3. Navigation records
 
-### 3.1 Core engineering records
+### Core engineering
 
-- `NAVIGATION_STATE_MODEL.md` — common Navigation State semantics and state structure.
-- `NAVIGATION_RULES.md` — Navigation engineering rules.
-- `NAVIGATION_ALGORITHM.md` — algorithmic logic.
-- `NAVIGATION_MATHEMATICAL_SPECIFICATION_001.md` — mathematical basis and unresolved mathematical parameters.
-- `Navigation_Knowledge_Map.md` — navigation knowledge relationships.
+| ID | Record | Role |
+|---|---|---|
+| NAV-DOC-001 | `NAVIGATION_STATE_MODEL.md` | common state semantics |
+| NAV-DOC-002 | `NAVIGATION_RULES.md` | engineering rules |
+| NAV-DOC-003 | `NAVIGATION_ALGORITHM.md` | algorithmic logic |
+| NAV-DOC-004 | `NAVIGATION_MATHEMATICAL_SPECIFICATION_001.md` | mathematical basis |
+| NAV-DOC-005 | `Navigation_Knowledge_Map.md` | knowledge relationships |
+| NAV-DOC-006 | `NAVIGATION_BASELINE_RECONCILIATION.md` | consolidation/reconciliation |
 
-### 3.2 Module specifications
+### Module specifications
 
-- `NAVIGATION_POSITION_MODULE_SPECIFICATION.md`
-- `NAVIGATION_VELOCITY_SPEED_MODULE_SPECIFICATION.md`
-- `NAVIGATION_HEADING_MODULE_SPECIFICATION.md`
-- `NAVIGATION_TRACK_COURSE_MODULE_SPECIFICATION.md`
-- `NAVIGATION_WIND_MODULE_SPECIFICATION.md`
+| ID | Module | Record |
+|---|---|---|
+| NAV-MOD-001 | Position | `NAVIGATION_POSITION_MODULE_SPECIFICATION.md` |
+| NAV-MOD-002 | Velocity / Speed | `NAVIGATION_VELOCITY_SPEED_MODULE_SPECIFICATION.md` |
+| NAV-MOD-003 | Heading | `NAVIGATION_HEADING_MODULE_SPECIFICATION.md` |
+| NAV-MOD-004 | Track / Course | `NAVIGATION_TRACK_COURSE_MODULE_SPECIFICATION.md` |
+| NAV-MOD-005 | Wind | `NAVIGATION_WIND_MODULE_SPECIFICATION.md` |
 
-These are derived design-level specifications. They must reference the existing authoritative sources rather than reproduce them as independent requirements.
+Module specifications are derived design records. They must reference the existing authoritative records and must not silently create new requirements or architecture.
 
-### 3.3 Review / verification records
+## 4. Requirements linkage
 
-- `00_PROJECT/KNOWLEDGE/NAVIGATION_KNOWLEDGE_REVIEW_001.md` — review and reconciliation of navigation knowledge.
-- `05_VERIFICATION/NAVIGATION/NAVIGATION_TRACEABILITY_MATRIX_001.md` — current Navigation rule/algorithm/verification traceability.
-- `05_VERIFICATION/NAVIGATION/NAVIGATION_VERIFICATION_MODEL.md` — verification model.
-- `05_VERIFICATION/NAVIGATION/TEST_VECTORS/NAVIGATION_TEST_VECTORS_001.md` — navigation test vectors.
-
-## 4. Requirement authority
-
-Authoritative requirement identity:
+Authoritative system requirement record:
 
 `01_REQUIREMENTS/SYSTEM/MASTER_REQUIREMENTS_REGISTER.md`
 
-Derived presentation/specification:
+System requirements specification:
 
 `01_REQUIREMENTS/SYSTEM/SYSTEM_REQUIREMENTS_SPECIFICATION.md`
 
-Candidate Navigation requirement family:
-
-`NAV-REQ-*`
-
-These candidates must be compared against existing SYS-REQ/SAF-REQ records before baseline. No candidate is promoted solely because it appears in a module specification.
-
-## 5. Regulatory authority
-
-Regulatory sources and applicability are controlled through:
-
-- `01_REQUIREMENTS/REGULATORY/REGULATORY_SOURCE_REGISTER.md`
-- `01_REQUIREMENTS/REGULATORY/REGULATORY_KNOWLEDGE_BASE.md`
-- `01_REQUIREMENTS/REGULATORY/REGULATORY_CLAUSE_MAPPING_001.md`
-- applicable certification-basis records under `06_CERTIFICATION/`
-
-A module document may identify regulatory applicability, but the authoritative source/clause remains in the regulatory/certification layer.
-
-## 6. Architecture authority
-
-Navigation module allocation is subordinate to the approved system architecture and interface control.
-
-The architecture layer is the authority for:
+Navigation candidate requirement family `NAV-REQ-*` is provisional until reconciliation against existing system and safety requirements is completed.
 
 ```text
-block boundaries
-module allocation
-system interfaces
-authority boundaries
+Navigation statement
+→ existing requirement search
+→ regulatory applicability
+→ safety allocation
+→ architecture allocation
+→ module allocation
 ```
 
-A module specification must not silently create a new architectural block or authority path.
+## 5. Regulatory linkage
 
-## 7. Verification authority
-
-Navigation verification is controlled through the verification layer.
+Regulatory authority remains outside the module specification:
 
 ```text
-Requirement
-→ verification method
-→ test case / test vector
-→ execution result
-→ evidence
+01_REQUIREMENTS/REGULATORY/REGULATORY_SOURCE_REGISTER.md
+→ REGULATORY_CLAUSE_MAPPING_001.md
+→ applicable 06_CERTIFICATION/ records
+→ requirement / interface constraint
+→ Navigation allocation
 ```
 
-A verification case listed in a module specification is a reference/allocation, not proof of execution. `VERIFIED` requires controlled evidence.
+External requirements are not silently converted into internal Navigation functions.
 
-## 8. Cross-module Navigation model
+## 6. Architecture linkage
+
+Current system architecture authority available in the repository:
+
+`02_ARCHITECTURE/SYSTEM/AVIATION_SYSTEM_DEFINITION.md`
+
+It defines Navigation as a system-level functional area and states that final allocation remains subject to further decomposition.
+
+Current controlled interface record available:
+
+`02_ARCHITECTURE/INTERFACES/C2/C2_ICD_BASELINE_001.md`
+
+No nonexistent generic `SYSTEM_ARCHITECTURE_BASELINE.md` or `INTERFACE_CONTROL_DOCUMENT.md` is referenced as an existing file.
+
+## 7. Verification linkage
 
 ```text
-                 ┌──────────────┐
-                 │   POSITION   │
-                 └──────┬───────┘
-                        │
-                 ┌──────▼───────┐
-                 │ VELOCITY /   │
-                 │    SPEED     │
-                 └──────┬───────┘
-                        │
-      ┌─────────────────┼─────────────────┐
-      ▼                 ▼                 ▼
- HEADING           WIND             TRACK/COURSE
-      │                 │                 │
-      └─────────────────┼─────────────────┘
-                        ▼
-               NAVIGATION STATE
-                        │
-              ┌─────────┼─────────┐
-              ▼         ▼         ▼
-          Planning   Safety     Flight
+05_VERIFICATION/NAVIGATION/NAVIGATION_TRACEABILITY_MATRIX_001.md
+                    ↓
+05_VERIFICATION/NAVIGATION/NAVIGATION_VERIFICATION_MODEL.md
+                    ↓
+05_VERIFICATION/NAVIGATION/TEST_VECTORS/NAVIGATION_TEST_VECTORS_001.md
+                    ↓
+05_VERIFICATION/EVIDENCE/VERIFICATION_EVIDENCE_INDEX.md
 ```
 
-The diagram expresses relationships only; it does not grant decision authority to individual Navigation modules.
+Verification allocation is not evidence. `VERIFIED` requires controlled execution evidence.
 
-## 9. Module-level traceability requirement
+## 8. HMI linkage
 
-Every module specification shall contain or reference:
+HMI is a separate controlled layer:
+
+`08_HMI/`
+
+A Navigation module specification allocates HMI behaviour; final visual implementation belongs to the HMI layer.
+
+## 9. Cross-module semantic baseline
+
+The common Navigation State Model governs these distinctions:
 
 ```text
-Module ID
-Parent block
-Authoritative requirements source
-Applicable rule/algorithm source
-Architecture/interface source
-Knowledge source, where applicable
-HMI allocation
-Verification allocation
-Open items
-Change/configuration status
+PLANNED ≠ ACTUAL ≠ SIMULATED
+Course ≠ Heading ≠ Track ≠ Bearing
+Airspeed ≠ Groundspeed
+Measured ≠ Estimated ≠ Derived ≠ Predicted
+Navigation State ≠ Execution Authority
 ```
 
-Where exact requirement IDs are not yet reconciled, the document must explicitly state `TBD` / `PENDING RECONCILIATION` rather than inventing an ID.
+Module documents must reuse these semantics rather than define competing ones.
 
-## 10. Current consolidation state
+## 10. Completion state
 
 ```text
-Architecture → established baseline
-Navigation State → existing
-Rules → existing
-Algorithm → existing
-Mathematical specification → existing
-Knowledge map → existing
-Module specifications → being consolidated
-Requirement linkage → reconciliation required
+Architecture → existing basis
+Core Navigation records → existing
+Module specifications → created as derived records
+Requirements linkage → reconciliation required
 Regulatory applicability → clause-level reconciliation required
-HMI linkage → controlled allocation required
-Verification linkage → existing matrix/model must be reused
-Evidence → only created by actual verification
+HMI linkage → allocation required
+Verification linkage → matrix/model reuse required
+Evidence → only after execution
 ```
 
-## 11. No-duplication rule
+## 11. Mandatory module completion gate
 
-Before creating any new Navigation document:
+A module is complete only when:
+
+```text
+[ ] existing records checked
+[ ] duplicate check completed
+[ ] module ID assigned
+[ ] parent block assigned
+[ ] requirements linked
+[ ] regulatory applicability checked
+[ ] safety implications checked
+[ ] architecture linked
+[ ] interfaces linked where applicable
+[ ] HMI allocated
+[ ] verification allocated
+[ ] evidence status controlled
+[ ] open items resolved or formally accepted
+[ ] Master Document Index updated
+```
+
+## 12. No-duplication rule
 
 ```text
 SEARCH EXISTING RECORDS
@@ -201,23 +194,4 @@ UPDATE / LINK EXISTING RECORD
 ONLY IF ABSENT → CREATE NEW RECORD
 ```
 
-## 12. Completion criterion for Navigation
-
-The Navigation block is not complete when all module documents merely exist.
-
-It is complete only when:
-
-```text
-all modules
-→ requirements reconciled
-→ regulatory applicability checked
-→ architecture/interfaces linked
-→ cross-module semantics consistent
-→ HMI allocation linked
-→ verification mapped
-→ evidence status controlled
-→ open items resolved or formally accepted
-→ documentation index updated
-```
-
-Status: `DRAFT_FOR_AGREEMENT`.
+**Status: DRAFT_FOR_AGREEMENT**
