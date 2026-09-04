@@ -2,7 +2,7 @@
 id: VERIFICATION-REGISTER-001
 type: verification_register
 status: draft_for_agreement
-version: 0.1
+version: 0.2
 parent: VERIFICATION
 authority: NAVIGATION_VERIFICATION_MODEL-001; NAVIGATION_TEST_VECTORS-001
 ---
@@ -134,6 +134,12 @@ No duplicate case is created merely because a new module specification appears.
 
 Each case must eventually identify its actual requirement/design basis.
 
+The current Navigation requirement allocation is maintained in:
+
+`05_VERIFICATION/NAVIGATION/NAVIGATION_REQUIREMENT_ALLOCATION_001.md`
+
+That allocation is a working reconciliation record and does not promote candidate requirements to authoritative status.
+
 Until reconciliation is complete, no unconfirmed `NAV-REQ-*` or other candidate ID is promoted to authoritative requirement linkage.
 
 Required fields:
@@ -201,7 +207,23 @@ A verification definition, mathematical relation, or documented expected result 
 
 The current Navigation Verification Model is the source for the twenty `NAV-V*` case definitions. The Navigation Test Vectors document is the source for the ten `NAV-TV-*` deterministic mathematical vectors.
 
-These documents are linked through this register; their contents are not duplicated here.
+The controlled relationship is:
+
+```text
+MASTER-REQUIREMENTS-REGISTER-001
+        ↓
+NAVIGATION-REQUIREMENT-ALLOCATION-001
+        ↓
+NAVIGATION-TRACEABILITY-MATRIX-001
+        ↓
+NAV-V* / NAV-TV-*
+        ↓
+Execution
+        ↓
+Evidence
+```
+
+These documents are linked through the register; their contents are not duplicated here.
 
 ## 13. Audit findings — initial pass
 
@@ -211,6 +233,7 @@ V-REG-002  NAV-V01..NAV-V20 exist as case definitions in NAVIGATION_VERIFICATION
 V-REG-003  NAV-TV-001..NAV-TV-010 exist as mathematical vectors in NAVIGATION_TEST_VECTORS_001.
 V-REG-004  Execution evidence is not implied by DEFINED / READY status.
 V-REG-005  Exact requirement allocation for Navigation cases remains pending reconciliation with MASTER-REQUIREMENTS-REGISTER.
+V-REG-006  Navigation requirement allocation is maintained as a separate working record and does not create requirement authority.
 ```
 
 ## 14. Completion gate
