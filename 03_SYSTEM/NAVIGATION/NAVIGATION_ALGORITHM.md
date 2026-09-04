@@ -2,22 +2,38 @@
 id: NAVIGATION-ALGORITHM-001
 type: navigation_algorithm
 status: draft_for_agreement
-authority: derived_from_agreed_navigation_rules
+version: 0.2
+parent: NAVIGATION-STATE-MODEL-001
+authority: NAVIGATION-RULES-001; NAVIGATION-STATE-MODEL-001; NAVIGATION-MATH-SPEC-001
 ---
 
 # Navigation Algorithm
 
-## 1. Status
+## 1. Назначение
 
-Базовые навигационные положения и различение Course / Heading / Track / Drift / Airspeed / Groundspeed согласованы как основа модели.
+Документ описывает логический алгоритм Navigation на основе действующей модели состояния и правил. Он не является программной реализацией и не создаёт новую независимую базу требований.
 
-Этот документ описывает **логический алгоритм**, а не программную реализацию.
+## 2. Document relationships
 
-Современный внешний источник FAA подтверждает wind-triangle relationship: desired course, heading/airspeed, wind и actual ground track/groundspeed являются различными элементами. urlFAA PHAK Chapter 16 — Navigationhttps://www.faa.gov/sites/faa.gov/files/18_phak_ch16.pdf
+```text
+Knowledge
+  ↓
+Navigation State Model
+  ↓
+Navigation Rules
+  ↓
+Navigation Algorithm
+  ↓
+Navigation Mathematical Specification
+  ↓
+Module Specifications
+  ↓
+Verification Model / Test Vectors
+```
 
----
+Системная граница и authority берутся из `02_ARCHITECTURE/SYSTEM/AVIATION_SYSTEM_DEFINITION.md`. Идентичность требований берётся из `01_REQUIREMENTS/SYSTEM/MASTER_REQUIREMENTS_REGISTER.md`.
 
-## 2. Algorithm boundary
+## 3. Algorithm boundary
 
 ```text
 INPUT SOURCES
@@ -45,13 +61,11 @@ REVALIDATION
 NAVIGATION OUTPUT
 ```
 
-Navigation output is an input to validation and planning components. It is not direct execution authority.
+Navigation output является входом validation/planning и не является execution authority.
 
----
+## 4. Input acquisition
 
-## 3. Step 1 — Acquire inputs
-
-Collect available:
+Собираются доступные:
 
 ```text
 Position
@@ -70,13 +84,11 @@ Resource / energy state
 Navigation source metadata
 ```
 
-No value is assumed valid merely because a field exists.
+Наличие поля не означает его validity.
 
----
+## 5. Source validation
 
-## 4. Step 2 — Validate source data
-
-For every critical value determine:
+Для критического значения определяются:
 
 ```text
 Source
@@ -86,7 +98,7 @@ Validity
 Confidence
 ```
 
-Classify:
+Классы качества:
 
 ```text
 VALID
@@ -96,13 +108,9 @@ INVALID
 UNAVAILABLE
 ```
 
-Invalid or unavailable data shall not silently be substituted with an assumed value.
+## 6. Reference frame
 
----
-
-## 5. Step 3 — Establish reference frame
-
-Before comparing directional values, determine the applicable reference frame.
+Перед сравнением направлений определяется reference frame:
 
 ```text
 TRUE
@@ -110,13 +118,11 @@ MAGNETIC
 COMPASS
 ```
 
-Do not compare or combine values from different reference frames without an explicit transformation.
+Преобразование между frame должно быть явным.
 
----
+## 7. Navigation state construction
 
-## 6. Step 4 — Establish navigation state
-
-Construct:
+Состояние строится в существующей модели:
 
 ```text
 PLANNED
@@ -125,48 +131,11 @@ DERIVED
 QUALITY
 ```
 
-### Planned
+При необходимости допускается отдельное `SIMULATED` состояние; оно не становится `ACTUAL` без фактического подтверждения.
 
-```text
-Route
-Active WP
-Intended Course
-Planned Altitude
-Planned Speed
-Time
-Constraints
-```
+## 8. Intended path
 
-### Actual
-
-```text
-Position
-Altitude
-Heading
-Track
-Airspeed
-Groundspeed
-Wind
-Navigation Source
-```
-
-### Derived
-
-```text
-Drift Angle
-Wind Correction Angle
-Cross Track Error
-Along Track Position
-Deviation
-ETA
-Return Feasibility
-```
-
----
-
-## 7. Step 5 — Determine intended path
-
-For the active route segment:
+Для активного сегмента:
 
 ```text
 Current Position
@@ -177,13 +146,11 @@ Next WP / Route Geometry
 → Intended Course
 ```
 
-The exact course definition depends on the route segment and remains subject to the project's route-generation rules.
+Точная геометрия определяется соответствующей Route/Geometry спецификацией, а не этим документом.
 
----
+## 9. Wind relationship
 
-## 8. Step 6 — Apply wind relationship
-
-Where wind data is valid:
+При валидном Wind:
 
 ```text
 Desired Course
@@ -196,33 +163,23 @@ Airspeed
 → Resulting Track / Groundspeed
 ```
 
-The wind triangle is the conceptual model.
+Базовое векторное соотношение и математические определения принадлежат `NAVIGATION-MATH-SPEC-001`.
 
-FAA material explicitly distinguishes heading/airspeed, wind, and ground track/groundspeed. urlFAA Chapter 16 Navigationhttps://www.faa.gov/sites/faa.gov/files/18_phak_ch16.pdf
+## 10. Actual navigation state
 
-The algorithm must not assume that Course = Heading when wind is present.
-
----
-
-## 9. Step 7 — Determine actual navigation state
-
-From available actual sources determine:
+Определяются фактические:
 
 ```text
-Actual Position
-Actual Heading
-Actual Track
-Actual Airspeed
-Actual Groundspeed
+Position
+Heading
+Track
+Airspeed
+Groundspeed
 ```
 
-If a value is estimated or derived rather than measured, preserve that provenance.
+Измеренные, оценочные и производные значения сохраняют соответствующую provenance.
 
----
-
-## 10. Step 8 — Calculate navigation deviations
-
-Compare:
+## 11. Deviation
 
 ```text
 ACTUAL
@@ -230,49 +187,37 @@ ACTUAL
 PLANNED
 ```
 
-Potential outputs:
+Могут рассчитываться:
 
 ```text
 Cross Track Error
 Along Track Position
 Course / Track Difference
-Heading / Desired Direction Difference
+Heading / Intended Direction Difference
 Altitude Deviation
 Speed Deviation
 Time / ETA Deviation
 ```
 
-The exact sign convention and numerical formulas are not fixed in this document until the corresponding project geometry and coordinate rules are approved.
+Точные формулы и знаковые соглашения определяются `NAVIGATION-MATH-SPEC-001`.
 
----
+## 12. Navigation quality
 
-## 11. Step 9 — Evaluate navigation quality
-
-Navigation quality is evaluated separately from navigation geometry.
-
-Example:
+Качество оценивается отдельно от геометрии.
 
 ```text
-VALID + small deviation
-→ normal navigation
-
-DEGRADED + acceptable deviation
-→ continue with degraded status if permitted
-
-STALE / INVALID / UNAVAILABLE critical data
-→ determine operational impact
-→ revalidation or other defined response
+VALID
+DEGRADED
+STALE
+INVALID
+UNAVAILABLE
 ```
 
-No automatic safety conclusion is made solely from one navigation field.
+Критические изменения качества передаются в соответствующий impact/revalidation контур.
 
----
+## 13. Route feasibility
 
-## 12. Step 10 — Evaluate route feasibility
-
-Use the current state to evaluate whether the active route remains feasible.
-
-Inputs may include:
+Оценка выполняется с учётом доступных:
 
 ```text
 Position
@@ -287,7 +232,7 @@ Constraints
 Mission state
 ```
 
-Output:
+Результат:
 
 ```text
 FEASIBLE
@@ -296,47 +241,15 @@ NOT FEASIBLE
 UNKNOWN
 ```
 
----
-
-## 13. Step 11 — Detect material change
-
-Detect changes in:
-
-- actual position;
-- route deviation;
-- navigation-source quality;
-- wind/environment;
-- energy/resource state;
-- communication;
-- route or WP;
-- mission constraints.
-
-Classify the change before deciding what to do.
+## 14. Material change and revalidation
 
 ```text
-NO MATERIAL CHANGE
-OPERATIONAL
-MISSION-IMPACTING
-SAFETY-IMPACTING
-APPROVAL-REQUIRED
+STATE CHANGE
+→ IMPACT ASSESSMENT
+→ REVALIDATION when required
 ```
 
-This follows the existing project runtime-adaptation model rather than inventing a separate navigation authority.
-
----
-
-## 14. Step 12 — Revalidation
-
-For material changes:
-
-```text
-DETECT
-→ CLASSIFY
-→ EVALUATE
-→ REVALIDATE
-```
-
-If a new route or adaptation is required:
+При необходимости адаптации:
 
 ```text
 GENERATE OPTIONS
@@ -346,13 +259,9 @@ GENERATE OPTIONS
 → EXECUTE
 ```
 
-The project already defines this controlled adaptation chain.
+Authority chain определяется системной архитектурой и не переопределяется Navigation.
 
----
-
-## 15. Step 13 — Navigation outputs
-
-Navigation subsystem may provide:
+## 15. Navigation outputs
 
 ```text
 Current Navigation State
@@ -366,11 +275,104 @@ Return Feasibility
 Revalidation Trigger
 ```
 
-Outputs must retain provenance and quality information.
+Выходы сохраняют provenance и quality.
 
----
+## 16. Dynamic Return
 
-## 16. Step 14 — Safety boundary
+```text
+CURRENT NAVIGATION STATE
++
+ENERGY / RESOURCE STATE
++
+COMMUNICATION
++
+ENVIRONMENT
++
+MISSION CONSTRAINTS
+→ RETURN FEASIBILITY
+```
+
+При существенном ухудшении:
+
+```text
+DETECT
+→ CLASSIFY
+→ REVALIDATE
+→ UPDATE RETURN PLAN
+```
+
+## 17. Multi-UAV
+
+Для каждого БВС сохраняется:
+
+```text
+UAV[i].NavigationState
+```
+
+Fleet coordination потребляет индивидуальные состояния и не уничтожает их provenance.
+
+## 18. Failure / degraded handling
+
+Различаются:
+
+```text
+Missing
+Stale
+Invalid
+Conflicting
+Degraded
+```
+
+Критическое отсутствие/недостоверность приводит к impact assessment, а не к молчаливой подстановке.
+
+## 19. Algorithm invariants
+
+1. `PLANNED ≠ ACTUAL`.
+2. `SIMULATED ≠ ACTUAL`.
+3. `Course ≠ Heading ≠ Track`.
+4. `Airspeed ≠ Groundspeed`.
+5. Reference frame explicit.
+6. Derived values retain derived provenance.
+7. Invalid/stale data is not silently treated as valid.
+8. Navigation State is not execution authority.
+9. Safety constraints cannot be overridden by optimization.
+10. AI proposal cannot independently authorize material execution.
+11. Individual UAV states remain distinct.
+12. Material state changes can require revalidation.
+
+## 20. Mathematical authority
+
+Не дублировать здесь окончательные формулы. Использовать:
+
+`03_SYSTEM/NAVIGATION/NAVIGATION_MATHEMATICAL_SPECIFICATION_001.md`
+
+Открытые параметры остаются там в статусе `TBD` до отдельного решения.
+
+## 21. Verification authority
+
+Проверка алгоритма выполняется через:
+
+`05_VERIFICATION/NAVIGATION/NAVIGATION_VERIFICATION_MODEL.md`
+
+и существующие test vectors:
+
+`05_VERIFICATION/NAVIGATION/TEST_VECTORS/NAVIGATION_TEST_VECTORS_001.md`
+
+Новая проверка создаётся только при отсутствии существующего покрытия.
+
+## 22. Requirements / architecture linkage
+
+Requirements identity:
+
+`01_REQUIREMENTS/SYSTEM/MASTER_REQUIREMENTS_REGISTER.md`
+
+System boundary / functional architecture:
+
+`02_ARCHITECTURE/SYSTEM/AVIATION_SYSTEM_DEFINITION.md`
+
+Navigation requirement candidates `NAV-REQ-*` не становятся baseline автоматически; allocation выполняется через reconciliation.
+
+## 23. Safety boundary
 
 ```text
 NAVIGATION
@@ -388,182 +390,14 @@ C++ CORE
 EXECUTION
 ```
 
-Navigation does not bypass:
+Navigation не обходит Mission Validation, Readiness, Safety Gate или требуемое approval.
 
-- Mission Validation;
-- Readiness;
-- Safety Engine;
-- operator approval where required.
+## 24. External aviation reference
 
----
+Для терминологической сверки используется FAA PHAK Chapter 16. Этот внешний материал является сравнительным техническим источником и не заменяет российскую certification basis проекта.
 
-## 17. Dynamic Return branch
-
-At every relevant state update:
-
-```text
-CURRENT NAVIGATION STATE
-+
-ENERGY / RESOURCE STATE
-+
-COMMUNICATION
-+
-ENVIRONMENT
-+
-MISSION CONSTRAINTS
-→ RETURN FEASIBILITY
-```
-
-If return feasibility materially degrades:
-
-```text
-DETECT
-→ CLASSIFY
-→ REVALIDATE
-→ UPDATE RETURN PLAN
-```
-
-The return calculation must remain tied to the actual current state of the specific UAV.
-
----
-
-## 18. Multi-UAV branch
-
-For each UAV:
-
-```text
-UAV[i].NavigationState
-```
-
-is maintained independently.
-
-Fleet-level coordination consumes individual states:
-
-```text
-UAV-1 State
-UAV-2 State
-...
-UAV-N State
-        ↓
-Fleet Coordination
-```
-
-Fleet state must not erase individual navigation state.
-
----
-
-## 19. Failure / degraded data handling
-
-The algorithm shall distinguish:
-
-```text
-Missing
-Stale
-Invalid
-Conflicting
-Degraded
-```
-
-A critical missing/invalid value triggers impact assessment rather than silent substitution.
-
-If the resulting state affects mission feasibility or safety:
-
-```text
-→ REVALIDATION
-```
-
----
-
-## 20. Algorithm invariants
-
-The following are invariants:
-
-1. `PLANNED ≠ ACTUAL`.
-2. `SIMULATED ≠ ACTUAL`.
-3. `Course ≠ Heading ≠ Track`.
-4. `Airspeed ≠ Groundspeed`.
-5. Reference frame must be explicit.
-6. Derived values retain derived provenance.
-7. Invalid/stale data is not silently treated as valid.
-8. Navigation State is not execution authority.
-9. Safety constraints cannot be overridden by optimization.
-10. AI proposal cannot independently authorize material execution.
-11. Individual UAV states remain distinct in fleet coordination.
-12. Material state changes can require revalidation.
-
----
-
-## 21. Open mathematical specifications
-
-Not silently fixed here:
-
-- coordinate reference system;
-- altitude datum;
-- units;
-- precision;
-- exact WCA formula and applicability;
-- exact Drift Angle convention/sign;
-- Cross Track Error sign convention;
-- source-fusion algorithm;
-- navigation-source priority;
-- stale thresholds;
-- confidence calculation;
-- route-segment course definition;
-- turn anticipation model.
-
-These belong to the next formal specification layer.
-
----
-
-## 22. Verification model
-
-The algorithm must eventually be verified against at least:
-
-```text
-Nominal navigation
-Crosswind
-Headwind / tailwind
-Changing wind
-Route deviation
-WP transition
-Stale navigation data
-Invalid navigation data
-Missing navigation data
-Conflicting navigation sources
-Communication degradation
-Energy degradation
-Dynamic Return degradation
-Multi-UAV interaction
-Material runtime adaptation
-Safety-gate rejection
-```
-
-Verification shall preserve:
-
-```text
-INPUT
-→ NAVIGATION STATE
-→ CALCULATION
-→ RESULT
-→ VALIDATION
-→ DECISION
-```
-
----
-
-## 23. Status
+## 25. Status
 
 **DRAFT_FOR_AGREEMENT**
 
-This is the first logical navigation algorithm derived from the agreed Navigation Knowledge / State / Rules chain.
-
-It is not yet implementation code and does not define unresolved mathematical conventions.
-
-Next formal layer:
-
-```text
-NAVIGATION ALGORITHM
-→ NAVIGATION VERIFICATION MODEL
-→ SOFTWARE DESIGN
-→ C++ IMPLEMENTATION
-```
+Следующий этап — закрытие математических TBD, точное requirement allocation и formal verification allocation; затем переход к Software Design.
