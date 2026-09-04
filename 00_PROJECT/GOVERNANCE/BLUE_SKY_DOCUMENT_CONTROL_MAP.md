@@ -16,11 +16,9 @@
 ↓
 `SYSTEM REQUIREMENTS SPECIFICATION`
 ↓
-`SYSTEM ARCHITECTURE BASELINE`
+`AVIATION SYSTEM DEFINITION`
 ↓
-`SYSTEM DESIGN DESCRIPTION`
-↓
-`INTERFACE CONTROL DOCUMENT`
+`INTERFACE CONTROL DOCUMENTS`
 ↓
 `SAFETY REQUIREMENTS BASELINE`
 ↓
@@ -48,11 +46,13 @@
 `AIR CODE 78.1`
 → `C2_PROVIDER_REGULATORY_ASSESSMENT`
 → `C2 requirements`
-→ `ICD`
+→ `C2 ICD`
 → `SRS`
 → `Safety`
 → `Verification`
 → `Evidence`
+
+C2 records are allocated by engineering role in the corresponding requirement, architecture/interface, safety, verification and HMI layers.
 
 ## Operational / external interface
 
@@ -67,6 +67,8 @@
 
 `№354`
 → ground-equipment check interface, conditional on applicability
+
+These references describe external constraints/interfaces. They do not by themselves create internal BlueSky PRO functions.
 
 ## Data
 
@@ -94,3 +96,54 @@
 - `APPROVED`
 - `SUPERSEDED`
 - `REG-GAP / REGULATORY WATCH`
+
+## Current controlled paths
+
+```text
+Project governance
+→ 00_PROJECT/GOVERNANCE/
+
+Project configuration
+→ 00_PROJECT/CONFIGURATION/
+
+Project knowledge
+→ 00_PROJECT/KNOWLEDGE/
+
+System requirements
+→ 01_REQUIREMENTS/SYSTEM/
+
+Regulatory basis
+→ 01_REQUIREMENTS/REGULATORY/
+
+Safety
+→ 01_REQUIREMENTS/SAFETY/
+
+Traceability
+→ 01_REQUIREMENTS/TRACEABILITY/
+
+Architecture
+→ 02_ARCHITECTURE/
+
+System modules
+→ 03_SYSTEM/
+
+Software
+→ 04_SOFTWARE/
+
+Verification
+→ 05_VERIFICATION/
+
+Certification
+→ 06_CERTIFICATION/
+
+External interfaces/data
+→ 07_EXTERNAL/
+
+HMI
+→ 08_HMI/
+
+Archive
+→ 99_ARCHIVE/
+```
+
+The Master Document Index is the authoritative inventory of document identity and current path. The control map defines relationships and control responsibilities; it does not replace primary engineering records.
