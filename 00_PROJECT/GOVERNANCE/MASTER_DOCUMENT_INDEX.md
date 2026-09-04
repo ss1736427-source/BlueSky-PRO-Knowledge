@@ -112,9 +112,8 @@ ORIGINAL SOURCE
 | DOC-SAF-001 | SAFETY_REQUIREMENTS_BASELINE.md | SAF | 01_REQUIREMENTS/SAFETY/ |
 | DOC-SAF-002 | SAFETY_CASE.md | SAF | 01_REQUIREMENTS/SAFETY/ |
 | DOC-SAF-003 | HAZARD_LOG.md | SAF | 01_REQUIREMENTS/SAFETY/ |
-| DOC-ARCH-001 | SYSTEM_ARCHITECTURE_BASELINE.md | ARCH | 02_ARCHITECTURE/SYSTEM/ |
-| DOC-DES-001 | SYSTEM_DESIGN_DESCRIPTION.md | DES | 02_ARCHITECTURE/SYSTEM/ |
-| DOC-IF-001 | INTERFACE_CONTROL_DOCUMENT.md | IF | 02_ARCHITECTURE/INTERFACES/ |
+| DOC-ARCH-001 | AVIATION_SYSTEM_DEFINITION.md | ARCH | 02_ARCHITECTURE/SYSTEM/ |
+| DOC-IF-001 | C2_ICD_BASELINE_001.md | IF | 02_ARCHITECTURE/INTERFACES/C2/ |
 | DOC-VER-001 | VERIFICATION_PLAN.md | VER | 05_VERIFICATION/PLAN/ |
 | DOC-VER-002 | VERIFICATION_EVIDENCE_INDEX.md | EVD | 05_VERIFICATION/EVIDENCE/ |
 | DOC-KB-001 | Самолетовождение_Черный_Кораблин_1973_KNOWLEDGE_BASE.md | KB | 00_PROJECT/ |
@@ -127,7 +126,39 @@ ORIGINAL SOURCE
 | DOC-NAV-006 | NAVIGATION_TRACK_COURSE_MODULE_SPECIFICATION.md | MODULE | 03_SYSTEM/NAVIGATION/ |
 | DOC-NAV-007 | NAVIGATION_WIND_MODULE_SPECIFICATION.md | MODULE | 03_SYSTEM/NAVIGATION/ |
 
-## 5. Navigation working set
+## 5. Project governance set
+
+```text
+00_PROJECT/GOVERNANCE/
+├── BLUE_SKY_DECISIONS_LOG.md
+├── BLUE_SKY_DOCUMENT_CONTROL_MAP.md
+├── BLUE_SKY_PROJECT_STATE.md
+├── BLUE_SKY_WORK_PLAN.md
+├── CHANGELOG.md
+├── CHANGE_AND_PROBLEM_PROCESS.md
+├── DECISIONS.md
+├── DOCUMENT_CONTROL_AND_BASELINE_PROCESS.md
+├── MASTER_DOCUMENT_INDEX.md
+├── PROJECT_RULES.md
+├── PROJECT_WORK_ORDER.md
+├── SOURCE_INDEX.md
+└── TERMINOLOGY.md
+```
+
+## 6. Project configuration and knowledge
+
+```text
+00_PROJECT/CONFIGURATION/
+├── CONFIGURATION_A_APPLICABILITY_MATRIX.md
+├── CONFIGURATION_BASELINE.md
+└── CONFIGURATION_ITEM_REGISTER.md
+
+00_PROJECT/KNOWLEDGE/
+├── PROJECT_KNOWLEDGE_BASE.md
+└── NAVIGATION_KNOWLEDGE_REVIEW_001.md
+```
+
+## 7. Navigation working set
 
 ```text
 03_SYSTEM/NAVIGATION/
@@ -136,16 +167,13 @@ ORIGINAL SOURCE
 ├── NAVIGATION_ALGORITHM.md
 ├── NAVIGATION_MATHEMATICAL_SPECIFICATION_001.md
 ├── NAVIGATION_POSITION_MODULE_SPECIFICATION.md
-├── NAVIGATION_VELOCITY_SPEED_MODULE_SPECIFICATION.md
-├── NAVIGATION_HEADING_MODULE_SPECIFICATION.md
-├── NAVIGATION_TRACK_COURSE_MODULE_SPECIFICATION.md
-├── NAVIGATION_WIND_MODULE_SPECIFICATION.md
 ├── NAVIGATION_RULES.md
 ├── NAVIGATION_STATE_MODEL.md
+├── NAVIGATION_TRACK_COURSE_MODULE_SPECIFICATION.md
+├── NAVIGATION_VELOCITY_SPEED_MODULE_SPECIFICATION.md
+├── NAVIGATION_WIND_MODULE_SPECIFICATION.md
+├── NAVIGATION_HEADING_MODULE_SPECIFICATION.md
 └── Navigation_Knowledge_Map.md
-
-00_PROJECT/KNOWLEDGE/
-└── NAVIGATION_KNOWLEDGE_REVIEW_001.md
 
 05_VERIFICATION/NAVIGATION/
 ├── NAVIGATION_TRACEABILITY_MATRIX_001.md
@@ -156,9 +184,9 @@ ORIGINAL SOURCE
 
 Navigation materials are kept separated by role: system/module design, project knowledge/review, and verification. The Document Map and Baseline Reconciliation documents provide the cross-document linkage; they do not replace authoritative requirements, architecture or verification records.
 
-## 6. C2 working set
+## 8. C2 working set
 
-C2 materials are separated by their engineering role:
+C2 materials are separated by engineering role:
 
 ```text
 01_REQUIREMENTS/REGULATORY/C2/
@@ -172,7 +200,17 @@ C2 materials are separated by their engineering role:
 
 The original controlled file contents are preserved; structural cleanup changes their repository location only.
 
-## 7. Authoritative record rule
+## 9. HMI working set
+
+```text
+08_HMI/
+└── C2/
+    └── C2_HMI_ALLOCATION_001.md
+```
+
+Broken/empty AI interface artifact removed during cleanup. No valid source content was discarded.
+
+## 10. Authoritative record rule
 
 For each topic, exactly one record is designated authoritative at a given baseline.
 
@@ -183,7 +221,7 @@ Requirement wording
 → Master Requirements Register / controlled requirement record
 
 Architecture decision
-→ ARCH-DEC record
+→ architecture controlled record
 
 Hazard
 → HAZARD_LOG
@@ -200,7 +238,7 @@ Change
 
 Derived documents must link to the authoritative record.
 
-## 8. Duplicate control
+## 11. Duplicate control
 
 Before adding a document:
 
@@ -225,25 +263,25 @@ not:
 CREATE DUPLICATE
 ```
 
-## 9. Archive rule
+## 12. Archive rule
 
-Historical repair backups are retained under:
+Only valid historical/repair materials are retained under:
 
 ```text
 99_ARCHIVE/REPAIR_BACKUPS/
 ```
 
-They are not working documents and must not be used as authoritative sources.
+They are not working documents and must not be used as authoritative sources. Broken empty artifacts are removed rather than retained.
 
-## 10. Obsidian
+## 13. Obsidian
 
 Obsidian remains the navigation/knowledge presentation layer over the same repository mirror.
 
 There is no second independent documentation source. GitHub/main remains the controlled repository; Obsidian presents the synchronized working tree.
 
-## 11. Cleanup status
+## 14. Cleanup status
 
-First structural cleanup completed:
+Current structural cleanup pass:
 
 ```text
 [✓] Requirements separated
@@ -255,14 +293,34 @@ First structural cleanup completed:
 [✓] Navigation verification materials separated
 [✓] C2 materials separated by role
 [✓] Certification materials separated
-[✓] Repair backups archived
-[✓] Navigation document map added
-[✓] Navigation baseline reconciliation added
+[✓] Project governance grouped
+[✓] Project configuration grouped
+[✓] Project knowledge grouped
+[✓] Broken empty AI artifact removed
+[✓] Obsolete .bak artifact removed from working tree
+[✓] Master index paths updated
 ```
 
-The cleanup did not delete historical project content. Files were structurally relocated; Git history remains available.
+Structural changes preserve Git history. No valid project source was intentionally deleted in this pass.
 
-## 12. Next rule
+## 15. Mandatory document integration rule
+
+Every new document must be integrated into this structure before it is considered part of the project:
+
+```text
+CHECK EXISTING BASE
+→ DETERMINE NEED
+→ ASSIGN ID / NUMBER
+→ ASSIGN TYPE / STATUS / VERSION
+→ PLACE IN CORRECT LAYER
+→ LINK SOURCES / REQUIREMENTS / ARCHITECTURE
+→ LINK HMI / INTERFACES / VERIFICATION / CERTIFICATION AS APPLICABLE
+→ UPDATE INDEX / TRACEABILITY
+→ VERIFY INTEGRATION
+→ COMMIT
+```
+
+## 16. Next rule
 
 Do not create another parallel document when an existing controlled record can be updated.
 
