@@ -2,7 +2,9 @@
 id: NAVIGATION-TRACEABILITY-MATRIX-001
 type: navigation_traceability_matrix
 status: working_baseline
+version: 0.2
 authority: derived_from_navigation_state_model_rules_algorithm_verification_model
+parent: NAVIGATION
 ---
 
 # BlueSky PRO — Navigation Traceability Matrix
@@ -11,7 +13,7 @@ authority: derived_from_navigation_state_model_rules_algorithm_verification_mode
 
 Единая рабочая матрица трассируемости блока Navigation.
 
-Матрица **не создаёт новую базу требований**. Она связывает существующие authoritative records, инженерные правила, алгоритмы, математическую спецификацию, модули, интерфейсы и verification.
+Матрица не создаёт новую базу требований. Она связывает существующие authoritative records, инженерные правила, алгоритмы, математическую спецификацию, модули, интерфейсы и verification.
 
 ## 2. Authority chain
 
@@ -24,7 +26,7 @@ MASTER REQUIREMENTS REGISTER
         ↓
 SYSTEM REQUIREMENTS SPECIFICATION
         ↓
-SYSTEM ARCHITECTURE BASELINE
+AVIATION SYSTEM DEFINITION
         ↓
 NAVIGATION STATE MODEL
         ↓
@@ -53,22 +55,25 @@ EVIDENCE
 | System requirements presentation/specification | `01_REQUIREMENTS/SYSTEM/SYSTEM_REQUIREMENTS_SPECIFICATION.md` |
 | Regulatory sources | `01_REQUIREMENTS/REGULATORY/REGULATORY_SOURCE_REGISTER.md` |
 | Regulatory clause applicability | `01_REQUIREMENTS/REGULATORY/REGULATORY_CLAUSE_MAPPING_001.md` |
-| Certification basis | `06_CERTIFICATION/BASIS/` |
+| Certification basis | `06_CERTIFICATION/BASIS/CERTIFICATION_BASIS.md` + working register |
 | Safety requirements | `01_REQUIREMENTS/SAFETY/SAFETY_REQUIREMENTS_BASELINE.md` |
-| System architecture | `02_ARCHITECTURE/SYSTEM/SYSTEM_ARCHITECTURE_BASELINE.md` |
-| Interface control | `02_ARCHITECTURE/INTERFACES/INTERFACE_CONTROL_DOCUMENT.md` |
+| System architecture / aviation system definition | `02_ARCHITECTURE/SYSTEM/AVIATION_SYSTEM_DEFINITION.md` |
+| Controlled interface record currently available | `02_ARCHITECTURE/INTERFACES/C2/C2_ICD_BASELINE_001.md` |
 | Navigation state | `03_SYSTEM/NAVIGATION/NAVIGATION_STATE_MODEL.md` |
 | Navigation rules | `03_SYSTEM/NAVIGATION/NAVIGATION_RULES.md` |
 | Navigation algorithm | `03_SYSTEM/NAVIGATION/NAVIGATION_ALGORITHM.md` |
 | Navigation mathematics | `03_SYSTEM/NAVIGATION/NAVIGATION_MATHEMATICAL_SPECIFICATION_001.md` |
 | Navigation verification model | `05_VERIFICATION/NAVIGATION/NAVIGATION_VERIFICATION_MODEL.md` |
 | Navigation test vectors | `05_VERIFICATION/NAVIGATION/TEST_VECTORS/NAVIGATION_TEST_VECTORS_001.md` |
+| Verification evidence index | `05_VERIFICATION/EVIDENCE/VERIFICATION_EVIDENCE_INDEX.md` |
+
+**Важно:** универсальные `SYSTEM_ARCHITECTURE_BASELINE.md` и `INTERFACE_CONTROL_DOCUMENT.md` в текущем дереве не существуют и больше не указываются как фактические файлы. Их наличие/необходимость является отдельным проектным решением, а не основанием для выдуманной ссылки.
 
 ## 4. Module allocation
 
 | Module | Module specification | Existing engineering basis | Verification allocation | Status |
 |---|---|---|---|---|
-| Position | `03_SYSTEM/NAVIGATION/NAVIGATION_POSITION_MODULE_SPECIFICATION.md` | State Model / Rules / Algorithm / ICD | NAV-V06, V08–V12, V16, V20; NAV-TV-006, 007, 010 | RECONCILIATION |
+| Position | `03_SYSTEM/NAVIGATION/NAVIGATION_POSITION_MODULE_SPECIFICATION.md` | State Model / Rules / Algorithm / available interface basis | NAV-V06, V08–V12, V16, V20; NAV-TV-006, 007, 010 | RECONCILIATION |
 | Velocity / Speed | `03_SYSTEM/NAVIGATION/NAVIGATION_VELOCITY_SPEED_MODULE_SPECIFICATION.md` | State Model / Rules / Algorithm / Mathematics | NAV-V01–V04, V08–V12, V15–V17, V19, V20 | RECONCILIATION |
 | Heading | `03_SYSTEM/NAVIGATION/NAVIGATION_HEADING_MODULE_SPECIFICATION.md` | State Model / Rules / Algorithm / Mathematics | integration and quality cases; exact allocation pending | RECONCILIATION |
 | Track / Course | `03_SYSTEM/NAVIGATION/NAVIGATION_TRACK_COURSE_MODULE_SPECIFICATION.md` | State Model / Rules / Algorithm / Mathematics | NAV-V01–V04, V06–V12, V15–V20 | RECONCILIATION |
@@ -144,10 +149,10 @@ If a clause applies to an external object, it remains an external constraint/int
 
 ## 8. Architecture linkage
 
-Navigation module allocation is subordinate to the existing system architecture.
+Navigation module allocation is subordinate to the current system architecture definition.
 
 ```text
-System Architecture
+02_ARCHITECTURE/SYSTEM/AVIATION_SYSTEM_DEFINITION.md
         ↓
 Navigation block
         ↓
@@ -183,7 +188,7 @@ Until execution evidence exists, the item remains `NOT VERIFIED`.
 
 ## 10. Cross-module semantic baseline
 
-The existing Navigation State Model is the common semantic authority for the following distinctions:
+The existing Navigation State Model is the common semantic authority for:
 
 ```text
 PLANNED ≠ ACTUAL ≠ SIMULATED
@@ -244,7 +249,7 @@ source
 
 ## 13. Current decision
 
-The current Navigation module specifications are **derived design records**, not replacements for the authoritative requirement, architecture, rules, algorithm, mathematical or verification records.
+The current Navigation module specifications are derived design records, not replacements for the authoritative requirement, architecture, rules, algorithm, mathematical or verification records.
 
 The immediate task is to reconcile them with those existing records and eliminate duplication or conflicting definitions before declaring any module complete.
 
