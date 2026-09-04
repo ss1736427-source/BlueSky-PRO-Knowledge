@@ -11,10 +11,14 @@
             "id": "058fcba7e26ecc4b",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Граф"
+              "type": "markdown",
+              "state": {
+                "file": "05_VERIFICATION/C2/C2_CONTROLLED_BASELINE_STATUS_001.md",
+                "mode": "preview",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "C2_CONTROLLED_BASELINE_STATUS_001"
             }
           }
         ]
@@ -157,7 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "01_REQUIREMENTS/TRACEABILITY/REQUIREMENTS_CONSOLIDATION_REPORT.md",
+                "file": "05_VERIFICATION/C2/C2_CONTROLLED_BASELINE_STATUS_001.md",
                 "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
@@ -167,12 +171,11 @@
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -186,8 +189,9 @@
       "bases:Создать новую базу": false
     }
   },
-  "active": "058fcba7e26ecc4b",
+  "active": "0fbac89010389c02",
   "lastOpenFiles": [
+    "08_HMI/C2/C2_HMI_ALLOCATION_001.md",
     "TRACEABILITY/REPOSITORY_REQUIREMENTS_AUDIT_REPORT_001.md",
     "TRACEABILITY",
     "05_VERIFICATION/VERIFICATION_REGISTER.md",
@@ -216,7 +220,6 @@
     "00_PROJECT/GOVERNANCE/BLUE_SKY_DECISIONS_LOG.md",
     "00_PROJECT/GOVERNANCE",
     "00_PROJECT/CONFIGURATION/CONFIGURATION_ITEM_REGISTER.md",
-    "00_PROJECT/CONFIGURATION/CONFIGURATION_BASELINE.md",
     "00_PROJECT/CONFIGURATION"
   ]
 }
