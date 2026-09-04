@@ -2,7 +2,9 @@
 id: NAVIGATION-TRACK-COURSE-MODULE-001
 type: navigation_module_specification
 status: draft_for_agreement
-authority: derived_from_navigation_state_model_and_system_architecture
+version: 0.2
+parent: NAVIGATION
+authority: derived_from_master_requirements_system_architecture_navigation_state_model_rules_algorithm_mathematics
 ---
 
 # BlueSky PRO — Navigation / Track & Course Module Specification
@@ -523,4 +525,20 @@ Reference Frames → interpretation of directions
 Navigation State → unified representation
 ```
 
-Данный модуль является частью Navigation block и не заменяет остальные модули.
+## 28. Controlled references
+
+- `01_REQUIREMENTS/SYSTEM/MASTER_REQUIREMENTS_REGISTER.md`
+- `01_REQUIREMENTS/SYSTEM/SYSTEM_REQUIREMENTS_SPECIFICATION.md`
+- `01_REQUIREMENTS/SAFETY/SAFETY_REQUIREMENTS_BASELINE.md`
+- `02_ARCHITECTURE/SYSTEM/AVIATION_SYSTEM_DEFINITION.md`
+- `03_SYSTEM/NAVIGATION/NAVIGATION_STATE_MODEL.md`
+- `03_SYSTEM/NAVIGATION/NAVIGATION_RULES.md`
+- `03_SYSTEM/NAVIGATION/NAVIGATION_ALGORITHM.md`
+- `03_SYSTEM/NAVIGATION/NAVIGATION_MATHEMATICAL_SPECIFICATION_001.md`
+- `05_VERIFICATION/NAVIGATION/NAVIGATION_TRACEABILITY_MATRIX_001.md`
+- `05_VERIFICATION/NAVIGATION/NAVIGATION_VERIFICATION_MODEL.md`
+- `05_VERIFICATION/NAVIGATION/TEST_VECTORS/NAVIGATION_TEST_VECTORS_001.md`
+- `05_VERIFICATION/EVIDENCE/VERIFICATION_EVIDENCE_INDEX.md`
+- `08_HMI/`
+
+**Status: DRAFT_FOR_AGREEMENT**
