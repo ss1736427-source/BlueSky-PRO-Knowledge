@@ -11,10 +11,14 @@
             "id": "058fcba7e26ecc4b",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Граф"
+              "type": "markdown",
+              "state": {
+                "file": "00_PROJECT/GOVERNANCE/PROJECT_RULES.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "PROJECT_RULES"
             }
           }
         ]
@@ -188,6 +192,7 @@
   },
   "active": "058fcba7e26ecc4b",
   "lastOpenFiles": [
+    "00_PROJECT/KNOWLEDGE/NAVIGATION_KNOWLEDGE_REVIEW_001.md",
     "01_REQUIREMENTS/TRACEABILITY/TRACEABILITY_CLOSURE_PASS_002.md",
     "01_REQUIREMENTS/TRACEABILITY/REQUIREMENTS_TRACEABILITY_MATRIX.md",
     "01_REQUIREMENTS/TRACEABILITY/NAVIGATION_TRACEABILITY_CLOSURE_STATUS_001.md",
@@ -215,7 +220,6 @@
     "00_PROJECT/GOVERNANCE/PROJECT_RULES.md",
     "00_PROJECT/GOVERNANCE/MASTER_DOCUMENT_INDEX.md",
     "00_PROJECT/GOVERNANCE/DOCUMENT_CONTROL_AND_BASELINE_PROCESS.md",
-    "00_PROJECT/GOVERNANCE/DECISIONS.md",
     "00_PROJECT/GOVERNANCE",
     "00_PROJECT/CONFIGURATION"
   ]
