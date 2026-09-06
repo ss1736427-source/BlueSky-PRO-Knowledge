@@ -1,20 +1,58 @@
-# OBSIDIAN PROJECT KNOWLEDGE BASE
+# BlueSky PRO Knowledge Base
 
-## Contents
+## Назначение
 
-- `00_PROJECT/` — rules, knowledge-base navigation, source index, decisions, terminology and changelog.
-- `01_SOURCE_MATERIAL/` — all uploaded source files, preserved unchanged.
-- `03_ARCHIVE/` — reserved for future verified snapshots and backups.
+Этот репозиторий является контролируемой базой знаний и проектной документации BlueSky PRO, используемой совместно с Obsidian.
 
-## Installation
+## Текущая структура
 
-Copy the contents of this package into:
+```text
+00_PROJECT/          проектное управление, решения, правила, конфигурация, знания
+01_REQUIREMENTS/     требования, нормативные материалы, safety, compliance, traceability
+02_ARCHITECTURE/     архитектура, интерфейсы и архитектурные решения
+02_SYSTEM_DESIGN/    детальная проработка системных моделей и алгоритмов
+03_SYSTEM/           функциональные блоки системы
+05_VERIFICATION/     верификация, тестовые векторы и evidence
+06_CERTIFICATION/    материалы по сертификации
+08_HMI/              HMI и распределение функций интерфейса
+99_ARCHIVE/          исторические и резервные материалы
+```
 
-`E:\Flight Planning\02_SYSTEM\Design\`
+## Obsidian
 
-Do not overwrite existing working documentation blindly. The source material is intended to be added as a controlled knowledge/archive layer.
+Obsidian используется как рабочий навигационный и knowledge-management слой над тем же Git-репозиторием. Отдельной независимой базы документации нет.
 
-## Control principle
+## Управление изменениями
 
-**diagnose → understand → change only what is necessary → verify → save verified version**
+```text
+диагностика
+→ понимание
+→ изменение только необходимого
+→ проверка
+→ сохранение проверенной версии
+```
 
+## Правила
+
+- Не создавать дубликат существующего controlled record.
+- Не менять идентичность требования без отдельного решения.
+- Не переносить сведения из внешних систем во внутренние требования без определения границы ответственности.
+- Исходные материалы, если они присутствуют в репозитории как архив, не переписывать без отдельного решения.
+- После изменения документа проверять ссылки, структуру, кодировку и статус.
+
+## Контрольная точка
+
+Перед началом работы убедиться, что локальная ветка `main` синхронизирована с `origin/main`.
+
+```text
+git pull --ff-only
+git status
+```
+
+После подтверждённого изменения:
+
+```text
+git add <file>
+git commit -m "<message>"
+git push
+```

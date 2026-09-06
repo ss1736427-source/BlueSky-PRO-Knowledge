@@ -26,31 +26,33 @@ system: aviation_system
 
 ## 2. Repository structure
 
+### 2.1 Текущие каталоги, присутствующие в main
+
 ```text
 00_PROJECT/
 01_REQUIREMENTS/
 02_ARCHITECTURE/
+02_SYSTEM_DESIGN/
 03_SYSTEM/
-04_SOFTWARE/
 05_VERIFICATION/
 06_CERTIFICATION/
-07_EXTERNAL/
 08_HMI/
 99_ARCHIVE/
 ```
 
-### Назначение уровней
+### 2.2 Назначение уровней
 
 - `00_PROJECT` — управление проектом, решения, baseline/control, master indexes и проектные правила.
 - `01_REQUIREMENTS` — системные, нормативные, safety и compliance requirements/traceability.
 - `02_ARCHITECTURE` — архитектурные решения, system design и interface control.
+- `02_SYSTEM_DESIGN` — детальная проработка системных моделей, алгоритмов и инженерных design records.
 - `03_SYSTEM` — функциональные блоки и модули BlueSky PRO.
-- `04_SOFTWARE` — реализация, software design, API и configuration of software.
 - `05_VERIFICATION` — verification plan, test vectors, test cases, results и evidence.
 - `06_CERTIFICATION` — certification basis, scope, strategy, requirements и certification documentation.
-- `07_EXTERNAL` — внешние системы, источники и среда, не являющиеся внутренними функциями BlueSky PRO.
 - `08_HMI` — пользовательский интерфейс, UX, design system и HMI allocation.
 - `99_ARCHIVE` — сохранённые исторические/резервные материалы, не являющиеся текущими рабочими записями.
+
+Каталоги `04_SOFTWARE` и `07_EXTERNAL`, встречавшиеся в более ранних планах структуры, не считаются существующими каталогами текущего `main`, пока соответствующие директории фактически не созданы.
 
 ## 3. Source hierarchy
 
@@ -113,6 +115,21 @@ ORIGINAL SOURCE
 | DOC-SAF-002 | SAFETY_CASE.md | SAF | 01_REQUIREMENTS/SAFETY/ |
 | DOC-SAF-003 | HAZARD_LOG.md | SAF | 01_REQUIREMENTS/SAFETY/ |
 | DOC-ARCH-001 | AVIATION_SYSTEM_DEFINITION.md | ARCH | 02_ARCHITECTURE/SYSTEM/ |
+| DOC-ARCH-002 | EXTERNAL_PROCESSING_INTEGRATION_ARCHITECTURE_001.md | ARCH | 02_ARCHITECTURE/SYSTEM/ |
+| DOC-ARCH-003 | EXTERNAL_MAINTENANCE_SYSTEM_INTEGRATION_ARCHITECTURE_001.md | ARCH | 02_ARCHITECTURE/SYSTEM/ |
+| DOC-ARCH-004 | EXTERNAL_MAINTENANCE_INTEGRATION_PRINCIPLE_001.md | ARCH | 02_ARCHITECTURE/SYSTEM/ |
+| DOC-ARCH-005 | EXTERNAL_MAINTENANCE_INTEGRATION_DESIGN_001.md | ARCH | 02_ARCHITECTURE/SYSTEM/ |
+| DOC-ARCH-006 | EXTERNAL_MAINTENANCE_DATA_EXCHANGE_CONTRACT_001.md | ARCH | 02_ARCHITECTURE/SYSTEM/ |
+| DOC-ARCH-007 | BLUESKY_PRO_UX_MINIMAL_INFORMATION_PRINCIPLE_001.md | UX | 02_ARCHITECTURE/UX/ |
+| DOC-ARCH-008 | ADMINISTRATOR_DATA_INTEGRATION_ACCESS_MODEL_001.md | ARCH | 02_ARCHITECTURE/ADMINISTRATOR/ |
+| DOC-ARCH-009 | ADMINISTRATOR_ENGINEER_TECHNICIAN_AUTHORITY_MODEL_001.md | ARCH | 02_ARCHITECTURE/ADMINISTRATOR/ |
+| DOC-ARCH-010 | ADMINISTRATOR_ENGINEER_TECHNICIAN_ACCESS_RULE_002.md | ARCH | 02_ARCHITECTURE/ADMINISTRATOR/ |
+| DOC-ARCH-011 | ADMINISTRATOR_ENGINEER_TECHNICIAN_ACCESS_RULE_003.md | ARCH | 02_ARCHITECTURE/ADMINISTRATOR/ |
+| DOC-ARCH-012 | ADMINISTRATOR_ROLE_CATALOG_001.md | ARCH | 02_ARCHITECTURE/ADMINISTRATOR/ |
+| DOC-ARCH-013 | ADMINISTRATOR_USERS_ROLES_CAPABILITIES_001.md | ARCH | 02_ARCHITECTURE/ADMINISTRATOR/ |
+| DOC-ARCH-014 | ADMINISTRATOR_MENU_AND_ROLE_MODEL_001.md | ARCH | 02_ARCHITECTURE/ADMINISTRATOR/ |
+| DOC-ARCH-015 | ADMINISTRATOR_MENU_STRUCTURE_001.md | ARCH | 02_ARCHITECTURE/ADMINISTRATOR/ |
+| DOC-ARCH-016 | ADMINISTRATOR_USER_ROLE_ASSIGNMENT_UI_001.md | HMI/ARCH | 02_ARCHITECTURE/ADMINISTRATOR/ |
 | DOC-IF-001 | C2_ICD_BASELINE_001.md | IF | 02_ARCHITECTURE/INTERFACES/C2/ |
 | DOC-VER-001 | VERIFICATION_PLAN.md | VER | 05_VERIFICATION/PLAN/ |
 | DOC-VER-002 | VERIFICATION_EVIDENCE_INDEX.md | EVD | 05_VERIFICATION/EVIDENCE/ |
