@@ -2,78 +2,92 @@
 
 **Document ID:** ADMINISTRATOR_USERS_ROLES_CAPABILITIES_001  
 **Status:** BASELINE  
-**Scope:** Administrator block / identity, roles, capabilities, visibility and personal workspace
+**Scope:** Administrator block / user-based role assignment and personal workspace
 
 ## 1. Purpose
 
-Define a minimal and extensible model in which one authenticated person may receive several operational functions while the interface exposes only the information and controls required for the currently selected function.
+Define a simple and extensible model in which the Administrator selects a user and assigns the functions required for that person. One authenticated person may combine several functions.
 
 ## 2. Core principle
 
 ```text
-USER
-  ↓
-IDENTITY
-  ↓
-ROLES / FUNCTIONS
-  ↓
-CAPABILITIES
-  ↓
-RESOURCE SCOPE
-  ↓
-VISIBILITY
-  ↓
-PERSONAL MENU
+ADMINISTRATOR
+      ↓
+   USERNAME
+      ↓
+ ASSIGN ROLES
+      ↓
+ CONFIGURE ACCESS
+      ↓
+ PERSONAL MENU
 ```
 
-Visibility is not authorization. Hiding an item never grants or removes a permission.
+The Administrator works with the **user as the primary object**. Roles are assigned directly to the selected user.
 
-## 3. Initial user functions
+## 3. User functions
 
-The Administrator shall support at least these functions:
+The Administrator shall be able to assign one or several functions to the same user:
 
 - SYSTEM ADMINISTRATOR — system-wide administration;
 - TECHNICIAN — technical maintenance and service;
 - ENGINEER — engineering configuration, diagnostics and technical analysis;
 - PILOT / OPERATOR — flight preparation, execution and operational data.
 
-One person may hold multiple functions simultaneously, for example:
+Example:
 
 ```text
-USER A
+USER: SERGEY
+
+Roles:
+☑ PILOT
+☑ TECHNICIAN
+☑ ENGINEER
+☐ SYSTEM ADMINISTRATOR
+```
+
+No duplicate account is required solely because functions are combined.
+
+## 4. Administrator workflow
+
+```text
+Users
+  ↓
+Select user
+  ↓
+User card
+  ↓
+Roles
+  ↓
+Access / scope
+  ↓
+Save
+```
+
+The Administrator does not need to construct a complex role hierarchy for ordinary operation.
+
+## 5. Role combinations
+
+A role represents a functional area assigned to the user. Multiple roles can coexist on one user account.
+
+```text
+ONE USER
+│
 ├── PILOT
 ├── TECHNICIAN
 └── ENGINEER
 ```
 
-No duplicate account is required solely because functions are combined.
-
-## 4. Capability model
-
-A role is a convenient grouping of capabilities. Effective access is calculated from the user's assigned roles and the applicable resource scope.
+The effective capabilities of the user are the combined result of the assigned roles and configured access restrictions.
 
 ```text
-Effective Access = Roles × Capabilities × Scope × Policy
+Effective Access = Assigned Roles × Scope × Policy
 ```
 
-Examples of capabilities:
+The system may internally map roles to capabilities, but this complexity should normally remain outside the user's daily Administrator workflow.
 
-- view;
-- create;
-- edit;
-- approve;
-- configure;
-- diagnose;
-- maintain;
-- export;
-- process;
-- manage connection;
-- manage users and roles;
-- access audit information.
+## 6. Scope
 
-## 5. Resource scope
-
-Capabilities may be restricted by scope, such as:
+Where required, the Administrator may restrict a user's access to:
 
 - entire system;
 - organization/company;
@@ -84,77 +98,64 @@ Capabilities may be restricted by scope, such as:
 - dataset;
 - external processing connection.
 
-A user with a technical role does not automatically receive system-administrator access.
+Default principle: least privilege.
 
-## 6. Personal menu
+## 7. Personal menu
 
-The user interface shall be configurable per user.
+After roles and access are assigned, the user can configure how permitted functions are displayed.
 
 ```text
-AVAILABLE
-├── allowed by role
-├── allowed by capability
-└── allowed by scope
-
-        ↓
-PERSONAL WORKSPACE
-├── pinned
-├── frequently used
-├── hidden
-└── ordered
+USER
+ ↓
+ASSIGNED ROLES
+ ↓
+AVAILABLE FUNCTIONS
+ ↓
+PERSONAL MENU
 ```
 
-The system shall preferentially present only relevant functions. Mandatory safety, security, compliance and operational controls cannot be removed when their display is required by policy.
+The personal menu controls presentation and convenience, not authorization.
 
-## 7. Context switching
+Mandatory safety, security, compliance and operational controls remain visible whenever required by policy.
 
-When a user has several functions, the interface may expose a compact function/context selector instead of duplicating menus.
+## 8. Administrator responsibilities
 
-Example:
+The Administrator manages the user's:
+
+- identity / username;
+- assigned roles;
+- access scope;
+- access to external data and processing;
+- personal menu defaults;
+- security-sensitive permissions;
+- audit visibility where authorized.
+
+## 9. Context for multi-role users
+
+If a user has several roles, the interface can provide a simple context selector only when necessary.
 
 ```text
 SERGEY
 [PILOT ▾]
-
-Flight
-  ├── Mission
-  ├── UAV
-  └── Telemetry
 ```
 
-Switching to TECHNICIAN changes the working context and visible tools without changing the underlying identity.
+Selecting another assigned function changes the working view to the corresponding tools. It does not create another account or identity.
 
-## 8. Administrator responsibilities
+## 10. Safety and security
 
-The Administrator manages:
-
-- users;
-- assigned functions/roles;
-- capabilities;
-- scopes;
-- role combinations;
-- mandatory controls;
-- personal menu defaults;
-- external-data and processing access;
-- audit policy.
-
-The Administrator shall be able to create organization-specific role profiles without changing the core application model.
-
-## 9. Safety and security constraints
-
-- Least privilege is the default.
-- Administrative capability cannot be inferred from UI visibility.
+- UI visibility never grants authorization.
+- A user can access only functions permitted by the assigned roles and scope.
 - Critical actions require explicit authorization according to policy.
-- Changes to roles, permissions and security-sensitive configuration are auditable.
-- A user's personal menu may simplify access but must not bypass authorization.
+- Changes to roles and security-sensitive access are auditable.
+- Personal menu settings cannot bypass authorization.
 
-## 10. Relationship to other Administrator branches
+## 11. Relationship to other Administrator branches
 
 ```text
 ADMINISTRATOR
 │
-├── USERS & ROLES
-│     └── CAPABILITIES / SCOPE / PERSONAL MENU
+├── USERS
+│     └── User → Roles → Access → Personal Menu
 │
 ├── UAV & CONFIGURATION
 │     └── compatible equipment configuration
@@ -166,21 +167,41 @@ ADMINISTRATOR
 │     └── data and processing integrations
 │
 └── LOG / AUDIT
-      └── traceability of administrative actions
+      └── administrative actions
 ```
 
-## 11. Next decomposition
+## 12. Interface principle
 
-The next level shall define the concrete `USERS & ROLES` interface and its workflow:
+The Administrator's daily workflow should be direct:
 
 ```text
-Users
- → User card
- → Functions
- → Capabilities
- → Scope
- → Personal menu
- → Audit
+USERS
+ ↓
+[SEARCH / SELECT USER]
+ ↓
+USER CARD
+ ↓
+[ROLES]
+ ↓
+[ACCESS]
+ ↓
+[SAVE]
 ```
 
-Only after this layer is stable should detailed role matrices be expanded.
+The system hides unnecessary internal complexity. Advanced configuration remains available only where required.
+
+## 13. Next decomposition
+
+The next level is the concrete Administrator interface:
+
+```text
+USERS
+├── Search / list
+├── Select user
+├── User card
+├── Roles
+├── Access
+└── Personal menu
+```
+
+After this is fixed, the same simple user-centric approach can be applied to the other Administrator branches.
