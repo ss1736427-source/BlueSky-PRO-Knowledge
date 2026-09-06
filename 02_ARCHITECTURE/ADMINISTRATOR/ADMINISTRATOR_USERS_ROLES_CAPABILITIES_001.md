@@ -6,7 +6,7 @@
 
 ## 1. Purpose
 
-Define a simple and extensible model in which the Administrator selects a user and assigns the functions required for that person. One authenticated person may combine several functions.
+Define a simple and extensible model in which the Administrator selects a user and assigns the basic roles required for that person. One authenticated person may combine several roles.
 
 ## 2. Core principle
 
@@ -17,20 +17,20 @@ ADMINISTRATOR
       ↓
  ASSIGN ROLES
       ↓
- CONFIGURE ACCESS
+ SYSTEM BUILDS BASE ACCESS
       ↓
  PERSONAL MENU
 ```
 
 The Administrator works with the **user as the primary object**. Roles are assigned directly to the selected user.
 
-## 3. User functions
+## 3. User roles
 
-The Administrator shall be able to assign one or several functions to the same user:
+The Administrator shall be able to assign one or several basic roles to the same user:
 
 - SYSTEM ADMINISTRATOR — system-wide administration;
-- TECHNICIAN — technical maintenance and service;
-- ENGINEER — engineering configuration, diagnostics and technical analysis;
+- TECHNICIAN — technical maintenance and service within the engineer-defined technical authorization;
+- ENGINEER — engineering configuration, diagnostics, technical analysis and control of the technical authorization of subordinate technicians;
 - PILOT / OPERATOR — flight preparation, execution and operational data.
 
 Example:
@@ -52,18 +52,16 @@ No duplicate account is required solely because functions are combined.
 ```text
 Users
   ↓
-Select user
+Search / select user
   ↓
 User card
   ↓
 Roles
   ↓
-Access / scope
-  ↓
 Save
 ```
 
-The Administrator does not need to construct a complex role hierarchy for ordinary operation.
+The Administrator assigns the basic roles. The system derives the resulting base access.
 
 ## 5. Role combinations
 
@@ -77,39 +75,59 @@ ONE USER
 └── ENGINEER
 ```
 
-The effective capabilities of the user are the combined result of the assigned roles and configured access restrictions.
+The effective capabilities of the user are the combined result of assigned roles, applicable organizational rules and technical authorization boundaries.
+
+## 6. Technical authorization boundary
+
+The technical hierarchy is deliberately different from ordinary role assignment:
 
 ```text
-Effective Access = Assigned Roles × Scope × Policy
+ADMINISTRATOR
+      ↓
+assigns ENGINEER role
+      ↓
+ENGINEER
+      ↓
+full technical access to the fleet and technical data
+      ↓
+defines subordinate TECHNICIAN authorizations
+      ↓
+TECHNICIAN
+      ↓
+only authorized UAV / equipment / configuration / work
 ```
 
-The system may internally map roles to capabilities, but this complexity should normally remain outside the user's daily Administrator workflow.
+The Administrator does not manually distribute every maintenance operation between technicians when that decision belongs to the ENGINEER.
 
-## 6. Scope
+## 7. Engineer
 
-Where required, the Administrator may restrict a user's access to:
+ENGINEER has access to the entire UAV fleet and the technical data required for engineering work within the system's organizational boundary.
 
-- entire system;
-- organization/company;
-- site/base;
-- UAV/model;
+ENGINEER controls the technical authorization of subordinate TECHNICIAN personnel by defining, as applicable:
+
+- UAV or UAV group;
 - equipment;
-- mission;
-- dataset;
-- external processing connection.
+- configuration;
+- type of technical work;
+- authorization level;
+- validity or other organizational constraints.
 
-Default principle: least privilege.
+## 8. Technician
 
-## 7. Personal menu
+TECHNICIAN may perform only operations covered by the technical authorization established by ENGINEER.
 
-After roles and access are assigned, the user can configure how permitted functions are displayed.
+The existence of the `TECHNICIAN` role does not itself grant access to the whole technical fleet or all technical operations.
+
+## 9. Personal menu
+
+After authorization is established, the user can configure how permitted functions are displayed.
 
 ```text
 USER
  ↓
 ASSIGNED ROLES
  ↓
-AVAILABLE FUNCTIONS
+AUTHORIZED FUNCTIONS
  ↓
 PERSONAL MENU
 ```
@@ -118,19 +136,20 @@ The personal menu controls presentation and convenience, not authorization.
 
 Mandatory safety, security, compliance and operational controls remain visible whenever required by policy.
 
-## 8. Administrator responsibilities
+## 10. Administrator responsibilities
 
 The Administrator manages the user's:
 
 - identity / username;
-- assigned roles;
-- access scope;
-- access to external data and processing;
-- personal menu defaults;
+- assigned basic roles;
+- applicable system-level access controls;
 - security-sensitive permissions;
+- personal menu defaults;
 - audit visibility where authorized.
 
-## 9. Context for multi-role users
+Technical task-level authorization for TECHNICIAN is assigned by ENGINEER according to the established authority model.
+
+## 11. Context for multi-role users
 
 If a user has several roles, the interface can provide a simple context selector only when necessary.
 
@@ -141,24 +160,25 @@ SERGEY
 
 Selecting another assigned function changes the working view to the corresponding tools. It does not create another account or identity.
 
-## 10. Safety and security
+## 12. Safety and security
 
 - UI visibility never grants authorization.
-- A user can access only functions permitted by the assigned roles and scope.
+- A user can access only functions permitted by assigned roles and applicable authorization rules.
 - Critical actions require explicit authorization according to policy.
 - Changes to roles and security-sensitive access are auditable.
 - Personal menu settings cannot bypass authorization.
+- ENGINEER authorization of TECHNICIAN does not transfer ENGINEER-only authorities such as Certification / Release Authority unless separately granted.
 
-## 11. Relationship to other Administrator branches
+## 13. Relationship to other Administrator branches
 
 ```text
 ADMINISTRATOR
 │
 ├── USERS
-│     └── User → Roles → Access → Personal Menu
+│     └── User → Roles → Base Access → Personal Menu
 │
 ├── UAV & CONFIGURATION
-│     └── compatible equipment configuration
+│     └── fleet / equipment / configurations
 │
 ├── DATA & PROCESSING
 │     └── datasets / preparation / export / results
@@ -170,7 +190,7 @@ ADMINISTRATOR
       └── administrative actions
 ```
 
-## 12. Interface principle
+## 14. Interface principle
 
 The Administrator's daily workflow should be direct:
 
@@ -183,25 +203,11 @@ USER CARD
  ↓
 [ROLES]
  ↓
-[ACCESS]
- ↓
 [SAVE]
 ```
 
 The system hides unnecessary internal complexity. Advanced configuration remains available only where required.
 
-## 13. Next decomposition
+## 15. Status
 
-The next level is the concrete Administrator interface:
-
-```text
-USERS
-├── Search / list
-├── Select user
-├── User card
-├── Roles
-├── Access
-└── Personal menu
-```
-
-After this is fixed, the same simple user-centric approach can be applied to the other Administrator branches.
+**BASELINE.** The user-centric role assignment model is established. Detailed capability matrices and technical authorization rules are maintained in the corresponding Administrator authority documents.
