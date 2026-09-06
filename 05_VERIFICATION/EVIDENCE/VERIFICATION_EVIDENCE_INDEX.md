@@ -88,7 +88,7 @@ Status
 V-CERT-xxx   Certification-level verification
 V-SYS-xxx    System verification
 V-SAF-xxx    Safety verification
-V-NAV-xxx    Navigation
+NAV-Vxx      Navigation verification case — controlled Navigation Register
 V-RTE-xxx    Route
 V-WP-xxx     Waypoint
 V-RET-xxx    Dynamic Return
@@ -101,6 +101,8 @@ V-CFG-xxx    Configuration
 V-SW-xxx     Software
 ```
 
+Legacy `V-NAV-001…V-NAV-005` references are retained only as historical references until reconciled; they are not separate controlled Navigation case identities.
+
 ## 6. Initial verification index
 
 | Evidence ID | Verification Case | Requirement | Method | Objective | Status |
@@ -110,11 +112,11 @@ V-SW-xxx     Software
 | EVD-003 | V-CFG-001 | CRB-SYS-003 | Configuration Audit | Verify configuration identification | PLANNED |
 | EVD-004 | V-CFG-002 | CRB-SYS-004 | Process Audit | Verify change control | PLANNED |
 | EVD-005 | V-CERT-002 | CRB-SYS-005 | Review | Verify evidence allocation | PLANNED |
-| EVD-006 | V-NAV-001 | CRB-NAV-001 | Test / Analysis | Verify Navigation State | PLANNED |
-| EVD-007 | V-NAV-002 | CRB-NAV-002 | Failure Test | Verify invalid/stale data handling | PLANNED |
-| EVD-008 | V-NAV-003 | CRB-NAV-003 | Analysis / Test | Verify reference frame | PLANNED |
-| EVD-009 | V-NAV-004 | CRB-NAV-004 | Analysis / Test | Verify Course/Heading/Track distinction | PLANNED |
-| EVD-010 | V-NAV-005 | CRB-NAV-005 | Simulation / Test | Verify navigation deviation | PLANNED |
+| EVD-006 | NAV-V01 | CRB-NAV-001 | Test / Analysis | Verify Navigation State | PLANNED |
+| EVD-007 | NAV-V02 | CRB-NAV-002 | Failure Test | Verify invalid/stale data handling | PLANNED |
+| EVD-008 | NAV-V03 | CRB-NAV-003 | Analysis / Test | Verify reference frame | PLANNED |
+| EVD-009 | NAV-V04 | CRB-NAV-004 | Analysis / Test | Verify Course/Heading/Track distinction | PLANNED |
+| EVD-010 | NAV-V05 | CRB-NAV-005 | Simulation / Test | Verify navigation deviation | PLANNED |
 | EVD-011 | V-RTE-001 | CRB-RTE-001 | Integration Test | Verify route identity/version | PLANNED |
 | EVD-012 | V-WP-001 | CRB-WP-001 | Integration Test | Verify active WP and transitions | PLANNED |
 | EVD-013 | V-C2-001 | CRB-C2-001 | Test / Analysis | Verify C2 state | PLANNED |
@@ -127,6 +129,10 @@ V-SW-xxx     Software
 | EVD-020 | V-MUL-001 | SAF-REQ-012 | Integration Test | Verify individual UAV state isolation | PLANNED |
 | EVD-021 | V-AI-001 | SAF-REQ-018 | Negative Test | Verify AI cannot bypass authority | PLANNED |
 | EVD-022 | V-CFG-001 | SAF-REQ-017 | Configuration Audit | Verify evidence/configuration linkage | PLANNED |
+| EVD-023 | NAV-V11 | CRB-NAV-002 | Test / Analysis | Verify conflicting navigation sources are detected and controlled | PLANNED |
+| EVD-024 | NAV-V12 | CRB-NAV-002 | Failure Test | Verify degraded navigation source handling | PLANNED |
+| EVD-025 | NAV-V14 | Navigation Verification Model / NAV-TV-009 prerequisite | Simulation / Test | Verify energy-degradation navigation behavior and controlled return-feasibility assessment | PLANNED |
+| EVD-026 | NAV-V20 | CRB-NAV-001 / Navigation State Model | Analysis / Test | Verify separation of PLANNED, SIMULATED and ACTUAL states | PLANNED |
 
 ## 7. Navigation evidence
 
@@ -145,6 +151,8 @@ Evidence
 ```
 
 The existing model does not itself constitute executed certification evidence.
+
+Controlled Navigation case identities are maintained in `VERIFICATION_REGISTER.md` as `NAV-V01…NAV-V20`. Navigation evidence records shall use those controlled IDs.
 
 ## 8. Safety evidence
 
@@ -344,8 +352,8 @@ Evidence completeness and full requirement-to-evidence mapping remain pending un
 
 
 
-## C2 в„–142 вЂ” CONTROLLED INTEGRATION
-Source: РџСЂРёРєР°Р· РњРёРЅС‚СЂР°РЅСЃР° Р РѕСЃСЃРёРё РѕС‚ 24.04.2025 в„–142.
+## C2 №142 — CONTROLLED INTEGRATION
+Source: Приказ Минтранса России от 24.04.2025 №142.
 Integration record: C2-WP142-CLAUSE-RECON-001.
 Status: WORKING / NOT BASELINED.
 
@@ -355,6 +363,6 @@ SYS-REQ-080, SYS-REQ-081, SYS-REQ-082, SYS-REQ-085, SYS-REQ-086, SYS-REQ-091, SY
 Derived SRS records: SRS-C2-001..007.
 
 Baseline gate:
-authority в†’ applicability в†’ safety в†’ architecture в†’ verification в†’ evidence в†’ configuration.
+authority → applicability → safety → architecture → verification → evidence → configuration.
 
 No certification claim is made by this integration.
