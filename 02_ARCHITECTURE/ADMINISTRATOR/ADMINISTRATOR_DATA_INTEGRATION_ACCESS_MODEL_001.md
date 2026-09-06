@@ -2,7 +2,7 @@
 id: ADMIN-ARCH-DATA-INTEGRATION-001
 type: architecture
 status: BASELINE
-version: 1.0
+version: 1.1
 ---
 
 # ADMINISTRATOR — DATA & EXTERNAL INTEGRATION ACCESS MODEL
@@ -98,13 +98,16 @@ ROLE / FUNCTION
 USER ASSIGNMENT
        │
        ▼
+TECHNICAL AUTHORIZATION WHERE APPLICABLE
+       │
+       ▼
 PERSONAL WORKSPACE
        │
        ▼
 VISIBLE MENU
 ```
 
-A single person may have several authorized functions, for example:
+A single person may have several functions, for example:
 
 ```text
 USER
@@ -114,7 +117,7 @@ USER
 └── Pilot
 ```
 
-The system must allow these functions to be assigned to one user where organizational policy permits it.
+The Administrator assigns the basic roles. For technical work, ENGINEER has access to the entire UAV fleet and required technical data and determines the technical authorization of subordinate TECHNICIAN personnel.
 
 ## 6. Visibility principle
 
@@ -229,7 +232,9 @@ ADMINISTRATOR
 
 ## 10. Separation of concerns
 
-- **ADMINISTRATOR** — defines users, roles, available capabilities, configurations, connections and policy-controlled visibility.
+- **ADMINISTRATOR** — defines users, basic roles, system-level access controls, configurations, connections and policy-controlled visibility.
+- **ENGINEER** — has the engineering technical view of the fleet and determines technical authorizations for subordinate TECHNICIAN personnel.
+- **TECHNICIAN** — operates only within the technical authorization assigned by ENGINEER.
 - **DUM / Data Manager** — manages data lifecycle and data preparation.
 - **HUB** — provides the operational aggregation/communication point for applicable data flows.
 - **Integration layer** — provides controlled exchange with external systems.
@@ -238,6 +243,8 @@ ADMINISTRATOR
 
 ## 11. Design decision
 
-ADMINISTRATOR shall be the controlled entry point for management of data capabilities and external integrations, while the user's working interface shall expose only the functions authorized and configured for that user.
+ADMINISTRATOR shall be the controlled entry point for management of users, basic roles, system capabilities and external integrations, while the user's working interface shall expose only the functions authorized and configured for that user.
+
+For the technical hierarchy, the Administrator assigns the ENGINEER role; ENGINEER has access to the entire fleet and technical data and determines the TECHNICIAN technical authorization. This technical authorization model is maintained separately from personal menu presentation.
 
 The next implementation layer is therefore not another top-level menu item, but the deep functional chain behind each selected domain.
