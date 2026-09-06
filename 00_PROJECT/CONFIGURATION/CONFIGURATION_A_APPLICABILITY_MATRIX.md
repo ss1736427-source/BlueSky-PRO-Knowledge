@@ -80,20 +80,20 @@ TBD
 
 ## 5. High-level matrix
 
-| ID | Source / requirement family | A-MR | A-FW | A-VT | Current conclusion |
-|---|---|---|---|---|---|
-| A-REG-001 | ВК РФ ст. 8 — mandatory certification | NOT_APPLICABLE* | NOT_APPLICABLE* | NOT_APPLICABLE* | ≤30 кг попадает в исключение по соответствующему положению |
-| A-REG-002 | ВК РФ ст. 37 — certification basis / type certification | CERTIFICATION_RELEVANT | CERTIFICATION_RELEVANT | CERTIFICATION_RELEVANT | Не превращает A автоматически в mandatory certification target |
-| A-REG-003 | НЛГ Л-БАС | CONDITIONAL | CONDITIONAL | CONDITIONAL | Может быть relevant для type-certification scope при выполнении всех условий применимости |
-| A-REG-004 | НЛГ БАС-СТ | NOT_APPLICABLE | FUTURE_PROFILE | NOT_APPLICABLE | Издание 2 ориентировано на самолётный БАС >30 кг и определённые операции |
-| A-REG-005 | НЛГ БАС-ВТ | NOT_APPLICABLE | NOT_APPLICABLE | FUTURE_PROFILE | Издание 2 содержит требования для вертолётного БАС >30 кг и определённых операций |
-| A-REG-006 | НЛГ УИ-БАС | CONDITIONAL | CONDITIONAL | CONDITIONAL | Проверяется по наличию/обязательности оборудования удалённой идентификации |
-| A-REG-007 | НЛГ АЗН-УВД | CONDITIONAL | CONDITIONAL | CONDITIONAL | Проверяется по operational concept и установленному оборудованию |
-| A-REG-008 | ФАП по C2, приказ №142 | APPLICABLE/CONDITIONAL | APPLICABLE/CONDITIONAL | APPLICABLE/CONDITIONAL | Проверить конкретную организацию линии C2 и условия эксплуатации |
-| A-REG-009 | Государственный учёт БВС | APPLICABLE/CONDITIONAL | APPLICABLE/CONDITIONAL | APPLICABLE/CONDITIONAL | Проверяется по действующему режиму учёта и конкретному БВС |
-| A-REG-010 | Радиочастоты / электросвязь | CONDITIONAL | CONDITIONAL | CONDITIONAL | Зависит от используемых средств связи и спектра |
-| A-REG-011 | Ограничения воздушного пространства | CONDITIONAL | CONDITIONAL | CONDITIONAL | Зависит от intended operation и района полётов |
-| A-REG-012 | Эксплуатационные ограничения | APPLICABLE | APPLICABLE | APPLICABLE | Определяются конкретной эксплуатацией |
+| ID        | Source / requirement family                             | A-MR                   | A-FW                   | A-VT                   | Current conclusion                                                                        |
+| --------- | ------------------------------------------------------- | ---------------------- | ---------------------- | ---------------------- | ----------------------------------------------------------------------------------------- |
+| A-REG-001 | ВК РФ ст. 8 — mandatory certification                   | NOT_APPLICABLE*        | NOT_APPLICABLE*        | NOT_APPLICABLE*        | ≤30 кг попадает в исключение по соответствующему положению                                |
+| A-REG-002 | ВК РФ ст. 37 — certification basis / type certification | CERTIFICATION_RELEVANT | CERTIFICATION_RELEVANT | CERTIFICATION_RELEVANT | Не превращает A автоматически в mandatory certification target                            |
+| A-REG-003 | НЛГ Л-БАС                                               | CONDITIONAL            | CONDITIONAL            | CONDITIONAL            | Может быть relevant для type-certification scope при выполнении всех условий применимости |
+| A-REG-004 | НЛГ БАС-СТ                                              | NOT_APPLICABLE         | FUTURE_PROFILE         | NOT_APPLICABLE         | Издание 2 ориентировано на самолётный БАС >30 кг и определённые операции                  |
+| A-REG-005 | НЛГ БАС-ВТ                                              | NOT_APPLICABLE         | NOT_APPLICABLE         | FUTURE_PROFILE         | Издание 2 содержит требования для вертолётного БАС >30 кг и определённых операций         |
+| A-REG-006 | НЛГ УИ-БАС                                              | CONDITIONAL            | CONDITIONAL            | CONDITIONAL            | Проверяется по наличию/обязательности оборудования удалённой идентификации                |
+| A-REG-007 | НЛГ АЗН-УВД                                             | CONDITIONAL            | CONDITIONAL            | CONDITIONAL            | Проверяется по operational concept и установленному оборудованию                          |
+| A-REG-008 | ФАП по C2, приказ №142                                  | APPLICABLE/CONDITIONAL | APPLICABLE/CONDITIONAL | APPLICABLE/CONDITIONAL | Проверить конкретную организацию линии C2 и условия эксплуатации                          |
+| A-REG-009 | Государственный учёт БВС                                | APPLICABLE/CONDITIONAL | APPLICABLE/CONDITIONAL | APPLICABLE/CONDITIONAL | Проверяется по действующему режиму учёта и конкретному БВС                                |
+| A-REG-010 | Радиочастоты / электросвязь                             | CONDITIONAL            | CONDITIONAL            | CONDITIONAL            | Зависит от используемых средств связи и спектра                                           |
+| A-REG-011 | Ограничения воздушного пространства                     | CONDITIONAL            | CONDITIONAL            | CONDITIONAL            | Зависит от intended operation и района полётов                                            |
+| A-REG-012 | Эксплуатационные ограничения                            | APPLICABLE             | APPLICABLE             | APPLICABLE             | Определяются конкретной эксплуатацией                                                     |
 
 `*` — применительно к mandatory certification exclusion; это не означает отсутствие иных требований.
 

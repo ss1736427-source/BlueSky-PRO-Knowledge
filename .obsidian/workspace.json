@@ -11,10 +11,14 @@
             "id": "058fcba7e26ecc4b",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Граф"
+              "type": "markdown",
+              "state": {
+                "file": "00_PROJECT/CONFIGURATION/CONFIGURATION_A_APPLICABILITY_MATRIX.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "CONFIGURATION_A_APPLICABILITY_MATRIX"
             }
           }
         ]
@@ -157,6 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "00_PROJECT/CONFIGURATION/CONFIGURATION_A_APPLICABILITY_MATRIX.md",
                 "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
@@ -170,7 +175,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
