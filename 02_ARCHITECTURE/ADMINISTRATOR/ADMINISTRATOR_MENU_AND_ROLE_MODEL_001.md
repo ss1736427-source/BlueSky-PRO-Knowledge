@@ -1,8 +1,8 @@
 ---
 id: ADMINISTRATOR-MENU-ROLE-001
 type: architecture
-status: DRAFT
-version: 0.1
+status: BASELINE
+version: 1.0
 title: Administrator Menu and Multi-Role User Model
 ---
 
@@ -159,7 +159,7 @@ ROLES
       ↓
 FUNCTIONS / PERMISSIONS
       ↓
-RESOURCE SCOPE
+TECHNICAL AUTHORIZATION WHERE APPLICABLE
       ↓
 VISIBILITY
       ↓
@@ -168,7 +168,23 @@ PERSONAL WORKSPACE
 
 A role grants a controlled set of capabilities; visibility customization cannot grant permissions.
 
-## 7. Example combined specialist
+## 7. Technical authority model
+
+The technical hierarchy is fixed as follows:
+
+```text
+SYSTEM ADMINISTRATOR
+        ↓
+     ENGINEER
+        ↓
+TECHNICIAN
+```
+
+The Administrator assigns the base role `ENGINEER` or `TECHNICIAN` to the user. ENGINEER has access to the entire UAV fleet and technical data required for engineering work. ENGINEER determines the technical authorization of subordinate TECHNICIAN personnel.
+
+The TECHNICIAN works only within the authorization established by ENGINEER.
+
+## 8. Example combined specialist
 
 ```text
 Ivanov
@@ -182,18 +198,22 @@ Ivanov
 │   ├── UAV condition
 │   ├── batteries
 │   ├── maintenance
-│   └── faults
+│   └── faults within authorization
 │
 └── ENGINEER
+    ├── entire UAV fleet
+    ├── technical data
     ├── configurations
     ├── compatibility
     ├── equipment
-    └── technical parameters
+    ├── technical parameters
+    ├── maintenance status
+    └── technician authorizations
 ```
 
 The user may expose only the functions required for the current work profile.
 
-## 8. Permission granularity
+## 9. Permission granularity
 
 Permissions shall distinguish at least:
 
@@ -215,7 +235,9 @@ A role or function shall not imply all permissions automatically.
 
 Critical permissions such as approval, activation and operational authorization shall remain separately controlled.
 
-## 9. Personalized menu
+`Certification / Release Authority` is an ENGINEER-level authority and remains separately controlled; assignment of the ENGINEER role does not by itself imply that authority.
+
+## 10. Personalized menu
 
 A user may configure the presentation of functions available to that user.
 
@@ -237,7 +259,7 @@ The personal menu may:
 
 Hidden functionality remains accessible through the full authorized menu or search/navigation mechanism.
 
-## 10. Required functions vs visibility
+## 11. Required functions vs visibility
 
 The system shall maintain two independent properties:
 
@@ -255,7 +277,7 @@ PERMISSION + HIDDEN → AVAILABLE BUT NOT SHOWN IN PERSONAL MENU
 PERMISSION + SHOWN → SHOWN
 ```
 
-## 11. Role overlap and separation
+## 12. Role overlap and separation
 
 Several users may have the same role. One user may have multiple roles.
 
@@ -263,7 +285,7 @@ Separate approval authority shall not be created merely by assigning an addition
 
 Where required by safety, certification or organizational policy, approval may require a distinct authority role or organizational rule.
 
-## 12. Technical block visibility
+## 13. Technical block visibility
 
 Technical information shall be filtered according to user permissions and purpose.
 
@@ -271,10 +293,10 @@ For example:
 
 ```text
 TECHNICIAN
-→ condition / service / battery / faults
+→ condition / service / battery / faults within engineer-defined authorization
 
 ENGINEER
-→ parameters / configuration / compatibility / technical model
+→ entire fleet / technical data / parameters / configuration / compatibility / technical model
 
 PILOT
 → operational readiness / applicable configuration / relevant status
@@ -282,26 +304,26 @@ PILOT
 
 A combined user may receive the union of authorized functions while still using a compact personal menu.
 
-## 13. External data visibility
+## 14. External data visibility
 
-The full external-data catalogue shall remain available to authorized administrators, but each user shall see only relevant permitted domains.
+The full external-data catalogue shall remain available to authorized administrators, while each operational user sees only relevant permitted domains.
 
 Examples:
 
 ```text
-Administrator → all
-Engineer      → technical/navigation data as authorized
-Technician    → technical/service status as authorized
+Administrator → all administrative domains
+Engineer      → engineering and technical domains required for work
+Technician    → assigned technical/service scope
 Pilot         → operationally relevant data
 ```
 
-## 14. Audit
+## 15. Audit
 
 Role assignment, permission changes, profile changes affecting protected functions, configuration changes and administrative actions shall be auditable.
 
 The audit record shall retain actor, action, target, time, resulting state and applicable revision/context.
 
-## 15. Security boundary
+## 16. Security boundary
 
 The UI shall never be the authority for access control.
 
@@ -315,7 +337,7 @@ Protected resource / operation
 
 Personalization can reduce displayed information, but cannot bypass authorization.
 
-## 16. Relationship to existing architecture
+## 17. Relationship to existing architecture
 
 This model connects:
 
@@ -335,6 +357,6 @@ ADMINISTRATOR
 
 It complements the existing DUM, HUB, Data Governance, Configuration Manager, External Processing and traceability architecture without creating a parallel data authority.
 
-## 17. Status
+## 18. Status
 
-DRAFT — functional structure established; exact organizational roles, authority boundaries and certification-specific approval rules remain subject to the applicable requirements baseline.
+**BASELINE.** The user-centric role model and technical authority hierarchy are established. Detailed capability matrices and certification-specific approval rules remain subject to the applicable requirements baseline.
