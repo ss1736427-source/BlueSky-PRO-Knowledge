@@ -30,7 +30,7 @@ ENTER RESULT
    ↓
 COMPLETED → NOTIFY ENGINEER
    │
-   └── FINDING / NOT COMPLETED → ENGINEER REVIEW WHERE REQUIRED
+   └── NOT COMPLETED / FINDING → STATUS + COMMENT → ENGINEER SEES
 ```
 
 ## Technician Main View
@@ -79,7 +79,7 @@ IN PROGRESS
 COMPLETED
 ```
 
-Additional states such as `BLOCKED`, `REQUIRES ATTENTION` or `REJECTED FOR EXECUTION` may be introduced if required by the operational workflow, without changing the basic model.
+For an unfinished task, the Technician shall select an appropriate non-completed status and provide a comment describing the reason, current condition, or other information needed by the Engineer.
 
 ## Completion Entry
 
@@ -116,22 +116,30 @@ NOTIFICATION TO ENGINEER
 NO ACTION REQUIRED
 ```
 
-## Findings / Exception Handling
+## Unfinished Work / Findings
 
-If the Technician discovers a defect, abnormal condition or work that cannot be completed, the Technician shall be able to record the finding instead of falsely marking the task as completed.
+If the Technician discovers a defect, abnormal condition, or cannot complete the assigned work, the Technician shall not mark the task as `COMPLETED`.
+
+Instead, the Technician shall record:
+
+- the current task status;
+- a comment explaining the reason for non-completion and/or the finding;
+- additional information or evidence where required by the applicable procedure.
+
+The Engineer shall see the status and Technician comment in the Engineer's work/fleet view.
 
 Only in such cases, or where the assigned procedure explicitly requires Engineer involvement, shall the result require Engineer attention.
 
 ```text
 TASK
  ↓
-FINDING / NOT COMPLETED
+NOT COMPLETED / FINDING
  ↓
-ENGINEER REVIEW
- ├── additional work
- ├── restriction
- ├── corrective action
- └── other authorized disposition
+STATUS + TECHNICIAN COMMENT
+ ↓
+ENGINEER SEES
+ ↓
+ENGINEER REVIEW WHERE REQUIRED
 ```
 
 ## Engineer Control
@@ -140,7 +148,7 @@ The Engineer shall retain visibility of assigned work and its current state.
 
 For a normally completed task, Engineer visibility is informational and does not constitute a mandatory approval workflow.
 
-Where Engineer review is required, the completion/finding record shall become an input to the Engineer's fleet/UAV technical view.
+For unfinished work or findings, the Engineer shall see the recorded status and Technician comment and may take the appropriate action where required.
 
 ## Access Control
 
@@ -155,6 +163,8 @@ The Technician interface shall answer one primary question immediately:
 The interface should therefore prioritize the current assigned work list and its status. Fleet-wide technical information, administrative functions and unrelated configuration data shall not be presented as persistent information.
 
 Completion of a normal task shall require only the minimum information necessary to record the result. Engineer notification should be automatic rather than requiring the Technician to perform a separate reporting action.
+
+For unfinished work, the interface shall make the status and comment entry simple and direct. The Technician shall not be forced through an unnecessary approval workflow.
 
 ## Integration
 
@@ -173,7 +183,9 @@ Verify at minimum:
 - completion records retain author and timestamp;
 - a normally completed task does not require unnecessary Engineer approval;
 - Engineer receives notification when the task is completed;
-- incomplete/blocked work cannot be falsely represented as completed;
+- an unfinished task cannot be falsely represented as completed;
+- unfinished-task status is recorded;
+- Technician comment is recorded and visible to the Engineer;
 - findings can be escalated to Engineer review;
 - task completion does not independently produce flight release;
 - completion data is available to the Engineer where required;
