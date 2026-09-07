@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "00_PROJECT/GOVERNANCE/PROJECT_RULES.md",
+                "file": "02_ARCHITECTURE/UX/BLUESKY_PRO_UX_MINIMAL_INFORMATION_PRINCIPLE_001.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "PROJECT_RULES"
+              "title": "BLUESKY_PRO_UX_MINIMAL_INFORMATION_PRINCIPLE_001"
             }
           }
         ]
@@ -192,6 +192,7 @@
   },
   "active": "058fcba7e26ecc4b",
   "lastOpenFiles": [
+    "00_PROJECT/GOVERNANCE/PROJECT_RULES.md",
     "02_ARCHITECTURE/ENGINEER/ENGINEER_MENU_BASELINE_001.md",
     "02_ARCHITECTURE/ENGINEER/ENGINEER_TECHNICIAN_ASSIGNMENT_AND_AUTHORIZATION_001.md",
     "02_ARCHITECTURE/SYSTEM/MAINTENANCE_RESULT_TO_FLEET_STATE_001.md",
@@ -224,7 +225,6 @@
     "01_REQUIREMENTS/INTEROPERABILITY",
     "TRACEABILITY/PRACTICAL_FLIGHT_PLANNING_REQUIREMENTS_RECONCILIATION_001.md",
     "01_REQUIREMENTS/SYSTEM/PRACTICAL_FLIGHT_PLANNING_INTEROPERABILITY_REQUIREMENTS_001.md",
-    "TRACEABILITY/REPOSITORY_INTEGRITY_AUDIT_REPORT_002.md",
     "TRACEABILITY",
     "02_ARCHITECTURE/SYSTEM",
     "00_PROJECT/GOVERNANCE"

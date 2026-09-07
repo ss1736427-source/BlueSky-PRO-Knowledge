@@ -1,4 +1,4 @@
-﻿# PROJECT RULES
+# PROJECT RULES
 
 ## 1. Назначение
 
