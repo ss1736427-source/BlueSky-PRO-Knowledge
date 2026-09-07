@@ -28,9 +28,9 @@ PERFORM WORK
    ↓
 ENTER RESULT
    ↓
-COMPLETE / REPORT FINDING
-   ↓
-ENGINEER REVIEW WHERE REQUIRED
+COMPLETED → NOTIFY ENGINEER
+   │
+   └── FINDING / NOT COMPLETED → ENGINEER REVIEW WHERE REQUIRED
 ```
 
 ## Technician Main View
@@ -96,26 +96,36 @@ The completion record shall support, as applicable:
 - relevant measured values or evidence where required by the applicable procedure;
 - reference to attached technical evidence where supported.
 
-The system shall distinguish between:
+When all assigned actions have been completed successfully and no finding requiring Engineer intervention has been recorded, the Technician shall be able to close the assigned task as `COMPLETED`.
 
-`WORK COMPLETED`
+## Completion Notification
 
-and
+For a normally completed task, no Engineer action or approval is required solely because the Technician has completed the assigned work.
 
-`UAV READY FOR FLIGHT`.
+Upon completion, BlueSky PRO shall provide the Engineer with a notification that the assigned task has been completed. The notification is informational and provides traceability; it shall not create an additional approval step when no Engineer decision is required.
 
-Completion of a Technician task shall not by itself release the UAV for operation.
+The completion record shall remain available to the Engineer for information and operational history.
+
+```text
+TECHNICIAN
+   ↓
+COMPLETED
+   ↓
+NOTIFICATION TO ENGINEER
+   ↓
+NO ACTION REQUIRED
+```
 
 ## Findings / Exception Handling
 
 If the Technician discovers a defect, abnormal condition or work that cannot be completed, the Technician shall be able to record the finding instead of falsely marking the task as completed.
 
-The task shall then be routed for the appropriate Engineer decision where required.
+Only in such cases, or where the assigned procedure explicitly requires Engineer involvement, shall the result require Engineer attention.
 
 ```text
 TASK
  ↓
-FINDING
+FINDING / NOT COMPLETED
  ↓
 ENGINEER REVIEW
  ├── additional work
@@ -127,6 +137,8 @@ ENGINEER REVIEW
 ## Engineer Control
 
 The Engineer shall retain visibility of assigned work and its current state.
+
+For a normally completed task, Engineer visibility is informational and does not constitute a mandatory approval workflow.
 
 Where Engineer review is required, the completion/finding record shall become an input to the Engineer's fleet/UAV technical view.
 
@@ -141,6 +153,8 @@ The Technician interface shall answer one primary question immediately:
 **"What work do I need to do on this shift?"**
 
 The interface should therefore prioritize the current assigned work list and its status. Fleet-wide technical information, administrative functions and unrelated configuration data shall not be presented as persistent information.
+
+Completion of a normal task shall require only the minimum information necessary to record the result. Engineer notification should be automatic rather than requiring the Technician to perform a separate reporting action.
 
 ## Integration
 
@@ -157,6 +171,8 @@ Verify at minimum:
 - Technician access respects Engineer-defined scope;
 - task state transitions are controlled;
 - completion records retain author and timestamp;
+- a normally completed task does not require unnecessary Engineer approval;
+- Engineer receives notification when the task is completed;
 - incomplete/blocked work cannot be falsely represented as completed;
 - findings can be escalated to Engineer review;
 - task completion does not independently produce flight release;
