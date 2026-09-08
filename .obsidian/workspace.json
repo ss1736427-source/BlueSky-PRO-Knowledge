@@ -191,6 +191,15 @@
   },
   "active": "058fcba7e26ecc4b",
   "lastOpenFiles": [
+    "10_TRACEABILITY/Matrices/Traceability_Matrix.md",
+    "10_TRACEABILITY/Matrices/SYSTEM_Traceability.md",
+    "10_TRACEABILITY/Matrices/Traceability_Matrix.backup.md",
+    "10_TRACEABILITY/Matrices/SYSTEM_Traceability.md.backup.md",
+    "10_TRACEABILITY/Matrices/SYSREQ_Verification_Coverage.md",
+    "10_TRACEABILITY/Matrices/Architecture_Integrity.md",
+    "10_TRACEABILITY/Matrices/AI_Safety_Integrity.md",
+    "10_TRACEABILITY/Matrices",
+    "10_TRACEABILITY",
     "Скрины/Требования/BlueSky_Project_Formalization/02_Architecture/BS-ARCH-Mission-Economics-Knowledge-Simulation_v1.0.md",
     "Скрины/Требования/BlueSky_Project_Formalization/09_Changelog/2026-08-26_New_Concept_Formalization.md",
     "Скрины/Требования/BlueSky_Project_Formalization/06_Requirements/BlueSky_New_Requirements_v1.0.md",
@@ -217,15 +226,6 @@
     "_LEGACY/09_VERIFICATION/Test_Cases/TEST-014.md",
     "_LEGACY/09_VERIFICATION/Test_Cases/TEST-013.md",
     "_LEGACY/09_VERIFICATION/Test_Cases/TEST-012.md",
-    "_LEGACY/09_VERIFICATION/Test_Cases/TEST-011.md",
-    "_LEGACY/09_VERIFICATION/Test_Cases/TEST-010.md",
-    "_LEGACY/09_VERIFICATION/Test_Cases/TEST-009.md",
-    "_LEGACY/09_VERIFICATION/Test_Cases/TEST-008.md",
-    "_LEGACY/09_VERIFICATION/Test_Cases/TEST-007.md",
-    "_LEGACY/09_VERIFICATION/Test_Cases/TEST-006.md",
-    "_LEGACY/09_VERIFICATION/Test_Cases/TEST-005.md",
-    "_LEGACY/09_VERIFICATION/Test_Cases/TEST-004.md",
-    "_LEGACY/09_VERIFICATION/Test_Cases",
-    "_LEGACY/09_VERIFICATION"
+    "_LEGACY/09_VERIFICATION/Test_Cases/TEST-011.md"
   ]
 }
