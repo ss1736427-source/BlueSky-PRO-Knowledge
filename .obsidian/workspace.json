@@ -11,10 +11,14 @@
             "id": "058fcba7e26ecc4b",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Граф"
+              "type": "markdown",
+              "state": {
+                "file": "03_SYSTEM/NAVIGATION/NAVIGATION_STATE_MODEL.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "NAVIGATION_STATE_MODEL"
             }
           }
         ]
@@ -187,6 +191,12 @@
   },
   "active": "058fcba7e26ecc4b",
   "lastOpenFiles": [
+    "03_SYSTEM/NAVIGATION/NAVIGATION_RULES.md",
+    "03_SYSTEM/NAVIGATION/NAVIGATION_POSITION_MODULE_SPECIFICATION.md",
+    "03_SYSTEM/NAVIGATION/NAVIGATION_MATHEMATICAL_SPECIFICATION_001.md",
+    "03_SYSTEM/NAVIGATION/NAVIGATION_HEADING_MODULE_SPECIFICATION.md",
+    "03_SYSTEM/NAVIGATION/NAVIGATION_BASELINE_RECONCILIATION.md",
+    "03_SYSTEM/NAVIGATION/NAVIGATION_ALGORITHM.md",
     "Obsidian",
     "99_ARCHIVE/git_mirror.log",
     "TRACEABILITY/REPOSITORY_REQUIREMENTS_AUDIT_REPORT_001.md",
@@ -215,13 +225,7 @@
     "_LEGACY/09_VERIFICATION/Test_Cases/TEST-008.md",
     "_LEGACY/09_VERIFICATION/Test_Cases/TEST-007.md",
     "_LEGACY/09_VERIFICATION/Test_Cases/TEST-005.md",
-    "_LEGACY/09_VERIFICATION/Test_Cases/TEST-004.md",
-    "_LEGACY/09_VERIFICATION/Test_Cases/TEST-003.md",
-    "_LEGACY/09_VERIFICATION/Test_Cases/TEST-002.md",
-    "_LEGACY/09_VERIFICATION/Test_Cases/TEST-001.md",
-    "99_ARCHIVE/REPAIR_BACKUPS/BEFORE_FULL_RESTORE/01_REQUIREMENTS/SAFETY/SAFETY_REQUIREMENTS_BASELINE.md",
     "99_ARCHIVE/REPAIR_BACKUPS/BEFORE_FULL_RESTORE_20260908_203309/Скрины/Требования/BlueSky_Project_Formalization/09_Changelog",
-    "99_ARCHIVE/REPAIR_BACKUPS/BEFORE_FULL_RESTORE_20260908_203309/Скрины/Требования/BlueSky_Project_Formalization/06_Requirements",
-    "99_ARCHIVE/REPAIR_BACKUPS/BEFORE_FULL_RESTORE_20260908_203309/Скрины/Требования/BlueSky_Project_Formalization/02_Architecture"
+    "99_ARCHIVE/REPAIR_BACKUPS/BEFORE_FULL_RESTORE_20260908_203309/Скрины/Требования/BlueSky_Project_Formalization/06_Requirements"
   ]
 }
