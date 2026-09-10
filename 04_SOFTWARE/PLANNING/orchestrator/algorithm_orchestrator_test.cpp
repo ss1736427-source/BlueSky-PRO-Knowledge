@@ -59,22 +59,23 @@ int main() {
     problem.planning_graph = &graph;
     problem.objective_priorities = {"completion_time"};
 
-    // Real A* and Dijkstra are both evaluated. The same optimum is produced,
-    // while the mission priority provides a deterministic tie-break preference.
+    // Real A* is preferred by the mission profile and is evaluated first.
     TestContext context(problem, ComputeBudget{1000, 256, 8});
     AlgorithmOrchestrator orchestrator(make_solvers());
     const auto decision = orchestrator.solve(context);
 
     assert(decision.feasibility == Feasibility::Feasible);
     assert(decision.considered_solvers.size() == 2);
+    assert(decision.considered_solvers[0] == "astar");
+    assert(decision.considered_solvers[1] == "dijkstra");
     assert(decision.selected_solver_id == "astar");
     assert(decision.selected_candidate_id == "ORCH-REAL-001:astar:1");
     assert(context.candidates().size() == 2);
     assert(std::abs(context.candidates()[0].estimated_time_s - 5.0) < 1e-9);
     assert(std::abs(context.candidates()[1].estimated_time_s - 5.0) < 1e-9);
 
-    // Mission-profile change: minimum-cost profile uses Dijkstra as the
-    // deterministic tie-break when both admissible candidates are equivalent.
+    // Mission-profile change: minimum-cost profile prefers Dijkstra and
+    // therefore evaluates it first; final selection remains candidate-based.
     MissionProblem cost_problem = problem;
     cost_problem.mission_id = "ORCH-PROFILE-002";
     cost_problem.objective_priorities = {"minimum_cost"};
@@ -84,6 +85,8 @@ int main() {
 
     assert(cost_decision.feasibility == Feasibility::Feasible);
     assert(cost_decision.considered_solvers.size() == 2);
+    assert(cost_decision.considered_solvers[0] == "dijkstra");
+    assert(cost_decision.considered_solvers[1] == "astar");
     assert(cost_decision.selected_solver_id == "dijkstra");
     assert(cost_decision.selected_candidate_id == "ORCH-PROFILE-002:dijkstra:1");
     assert(cost_context.candidates().size() == 2);
