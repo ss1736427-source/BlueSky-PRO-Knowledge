@@ -41,7 +41,7 @@ Minimum provenance:
 
 - mission ID/version;
 - vehicle configuration ID/version;
-- payload configuration ID/version;
+- equipment configuration ID/version;
 - autopilot adapter ID/version;
 - algorithm/orchestrator version;
 - environmental-data versions/timestamps;
@@ -65,14 +65,14 @@ Depending on mission type, the package may contain:
 - waypoints;
 - navigation parameters;
 - action/command sequence;
-- payload actions;
+- equipment actions;
 - timing constraints;
 - speed/altitude targets;
 - geofencing/operational constraints;
 - recovery/return behaviour;
 - multi-UAV coordination data.
 
-Only content applicable to the selected vehicle and payload configuration shall be executable.
+Only content applicable to the selected vehicle and equipment configuration shall be executable.
 
 ## 6. Safety and energy information
 
@@ -135,7 +135,7 @@ Verification shall detect at minimum:
 - changed coordinates;
 - changed altitude/reference;
 - changed commands/parameters;
-- changed payload actions;
+- changed equipment actions;
 - changed mission metadata where safety-relevant.
 
 A mismatch in safety-critical executable content blocks release to execution.
@@ -185,7 +185,7 @@ PARENT MISSION
    └── PACKAGE UAV-03
 ```
 
-Each package has its own vehicle, autopilot, payload, validation and execution identity while remaining linked to the parent mission.
+Each package has its own vehicle, autopilot, equipment, validation and execution identity while remaining linked to the parent mission.
 
 ## 14. Change control
 
