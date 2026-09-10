@@ -72,16 +72,16 @@ NEXT MISSION
 
 | ID | Contour | Current BlueSky position | Gap to close | Priority |
 |---|---|---|---|---|
-| G0-01 | Autopilot adapter | Adapter principle exists | Concrete vehicle adapter boundary and lifecycle | P0 |
-| G0-02 | MAVLink session | MAVLink identified | Version/dialect/message policy, connection, heartbeat, routing | P0 |
-| G0-03 | Command protocol | C2 conceptual | Command state machine, ACK, retry, timeout, rejection, execution result | P0 |
-| G0-04 | Mission protocol | Mission Graph exists | Translator to vehicle mission representation + upload/read-back verification | P0 |
-| G0-05 | Parameter protocol | Configuration model exists | Read/write/sync/compare/backup/restore and baseline | P0 |
-| G0-06 | Vehicle state | State model exists | Normalized telemetry/health/quality contract and source mapping | P0 |
-| G0-07 | C2 transport | C2 conceptual | Link/session abstraction, primary/backup links, loss/recovery state | P0 |
-| G0-08 | Safety reconciliation | Safety architecture exists | BlueSky limits ↔ autopilot failsafe/geofence/rally/flight-mode consistency | P0 |
-| G0-09 | Manual/override control | Not yet explicit as integration contract | RC/joystick/manual override and authority arbitration | P0 |
-| G0-10 | Pre-arm/health | Readiness concept exists | Mapping of autopilot pre-arm/health failures into BlueSky gate | P0 |
+| G0-01 | Autopilot adapter | Universal interface now baselined | Concrete vehicle adapters and lifecycle implementation | P0 |
+| G0-02 | MAVLink session | MAVLink identified as reference | Version/dialect/message policy, connection, heartbeat, routing implementation | P0 |
+| G0-03 | Command protocol | Command contract now baselined | Runtime implementation of state machine, ACK, retry, timeout, rejection, execution result | P0 |
+| G0-04 | Mission protocol | Canonical Mission Model + translator contract baselined | Vehicle mission compiler/translator, upload/read-back and semantic verification implementation | P0 |
+| G0-05 | Parameter protocol | Configuration contract baselined | Read/write/sync/compare/backup/restore implementation and verified baseline handling | P0 |
+| G0-06 | Vehicle state | Normalized state contract defined | Concrete telemetry/health mappings per adapter | P0 |
+| G0-07 | C2 transport | C2 framework + interface contract defined | Link/session implementation, primary/backup links, loss/recovery state machine | P0 |
+| G0-08 | Safety reconciliation | Safety reconciliation rule defined | Executable consistency checks between BlueSky and autopilot safety configuration | P0 |
+| G0-09 | Manual/override control | Authority model defined in autopilot/command contract | Concrete RC/joystick/manual override implementation and authority arbitration tests | P0 |
+| G0-10 | Pre-arm/health | Readiness contract exists | Concrete autopilot pre-arm/health mapping into BlueSky readiness gate | P0 |
 
 ### G1 — required operational subsystems
 
@@ -118,19 +118,39 @@ NEXT MISSION
 | G2-11 | Data export/API | Controlled exchange with processing, GIS and enterprise systems |
 | G2-12 | Maintenance feedback | Flight/resource data updates aircraft, battery, engine and component records |
 
-## Competitor-derived practical baseline
+## Closure state introduced by the current architecture pass
 
-Mission Planner explicitly separates CONNECT, DATA, PLAN, SETUP, CONFIG and SIMULATION and provides firmware loading, configuration, mission upload, telemetry, logs, simulation and live video. citeturn1search0turn1search6
+A gap is not considered implemented merely because its architecture is described. The controlled lifecycle is:
 
-Mission Planner's practical setup includes mandatory accelerometer/radio/servo configuration, DroneCAN/UAVCAN access, MAVLink inspection, signing and MAVLink forwarding. citeturn1search8
+```text
+GAP
+ ↓
+SPECIFIED
+ ↓
+CONTRACT BASELINED
+ ↓
+IMPLEMENTED
+ ↓
+INTEGRATED
+ ↓
+TESTED
+ ↓
+VERIFIED
+```
 
-Mission Planner handles both onboard DataFlash logs and ground-station telemetry logs, including download, analysis and replay. citeturn1search1turn1search2
+The current pass closes the **SPECIFICATION / CONTRACT** portion for the following P0 boundaries:
 
-Mission Planner SITL can use the same operational controls, mission setup and parameter changes against a simulated vehicle. citeturn1search3
+- canonical Mission Model;
+- Mission Objective Profiles;
+- Universal Autopilot Interface;
+- Command Execution contract;
+- C2 interface/framework.
+
+These items therefore remain open at implementation/integration/verification levels until executable software and evidence exist.
 
 ## Architectural rule
 
-BlueSky must not become a copy of Mission Planner. The missing capability should be implemented as adapters and controlled interfaces beneath the BlueSky operational layer:
+BlueSky must not become a copy of Mission Planner. Missing capability is implemented as adapters and controlled interfaces beneath the BlueSky operational layer:
 
 ```text
                 BLUE SKY OPERATIONAL CORE
