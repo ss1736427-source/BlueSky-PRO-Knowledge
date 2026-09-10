@@ -14,22 +14,27 @@ BlueSky is not required to reproduce Mission Planner feature-for-feature. The co
 
 | Domain | Practical competitor capability | BlueSky current architectural position | Gap | Required action |
 |---|---|---|---|---|
-| Vehicle connection | Connect via USB/serial/telemetry/network | C2 and vehicle state are defined conceptually | OPEN | Define IF-AUTOPILOT connection/session contract |
-| Vehicle discovery | Heartbeat, vehicle/firmware identification, capabilities | Vehicle state/capability concepts exist | OPEN | Define discovery, identity and capability handshake |
-| Autopilot integration | Direct ArduPilot/PX4 communication | Adapter principle is now defined | OPEN | Define adapter boundary and first MAVLink adapter |
-| MAVLink session | Telemetry, commands, mission and parameters | MAVLink named as required interface | OPEN | Define supported MAVLink dialect/messages/version policy |
-| Command control | Arm, disarm, takeoff, land, RTL, mode changes, mission control | Supervisory C2 exists conceptually | OPEN | Define command lifecycle, ACK, retry, timeout and safe failure |
-| Mission upload/download | Upload mission to vehicle and read back | Mission Graph exists; translation is defined conceptually | OPEN | Define BlueSky mission → vehicle mission translator and verification |
+| Vehicle connection | USB/serial/telemetry/network connection | C2 and vehicle state are defined conceptually | OPEN | Define IF-AUTOPILOT connection/session contract |
+| Vehicle discovery | Heartbeat, system/component identity, firmware and capabilities | Vehicle state/capability concepts exist | OPEN | Define discovery, identity and capability handshake |
+| Autopilot integration | Direct ArduPilot/PX4 communication | Adapter principle is defined | OPEN | Define adapter boundary and first MAVLink adapter |
+| MAVLink session | Telemetry, commands, mission, parameters | MAVLink named as required interface | OPEN | Define dialect/version/message policy and routing |
+| Command control | Arm, disarm, takeoff, land, RTL, modes, mission control | Supervisory C2 exists conceptually | OPEN | Define command lifecycle, ACK, retry, timeout and safe failure |
+| Manual/override control | RC/joystick/manual override and mode authority | Not yet explicit as interface contract | OPEN | Define pilot input, override, authority arbitration and loss behavior |
+| Mission upload/download | Upload mission and read back from vehicle | Mission Graph exists; translation is conceptual | OPEN | Define mission translator, upload/download and integrity verification |
 | Parameter management | Read/write/save/restore/compare parameters | Configuration model exists | OPEN | Define parameter synchronization and configuration baseline |
-| Vehicle configuration | Firmware, frame, sensors, radio, safety, modes, power, tuning | ADMIN/configuration exists | PARTIAL | Define which engineering functions BlueSky owns vs external tools |
-| Safety configuration | Failsafe, geofence, rally, operational limits | Safety architecture exists | PARTIAL | Define reconciliation between BlueSky safety policy and autopilot parameters |
-| Telemetry | Live position, attitude, speed, battery, GPS, mode, health | Telemetry/UAV state concepts exist | PARTIAL | Define normalized telemetry schema and update/quality semantics |
-| C2 | Link monitoring and loss behavior | C2 is defined conceptually | OPEN | Define primary/backup links, heartbeat, link quality and loss/recovery state machine |
-| Log acquisition | TLOG and onboard DataFlash/ULog download and analysis | Flight Record exists conceptually | PARTIAL | Define IF-LOG and source-specific acquisition adapters |
-| Simulation | SITL/HITL integration and mission testing | Digital Twin/simulation architecture exists | PARTIAL | Make the same external interface executable against simulator/autopilot SITL |
-| Payload | Camera/gimbal/payload actions and state | Payload State is defined | OPEN | Define payload command/data adapter contract |
-| Video | Live video during flight | Video is identified as a P1 interface | OPEN | Define stream transport, state, recording and mission association |
-| Companion computer | MAVLink/data exchange with onboard companion | Companion is identified as P1 | OPEN | Define onboard data/command interface |
+| Vehicle configuration | Firmware, frame, sensors, radio, safety, modes, power, tuning | ADMIN/configuration exists | PARTIAL | Define BlueSky-owned vs engineering-tool functions |
+| Calibration | Accelerometer, compass, radio, actuator/sensor calibration | Readiness/configuration concepts exist | OPEN | Define calibration interface or explicit external-tool boundary |
+| Safety configuration | Failsafe, geofence, rally, operational limits | Safety architecture exists | PARTIAL | Define reconciliation between BlueSky policy and autopilot settings |
+| Pre-arm/health | Autopilot pre-arm checks and health status | Readiness Gate exists | PARTIAL | Map autopilot health/pre-arm reasons into BlueSky readiness model |
+| Telemetry | Position, attitude, speed, battery, GPS, mode, health | Telemetry/UAV state concepts exist | PARTIAL | Define normalized telemetry schema, rate and quality semantics |
+| C2 | Link monitoring and loss behavior | C2 is defined conceptually | OPEN | Define primary/backup links, heartbeat, quality, loss/recovery state machine |
+| Time synchronization | Ground/vehicle timestamps | Not explicit | OPEN | Define common timebase and timestamp quality |
+| Log acquisition | TLOG and onboard DataFlash/ULog download/analysis | Flight Record exists conceptually | PARTIAL | Define source-specific log acquisition adapters |
+| Simulation | SITL/HITL integration | Digital Twin/simulation architecture exists | PARTIAL | Run the same external interface stack against simulated autopilot |
+| Payload | Camera/gimbal/payload actions and state | Payload State is defined | OPEN | Define payload command/state/data adapter |
+| Video | Live video and recording | Video identified as P1 | OPEN | Define stream transport, recording, loss/recovery and mission association |
+| Companion computer | MAVLink/data exchange with onboard computer | Concept identified | OPEN | Define onboard data/command interface |
+| Peripheral bus | DroneCAN/UAVCAN and other vehicle buses | Not formalized as interface layer | OPEN | Define peripheral adapter strategy and diagnostics boundary |
 | Airspace/ATM | External airspace data and operational submission | Airspace/ATM/FPL identified | OPEN | Define source/API, submission, response, rejection and correction lifecycle |
 
 ## Minimum P0 operational path
@@ -45,7 +50,7 @@ Autopilot + firmware + capabilities identified
     ↓
 Configuration synchronized
     ↓
-Vehicle health / readiness verified
+Health / pre-arm state verified
     ↓
 BlueSky mission validated
     ↓
@@ -55,13 +60,15 @@ Mission uploaded
     ↓
 Mission read-back / integrity verified
     ↓
+C2 + pilot authority established
+    ↓
 ARM / START command
     ↓
 Flight execution
     ↓
 Telemetry + C2 + command ACK + health
     ↓
-Contingency / RTL / LAND as required
+Manual override / contingency / RTL / LAND as required
     ↓
 Mission complete
     ↓
@@ -73,14 +80,16 @@ Flight Record closed
 ## Mandatory interface contracts to create next
 
 1. `IF-AUTOPILOT` — vehicle connection, identification and adapter boundary.
-2. `IF-MAVLINK` — MAVLink session, message set, dialect/version policy.
-3. `IF-COMMAND` — command lifecycle and acknowledgement semantics.
+2. `IF-MAVLINK` — MAVLink session, message set, dialect/version policy and routing.
+3. `IF-COMMAND` — command lifecycle, acknowledgement and failure semantics.
 4. `IF-MISSION` — mission translation, upload/download and verification.
 5. `IF-PARAMETER` — parameter synchronization and configuration baseline.
 6. `IF-C2` — command/control transport and loss/recovery behavior.
 7. `IF-VEHICLE-STATE` — normalized state/health model.
 8. `IF-SAFETY-CONFIG` — reconciliation with autopilot failsafe/geofence/rally/limits.
 9. `IF-AIRSPACE-ATM` — operational airspace/FPL/authorization exchange.
+10. `IF-PILOT-CONTROL` — RC/joystick/manual override and authority arbitration.
+11. `IF-LOG` — onboard/ground log acquisition and Flight Record mapping.
 
 ## Non-goal
 
@@ -88,8 +97,12 @@ Do not clone Mission Planner's UI or expose raw autopilot complexity to the norm
 
 ## External evidence
 
-Mission Planner documentation identifies CONNECT, DATA, PLAN, SETUP, CONFIG, SIMULATION, logs and live video as major operational areas. It also supports firmware loading, vehicle configuration, autonomous mission planning, log download/analysis and simulator integration.
+Mission Planner explicitly separates CONNECT, DATA, PLAN, SETUP, CONFIG and SIMULATION and supports firmware loading, vehicle configuration, autonomous mission planning, logs and live video. citeturn1search0turn1search6
 
-QGroundControl documents full vehicle setup for PX4/ArduPilot, autonomous mission planning and upload, Fly monitoring, video, multiple vehicles, vehicle configuration and post-flight analysis/log download.
+Its setup path includes mandatory accelerometer/radio/servo configuration, DroneCAN/UAVCAN access, MAVLink inspection, signing and MAVLink forwarding. citeturn1search8
 
-MAVLink defines separate command, mission and parameter protocols; these protocols require explicit handling of acknowledgements, retries, synchronization and message semantics rather than treating MAVLink as a generic transport.
+Mission Planner handles both onboard DataFlash logs and ground-station telemetry logs, including download, analysis and replay. citeturn1search1turn1search2
+
+Mission Planner SITL can be controlled and configured through the same operational application used for mission setup and parameter changes. citeturn1search3
+
+MAVLink command, mission and parameter functions must therefore be treated as explicit protocols with acknowledgement, retry and synchronization semantics, not as a generic data transport.
