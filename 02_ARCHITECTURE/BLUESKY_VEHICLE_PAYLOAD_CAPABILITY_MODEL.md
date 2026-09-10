@@ -1,10 +1,10 @@
-# BlueSky PRO — Vehicle / Payload Capability Model
+# BlueSky PRO — Vehicle / Equipment Capability Model
 
 **Status:** ARCHITECTURE BASELINE — P0 integration contract
 
 ## 1. Purpose
 
-The Capability Model is the bridge between the abstract mission and the real fleet. BlueSky shall determine automatically whether a UAV + autopilot + payload configuration can perform the requested task and which vehicle is the most appropriate.
+The Capability Model is the bridge between the abstract mission and the real fleet. BlueSky shall determine automatically whether a UAV + autopilot + equipment configuration can perform the requested task and which vehicle is the most appropriate.
 
 The pilot does not select an algorithm or manually translate mission requirements into aircraft capabilities.
 
@@ -20,7 +20,7 @@ FLEET CAPABILITY REGISTRY
 CAPABILITY MATCHING
       ↓
 ┌───────────────────────────────┐
-│ UAV + AUTOPILOT + PAYLOAD     │
+│ UAV + AUTOPILOT + EQUIPMENT   │
 │ + C2 + BATTERY + EQUIPMENT    │
 └───────────────────────────────┘
       ↓
@@ -45,7 +45,7 @@ Each vehicle profile shall have a stable identity and versioned configuration co
 - navigation capabilities;
 - communication capabilities;
 - battery type/capacity/state model;
-- payload interfaces;
+- equipment interfaces;
 - operational limits;
 - recovery capabilities;
 - maintenance/resource state.
@@ -81,7 +81,7 @@ The model shall permit calculation using:
 - battery usable energy;
 - battery state/health;
 - degradation coefficient;
-- payload mass and power;
+- equipment mass and power;
 - propulsion configuration;
 - flight mode;
 - wind;
@@ -105,12 +105,12 @@ Where applicable, the profile shall include:
 
 Resource constraints are part of candidate evaluation but shall never override mandatory safety or energy constraints.
 
-## 7. Payload capability
+## 7. Equipment capability
 
-A payload profile shall identify:
+An equipment profile shall identify:
 
 - sensor/camera type;
-- payload identifier and version;
+- equipment identifier and version;
 - mass and balance impact;
 - electrical power requirements;
 - interface/protocol;
@@ -135,7 +135,7 @@ INSPECTION
  → required clearance
 
 DELIVERY
- → payload mass/volume
+ → equipment mass/volume
  → range
  → recovery margin
  → ETA
@@ -169,7 +169,7 @@ AIRFRAME
  + FIRMWARE
  + BATTERY
  + PROPULSION
- + PAYLOAD
+ + EQUIPMENT
  + C2
  + REQUIRED EQUIPMENT
       ↓
@@ -188,7 +188,7 @@ Allocation shall consider:
 
 - capability match;
 - energy margin;
-- payload suitability;
+- equipment suitability;
 - route characteristics;
 - C2 availability;
 - coordination constraints;
@@ -198,57 +198,3 @@ Allocation shall consider:
 ## 12. Autopilot independence
 
 The capability model shall not embed ArduPilot-, PX4- or OEM-specific assumptions into the mission model.
-
-Autopilot-specific capabilities are exposed through the Autopilot Adapter and mapped into the common capability model.
-
-```text
-COMMON CAPABILITY MODEL
-        ↑
-AUTOPILOT ADAPTER
-   ↑       ↑       ↑
-ArduPilot  PX4     OEM
-```
-
-## 13. Capability discovery
-
-Where supported, BlueSky shall obtain machine-readable capabilities from the connected autopilot/vehicle and compare them with the stored approved profile.
-
-Discrepancies shall be surfaced before mission release.
-
-## 14. Readiness relationship
-
-Capability matching is a prerequisite to route optimization and final readiness validation.
-
-```text
-CAPABILITY MATCH
-      ↓
-ROUTE OPTIMIZATION
-      ↓
-ENERGY / SAFETY / REGULATORY GATES
-      ↓
-OPERATIONAL VALIDATION
-      ↓
-READY FOR FLIGHT
-```
-
-## 15. Traceability
-
-Every mission solution shall retain the exact vehicle, autopilot, payload, battery/configuration and capability-model versions used for planning and validation.
-
-## 16. Acceptance criteria
-
-The capability model is considered contract-complete when:
-
-1. any supported fleet can be represented without changing the mission model;
-2. mandatory and preferred capabilities are distinguishable;
-3. vehicle allocation can be performed automatically;
-4. heterogeneous UAVs can be allocated different subtasks;
-5. energy and payload effects are represented;
-6. configuration changes trigger affected revalidation;
-7. autopilot-specific data is isolated behind adapters;
-8. capability versions are traceable;
-9. planning and validation use the same authoritative capability data.
-
-## 17. Implementation boundary
-
-This document defines the common contract. Concrete profiles, adapters and verified performance parameters are implementation/configuration artifacts and shall be independently versioned and verified.
