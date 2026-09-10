@@ -1,6 +1,10 @@
 #include "algorithm_orchestrator.hpp"
 #include "../model/planning_graph.hpp"
+#include "../solvers/astar_solver.hpp"
+#include "../solvers/dijkstra_solver.hpp"
+
 #include <cassert>
+#include <cmath>
 #include <memory>
 #include <vector>
 
@@ -20,55 +24,52 @@ private:
     ComputeBudget b_;
     std::vector<CandidateSolution> candidates_;
 };
-
-class FakeSolver final : public Solver {
-public:
-    FakeSolver(std::string id, double score, Feasibility feasibility)
-        : id_(std::move(id)), score_(score), feasibility_(feasibility) {}
-    SolverMetadata metadata() const override { return {id_, "test", {"point_to_point"}, false, true}; }
-    bool eligible(const MissionProblem& p) const override { return p.problem_class == "point_to_point"; }
-    RunState run(SolverContext& c) override {
-        CandidateSolution x;
-        x.candidate_id = c.problem().mission_id + ":" + id_;
-        x.solver_id = id_;
-        x.solver_version = "test";
-        x.objective_score = score_;
-        x.feasibility = feasibility_;
-        c.publish(std::move(x));
-        return feasibility_ == Feasibility::Feasible ? RunState::Candidate : RunState::Completed;
-    }
-    void cancel() override {}
-private:
-    std::string id_;
-    double score_;
-    Feasibility feasibility_;
-};
 }
 
 int main() {
     PlanningGraph graph;
     graph.nodes.push_back({"A", 0, 0});
     graph.nodes.push_back({"B", 1, 0});
+    graph.nodes.push_back({"C", 0, 1});
+    graph.nodes.push_back({"D", 1, 1});
+    graph.edges = {
+        {"A", "B", 10.0},
+        {"A", "C", 2.0},
+        {"C", "D", 2.0},
+        {"D", "B", 1.0}
+    };
     graph.start_node = "A";
     graph.goal_node = "B";
 
     MissionProblem problem;
-    problem.mission_id = "ORCH-001";
+    problem.mission_id = "ORCH-REAL-001";
     problem.problem_class = "point_to_point";
     problem.planning_graph = &graph;
+    problem.objective_priorities = {"minimum_cost"};
 
     TestContext context(problem, ComputeBudget{1000, 256, 8});
+
+    auto heuristic = [](const PlanningNode& from, const PlanningNode& to) {
+        const double dx = from.x - to.x;
+        const double dy = from.y - to.y;
+        return std::sqrt(dx * dx + dy * dy);
+    };
+
     std::vector<std::unique_ptr<Solver>> solvers;
-    solvers.push_back(std::make_unique<FakeSolver>("solver-safe", 10.0, Feasibility::Feasible));
-    solvers.push_back(std::make_unique<FakeSolver>("solver-better", 5.0, Feasibility::Feasible));
-    solvers.push_back(std::make_unique<FakeSolver>("solver-rejected", 0.0, Feasibility::Infeasible));
+    solvers.push_back(std::make_unique<AStarSolver>(heuristic));
+    solvers.push_back(std::make_unique<DijkstraSolver>());
 
     AlgorithmOrchestrator orchestrator(std::move(solvers));
     const auto decision = orchestrator.solve(context);
 
     assert(decision.feasibility == Feasibility::Feasible);
-    assert(decision.selected_solver_id == "solver-better");
-    assert(decision.selected_candidate_id == "ORCH-001:solver-better");
-    assert(decision.considered_solvers.size() == 3);
+    assert(decision.considered_solvers.size() == 2);
+    assert(decision.selected_solver_id == "astar" || decision.selected_solver_id == "dijkstra");
+    assert(decision.selected_candidate_id == "ORCH-REAL-001:astar:1" ||
+           decision.selected_candidate_id == "ORCH-REAL-001:dijkstra:1");
+    assert(context.candidates().size() == 2);
+    assert(std::abs(context.candidates()[0].objective_score - 5.0) < 1e-9);
+    assert(std::abs(context.candidates()[1].objective_score - 5.0) < 1e-9);
+
     return 0;
 }
