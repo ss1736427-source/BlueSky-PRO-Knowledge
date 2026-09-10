@@ -21,16 +21,16 @@ public:
     const ComputeBudget& budget() const override { return budget_; }
     bool cancelled() const override { return cancelled_; }
     void publish(CandidateSolution candidate) override {
-        candidates.push_back(std::move(candidate));
+        candidates_.push_back(std::move(candidate));
     }
     const std::vector<CandidateSolution>& candidates() const override {
-        return candidates;
+        return candidates_;
     }
 
     MissionProblem problem_;
     ComputeBudget budget_;
     bool cancelled_{false};
-    std::vector<CandidateSolution> candidates;
+    std::vector<CandidateSolution> candidates_;
 };
 
 static PlanningGraph make_graph() {
@@ -81,11 +81,11 @@ int main() {
 
     assert(a_state == RunState::Completed);
     assert(d_state == RunState::Completed);
-    assert(a_ctx.candidates.size() == 1);
-    assert(d_ctx.candidates.size() == 1);
+    assert(a_ctx.candidates_.size() == 1);
+    assert(d_ctx.candidates_.size() == 1);
 
-    const auto& a = a_ctx.candidates.front();
-    const auto& d = d_ctx.candidates.front();
+    const auto& a = a_ctx.candidates_.front();
+    const auto& d = d_ctx.candidates_.front();
     assert(a.feasibility == Feasibility::Feasible);
     assert(d.feasibility == Feasibility::Feasible);
     assert(std::fabs(a.estimated_time_s - d.estimated_time_s) < 1e-9);
