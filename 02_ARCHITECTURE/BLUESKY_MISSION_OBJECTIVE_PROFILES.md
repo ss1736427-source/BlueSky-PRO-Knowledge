@@ -34,7 +34,7 @@ The evaluation uses a hierarchical model rather than allowing a low-level optimi
 
 ### Level 0 — Hard admissibility
 
-The candidate is rejected if it violates mandatory safety, regulatory, vehicle, C2, separation, payload or minimum-energy-reserve requirements.
+The candidate is rejected if it violates mandatory safety, regulatory, vehicle, C2, separation, equipment or minimum-energy-reserve requirements.
 
 ### Level 1 — Primary mission objective
 
@@ -72,7 +72,7 @@ Relevant objectives: search coverage, sensor performance, observation geometry, 
 
 Primary: successful delivery to the required location/condition.
 
-Relevant objectives: delivery feasibility, route safety, energy reserve for mission and recovery, payload constraints, ETA, propulsion resource, route efficiency.
+Relevant objectives: delivery feasibility, route safety, energy reserve for mission and recovery, equipment constraints, ETA, propulsion resource, route efficiency.
 
 ### Inspection
 
