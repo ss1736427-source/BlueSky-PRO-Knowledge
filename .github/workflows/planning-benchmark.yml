@@ -1,6 +1,7 @@
 name: BlueSky Planning Benchmark
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - '04_SOFTWARE/PLANNING/**'
