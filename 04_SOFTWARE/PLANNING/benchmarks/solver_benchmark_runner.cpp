@@ -2,13 +2,10 @@
 #include "../solvers/astar_solver.hpp"
 #include "../solvers/dijkstra_solver.hpp"
 
-#include <algorithm>
 #include <chrono>
 #include <cmath>
-#include <functional>
 #include <optional>
 #include <stdexcept>
-#include <unordered_map>
 
 namespace bluesky::planning::benchmark {
 namespace {
@@ -21,7 +18,11 @@ public:
     const MissionProblem& problem() const override { return problem_; }
     const ComputeBudget& budget() const override { return budget_; }
     bool cancelled() const override { return false; }
-    void publish(CandidateSolution candidate) override { candidate_ = std::move(candidate); }
+    void publish(CandidateSolution candidate) override {
+        candidate_ = candidate;
+        candidates_.push_back(std::move(candidate));
+    }
+    const std::vector<CandidateSolution>& candidates() const override { return candidates_; }
 
     const CandidateSolution* candidate() const {
         return candidate_.has_value() ? &*candidate_ : nullptr;
@@ -31,6 +32,7 @@ private:
     const MissionProblem& problem_;
     ComputeBudget budget_;
     std::optional<CandidateSolution> candidate_;
+    std::vector<CandidateSolution> candidates_;
 };
 
 BenchmarkResult run_one(Solver& solver, const MissionProblem& problem,
@@ -68,8 +70,6 @@ BenchmarkReport run_astar_dijkstra_benchmark(const MissionProblem& problem,
     }
     if (repetitions == 0) repetitions = 1;
 
-    // Valid when graph edge costs are non-negative and are not below the
-    // corresponding straight-line distance in the same coordinate metric.
     AStarSolver astar([](const PlanningNode& a, const PlanningNode& b) {
         const double dx = a.x - b.x;
         const double dy = a.y - b.y;

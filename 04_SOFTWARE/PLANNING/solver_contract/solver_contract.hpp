@@ -54,6 +54,7 @@ public:
     virtual const ComputeBudget& budget() const = 0;
     virtual bool cancelled() const = 0;
     virtual void publish(CandidateSolution candidate) = 0;
+    virtual const std::vector<CandidateSolution>& candidates() const = 0;
 };
 
 class Solver {
