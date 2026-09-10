@@ -11,10 +11,14 @@
             "id": "058fcba7e26ecc4b",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Граф"
+              "type": "markdown",
+              "state": {
+                "file": "04_SOFTWARE/AUTOPILOT_ADAPTER/BLUESKY_AUTOPILOT_ADAPTER_IMPLEMENTATION_BASELINE.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "BLUESKY_AUTOPILOT_ADAPTER_IMPLEMENTATION_BASELINE"
             }
           }
         ]
@@ -185,8 +189,12 @@
       "bases:Создать новую базу": false
     }
   },
-  "active": "0edc1e8c7f140214",
+  "active": "058fcba7e26ecc4b",
   "lastOpenFiles": [
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/universal_autopilot_adapter.hpp",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/core",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/contract/universal_autopilot_api.yaml",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/contract",
     "02_ARCHITECTURE/TELEMETRY/BLUESKY_UNIFIED_TELEMETRY_EVENT_MODEL_BASELINE.md",
     "02_ARCHITECTURE/TELEMETRY",
     "02_ARCHITECTURE/BLUESKY_END_TO_END_OPERATIONAL_LIFECYCLE_BASELINE.md",
@@ -218,10 +226,6 @@
     "02_ARCHITECTURE/EXTERNAL_INTEGRATION/ATM_REGULATORY_INTEGRATION_FRAMEWORK.md",
     "15_CERTIFICATION/Evidence/EVID-020.md",
     "15_CERTIFICATION/Evidence/EVID-009.md",
-    "15_CERTIFICATION/Evidence/EVID-003.md",
-    "15_CERTIFICATION/Evidence/EVID-002.md",
-    "08_PLANNING",
-    "07_ATM_REGULATORY",
-    "06_PAYLOAD"
+    "15_CERTIFICATION/Evidence/EVID-003.md"
   ]
 }
