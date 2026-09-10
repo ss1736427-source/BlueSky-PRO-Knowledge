@@ -1,14 +1,30 @@
 # BlueSky PRO — External Integration Architecture
 
-**Status:** WORKING BASELINE — ARCHITECTURE GAP CLOSURE
+**Status:** WORKING BASELINE — UNIVERSAL INTEROPERABILITY PRINCIPLE
 
 ## 1. Purpose
 
 This document defines the complete operational lifecycle of BlueSky PRO and the external interfaces required for BlueSky PRO to operate as a full UAV mission and flight operations system rather than only a mission planner.
 
+## 2. Fundamental product principle — UNIVERSALITY
+
+**BlueSky PRO shall be designed as an autopilot-, UAV-, manufacturer- and external-system-independent product.**
+
+The user shall receive a product ready to operate the user's fleet without having to develop or implement integrations personally.
+
+Universality applies to **all external interfaces**, not only autopilots: C2/data links, payloads, video, GNSS/RTK, traffic, airspace/ATM, weather, GIS/terrain, companion computers, ground infrastructure, logs, security and enterprise systems.
+
+Where a standardized protocol exists, BlueSky shall use it. Where no universal protocol exists, BlueSky shall use a dedicated adapter/connector. BlueSky's internal operational model must remain independent from any specific external protocol.
+
+A closed proprietary system can be supported when its manufacturer provides a technically accessible and legally usable interface/API/SDK. Where no accessible interface exists, support cannot be guaranteed and must not be represented as universal compatibility.
+
+## 3. Product responsibility
+
 The boundary is explicit: BlueSky PRO owns mission management, planning, optimization, supervisory safety, fleet coordination, C2 orchestration, operational state, data aggregation and traceability. Aircraft flight-control execution remains in the onboard flight-control system/autopilot unless an explicitly defined interface delegates a function otherwise.
 
-## 2. Complete lifecycle
+The user-facing product must hide protocol-specific complexity. Vehicle-specific adapters, mappings, compatibility rules and verification are BlueSky product responsibilities.
+
+## 4. Complete lifecycle
 
 1. Fleet and aircraft configuration
 2. Technical preparation and maintenance status
@@ -35,7 +51,7 @@ The boundary is explicit: BlueSky PRO owns mission management, planning, optimiz
 23. Controlled learning/corrections and configuration improvement
 24. Next mission
 
-## 3. System boundary
+## 5. System boundary
 
 ```text
                     EXTERNAL AVIATION / OPERATIONAL WORLD
@@ -59,7 +75,7 @@ The boundary is explicit: BlueSky PRO owns mission management, planning, optimiz
                               │ Flight Record    │
                               └────────┬─────────┘
                                        │
-                            EXTERNAL INTEGRATION LAYER
+                            UNIVERSAL INTEGRATION LAYER
                                        │
               ┌────────────┬───────────┼───────────┬────────────┐
               ▼            ▼           ▼           ▼            ▼
@@ -75,7 +91,7 @@ The boundary is explicit: BlueSky PRO owns mission management, planning, optimiz
                            AIRCRAFT
 ```
 
-## 4. Mandatory integration domains
+## 6. Mandatory integration domains
 
 ### P0 — required for a complete operational product
 
@@ -108,7 +124,26 @@ The boundary is explicit: BlueSky PRO owns mission management, planning, optimiz
 - **IF-SECURITY:** identity, authorization, cryptographic material, secure C2, MAVLink signing where applicable and audit.
 - **IF-ENTERPRISE:** external customer/ERP/GIS/archive/reporting APIs.
 
-## 5. Required interface contract
+## 7. Universal adapter rule
+
+```text
+                     BLUE SKY PRO
+                          │
+                 UNIVERSAL INTERNAL API
+                          │
+        ┌─────────────────┼─────────────────┐
+        ▼                 ▼                 ▼
+   UAV ADAPTER       C2 ADAPTER        DATA ADAPTER
+        │                 │                 │
+   ┌────┼────┐       ┌────┼────┐      ┌────┼─────┐
+   ▼    ▼    ▼       ▼    ▼    ▼      ▼    ▼     ▼
+ Ardu  PX4  OEM    Radio IP Vendor   Weather GIS Payload
+ Pilot       FCS
+```
+
+The adapter layer is a product component of BlueSky, not an integration task assigned to the customer.
+
+## 8. Required interface contract
 
 Every external interface must define:
 
@@ -130,7 +165,7 @@ Every external interface must define:
 16. Logging/audit requirements
 17. Verification method
 
-## 6. Autopilot integration lifecycle
+## 9. Autopilot integration lifecycle
 
 ```text
 AIRCRAFT REGISTERED
@@ -166,32 +201,6 @@ LOG DOWNLOAD
 FLIGHT RECORD
 ```
 
-## 7. Critical architectural rule
-
-The BlueSky internal mission model must not be coupled directly to one autopilot protocol. A translation/adapter layer is mandatory:
-
-```text
-BlueSky Mission Graph
-        ↓
-Operational Flight Plan
-        ↓
-Vehicle/Autopilot Adapter
-        ↓
-MAVLink / vendor protocol
-        ↓
-Autopilot
-```
-
-This preserves BlueSky's higher-level mission semantics while allowing aircraft-specific execution constraints.
-
-## 8. Gap-closure priority
-
-**P0:** Autopilot + MAVLink + Command + Mission + Parameters + C2 + Vehicle State + Safety Configuration + ATM/FPL interface.
-
-**P1:** Payload + Video + Companion Computer + GNSS/RTK + Traffic + GIS/Terrain + Weather connectors + Log acquisition + Peripheral interfaces + Ground infrastructure.
-
-**P2:** Maintenance + Security hardening + Enterprise integrations.
-
-## 9. Exit criterion for a complete product
+## 10. Exit criterion for a complete product
 
 BlueSky PRO is not considered operationally complete until a representative real aircraft can be registered, connected, identified, configured/synchronized, validated, receive a translated mission, execute it under C2 supervision, expose normalized telemetry and health, handle defined contingencies, return/land, provide logs and payload data, and produce a traceable Flight Record — with the same lifecycle executable in a representative simulation environment.
