@@ -187,6 +187,7 @@
   },
   "active": "058fcba7e26ecc4b",
   "lastOpenFiles": [
+    "05_VERIFICATION/EVIDENCE/VERIFICATION_EVIDENCE_INDEX.md",
     "04_SOFTWARE/PLANNING/orchestrator/algorithm_orchestrator_test.cpp",
     "04_SOFTWARE/PLANNING/orchestrator/algorithm_orchestrator.hpp",
     "04_SOFTWARE/PLANNING/orchestrator/algorithm_orchestrator.cpp",
@@ -199,7 +200,6 @@
     "04_SOFTWARE/PLANNING/BLUESKY_SOLVER_BENCHMARK_RUNNER_BASELINE.md",
     "04_SOFTWARE/PLANNING/tests/BLUESKY_SOLVER_BENCHMARK_BASELINE.md",
     "04_SOFTWARE/PLANNING/tests/astar_dijkstra_benchmark.cpp",
-    "04_SOFTWARE/PLANNING/tests",
     "04_SOFTWARE/PLANNING/BLUESKY_SOLVER_BENCHMARK_BASELINE.md",
     "04_SOFTWARE/PLANNING/solver_contract/README.md",
     "04_SOFTWARE/PLANNING/BLUESKY_SOLVER_PORTFOLIO_AND_DECISION_ENGINE_BASELINE.md",
