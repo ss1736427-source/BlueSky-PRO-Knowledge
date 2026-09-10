@@ -23,6 +23,9 @@ public:
     void publish(CandidateSolution candidate) override {
         candidates.push_back(std::move(candidate));
     }
+    const std::vector<CandidateSolution>& candidates() const override {
+        return candidates;
+    }
 
     MissionProblem problem_;
     ComputeBudget budget_;
