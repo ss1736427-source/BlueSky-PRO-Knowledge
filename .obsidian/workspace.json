@@ -187,6 +187,7 @@
   },
   "active": "058fcba7e26ecc4b",
   "lastOpenFiles": [
+    "07_DATA/Payloads/PAYLOAD-010.md",
     "05_VERIFICATION/EVIDENCE/VERIFICATION_EVIDENCE_INDEX.md",
     "04_SOFTWARE/PLANNING/orchestrator/algorithm_orchestrator_test.cpp",
     "04_SOFTWARE/PLANNING/orchestrator/algorithm_orchestrator.hpp",
@@ -221,7 +222,6 @@
     "02_ARCHITECTURE/BLUESKY_MISSION_OBJECTIVE_PROFILES.md",
     "08_PLANNING/BLUESKY_ROUTE_CALCULATION_AND_OPTIMIZATION_SPEC.md",
     "08_HMI/DESIGN_SYSTEM/BLUESKY_PRO_SCREEN_REFERENCE.md",
-    "README.md",
-    "USER.md"
+    "README.md"
   ]
 }
