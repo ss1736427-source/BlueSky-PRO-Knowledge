@@ -6,6 +6,7 @@
 #include <chrono>
 #include <cmath>
 #include <functional>
+#include <optional>
 #include <stdexcept>
 #include <unordered_map>
 
@@ -67,8 +68,8 @@ BenchmarkReport run_astar_dijkstra_benchmark(const MissionProblem& problem,
     }
     if (repetitions == 0) repetitions = 1;
 
-    // Euclidean distance is admissible when graph edge costs represent
-    // non-negative travel distance and do not fall below straight-line distance.
+    // Valid when graph edge costs are non-negative and are not below the
+    // corresponding straight-line distance in the same coordinate metric.
     AStarSolver astar([](const PlanningNode& a, const PlanningNode& b) {
         const double dx = a.x - b.x;
         const double dy = a.y - b.y;
