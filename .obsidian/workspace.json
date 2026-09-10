@@ -11,10 +11,14 @@
             "id": "058fcba7e26ecc4b",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Граф"
+              "type": "markdown",
+              "state": {
+                "file": "02_ARCHITECTURE/BLUESKY_SYSTEM_DATA_MODEL_BASELINE.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "BLUESKY_SYSTEM_DATA_MODEL_BASELINE"
             }
           }
         ]
