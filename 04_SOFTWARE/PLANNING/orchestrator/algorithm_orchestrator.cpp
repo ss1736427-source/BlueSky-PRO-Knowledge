@@ -1,16 +1,71 @@
 #include "algorithm_orchestrator.hpp"
 
+#include <algorithm>
 #include <limits>
 #include <sstream>
+#include <string>
 
 namespace bluesky::planning {
+
+namespace {
+
+int priority_rank(const MissionProblem& problem, const std::string& solver_id) {
+    const auto has = [&problem](const std::string& token) {
+        return std::find(problem.objective_priorities.begin(),
+                         problem.objective_priorities.end(), token) !=
+               problem.objective_priorities.end();
+    };
+
+    // Keep solver ordering deterministic when the mission priorities do not
+    // distinguish the candidates. This is a preference, not a safety gate.
+    if (has("completion_time") || has("fast") || has("route_efficiency")) {
+        return solver_id == "astar" ? 0 : 1;
+    }
+    if (has("deterministic") || has("minimum_cost")) {
+        return solver_id == "dijkstra" ? 0 : 1;
+    }
+    return 0;
+}
+
+bool better_candidate(const CandidateSolution& candidate,
+                      const CandidateSolution& current,
+                      const MissionProblem& problem) {
+    const auto better_lower = [](double lhs, double rhs) {
+        return lhs + 1e-9 < rhs;
+    };
+    const auto better_higher = [](double lhs, double rhs) {
+        return lhs > rhs + 1e-9;
+    };
+
+    for (const auto& priority : problem.objective_priorities) {
+        if (priority == "completion_time" || priority == "time" ||
+            priority == "fast" || priority == "route_efficiency" ||
+            priority == "minimum_cost") {
+            if (better_lower(candidate.estimated_time_s, current.estimated_time_s)) return true;
+            if (better_lower(current.estimated_time_s, candidate.estimated_time_s)) return false;
+        } else if (priority == "energy") {
+            if (better_lower(candidate.estimated_energy_wh, current.estimated_energy_wh)) return true;
+            if (better_lower(current.estimated_energy_wh, candidate.estimated_energy_wh)) return false;
+        } else if (priority == "endurance" || priority == "reserve") {
+            if (better_higher(candidate.estimated_reserve_wh, current.estimated_reserve_wh)) return true;
+            if (better_higher(current.estimated_reserve_wh, candidate.estimated_reserve_wh)) return false;
+        }
+    }
+
+    if (candidate.objective_score + 1e-9 < current.objective_score) return true;
+    if (current.objective_score + 1e-9 < candidate.objective_score) return false;
+
+    return priority_rank(problem, candidate.solver_id) <
+           priority_rank(problem, current.solver_id);
+}
+
+} // namespace
 
 AlgorithmOrchestrator::AlgorithmOrchestrator(std::vector<std::unique_ptr<Solver>> solvers)
     : solvers_(std::move(solvers)) {}
 
 OrchestratorDecision AlgorithmOrchestrator::solve(SolverContext& context) {
     OrchestratorDecision decision;
-    double best_score = std::numeric_limits<double>::infinity();
     CandidateSolution best;
     bool have_best = false;
 
@@ -27,14 +82,14 @@ OrchestratorDecision AlgorithmOrchestrator::solve(SolverContext& context) {
         (void)state;
 
         // Candidates are published into the shared context. The orchestrator
-        // selects only candidates marked FEASIBLE and ranks their objective score.
+        // selects only FEASIBLE candidates and applies mission objective
+        // priorities before the generic objective score fallback.
         for (const auto& candidate : context.candidates()) {
             if (candidate.solver_id != meta.solver_id ||
                 candidate.feasibility != Feasibility::Feasible) {
                 continue;
             }
-            if (!have_best || candidate.objective_score < best_score) {
-                best_score = candidate.objective_score;
+            if (!have_best || better_candidate(candidate, best, context.problem())) {
                 best = candidate;
                 have_best = true;
             }
@@ -53,7 +108,7 @@ OrchestratorDecision AlgorithmOrchestrator::solve(SolverContext& context) {
 
     std::ostringstream explanation;
     explanation << "Выбран маршрут, рассчитанный алгоритмом " << best.solver_id
-                << ", как лучший допустимый кандидат по текущему профилю задачи."
+                << ", как лучший допустимый кандидат с учётом приоритетов текущей задачи."
                 << " Ограничения безопасности прошли проверку до ранжирования.";
     decision.explanation = explanation.str();
     return decision;

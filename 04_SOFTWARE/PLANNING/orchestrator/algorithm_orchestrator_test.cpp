@@ -24,6 +24,18 @@ private:
     ComputeBudget b_;
     std::vector<CandidateSolution> candidates_;
 };
+
+std::vector<std::unique_ptr<Solver>> make_solvers() {
+    auto heuristic = [](const PlanningNode& from, const PlanningNode& to) {
+        const double dx = from.x - to.x;
+        const double dy = from.y - to.y;
+        return std::sqrt(dx * dx + dy * dy);
+    };
+    std::vector<std::unique_ptr<Solver>> solvers;
+    solvers.push_back(std::make_unique<AStarSolver>(heuristic));
+    solvers.push_back(std::make_unique<DijkstraSolver>());
+    return solvers;
+}
 }
 
 int main() {
@@ -45,35 +57,40 @@ int main() {
     problem.mission_id = "ORCH-REAL-001";
     problem.problem_class = "point_to_point";
     problem.planning_graph = &graph;
-    problem.objective_priorities = {"minimum_cost"};
+    problem.objective_priorities = {"completion_time"};
 
-    auto heuristic = [](const PlanningNode& from, const PlanningNode& to) {
-        const double dx = from.x - to.x;
-        const double dy = from.y - to.y;
-        return std::sqrt(dx * dx + dy * dy);
-    };
-
-    // Normal condition: both algorithms are eligible and produce the same optimum.
+    // Real A* and Dijkstra are both evaluated. The same optimum is produced,
+    // while the mission priority provides a deterministic tie-break preference.
     TestContext context(problem, ComputeBudget{1000, 256, 8});
-    std::vector<std::unique_ptr<Solver>> solvers;
-    solvers.push_back(std::make_unique<AStarSolver>(heuristic));
-    solvers.push_back(std::make_unique<DijkstraSolver>());
-
-    AlgorithmOrchestrator orchestrator(std::move(solvers));
+    AlgorithmOrchestrator orchestrator(make_solvers());
     const auto decision = orchestrator.solve(context);
 
     assert(decision.feasibility == Feasibility::Feasible);
     assert(decision.considered_solvers.size() == 2);
-    assert(decision.selected_solver_id == "astar" || decision.selected_solver_id == "dijkstra");
-    assert(decision.selected_candidate_id == "ORCH-REAL-001:astar:1" ||
-           decision.selected_candidate_id == "ORCH-REAL-001:dijkstra:1");
+    assert(decision.selected_solver_id == "astar");
+    assert(decision.selected_candidate_id == "ORCH-REAL-001:astar:1");
     assert(context.candidates().size() == 2);
-    assert(std::abs(context.candidates()[0].objective_score - 5.0) < 1e-9);
-    assert(std::abs(context.candidates()[1].objective_score - 5.0) < 1e-9);
+    assert(std::abs(context.candidates()[0].estimated_time_s - 5.0) < 1e-9);
+    assert(std::abs(context.candidates()[1].estimated_time_s - 5.0) < 1e-9);
+
+    // Mission-profile change: minimum-cost profile uses Dijkstra as the
+    // deterministic tie-break when both admissible candidates are equivalent.
+    MissionProblem cost_problem = problem;
+    cost_problem.mission_id = "ORCH-PROFILE-002";
+    cost_problem.objective_priorities = {"minimum_cost"};
+    TestContext cost_context(cost_problem, ComputeBudget{1000, 256, 8});
+    AlgorithmOrchestrator cost_orchestrator(make_solvers());
+    const auto cost_decision = cost_orchestrator.solve(cost_context);
+
+    assert(cost_decision.feasibility == Feasibility::Feasible);
+    assert(cost_decision.considered_solvers.size() == 2);
+    assert(cost_decision.selected_solver_id == "dijkstra");
+    assert(cost_decision.selected_candidate_id == "ORCH-PROFILE-002:dijkstra:1");
+    assert(cost_context.candidates().size() == 2);
 
     // Condition change: A* has no heuristic and becomes ineligible; Dijkstra must be selected.
     MissionProblem no_heuristic_problem = problem;
-    no_heuristic_problem.mission_id = "ORCH-CONDITION-002";
+    no_heuristic_problem.mission_id = "ORCH-CONDITION-003";
     TestContext fallback_context(no_heuristic_problem, ComputeBudget{1000, 256, 8});
     std::vector<std::unique_ptr<Solver>> fallback_solvers;
     fallback_solvers.push_back(std::make_unique<AStarSolver>(AStarSolver::Heuristic{}));
@@ -86,7 +103,7 @@ int main() {
     assert(fallback_decision.considered_solvers.size() == 1);
     assert(fallback_decision.considered_solvers[0] == "dijkstra");
     assert(fallback_decision.selected_solver_id == "dijkstra");
-    assert(fallback_decision.selected_candidate_id == "ORCH-CONDITION-002:dijkstra:1");
+    assert(fallback_decision.selected_candidate_id == "ORCH-CONDITION-003:dijkstra:1");
     assert(fallback_context.candidates().size() == 1);
     assert(std::abs(fallback_context.candidates()[0].objective_score - 5.0) < 1e-9);
 
