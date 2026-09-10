@@ -10,7 +10,7 @@
 #include <utility>
 #include <vector>
 
-namespace bluesky::planning {
+using namespace bluesky::planning;
 
 class TestContext final : public SolverContext {
 public:
@@ -99,5 +99,3 @@ int main() {
     std::cout << "Benchmark: PASS\n";
     return 0;
 }
-
-} // namespace bluesky::planning
