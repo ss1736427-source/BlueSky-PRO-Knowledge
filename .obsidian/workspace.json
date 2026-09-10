@@ -187,6 +187,11 @@
   },
   "active": "058fcba7e26ecc4b",
   "lastOpenFiles": [
+    "04_SOFTWARE/PLANNING/benchmarks/solver_benchmark_runner_test.cpp",
+    "04_SOFTWARE/PLANNING/benchmarks/solver_benchmark_runner.hpp",
+    "04_SOFTWARE/PLANNING/benchmarks/solver_benchmark_runner.cpp",
+    "04_SOFTWARE/PLANNING/benchmarks",
+    "04_SOFTWARE/PLANNING/BLUESKY_SOLVER_BENCHMARK_RUNNER_BASELINE.md",
     "04_SOFTWARE/PLANNING/tests/BLUESKY_SOLVER_BENCHMARK_BASELINE.md",
     "04_SOFTWARE/PLANNING/tests/astar_dijkstra_benchmark.cpp",
     "04_SOFTWARE/PLANNING/tests",
@@ -196,9 +201,6 @@
     "04_SOFTWARE/PLANNING/model",
     "04_SOFTWARE/PLANNING/solvers/dijkstra_solver.hpp",
     "04_SOFTWARE/PLANNING/solvers/dijkstra_solver.cpp",
-    "04_SOFTWARE/PLANNING/solver_contract/solver_comparison.hpp",
-    "04_SOFTWARE/PLANNING/solvers/astar_solver.hpp",
-    "04_SOFTWARE/PLANNING/solvers/astar_solver.cpp",
     "04_SOFTWARE/PLANNING/solver_contract/README.md",
     "04_SOFTWARE/PLANNING/BLUESKY_SOLVER_PORTFOLIO_AND_DECISION_ENGINE_BASELINE.md",
     "04_SOFTWARE/PLANNING/BLUESKY_SOLVER_CONTRACT_BASELINE.md",
@@ -220,8 +222,6 @@
     "08_PLANNING/BLUESKY_ROUTE_CALCULATION_AND_OPTIMIZATION_SPEC.md",
     "08_HMI/DESIGN_SYSTEM/BLUESKY_PRO_SCREEN_REFERENCE.md",
     "README.md",
-    "USER.md",
-    "08_HMI/DESIGN_SYSTEM/BLUESKY_PRO_FIGMA_HANDOFF.md",
-    "08_HMI/DESIGN_SYSTEM/BLUESKY_PRO_DESIGN_SYSTEM.md"
+    "USER.md"
   ]
 }
