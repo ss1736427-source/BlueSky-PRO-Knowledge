@@ -201,6 +201,99 @@ LOG DOWNLOAD
 FLIGHT RECORD
 ```
 
-## 10. Exit criterion for a complete product
+## 10. C2 connectivity lifecycle
 
-BlueSky PRO is not considered operationally complete until a representative real aircraft can be registered, connected, identified, configured/synchronized, validated, receive a translated mission, execute it under C2 supervision, expose normalized telemetry and health, handle defined contingencies, return/land, provide logs and payload data, and produce a traceable Flight Record — with the same lifecycle executable in a representative simulation environment.
+```text
+LINK DISCOVERY
+      ↓
+PRIMARY / BACKUP LINKS
+      ↓
+CONNECT
+      ↓
+QUALITY MONITORING
+      ↓
+CONNECTED ──→ DEGRADED ──→ LOST
+      ↑                         │
+      └──── RECOVERY / FAILOVER┘
+```
+
+BlueSky shall distinguish loss of C2, telemetry, video, payload control and total communication. Failover policy shall be explicit and auditable; onboard autopilot contingency behavior remains authoritative for aircraft safety.
+
+## 11. Vehicle / Payload integration
+
+```text
+AIRCRAFT PROFILE
+      ├── FCS + firmware
+      ├── sensors/navigation
+      ├── C2
+      ├── energy/performance
+      └── payloads
+             ↓
+      CAPABILITY MODEL
+             ↓
+      MISSION COMPATIBILITY
+             ↓
+       READY / BLOCKED
+```
+
+Vehicle-specific profiles, adapters and verification status are maintained by BlueSky so that the customer receives ready-to-operate integrations.
+
+## 12. ATM / Regulatory lifecycle
+
+```text
+MISSION
+  ↓
+AIRSPACE + WEATHER + TERRAIN + TRAFFIC
+  ↓
+CONSTRAINTS
+  ↓
+FPL / AUTHORIZATION
+  ↓
+SUBMIT
+  ↓
+ACCEPTED / REJECTED / CORRECTION REQUIRED
+  ↓
+CORRECTION LOOP
+  ↓
+APPROVED
+  ↓
+LINK APPROVAL TO MISSION VERSION
+  ↓
+FLIGHT RELEASE
+```
+
+BlueSky shall support applicable jurisdiction-specific adapters for airspace/ATM/FPL/authorization/reporting systems. No flight release shall be inferred from network submission success alone.
+
+## 13. Operational validation lifecycle
+
+```text
+REQUIREMENTS
+    ↓
+UNIT / INTEGRATION TESTS
+    ↓
+SIL / SITL
+    ↓
+HIL
+    ↓
+BENCH / GROUND TEST
+    ↓
+REAL UAV TEST
+    ↓
+OPERATIONAL RELEASE
+```
+
+The same integration contracts shall be exercised in simulation and real-aircraft environments wherever practical. Logs shall be replayable for incident investigation and regression.
+
+## 14. Full integration contract set
+
+Detailed working baselines:
+
+- `AUTOPILOT_INTEGRATION_FRAMEWORK.md`
+- `C2_CONNECTIVITY_FRAMEWORK.md`
+- `VEHICLE_PAYLOAD_INTEGRATION_FRAMEWORK.md`
+- `ATM_REGULATORY_INTEGRATION_FRAMEWORK.md`
+- `OPERATIONAL_VALIDATION_FRAMEWORK.md`
+
+## 15. Exit criterion for a complete product
+
+BlueSky PRO is not considered operationally complete until a representative real aircraft can be registered, connected, identified, configured/synchronized, validated, receive a translated mission, execute it under C2 supervision, expose normalized telemetry and health, handle defined contingencies, return/land, provide logs and payload data, and produce a traceable Flight Record — with the same critical lifecycle executable in a representative simulation environment.
