@@ -11,10 +11,14 @@
             "id": "058fcba7e26ecc4b",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Граф"
+              "type": "markdown",
+              "state": {
+                "file": "02_ARCHITECTURE/EXTERNAL_INTEGRATION/ATM_REGULATORY_INTEGRATION_FRAMEWORK.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "ATM_REGULATORY_INTEGRATION_FRAMEWORK"
             }
           }
         ]
@@ -79,7 +83,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 293.08698654174805
+    "width": 424.1478385925293
   },
   "right": {
     "id": "92649558e411b8a1",
