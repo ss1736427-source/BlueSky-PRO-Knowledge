@@ -7,6 +7,7 @@
 #include <chrono>
 #include <cmath>
 #include <iostream>
+#include <utility>
 #include <vector>
 
 namespace bluesky::planning {
@@ -30,41 +31,36 @@ public:
 };
 
 static PlanningGraph make_graph() {
-    return {
-        {"S", "A", "B", "C", "D", "G"},
-        {
-            {"S", "A", 2.0}, {"S", "B", 5.0},
-            {"A", "B", 1.0}, {"A", "C", 2.0},
-            {"B", "C", 1.0}, {"B", "D", 3.0},
-            {"C", "D", 1.0}, {"C", "G", 6.0},
-            {"D", "G", 1.0}
-        },
-        "S", "G"
+    PlanningGraph graph;
+    graph.nodes = {
+        {"S", 0.0, 0.0}, {"A", 1.0, 0.0}, {"B", 0.0, 1.0},
+        {"C", 1.0, 1.0}, {"D", 2.0, 1.0}, {"G", 2.0, 2.0}
     };
+    graph.edges = {
+        {"S", "A", 2.0}, {"S", "B", 5.0},
+        {"A", "B", 1.0}, {"A", "C", 2.0},
+        {"B", "C", 1.0}, {"B", "D", 3.0},
+        {"C", "D", 1.0}, {"C", "G", 6.0},
+        {"D", "G", 1.0}
+    };
+    graph.start_node = "S";
+    graph.goal_node = "G";
+    return graph;
 }
 
 int main() {
     const auto graph = make_graph();
     MissionProblem problem{
-        "benchmark-astar-dijkstra",
-        "1",
-        "point_to_point",
-        {"UAV-01"},
-        {},
-        {"route_efficiency"},
-        "test-environment",
-        &graph
+        "benchmark-astar-dijkstra", "1", "point_to_point", {"UAV-01"},
+        {}, {"route_efficiency"}, "test-environment", &graph
     };
     const ComputeBudget budget{1000, 128, 1};
 
-    AStarSolver astar(
-        {{"S"}, {"A"}, {"B"}, {"C"}, {"D"}, {"G"}},
-        {{"S", "A", 2.0}, {"S", "B", 5.0}, {"A", "B", 1.0},
-         {"A", "C", 2.0}, {"B", "C", 1.0}, {"B", "D", 3.0},
-         {"C", "D", 1.0}, {"C", "G", 6.0}, {"D", "G", 1.0}},
-        [](const std::string&, const std::string&) { return 0.0; },
-        [](const std::string& id) { return id == "G"; });
-
+    // Zero heuristic is the reference mode: A* becomes Dijkstra-equivalent,
+    // making this test a correctness check independent of heuristic quality.
+    AStarSolver astar([](const PlanningNode&, const PlanningNode&) {
+        return 0.0;
+    });
     DijkstraSolver dijkstra;
 
     TestContext a_ctx(problem, budget);
@@ -72,12 +68,12 @@ int main() {
 
     const auto a_start = std::chrono::steady_clock::now();
     const auto a_state = astar.run(a_ctx);
-    const auto a_ms = std::chrono::duration_cast<std::chrono::microseconds>(
+    const auto a_us = std::chrono::duration_cast<std::chrono::microseconds>(
         std::chrono::steady_clock::now() - a_start).count();
 
     const auto d_start = std::chrono::steady_clock::now();
     const auto d_state = dijkstra.run(d_ctx);
-    const auto d_ms = std::chrono::duration_cast<std::chrono::microseconds>(
+    const auto d_us = std::chrono::duration_cast<std::chrono::microseconds>(
         std::chrono::steady_clock::now() - d_start).count();
 
     assert(a_state == RunState::Completed);
@@ -90,21 +86,18 @@ int main() {
     assert(a.feasibility == Feasibility::Feasible);
     assert(d.feasibility == Feasibility::Feasible);
     assert(std::fabs(a.estimated_time_s - d.estimated_time_s) < 1e-9);
+    assert(std::fabs(d.estimated_time_s - 6.0) < 1e-9);
     assert(a.route_elements == d.route_elements);
 
     const auto* best = SolverCandidateEvaluator::best(a, d, 0.0, 100000.0);
     assert(best != nullptr);
 
     std::cout << "A* route cost: " << a.estimated_time_s
-              << ", time(us): " << a_ms << '\n';
+              << ", time(us): " << a_us << '\n';
     std::cout << "Dijkstra route cost: " << d.estimated_time_s
-              << ", time(us): " << d_ms << '\n';
+              << ", time(us): " << d_us << '\n';
     std::cout << "Benchmark: PASS\n";
     return 0;
 }
 
 } // namespace bluesky::planning
-
-int main() {
-    return bluesky::planning::main();
-}
