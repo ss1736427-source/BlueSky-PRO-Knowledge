@@ -29,8 +29,9 @@ RunState AStarSolver::run(SolverContext& context) {
     if (!eligible(context.problem())) return RunState::Failed;
 
     const auto& graph = *context.problem().planning_graph;
-    if (graph.start_node.empty() || graph.goal_node.empty()) return RunState::Failed;
-    if (context.budget().max_candidates == 0) return RunState::Failed;
+    const auto* start = graph.find_node(graph.start_node);
+    const auto* goal = graph.find_node(graph.goal_node);
+    if (!start || !goal || context.budget().max_candidates == 0) return RunState::Failed;
 
     const auto started = std::chrono::steady_clock::now();
     const auto budget_ms = context.budget().wall_time_ms;
@@ -43,7 +44,8 @@ RunState AStarSolver::run(SolverContext& context) {
 
     std::unordered_map<std::string, double> g;
     std::unordered_map<std::string, std::string> parent;
-    for (const auto& node : graph.nodes) g[node] = inf;
+    for (const auto& node : graph.nodes) g[node.id] = inf;
+    g[start->id] = 0.0;
 
     struct QueueItem {
         std::string id;
@@ -51,22 +53,10 @@ RunState AStarSolver::run(SolverContext& context) {
         bool operator>(const QueueItem& other) const { return f > other.f; }
     };
 
-    const auto* goal = std::find(graph.nodes.begin(), graph.nodes.end(), graph.goal_node) != graph.nodes.end()
-        ? &graph.goal_node : nullptr;
-    if (!goal) return RunState::Failed;
-
     std::priority_queue<QueueItem, std::vector<QueueItem>, std::greater<>> open;
-    g[graph.start_node] = 0.0;
+    open.push({start->id, heuristic_(*start, *goal)});
 
-    const auto* start_node = std::find_if(graph.nodes.begin(), graph.nodes.end(),
-        [&](const std::string& id) { return id == graph.start_node; });
-    const auto* goal_node = std::find_if(graph.nodes.begin(), graph.nodes.end(),
-        [&](const std::string& id) { return id == graph.goal_node; });
-    if (start_node == graph.nodes.end() || goal_node == graph.nodes.end()) return RunState::Failed;
-
-    open.push({graph.start_node, heuristic_(PlanningNode{graph.start_node, 0.0, 0.0},
-                                            PlanningNode{graph.goal_node, 0.0, 0.0})});
-
+    std::unordered_set<std::string> closed;
     while (!open.empty()) {
         if (cancelled_.load() || context.cancelled()) return RunState::Cancelled;
         if (budget_ms > 0) {
@@ -77,8 +67,10 @@ RunState AStarSolver::run(SolverContext& context) {
 
         const auto current = open.top();
         open.pop();
-        const double expected_f = g[current.id];
-        if (current.id == graph.goal_node) {
+        if (closed.contains(current.id)) continue;
+        closed.insert(current.id);
+
+        if (current.id == goal->id) {
             std::vector<std::string> route;
             for (std::string at = current.id; !at.empty();) {
                 route.push_back(at);
@@ -100,23 +92,20 @@ RunState AStarSolver::run(SolverContext& context) {
             return RunState::Completed;
         }
 
+        const auto* current_node = graph.find_node(current.id);
+        if (!current_node) return RunState::Failed;
+
         for (const auto& edge : adjacency[current.id]) {
+            if (closed.contains(edge.to)) continue;
             const double tentative_g = g[current.id] + edge.cost;
             if (tentative_g < g[edge.to]) {
                 g[edge.to] = tentative_g;
                 parent[edge.to] = current.id;
-
-                // Graph coordinates are not yet part of the MissionProblem lookup;
-                // use zero-coordinate nodes here only as a safe baseline. The shared
-                // graph model is the authoritative source and the coordinate-aware
-                // heuristic is supplied by the caller in the next integration step.
-                const PlanningNode from{edge.to, 0.0, 0.0};
-                const PlanningNode to{graph.goal_node, 0.0, 0.0};
-                open.push({edge.to, tentative_g + heuristic_(from, to)});
+                const auto* next_node = graph.find_node(edge.to);
+                if (!next_node) return RunState::Failed;
+                open.push({edge.to, tentative_g + heuristic_(*next_node, *goal)});
             }
         }
-
-        (void)expected_f;
     }
 
     return RunState::Failed;
