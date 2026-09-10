@@ -16,9 +16,7 @@ int priority_rank(const MissionProblem& problem, const std::string& solver_id) {
                problem.objective_priorities.end();
     };
 
-    // Keep solver ordering deterministic when the mission priorities do not
-    // distinguish the candidates. This is a preference, not a safety gate.
-    if (has("completion_time") || has("fast") || has("route_efficiency")) {
+    if (has("completion_time") || has("time") || has("fast") || has("route_efficiency")) {
         return solver_id == "astar" ? 0 : 1;
     }
     if (has("deterministic") || has("minimum_cost")) {
@@ -69,6 +67,20 @@ OrchestratorDecision AlgorithmOrchestrator::solve(SolverContext& context) {
     CandidateSolution best;
     bool have_best = false;
 
+    // Mission characteristics define a deterministic solver preference. The
+    // preferred solver is evaluated first, while all eligible solvers remain
+    // available so that the final decision can still be based on real
+    // candidates rather than on the preference alone.
+    std::stable_sort(solvers_.begin(), solvers_.end(),
+                     [&context](const std::unique_ptr<Solver>& lhs,
+                                const std::unique_ptr<Solver>& rhs) {
+                         if (!lhs) return false;
+                         if (!rhs) return true;
+                         const int lrank = priority_rank(context.problem(), lhs->metadata().solver_id);
+                         const int rrank = priority_rank(context.problem(), rhs->metadata().solver_id);
+                         return lrank < rrank;
+                     });
+
     for (auto& solver : solvers_) {
         if (!solver || !solver->eligible(context.problem())) {
             if (solver) decision.rejected_solvers.push_back(solver->metadata().solver_id);
@@ -81,9 +93,6 @@ OrchestratorDecision AlgorithmOrchestrator::solve(SolverContext& context) {
         const auto state = solver->run(context);
         (void)state;
 
-        // Candidates are published into the shared context. The orchestrator
-        // selects only FEASIBLE candidates and applies mission objective
-        // priorities before the generic objective score fallback.
         for (const auto& candidate : context.candidates()) {
             if (candidate.solver_id != meta.solver_id ||
                 candidate.feasibility != Feasibility::Feasible) {
