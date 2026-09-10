@@ -54,23 +54,23 @@ CORRECTIONS
 |---|---|---|---|---|
 | Mission Model | BASELINED | pending | pending | P0 |
 | Mission Objective Profiles | BASELINED | pending | pending | P0 |
-| Vehicle Capability Model | required | pending | pending | P0 |
-| Payload Capability Model | required | pending | pending | P0 |
+| Vehicle Capability Model | BASELINED | pending | pending | P0 |
+| Payload Capability Model | BASELINED | pending | pending | P0 |
 | Universal Autopilot API | BASELINED | pending | pending | P0 |
 | ArduPilot adapter | required | pending | pending | P0 |
 | PX4 adapter | required | pending | pending | P0 |
 | OEM adapter framework | required | pending | pending | P0 |
-| C2 abstraction | required | pending | pending | P0 |
-| Channel management / failover | required | pending | pending | P0 |
-| Mission Package | required | pending | pending | P0 |
-| Mission upload + read-back verification | required | pending | pending | P0 |
+| C2 abstraction | BASELINED | pending | pending | P0 |
+| Channel management / failover | BASELINED | pending | pending | P0 |
+| Mission Package | BASELINED | pending | pending | P0 |
+| Mission upload + read-back verification | BASELINED | pending | pending | P0 |
 | Regulatory adapter layer | BASELINED concept | pending | pending | P0 |
 | FPL / authorization workflows | required | pending | pending | P0 |
 | SIL | specified | pending | pending | P0 |
 | HIL | specified | pending | pending | P0 |
 | Automated pre-flight validation | specified | pending | pending | P0 |
-| Telemetry normalization | required | pending | pending | P0 |
-| Runtime state machine | required | pending | pending | P0 |
+| Telemetry normalization | BASELINED | pending | pending | P0 |
+| Runtime state machine | specified | pending | pending | P0 |
 | Recovery / failsafe coordination | specified | pending | pending | P0 |
 | Replanning | specified | pending | pending | P0 |
 | Log / replay | specified | pending | pending | P1 |
@@ -101,7 +101,7 @@ External regulatory information must enter the same authoritative constraint mod
 
 ### 4.6 Runtime → Planning
 
-The system needs an explicit replanning contract: what events may trigger replanning, which constraints are immutable, how a new plan is validated, and how it is transferred to the UAV.
+The replanning contract defines triggers, immutable constraints, validation of a new plan and controlled transfer to the UAV. Runtime changes are classified by impact so the system avoids unnecessary full recomputation.
 
 ### 4.7 Execution → Evidence
 
@@ -132,12 +132,13 @@ Implementation shall follow dependency order:
 5. Mission Package
 6. Safety + Energy Gate
 7. Runtime State Machine
-8. SIL
-9. ArduPilot/PX4 adapters
-10. HIL
-11. ATM/Regulatory adapters
-12. Telemetry / Replay
+8. Unified Telemetry/Event Model
+9. SIL
+10. ArduPilot/PX4 adapters
+11. HIL
+12. ATM/Regulatory adapters
 13. Real-UAV validation
+14. Replay / predicted-vs-actual / corrections
 ```
 
 UI work must consume these contracts and must not redefine them.
@@ -155,17 +156,35 @@ Whenever a new feature is proposed, the audit asks:
 
 If one of these is missing, the feature remains a GAP rather than being considered complete.
 
-## 8. Immediate P0 work
+## 8. Current architecture status
 
-The highest-risk missing practical contours are:
+The following P0 contracts are now baselined in the repository:
 
-1. Vehicle/Payload Capability Model;
-2. concrete universal Autopilot Adapter implementation;
-3. Mission Package schema and transfer/read-back protocol;
-4. C2 runtime/channel state machine;
-5. runtime/replanning state machine;
-6. SIL/HIL integration harness;
-7. regulatory/FPL adapter implementation;
-8. normalized telemetry and event model.
+- Mission Model;
+- Mission Objective Profiles;
+- Vehicle/Payload Capability Model;
+- Universal Autopilot API;
+- C2 Runtime and Channel Management;
+- Mission Package;
+- Operational Validation;
+- Unified Telemetry/Event Model;
+- End-to-End Operational Lifecycle.
 
-These are the interfaces that turn the current architectural model into an executable product.
+These baselines close architectural definition gaps but do **not** imply implementation or verification completion.
+
+## 9. Remaining P0 implementation gaps
+
+1. concrete ArduPilot adapter;
+2. concrete PX4 adapter;
+3. OEM adapter framework and first OEM integration;
+4. executable Mission Package schema/serialization and transfer implementation;
+5. C2 drivers and failover implementation;
+6. runtime state machine/replanning implementation;
+7. automated validation engine;
+8. SIL integration harness;
+9. HIL integration;
+10. ATM/FPL/authorization adapters;
+11. normalized telemetry/event implementation;
+12. real-UAV operational verification.
+
+These items are the next implementation work, in dependency order.
