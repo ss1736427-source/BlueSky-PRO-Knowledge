@@ -11,10 +11,14 @@
             "id": "058fcba7e26ecc4b",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Граф"
+              "type": "markdown",
+              "state": {
+                "file": "02_ARCHITECTURE/BLUESKY_VEHICLE_PAYLOAD_CAPABILITY_MODEL.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "BLUESKY_VEHICLE_PAYLOAD_CAPABILITY_MODEL"
             }
           }
         ]
@@ -187,6 +191,10 @@
   },
   "active": "058fcba7e26ecc4b",
   "lastOpenFiles": [
+    "02_ARCHITECTURE/MISSION_PACKAGE/BLUESKY_MISSION_PACKAGE_BASELINE.md",
+    "02_ARCHITECTURE/MISSION_PACKAGE",
+    "02_ARCHITECTURE/BLUESKY_VEHICLE_PAYLOAD_CAPABILITY_MODEL.md",
+    "02_ARCHITECTURE/BLUESKY_ARCHITECTURE_GAP_MATRIX.md",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/BLUESKY_AUTOPILOT_ADAPTER_IMPLEMENTATION_BASELINE.md",
     "04_SOFTWARE/AUTOPILOT_ADAPTER",
     "02_ARCHITECTURE/BLUESKY_MISSION_MODEL.md",
@@ -216,12 +224,8 @@
     "05_C2",
     "04_INTEGRATION/BLUESKY_UNIVERSAL_INTEGRATION_LAYER.md",
     "04_INTEGRATION",
-    "03_FLEET/BLUESKY_FLEET_VEHICLE_PAYLOAD_MODEL.md",
     "03_FLEET",
-    "04_SOFTWARE/Modules/MOD-019.md",
-    "01_REQUIREMENTS/BLUESKY_REQUIREMENTS_TRACEABILITY_MASTER.md",
     "00_MASTER",
-    "Obsidian",
-    "99_ARCHIVE/git_mirror.log"
+    "Obsidian"
   ]
 }
