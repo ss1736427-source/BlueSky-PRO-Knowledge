@@ -6,14 +6,13 @@
 #include <limits>
 #include <queue>
 #include <unordered_map>
-#include <unordered_set>
 
 namespace bluesky::planning {
 
 SolverMetadata DijkstraSolver::metadata() const {
     return SolverMetadata{
         "dijkstra",
-        "1.0.0",
+        "1.0.1",
         {"point_to_point", "graph_route", "constrained_graph_route"},
         false,
         true
@@ -32,22 +31,26 @@ RunState DijkstraSolver::run(SolverContext& context) {
 
     if (!eligible(context.problem())) return RunState::Failed;
     const auto& graph_data = *context.problem().planning_graph;
-    if (graph_data.start_node.empty() || graph_data.goal_node.empty())
+    const auto* start = graph_data.find_node(graph_data.start_node);
+    const auto* goal = graph_data.find_node(graph_data.goal_node);
+    if (!start || !goal || context.budget().max_candidates == 0)
         return RunState::Failed;
-    if (context.budget().max_candidates == 0) return RunState::Failed;
 
-    const auto start_time = std::chrono::steady_clock::now();
+    const auto started = std::chrono::steady_clock::now();
     const auto budget_ms = context.budget().wall_time_ms;
     const double inf = std::numeric_limits<double>::infinity();
 
-    std::unordered_map<std::string, std::vector<PlanningGraphEdge>> graph;
+    std::unordered_map<std::string, std::vector<PlanningGraphEdge>> adjacency;
     for (const auto& edge : graph_data.edges) {
-        if (edge.cost >= 0.0) graph[edge.from].push_back(edge);
+        if (edge.cost >= 0.0 && graph_data.find_node(edge.from) && graph_data.find_node(edge.to)) {
+            adjacency[edge.from].push_back(edge);
+        }
     }
 
     std::unordered_map<std::string, double> distance;
     std::unordered_map<std::string, std::string> parent;
-    for (const auto& node : graph_data.nodes) distance[node] = inf;
+    for (const auto& node : graph_data.nodes) distance[node.id] = inf;
+    distance[start->id] = 0.0;
 
     struct QueueItem {
         std::string id;
@@ -58,8 +61,7 @@ RunState DijkstraSolver::run(SolverContext& context) {
     };
 
     std::priority_queue<QueueItem, std::vector<QueueItem>, std::greater<>> open;
-    distance[graph_data.start_node] = 0.0;
-    open.push({graph_data.start_node, 0.0});
+    open.push({start->id, 0.0});
 
     while (!open.empty()) {
         if (cancelled_.load() || context.cancelled())
@@ -67,7 +69,7 @@ RunState DijkstraSolver::run(SolverContext& context) {
 
         if (budget_ms > 0) {
             const auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
-                std::chrono::steady_clock::now() - start_time).count();
+                std::chrono::steady_clock::now() - started).count();
             if (static_cast<std::uint64_t>(elapsed) >= budget_ms)
                 return RunState::Timeout;
         }
@@ -76,7 +78,7 @@ RunState DijkstraSolver::run(SolverContext& context) {
         open.pop();
         if (current.distance != distance[current.id]) continue;
 
-        if (current.id == graph_data.goal_node) {
+        if (current.id == goal->id) {
             std::vector<std::string> route;
             for (std::string at = current.id; !at.empty();) {
                 route.push_back(at);
@@ -98,11 +100,13 @@ RunState DijkstraSolver::run(SolverContext& context) {
             return RunState::Completed;
         }
 
-        for (const auto& edge : graph[current.id]) {
-            if (distance[edge.to] > current.distance + edge.cost) {
-                distance[edge.to] = current.distance + edge.cost;
+        for (const auto& edge : adjacency[current.id]) {
+            const double next_distance = current.distance + edge.cost;
+            const auto it = distance.find(edge.to);
+            if (it != distance.end() && next_distance < it->second) {
+                it->second = next_distance;
                 parent[edge.to] = current.id;
-                open.push({edge.to, distance[edge.to]});
+                open.push({edge.to, next_distance});
             }
         }
     }
