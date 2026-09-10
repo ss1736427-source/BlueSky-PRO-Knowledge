@@ -1,0 +1,151 @@
+api: bluesky.universal_autopilot
+version: 0.1.0
+status: IMPLEMENTATION_BASELINE
+
+principles:
+  - autopilot_independent_core
+  - protocol_specific_logic_inside_adapter
+  - capability_driven
+  - deterministic_results
+  - no_silent_degradation
+
+identity:
+  methods:
+    - getVehicleIdentity
+    - getAutopilotIdentity
+    - getFirmwareVersion
+    - getProtocolVersion
+
+capabilities:
+  methods:
+    - getCapabilities
+    - getSupportedCommands
+    - getSupportedMissionFeatures
+    - getSupportedPayloadFeatures
+
+connection:
+  methods:
+    - connect
+    - disconnect
+    - getConnectionState
+    - getLinkMetrics
+
+state:
+  methods:
+    - getNavigationState
+    - getFlightMode
+    - getHealthState
+    - getFailsafeState
+    - getEnergyState
+    - getMissionState
+    - getPayloadState
+
+commands:
+  methods:
+    - arm
+    - disarm
+    - takeoff
+    - land
+    - hold
+    - resume
+    - rtl
+    - goto
+    - startMission
+    - pauseMission
+    - abortMission
+  result:
+    required:
+      - command_id
+      - vehicle_id
+      - execution_state
+      - acknowledgement
+      - reason
+      - source_timestamp
+      - adapter_timestamp
+    execution_states:
+      - REQUESTED
+      - SENT
+      - ACKNOWLEDGED
+      - EXECUTED
+      - REJECTED
+      - TIMEOUT
+      - UNKNOWN
+
+mission:
+  methods:
+    - compileMission
+    - uploadMission
+    - downloadMission
+    - readBackMission
+    - compareMission
+    - startMission
+    - pauseMission
+    - resumeMission
+    - abortMission
+  rules:
+    - compile_from_canonical_bluesky_mission
+    - validate_vehicle_capabilities_before_upload
+    - read_back_after_upload_when_supported
+    - semantic_compare_before_release
+    - safety_critical_mismatch_blocks_execution
+
+configuration:
+  methods:
+    - readBaseline
+    - compare
+    - validate
+    - write
+    - readBack
+    - verify
+  rules:
+    - safety_critical_change_invalidates_readiness
+
+authority:
+  states:
+    - AUTONOMOUS_MISSION
+    - GUIDED_MANUAL_SUPERVISED
+    - FAILSAFE
+    - RETURN_RECOVERY
+    - EMERGENCY_ABORT
+    - COMMUNICATION_LOST
+
+errors:
+  - NOT_CONNECTED
+  - AUTHENTICATION_FAILED
+  - UNSUPPORTED
+  - INCOMPATIBLE_VERSION
+  - CAPABILITY_MISSING
+  - INVALID_STATE
+  - SAFETY_REJECTED
+  - COMMAND_REJECTED
+  - TIMEOUT
+  - LINK_LOST
+  - PROTOCOL_ERROR
+  - MISSION_MISMATCH
+  - CONFIGURATION_MISMATCH
+  - INTERNAL_ADAPTER_ERROR
+
+adapters:
+  required_initial:
+    - ardupilot_mavlink
+    - px4_mavlink
+  extension:
+    - oem
+
+anti_coupling:
+  forbidden_core_dependencies:
+    - ardupilot
+    - px4
+    - mavlink
+    - oem_protocol_types
+  rule: protocol_specific_dependencies_must_remain_inside_adapter_boundary
+
+verification:
+  lifecycle:
+    - CONTRACT_BASELINED
+    - IMPLEMENTED
+    - AUTOMATED_TESTED
+    - SIL_VERIFIED
+    - HIL_VERIFIED
+    - REAL_UAV_VERIFIED
+    - PRODUCT_READY
