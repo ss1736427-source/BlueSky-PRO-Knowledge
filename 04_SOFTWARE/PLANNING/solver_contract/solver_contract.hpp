@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../model/planning_graph.hpp"
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -23,6 +24,7 @@ struct MissionProblem {
     std::vector<std::string> hard_constraints;
     std::vector<std::string> objective_priorities;
     std::string environment_version;
+    const PlanningGraph* planning_graph{nullptr};
 };
 
 struct CandidateSolution {
