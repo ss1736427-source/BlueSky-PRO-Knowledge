@@ -21,7 +21,7 @@ CAPABILITY MATCHING
       ↓
 ┌───────────────────────────────┐
 │ UAV + AUTOPILOT + EQUIPMENT   │
-│ + C2 + BATTERY + EQUIPMENT    │
+│ + C2 + BATTERY                │
 └───────────────────────────────┘
       ↓
 FEASIBILITY / RANKING
