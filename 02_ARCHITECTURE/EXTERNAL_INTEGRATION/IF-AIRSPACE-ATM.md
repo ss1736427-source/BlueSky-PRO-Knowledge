@@ -39,6 +39,10 @@ AIP / NOTAM / Airspace / Restrictions / Weather / ATM sources
 - authorization/approval status;
 - operational messages and acknowledgements.
 
+## Required authorization states
+
+DATA_CURRENT, DATA_STALE, SUBMISSION_PENDING, SUBMITTED, ACCEPTED, REJECTED, CANCELLED, AMENDED.
+
 ## Principle
 
 BlueSky MUST distinguish between information used for planning and an actual authorization to conduct a flight. Receipt of external data MUST NOT itself be interpreted as permission to fly.
