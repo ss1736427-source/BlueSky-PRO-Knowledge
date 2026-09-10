@@ -14,7 +14,7 @@ public:
     const ComputeBudget& budget() const override { return b_; }
     bool cancelled() const override { return false; }
     void publish(CandidateSolution c) override { candidates_.push_back(std::move(c)); }
-    const std::vector<CandidateSolution>& candidates() const { return candidates_; }
+    const std::vector<CandidateSolution>& candidates() const override { return candidates_; }
 private:
     const MissionProblem& p_;
     ComputeBudget b_;
@@ -47,8 +47,10 @@ private:
 
 int main() {
     PlanningGraph graph;
-    graph.add_node({"A", 0, 0});
-    graph.add_node({"B", 1, 0});
+    graph.nodes.push_back({"A", 0, 0});
+    graph.nodes.push_back({"B", 1, 0});
+    graph.start_node = "A";
+    graph.goal_node = "B";
 
     MissionProblem problem;
     problem.mission_id = "ORCH-001";
