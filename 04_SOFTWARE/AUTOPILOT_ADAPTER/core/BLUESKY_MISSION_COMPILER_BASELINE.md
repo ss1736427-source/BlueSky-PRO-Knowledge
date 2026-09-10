@@ -59,7 +59,7 @@ At minimum, comparison shall cover where applicable:
 - altitude and reference;
 - speed/trajectory constraints;
 - mission actions;
-- payload actions;
+- equipment actions;
 - timing constraints;
 - return/recovery behaviour;
 - relevant geofence/operational constraints.
