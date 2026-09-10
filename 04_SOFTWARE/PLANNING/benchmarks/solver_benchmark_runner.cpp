@@ -2,13 +2,10 @@
 #include "../solvers/astar_solver.hpp"
 #include "../solvers/dijkstra_solver.hpp"
 
-#include <algorithm>
 #include <chrono>
 #include <cmath>
-#include <functional>
 #include <optional>
 #include <stdexcept>
-#include <unordered_map>
 
 namespace bluesky::planning::benchmark {
 namespace {
@@ -21,7 +18,10 @@ public:
     const MissionProblem& problem() const override { return problem_; }
     const ComputeBudget& budget() const override { return budget_; }
     bool cancelled() const override { return false; }
-    void publish(CandidateSolution candidate) override { candidate_ = std::move(candidate); }
+    void publish(CandidateSolution candidate) override {
+        candidate_ = candidate;
+        candidates_.push_back(std::move(candidate));
+    }
     const std::vector<CandidateSolution>& candidates() const override { return candidates_; }
 
     const CandidateSolution* candidate() const {
