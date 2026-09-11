@@ -4,8 +4,23 @@ $AgentExecutable = $env:BS_AGENT_EXECUTABLE
 $AgentArguments = $env:BS_AGENT_ARGUMENTS
 
 if (-not $AgentExecutable) {
-    Write-Error "BS_AGENT_EXECUTABLE is not set."
-    exit 42
+    $codexCommand = Get-Command codex.cmd -ErrorAction SilentlyContinue
+    if ($codexCommand) {
+        $AgentExecutable = $codexCommand.Source
+    } else {
+        $codexCommand = Get-Command codex.exe -ErrorAction SilentlyContinue
+        if ($codexCommand) {
+            $AgentExecutable = $codexCommand.Source
+        } else {
+            $defaultCodex = Join-Path $env:ProgramData "BlueSkyPro\codex.cmd"
+            if (Test-Path -LiteralPath $defaultCodex -PathType Leaf) {
+                $AgentExecutable = $defaultCodex
+            } else {
+                Write-Error "BS_AGENT_EXECUTABLE is not set and Codex CLI was not found in PATH. Set BS_AGENT_EXECUTABLE to the Codex executable."
+                exit 1
+            }
+        }
+    }
 }
 
 $agentLeaf = Split-Path $AgentExecutable -Leaf
@@ -15,9 +30,6 @@ if ($agentLeaf -match '(?i)^codex\.cmd$') {
         $AgentExecutable = (Resolve-Path -LiteralPath $nativeCodex).Path
         $agentLeaf = Split-Path $AgentExecutable -Leaf
         Write-Host "Codex native executable selected: $AgentExecutable"
-    } else {
-        Write-Error "Codex native executable not found next to $AgentExecutable"
-        exit 1
     }
 }
 
