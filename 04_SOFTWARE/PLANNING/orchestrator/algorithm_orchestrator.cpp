@@ -156,11 +156,15 @@ OrchestratorDecision AlgorithmOrchestrator::solve(SolverContext& context) {
                 continue;
             }
 
-            std::vector<std::string> violations;
+            // A candidate-reported violation is always retained. The independent
+            // validator may add violations, but must never erase solver-reported ones.
+            std::vector<std::string> violations = candidate.constraint_violations;
             if (constraint_validator_) {
-                violations = constraint_validator_(context.problem(), candidate);
-            } else {
-                violations = candidate.constraint_violations;
+                const auto validated_violations =
+                    constraint_validator_(context.problem(), candidate);
+                violations.insert(violations.end(),
+                                  validated_violations.begin(),
+                                  validated_violations.end());
             }
 
             // Mandatory constraints are evaluated before any objective ranking.
