@@ -96,6 +96,28 @@ public:
     void cancel() override {}
 };
 
+class HardConstraintViolationSolver final : public Solver {
+public:
+    SolverMetadata metadata() const override { return {"violating", "test", {"point_to_point"}, false, true}; }
+    bool eligible(const MissionProblem& problem) const override {
+        return problem.problem_class == "point_to_point";
+    }
+    RunState run(SolverContext& context) override {
+        CandidateSolution candidate;
+        candidate.candidate_id = context.problem().mission_id + ":violating:1";
+        candidate.solver_id = "violating";
+        candidate.solver_version = "test";
+        candidate.route_elements = {"A", "B"};
+        candidate.estimated_time_s = 1.0;
+        candidate.objective_score = 0.1;
+        candidate.constraint_violations = {"restricted_airspace"};
+        candidate.feasibility = Feasibility::Feasible;
+        context.publish(std::move(candidate));
+        return RunState::Completed;
+    }
+    void cancel() override {}
+};
+
 std::vector<std::unique_ptr<Solver>> make_solvers() {
     auto heuristic = [](const PlanningNode& from, const PlanningNode& to) {
         const double dx = from.x - to.x;
@@ -281,6 +303,36 @@ int main() {
     assert(ordered_decision.feasibility == Feasibility::Feasible);
     assert(ordered_decision.selected_solver_id == "fast-expensive");
     assert(ordered_decision.selected_candidate_id == "ORCH-ORDER-010:fast-expensive:1");
+
+    // Hard constraints are feasibility gates: a violating candidate must never win ranking.
+    MissionProblem constraints_problem = problem;
+    constraints_problem.mission_id = "ORCH-CONSTRAINTS-011";
+    constraints_problem.hard_constraints = {"restricted_airspace"};
+    TestContext constraints_context(constraints_problem, ComputeBudget{1000, 256, 8});
+    std::vector<std::unique_ptr<Solver>> constraint_solvers;
+    constraint_solvers.push_back(std::make_unique<HardConstraintViolationSolver>());
+    constraint_solvers.push_back(std::make_unique<RankingSolver>("safe", 5.0, 1.0));
+    AlgorithmOrchestrator constraints_orchestrator(std::move(constraint_solvers));
+    const auto constraints_decision = constraints_orchestrator.solve(constraints_context);
+
+    assert(constraints_decision.feasibility == Feasibility::Feasible);
+    assert(constraints_decision.selected_solver_id == "safe");
+    assert(constraints_decision.selected_candidate_id == "ORCH-CONSTRAINTS-011:safe:1");
+    assert(constraints_context.candidates().size() == 2);
+
+    // If every candidate violates a hard constraint, no route may be selected.
+    MissionProblem all_invalid_problem = problem;
+    all_invalid_problem.mission_id = "ORCH-CONSTRAINTS-012";
+    all_invalid_problem.hard_constraints = {"restricted_airspace"};
+    TestContext all_invalid_context(all_invalid_problem, ComputeBudget{1000, 256, 8});
+    std::vector<std::unique_ptr<Solver>> all_invalid_solvers;
+    all_invalid_solvers.push_back(std::make_unique<HardConstraintViolationSolver>());
+    AlgorithmOrchestrator all_invalid_orchestrator(std::move(all_invalid_solvers));
+    const auto all_invalid_decision = all_invalid_orchestrator.solve(all_invalid_context);
+
+    assert(all_invalid_decision.feasibility == Feasibility::Infeasible);
+    assert(all_invalid_decision.selected_solver_id.empty());
+    assert(all_invalid_decision.selected_candidate_id.empty());
 
     return 0;
 }
