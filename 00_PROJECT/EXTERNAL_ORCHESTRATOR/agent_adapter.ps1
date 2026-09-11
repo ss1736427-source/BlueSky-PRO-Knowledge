@@ -24,18 +24,20 @@ if (-not $AgentExecutable) {
 }
 
 $agentLeaf = Split-Path $AgentExecutable -Leaf
-if ($agentLeaf -match '(?i)^codex\.cmd$') {
-    $nativeCodex = [System.IO.Path]::ChangeExtension($AgentExecutable, ".exe")
-    if (Test-Path -LiteralPath $nativeCodex -PathType Leaf) {
-        $AgentExecutable = (Resolve-Path -LiteralPath $nativeCodex).Path
-        $agentLeaf = Split-Path $AgentExecutable -Leaf
-        Write-Host "Codex native executable selected: $AgentExecutable"
-    }
-}
+$defaultArguments = @("--dangerously-bypass-approvals-and-sandbox", "exec", "-")
 
 if ($agentLeaf -match '(?i)^codex\.exe$') {
     $psiFileName = $AgentExecutable
-    $psiArgumentList = if ($AgentArguments) { $AgentArguments -split '\s+' } else { @("--dangerously-bypass-approvals-and-sandbox", "exec", "-") }
+    $psiArgumentList = if ($AgentArguments) { $AgentArguments -split '\s+' } else { $defaultArguments }
+} elseif ($agentLeaf -match '(?i)^codex\.cmd$') {
+    # npm installs Codex as a Windows .cmd shim. Invoke the shim through cmd.exe
+    # with /c CALL so paths containing spaces are handled correctly and the shim's
+    # exit code is propagated back to the orchestrator.
+    $psiFileName = Join-Path $env:ComSpec ""
+    $codexArgs = if ($AgentArguments) { $AgentArguments -split '\s+' } else { $defaultArguments }
+    $quotedExecutable = '"' + $AgentExecutable.Replace('"', '\"') + '"'
+    $commandLine = "call $quotedExecutable " + ($codexArgs -join ' ')
+    $psiArgumentList = @('/d', '/s', '/c', $commandLine)
 } elseif ($agentLeaf -match '(?i)^codex\.ps1$') {
     $psiFileName = 'powershell.exe'
     $codexArgs = if ($AgentArguments) { $AgentArguments } else { '--dangerously-bypass-approvals-and-sandbox exec -' }
