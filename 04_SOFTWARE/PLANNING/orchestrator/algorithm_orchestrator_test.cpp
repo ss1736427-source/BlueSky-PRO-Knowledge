@@ -59,7 +59,8 @@ int main() {
     problem.planning_graph = &graph;
     problem.objective_priorities = {"completion_time"};
 
-    // Real A* is preferred by the mission profile and is evaluated first.
+    // Real graph geometry contains useful heuristic information, so A* is
+    // evaluated first for the time-critical mission profile.
     TestContext context(problem, ComputeBudget{1000, 256, 8});
     AlgorithmOrchestrator orchestrator(make_solvers());
     const auto decision = orchestrator.solve(context);
@@ -91,9 +92,34 @@ int main() {
     assert(cost_decision.selected_candidate_id == "ORCH-PROFILE-002:dijkstra:1");
     assert(cost_context.candidates().size() == 2);
 
+    // Graph characteristic change: start and goal coincide, so the Euclidean
+    // heuristic carries no information. Dijkstra becomes the preferred
+    // deterministic ordering even though A* remains eligible.
+    PlanningGraph zero_information_graph = graph;
+    zero_information_graph.nodes[1].x = 0.0;
+    zero_information_graph.nodes[1].y = 0.0;
+    zero_information_graph.start_node = "A";
+    zero_information_graph.goal_node = "B";
+
+    MissionProblem zero_information_problem = problem;
+    zero_information_problem.mission_id = "ORCH-GRAPH-003";
+    zero_information_problem.planning_graph = &zero_information_graph;
+    TestContext zero_information_context(
+        zero_information_problem, ComputeBudget{1000, 256, 8});
+    AlgorithmOrchestrator zero_information_orchestrator(make_solvers());
+    const auto zero_information_decision = zero_information_orchestrator.solve(zero_information_context);
+
+    assert(zero_information_decision.feasibility == Feasibility::Feasible);
+    assert(zero_information_decision.considered_solvers.size() == 2);
+    assert(zero_information_decision.considered_solvers[0] == "dijkstra");
+    assert(zero_information_decision.considered_solvers[1] == "astar");
+    assert(zero_information_decision.selected_solver_id == "dijkstra");
+    assert(zero_information_decision.selected_candidate_id == "ORCH-GRAPH-003:dijkstra:1");
+    assert(zero_information_context.candidates().size() == 2);
+
     // Condition change: A* has no heuristic and becomes ineligible; Dijkstra must be selected.
     MissionProblem no_heuristic_problem = problem;
-    no_heuristic_problem.mission_id = "ORCH-CONDITION-003";
+    no_heuristic_problem.mission_id = "ORCH-CONDITION-004";
     TestContext fallback_context(no_heuristic_problem, ComputeBudget{1000, 256, 8});
     std::vector<std::unique_ptr<Solver>> fallback_solvers;
     fallback_solvers.push_back(std::make_unique<AStarSolver>(AStarSolver::Heuristic{}));
@@ -106,7 +132,7 @@ int main() {
     assert(fallback_decision.considered_solvers.size() == 1);
     assert(fallback_decision.considered_solvers[0] == "dijkstra");
     assert(fallback_decision.selected_solver_id == "dijkstra");
-    assert(fallback_decision.selected_candidate_id == "ORCH-CONDITION-003:dijkstra:1");
+    assert(fallback_decision.selected_candidate_id == "ORCH-CONDITION-004:dijkstra:1");
     assert(fallback_context.candidates().size() == 1);
     assert(std::abs(fallback_context.candidates()[0].objective_score - 5.0) < 1e-9);
 
