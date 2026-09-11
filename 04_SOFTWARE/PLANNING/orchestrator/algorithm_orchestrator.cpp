@@ -16,6 +16,19 @@ bool has_priority(const MissionProblem& problem, const std::string& token) {
            problem.objective_priorities.end();
 }
 
+bool supported_priority(const std::string& priority) {
+    return priority == "completion_time" || priority == "time" || priority == "fast" ||
+           priority == "minimum_cost" || priority == "route_efficiency" ||
+           priority == "energy" || priority == "endurance" || priority == "reserve" ||
+           priority == "deterministic";
+}
+
+bool objective_priorities_are_supported(const MissionProblem& problem) {
+    return std::all_of(problem.objective_priorities.begin(),
+                       problem.objective_priorities.end(),
+                       supported_priority);
+}
+
 bool graph_has_heuristic_information(const MissionProblem& problem) {
     if (!problem.planning_graph) return false;
 
@@ -143,6 +156,12 @@ OrchestratorDecision AlgorithmOrchestrator::solve(SolverContext& context) {
     OrchestratorDecision decision;
     CandidateSolution best;
     bool have_best = false;
+
+    if (!objective_priorities_are_supported(context.problem())) {
+        decision.feasibility = Feasibility::Uncertain;
+        decision.explanation = "Расчёт остановлен: задача содержит неподдерживаемый приоритет выбора маршрута.";
+        return decision;
+    }
 
     std::stable_sort(solvers_.begin(), solvers_.end(),
                      [&context](const std::unique_ptr<Solver>& lhs,
