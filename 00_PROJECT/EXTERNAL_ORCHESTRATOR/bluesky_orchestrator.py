@@ -18,11 +18,11 @@ POLL_SECONDS = int(os.getenv("BS_POLL_SECONDS", "1"))
 CI_GRACE_SECONDS = int(os.getenv("BS_CI_GRACE_SECONDS", "5"))
 AGENT_CONTINUE_SECONDS = int(os.getenv("BS_AGENT_CONTINUE_SECONDS", "5"))
 GH_TIMEOUT_SECONDS = int(os.getenv("BS_GH_TIMEOUT_SECONDS", "20"))
-STATE_FILE = Path(os.getenv("BS_STATE_FILE", ".bluesky_orchestrator_state.json"))
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+STATE_FILE = Path(os.getenv("BS_STATE_FILE", str(PROJECT_ROOT / ".bluesky_orchestrator_state.json")))
 ADAPTER = Path(os.getenv("BS_AGENT_ADAPTER", Path(__file__).with_name("agent_adapter.ps1")))
 CI_PATH_PREFIXES = ("04_SOFTWARE/PLANNING/",)
 CI_WORKFLOW_PATH = ".github/workflows/planning-benchmark.yml"
-GENERATED_DIR_NAMES = {"__pycache__"}
 GENERATED_SUFFIXES = {".pyc", ".pyo"}
 
 
@@ -38,7 +38,7 @@ def tracked_paths() -> set[str] | None:
 
 def cleanup_generated_artifacts():
     """Remove only untracked disposable Python runtime artifacts from the checkout."""
-    root = Path.cwd()
+    root = PROJECT_ROOT
     tracked = tracked_paths()
     if tracked is None:
         return
@@ -84,9 +84,16 @@ def cleanup_generated_artifacts():
 
 
 def gh_get(path: str):
-    """Read a GitHub API endpoint without requiring a GITHUB_TOKEN."""
+    """Read a GitHub API endpoint, using GITHUB_TOKEN when supplied and gh as fallback."""
     url = "https://api.github.com/" + path.lstrip("/")
-    request = Request(url, headers={"Accept": "application/vnd.github+json", "User-Agent": "BlueSky-PRO-orchestrator"})
+    headers = {
+        "Accept": "application/vnd.github+json",
+        "User-Agent": "BlueSky-PRO-orchestrator",
+    }
+    token = os.getenv("GITHUB_TOKEN")
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    request = Request(url, headers=headers)
     try:
         with urlopen(request, timeout=GH_TIMEOUT_SECONDS) as response:
             return json.loads(response.read().decode("utf-8"))
@@ -150,7 +157,7 @@ def ci_state(sha):
 
 
 def git_run(args):
-    return subprocess.run(["git", *args], cwd=Path.cwd(), capture_output=True, text=True)
+    return subprocess.run(["git", *args], cwd=PROJECT_ROOT, capture_output=True, text=True)
 
 
 def local_head_sha():
@@ -193,12 +200,12 @@ def sync_local_checkout(target_sha):
     if remote_sha == local_sha:
         return True
 
-    ancestor = git_run(["merge-base", "--is-ancestor", target_sha, local_sha])
-    if ancestor.returncode == 0:
+    target_in_local = git_run(["merge-base", "--is-ancestor", target_sha, local_sha])
+    if target_in_local.returncode == 0:
         return True
 
-    remote_ahead = git_run(["merge-base", "--is-ancestor", local_sha, remote_sha])
-    if remote_ahead.returncode != 0:
+    local_in_remote = git_run(["merge-base", "--is-ancestor", local_sha, remote_sha])
+    if local_in_remote.returncode != 0:
         print("LOCAL SYNC BLOCKED: local and origin/main have diverged", flush=True)
         return False
 
@@ -245,6 +252,7 @@ def invoke_agent(sha, reason):
     })
     return subprocess.run(
         ["powershell.exe", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", str(ADAPTER)],
+        cwd=PROJECT_ROOT,
         env=env,
     ).returncode
 
@@ -274,6 +282,7 @@ def run_agent_and_record(state, sha, reason):
 def loop():
     state = load_state()
     print(f"BlueSky PRO orchestrator: {REPO}@{BRANCH}", flush=True)
+    print(f"Project root: {PROJECT_ROOT}", flush=True)
     print(f"Polling: {POLL_SECONDS}s; CI grace: {CI_GRACE_SECONDS}s; agent continuation: {AGENT_CONTINUE_SECONDS}s", flush=True)
     last_agent_sha = None
     last_agent_time = 0.0
