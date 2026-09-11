@@ -21,6 +21,34 @@ STATE_FILE = Path(os.getenv("BS_STATE_FILE", ".bluesky_orchestrator_state.json")
 ADAPTER = Path(os.getenv("BS_AGENT_ADAPTER", Path(__file__).with_name("agent_adapter.ps1")))
 CI_PATH_PREFIXES = ("04_SOFTWARE/PLANNING/",)
 CI_WORKFLOW_PATH = ".github/workflows/planning-benchmark.yml"
+GENERATED_DIR_NAMES = {"__pycache__"}
+GENERATED_SUFFIXES = {".pyc", ".pyo"}
+
+
+def cleanup_generated_artifacts():
+    """Remove only known disposable Python runtime artifacts from the checkout."""
+    root = Path.cwd()
+    removed = 0
+    for path in root.rglob("*"):
+        if not path.is_dir() and path.suffix.lower() in GENERATED_SUFFIXES:
+            try:
+                path.unlink()
+                removed += 1
+            except OSError as exc:
+                print(f"CLEANUP WARNING: cannot remove {path}: {exc}", flush=True)
+    for directory in sorted(root.rglob("__pycache__"), reverse=True):
+        if not directory.is_dir():
+            continue
+        try:
+            for child in directory.iterdir():
+                if child.is_file() and child.suffix.lower() in GENERATED_SUFFIXES:
+                    child.unlink()
+                    removed += 1
+            directory.rmdir()
+        except OSError as exc:
+            print(f"CLEANUP WARNING: cannot remove {directory}: {exc}", flush=True)
+    if removed:
+        print(f"CLEANUP: removed {removed} generated Python artifact(s)", flush=True)
 
 
 def gh_get(path: str):
@@ -94,12 +122,7 @@ def git_run(args):
 
 
 def sync_local_checkout(target_sha):
-    """Fast-forward local checkout safely, preserving known runtime files.
-
-    GitHub may briefly return the previous main SHA after an agent push. If the
-    local HEAD is already ahead of that stale SHA, do not attempt a backwards
-    sync and do not report a false LOCAL SYNC.
-    """
+    """Fast-forward local checkout safely, preserving known runtime files."""
     head = git_run(["rev-parse", "HEAD"])
     if head.returncode != 0:
         raise RuntimeError(f"Local Git HEAD check failed: {head.stderr.strip()}")
@@ -134,15 +157,10 @@ def sync_local_checkout(target_sha):
     if remote_sha == local_sha:
         return True
 
-    # The API can lag behind the just-pushed origin ref. Never move local HEAD
-    # backwards merely because target_sha is stale. A target that is already an
-    # ancestor of local HEAD needs no synchronization.
     ancestor = git_run(["merge-base", "--is-ancestor", target_sha, local_sha])
     if ancestor.returncode == 0:
         return True
 
-    # Only fast-forward when the fetched remote branch is actually ahead of
-    # the local HEAD. This prevents a false LOCAL SYNC on a stale target SHA.
     remote_ahead = git_run(["merge-base", "--is-ancestor", local_sha, remote_sha])
     if remote_ahead.returncode != 0:
         print("LOCAL SYNC BLOCKED: local and origin/main have diverged", flush=True)
@@ -200,12 +218,14 @@ def run_agent_and_record(state, sha, reason):
     if rc == 42:
         state["decision_required"] = True
         save_state(state)
+        cleanup_generated_artifacts()
         print("STOP: agent requested user decision", flush=True)
         return 42
     if rc != 0:
         print(f"AGENT returned {rc}; retrying", flush=True)
     else:
         print(f"AGENT completed for {sha[:12]}; continuing automatically", flush=True)
+    cleanup_generated_artifacts()
     return rc
 
 
@@ -277,8 +297,10 @@ def loop():
             time.sleep(POLL_SECONDS)
         except (RuntimeError, KeyError, json.JSONDecodeError, subprocess.CalledProcessError) as exc:
             print(f"ORCHESTRATOR ERROR: {exc}", file=sys.stderr, flush=True)
+            cleanup_generated_artifacts()
             time.sleep(POLL_SECONDS)
 
 
 if __name__ == "__main__":
+    cleanup_generated_artifacts()
     raise SystemExit(loop())
