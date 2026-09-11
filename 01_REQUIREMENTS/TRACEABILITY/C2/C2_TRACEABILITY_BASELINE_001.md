@@ -3,7 +3,7 @@ id: C2-TRACEABILITY-BASELINE-001
 type: c2_traceability_baseline
 status: controlled_working_draft
 system: BlueSky PRO
-basis: C2-ICD-BASELINE-001
+basis: C2-ICD-BASELINE-001; C2-RECONCILIATION-PASS-003; C2-VERIFICATION-CASES-001; C2-VERIFICATION-CONFIGURATION-001
 ---
 
 # BLUE SKY PRO — C2 TRACEABILITY BASELINE
@@ -45,6 +45,13 @@ evidence
 
 No C2 requirement is marked VERIFIED merely because an interface document exists.
 
+`C2-RECONCILIATION-PASS-003` establishes the pre-execution content and
+scope reconciliation for the controlled case set `C2-V01..C2-V08`. The
+case definitions are `DEFINED` and their execution configuration
+`C2-VER-CFG-001` is `PLANNED`. This closes `C2-TG-005` only for
+case-definition/configuration control; it does not create an execution
+result, evidence, quantitative acceptance value or compliance claim.
+
 The following evidence classes are required as applicable:
 
 ```text
@@ -67,8 +74,8 @@ C2-TG-001  Clause-level acceptance values TBD
 C2-TG-002  Final physical C2 boundary TBD
 C2-TG-003  Protocol/data schema TBD
 C2-TG-004  Interface owner TBD
-C2-TG-005  Verification case identifiers TBD
 C2-TG-006  Evidence records TBD
+C2-TG-007  Execution configuration fields remain PLANNED; execution results TBD
 ```
 
 ## 6. Baseline rule
