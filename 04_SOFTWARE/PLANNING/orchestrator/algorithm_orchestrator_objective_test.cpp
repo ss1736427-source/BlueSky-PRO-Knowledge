@@ -153,7 +153,12 @@ int main() {
             });
         const auto decision = orchestrator.solve(context);
         assert(decision.feasibility == Feasibility::Feasible);
-        assert(decision.selected_solver_id == "dijkstra");
+        assert(decision.selected_solver_id == "b");
+        assert(decision.selected_candidate_id == "ORCH-CONSTRAINT-007:b:1");
+        assert(decision.rejected_candidates.size() == 1);
+        assert(decision.rejected_candidates[0].candidate_id == "ORCH-CONSTRAINT-007:a:1");
+        assert(decision.rejected_candidates[0].violations.size() == 1);
+        assert(decision.rejected_candidates[0].violations[0] == "restricted_airspace");
     }
 
     return 0;
