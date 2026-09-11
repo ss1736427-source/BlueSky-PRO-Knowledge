@@ -3,26 +3,36 @@
 Внешний управляющий цикл для разработки BlueSky PRO.
 
 ```text
-GitHub main → новый SHA → CI именно этого SHA → PASS → 5 секунд → agent → следующий шаг → новый SHA
+GitHub main → новый SHA → CI именно этого SHA → PASS → 5 секунд → agent adapter → следующий шаг → новый SHA
 ```
 
 ## Запуск на Windows
 
 Требуется Python 3.10+ и `GITHUB_TOKEN` с необходимыми правами GitHub.
 
-Сначала укажи исполняемый файл локального агента и его аргументы:
+Синхронизируй локальный клон:
 
-```powershell
-$env:GITHUB_TOKEN="YOUR_TOKEN"
-$env:BS_REPO="ss1736427-source/BlueSky-PRO-Knowledge"
-$env:BS_BRANCH="main"
-$env:BS_POLL_SECONDS="5"
-$env:BS_AGENT_EXECUTABLE="codex.exe"
-$env:BS_AGENT_ARGUMENTS="exec --full-auto"
-python .\bluesky_orchestrator.py
+```cmd
+git pull --ff-only
 ```
 
-Для PowerShell-обвязки:
+Затем задай:
+
+```cmd
+set BS_REPO=ss1736427-source/BlueSky-PRO-Knowledge
+set BS_BRANCH=main
+set BS_POLL_SECONDS=5
+set BS_CI_GRACE_SECONDS=5
+set BS_AGENT_ADAPTER=E:\Flight Planning\agent_adapter.ps1
+```
+
+Запуск:
+
+```cmd
+python E:\Flight Planning\bluesky_orchestrator.py
+```
+
+Либо через PowerShell launcher:
 
 ```powershell
 .\run_orchestrator.ps1
@@ -38,5 +48,9 @@ Agent должен вернуть:
 - другой ненулевой код — ошибка агента.
 
 `UNVERIFIED` никогда не считается `PASS`, а старый CI не подтверждает новый SHA.
+
+## Windows PATH
+
+Путь к локальной папке с оркестратором может быть любым. В переменной `BS_AGENT_ADAPTER` указывается фактический путь к `agent_adapter.ps1`.
 
 Этот компонент является внешним управляющим циклом и не принимает архитектурных или продуктовых решений самостоятельно.
