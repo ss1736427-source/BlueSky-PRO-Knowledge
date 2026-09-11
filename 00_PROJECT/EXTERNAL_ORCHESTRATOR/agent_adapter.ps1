@@ -12,8 +12,12 @@ $agentLeaf = Split-Path $AgentExecutable -Leaf
 if ($agentLeaf -match '(?i)^codex\.cmd$') {
     $nativeCodex = [System.IO.Path]::ChangeExtension($AgentExecutable, ".exe")
     if (Test-Path -LiteralPath $nativeCodex -PathType Leaf) {
-        $AgentExecutable = $nativeCodex
+        $AgentExecutable = (Resolve-Path -LiteralPath $nativeCodex).Path
         $agentLeaf = Split-Path $AgentExecutable -Leaf
+        Write-Host "Codex native executable selected: $AgentExecutable"
+    } else {
+        Write-Error "Codex native executable not found next to $AgentExecutable"
+        exit 1
     }
 }
 
@@ -25,8 +29,8 @@ if ($agentLeaf -match '(?i)^codex\.exe$') {
     $codexArgs = if ($AgentArguments) { $AgentArguments } else { '--dangerously-bypass-approvals-and-sandbox exec -' }
     $psiArgumentList = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $AgentExecutable) + ($codexArgs -split '\s+')
 } else {
-    $psiFileName = $AgentExecutable
-    $psiArgumentList = if ($AgentArguments) { $AgentArguments -split '\s+' } else { @() }
+    Write-Error "Unsupported agent executable: $AgentExecutable"
+    exit 1
 }
 
 $psi = [System.Diagnostics.ProcessStartInfo]::new()
