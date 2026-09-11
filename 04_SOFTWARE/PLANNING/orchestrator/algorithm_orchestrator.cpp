@@ -151,13 +151,10 @@ OrchestratorDecision AlgorithmOrchestrator::solve(SolverContext& context) {
 
         for (const auto& candidate : context.candidates()) {
             if (candidate.solver_id != meta.solver_id ||
-                candidate.solver_version != meta.version ||
-                !structurally_valid_candidate(candidate, context.problem())) {
+                candidate.solver_version != meta.version) {
                 continue;
             }
 
-            // A candidate-reported violation is always retained. The independent
-            // validator may add violations, but must never erase solver-reported ones.
             std::vector<std::string> violations = candidate.constraint_violations;
             if (constraint_validator_) {
                 const auto validated_violations =
@@ -167,8 +164,21 @@ OrchestratorDecision AlgorithmOrchestrator::solve(SolverContext& context) {
                                   validated_violations.end());
             }
 
+            if (!structurally_valid_candidate(candidate, context.problem())) {
+                if (violations.empty()) {
+                    violations.push_back("Кандидат не прошёл структурную проверку допустимости.");
+                }
+                decision.rejected_candidates.push_back(
+                    {candidate.candidate_id, candidate.solver_id, std::move(violations)});
+                continue;
+            }
+
             // Mandatory constraints are evaluated before any objective ranking.
-            if (!violations.empty()) continue;
+            if (!violations.empty()) {
+                decision.rejected_candidates.push_back(
+                    {candidate.candidate_id, candidate.solver_id, std::move(violations)});
+                continue;
+            }
 
             if (!have_best || better_candidate(candidate, best, context.problem())) {
                 best = candidate;
@@ -179,7 +189,9 @@ OrchestratorDecision AlgorithmOrchestrator::solve(SolverContext& context) {
 
     if (!have_best) {
         decision.feasibility = Feasibility::Infeasible;
-        decision.explanation = "Допустимый маршрут не найден доступными алгоритмами.";
+        decision.explanation = decision.rejected_candidates.empty()
+            ? "Допустимый маршрут не найден доступными алгоритмами."
+            : "Допустимый маршрут не найден: все полученные кандидаты отклонены проверкой допустимости.";
         return decision;
     }
 
