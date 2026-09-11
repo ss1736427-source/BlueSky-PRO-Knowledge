@@ -79,25 +79,42 @@ When no user decision is required, continue automatically. When a user decision 
 $agentLeaf = Split-Path $AgentExecutable -Leaf
 if ($agentLeaf -match '(?i)^copilot(\.exe|\.cmd)?$') {
     # GitHub Copilot CLI accepts a comma-separated tool list.
+    $psiFileName = $AgentExecutable
     $psiArgumentList = @(
         "--allow-tool=read,write,shell",
         "--no-ask-user",
         "-s"
     )
-} elseif ($agentLeaf -match '(?i)^codex(\.exe|\.cmd)?$') {
-    # Codex exec reads the complete prompt from stdin when '-' is supplied.
-    # workspace-write is the least privilege needed for repository changes.
+} elseif ($agentLeaf -match '(?i)^codex(\.exe)?$') {
+    # Native Codex executable.
+    $psiFileName = $AgentExecutable
     if ($AgentArguments) {
         $psiArgumentList = $AgentArguments -split '\s+'
     } else {
-        $psiArgumentList = @(
-            "exec",
-            "--sandbox",
-            "workspace-write",
-            "-"
-        )
+        $psiArgumentList = @("exec", "--sandbox", "workspace-write", "-")
     }
+} elseif ($agentLeaf -match '(?i)^codex\.cmd$') {
+    # Windows .cmd wrappers cannot be passed directly to Process.Start.
+    # Run the wrapper through cmd.exe while preserving the existing prompt/stdin flow.
+    $psiFileName = $env:ComSpec
+    $cmdPath = $AgentExecutable -replace '([%&()!^"<>|])', '^$1'
+    if ($AgentArguments) {
+        $cmdArgs = $AgentArguments
+    } else {
+        $cmdArgs = 'exec --sandbox workspace-write -'
+    }
+    $psiArgumentList = @('/d', '/s', '/c', ('""{0}" {1}"' -f $cmdPath, $cmdArgs))
+} elseif ($agentLeaf -match '(?i)^codex\.ps1$') {
+    # PowerShell wrappers must be launched through powershell.exe.
+    $psiFileName = 'powershell.exe'
+    if ($AgentArguments) {
+        $codexArgs = $AgentArguments
+    } else {
+        $codexArgs = 'exec --sandbox workspace-write -'
+    }
+    $psiArgumentList = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $AgentExecutable) + ($codexArgs -split '\s+')
 } else {
+    $psiFileName = $AgentExecutable
     $psiArgumentList = @()
     if ($AgentArguments) {
         $psiArgumentList = $AgentArguments -split '\s+'
@@ -105,7 +122,7 @@ if ($agentLeaf -match '(?i)^copilot(\.exe|\.cmd)?$') {
 }
 
 $psi = New-Object System.Diagnostics.ProcessStartInfo
-$psi.FileName = $AgentExecutable
+$psi.FileName = $psiFileName
 $psi.WorkingDirectory = (Get-Location).Path
 $psi.UseShellExecute = $false
 $psi.RedirectStandardInput = $true
