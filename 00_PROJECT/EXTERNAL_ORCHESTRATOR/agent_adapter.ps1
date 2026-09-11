@@ -47,6 +47,20 @@ if (-not $AgentExecutable) {
     exit 42
 }
 
+# Fail before starting the model session if Codex authentication is not locally valid
+# or an environment API credential could silently override ChatGPT login credentials.
+$preflight = Join-Path $PSScriptRoot "codex_preflight.ps1"
+if (-not (Test-Path -LiteralPath $preflight -PathType Leaf)) {
+    Write-Error "Codex preflight script not found: $preflight"
+    exit 42
+}
+& powershell.exe -NoProfile -ExecutionPolicy Bypass -File $preflight -CodexExecutable $AgentExecutable -CheckOnly
+if ($LASTEXITCODE -eq 42) { exit 42 }
+if ($LASTEXITCODE -ne 0) {
+    Write-Error "Codex preflight failed with exit code $LASTEXITCODE"
+    exit $LASTEXITCODE
+}
+
 $repo = if ($env:BS_REPO) { $env:BS_REPO } else { "ss1736427-source/BlueSky-PRO-Knowledge" }
 $branch = if ($env:BS_BRANCH) { $env:BS_BRANCH } else { "main" }
 $protocol = if ($env:BS_PROTOCOL) { $env:BS_PROTOCOL } else { "00_PROJECT/GITHUB_DEVELOPMENT_PROTOCOL.md" }
