@@ -1,6 +1,7 @@
 #include "algorithm_orchestrator.hpp"
 
 #include <algorithm>
+#include <cmath>
 #include <limits>
 #include <sstream>
 #include <string>
@@ -9,19 +10,42 @@ namespace bluesky::planning {
 
 namespace {
 
-int priority_rank(const MissionProblem& problem, const std::string& solver_id) {
-    const auto has = [&problem](const std::string& token) {
-        return std::find(problem.objective_priorities.begin(),
-                         problem.objective_priorities.end(), token) !=
-               problem.objective_priorities.end();
-    };
+bool has_priority(const MissionProblem& problem, const std::string& token) {
+    return std::find(problem.objective_priorities.begin(),
+                     problem.objective_priorities.end(), token) !=
+           problem.objective_priorities.end();
+}
 
-    if (has("completion_time") || has("time") || has("fast") || has("route_efficiency")) {
-        return solver_id == "astar" ? 0 : 1;
-    }
-    if (has("deterministic") || has("minimum_cost")) {
+// A* is useful only when the supplied graph geometry gives its heuristic
+// information. If start and goal coincide, Euclidean h is zero everywhere
+// for this model and Dijkstra is the appropriate deterministic ordering.
+bool graph_has_heuristic_information(const MissionProblem& problem) {
+    if (!problem.planning_graph) return false;
+
+    const auto* start = problem.planning_graph->find_node(problem.planning_graph->start_node);
+    const auto* goal = problem.planning_graph->find_node(problem.planning_graph->goal_node);
+    if (!start || !goal) return false;
+
+    const double dx = start->x - goal->x;
+    const double dy = start->y - goal->y;
+    return std::sqrt(dx * dx + dy * dy) > 1e-9;
+}
+
+int priority_rank(const MissionProblem& problem, const std::string& solver_id) {
+    if (has_priority(problem, "completion_time") ||
+        has_priority(problem, "time") ||
+        has_priority(problem, "fast") ||
+        has_priority(problem, "route_efficiency")) {
+        if (solver_id == "astar") {
+            return graph_has_heuristic_information(problem) ? 0 : 1;
+        }
         return solver_id == "dijkstra" ? 0 : 1;
     }
+
+    if (has_priority(problem, "deterministic") || has_priority(problem, "minimum_cost")) {
+        return solver_id == "dijkstra" ? 0 : 1;
+    }
+
     return 0;
 }
 
@@ -67,10 +91,9 @@ OrchestratorDecision AlgorithmOrchestrator::solve(SolverContext& context) {
     CandidateSolution best;
     bool have_best = false;
 
-    // Mission characteristics define a deterministic solver preference. The
-    // preferred solver is evaluated first, while all eligible solvers remain
-    // available so that the final decision can still be based on real
-    // candidates rather than on the preference alone.
+    // Mission profile and graph characteristics define a deterministic solver
+    // preference. The preferred solver is evaluated first, while all eligible
+    // solvers remain available so that the final decision is candidate-based.
     std::stable_sort(solvers_.begin(), solvers_.end(),
                      [&context](const std::unique_ptr<Solver>& lhs,
                                 const std::unique_ptr<Solver>& rhs) {
