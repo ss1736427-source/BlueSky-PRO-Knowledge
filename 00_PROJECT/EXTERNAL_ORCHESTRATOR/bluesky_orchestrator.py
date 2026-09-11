@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import shutil
 import subprocess
 import sys
 import time
@@ -60,6 +61,12 @@ def cleanup_generated_artifacts():
         if not directory.is_dir():
             continue
         try:
+            relative_dir = directory.relative_to(root).as_posix()
+            tracked_inside = any(p.startswith(relative_dir + "/") for p in tracked)
+            if not tracked_inside:
+                shutil.rmtree(directory)
+                removed += 1
+                continue
             for child in directory.iterdir():
                 if not child.is_file() or child.suffix.lower() not in GENERATED_SUFFIXES:
                     continue
