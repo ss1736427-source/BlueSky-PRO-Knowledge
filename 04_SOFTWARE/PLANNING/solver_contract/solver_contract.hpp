@@ -32,6 +32,7 @@ struct CandidateSolution {
     std::string solver_id;
     std::string solver_version;
     std::vector<std::string> route_elements;
+    std::vector<std::string> constraint_violations;
     double estimated_time_s{0.0};
     double estimated_energy_wh{0.0};
     double estimated_reserve_wh{0.0};
