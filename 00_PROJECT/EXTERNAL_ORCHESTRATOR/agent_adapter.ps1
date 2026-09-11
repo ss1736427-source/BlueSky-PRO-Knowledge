@@ -44,11 +44,14 @@ Run appropriate tests after changes and do not claim CI success unless it belong
 When no user decision is required, return 0. When a user decision is required, return 42.
 "@
 
-# GitHub Copilot CLI uses a comma-separated tool list. Do not quote the value
-# inside the argument itself, otherwise PowerShell passes the quote as part of
-# the --allow-tool value.
+# GitHub Copilot CLI accepts a comma-separated tool list. ProcessStartInfo
+# ArgumentList keeps it as one argument and avoids shell re-parsing.
 if ((Split-Path $AgentExecutable -Leaf) -match '(?i)^copilot(\.exe)?$') {
-    $psiArgumentList = @("--allow-tool=read,write,shell", "--no-ask-user", "-s")
+    $psiArgumentList = @(
+        "--allow-tool=read,write,shell",
+        "--no-ask-user",
+        "-s"
+    )
 } else {
     $psiArgumentList = @()
     if ($AgentArguments) {
