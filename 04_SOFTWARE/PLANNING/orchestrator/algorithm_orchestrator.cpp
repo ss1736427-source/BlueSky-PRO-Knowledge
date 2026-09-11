@@ -49,6 +49,20 @@ int priority_rank(const MissionProblem& problem, const std::string& solver_id) {
     return 0;
 }
 
+bool valid_candidate(const CandidateSolution& candidate) {
+    if (candidate.feasibility != Feasibility::Feasible) return false;
+    if (candidate.candidate_id.empty() || candidate.solver_id.empty()) return false;
+    if (candidate.route_elements.empty()) return false;
+    if (!std::isfinite(candidate.estimated_time_s) ||
+        !std::isfinite(candidate.estimated_energy_wh) ||
+        !std::isfinite(candidate.estimated_reserve_wh) ||
+        !std::isfinite(candidate.objective_score)) return false;
+    if (candidate.estimated_time_s < 0.0 ||
+        candidate.estimated_energy_wh < 0.0 ||
+        candidate.estimated_reserve_wh < 0.0) return false;
+    return true;
+}
+
 bool better_candidate(const CandidateSolution& candidate,
                       const CandidateSolution& current,
                       const MissionProblem& problem) {
@@ -119,8 +133,7 @@ OrchestratorDecision AlgorithmOrchestrator::solve(SolverContext& context) {
         (void)state;
 
         for (const auto& candidate : context.candidates()) {
-            if (candidate.solver_id != meta.solver_id ||
-                candidate.feasibility != Feasibility::Feasible) {
+            if (candidate.solver_id != meta.solver_id || !valid_candidate(candidate)) {
                 continue;
             }
             if (!have_best || better_candidate(candidate, best, context.problem())) {
