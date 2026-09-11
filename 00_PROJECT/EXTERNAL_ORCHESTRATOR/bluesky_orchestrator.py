@@ -25,26 +25,47 @@ GENERATED_DIR_NAMES = {"__pycache__"}
 GENERATED_SUFFIXES = {".pyc", ".pyo"}
 
 
+def tracked_paths():
+    """Return Git-tracked paths so cleanup never creates a working-tree deletion."""
+    result = git_run(["ls-files", "-z"])
+    if result.returncode != 0:
+        return set()
+    return {p for p in result.stdout.split("\0") if p}
+
+
 def cleanup_generated_artifacts():
-    """Remove only known disposable Python runtime artifacts from the checkout."""
+    """Remove only untracked disposable Python runtime artifacts from the checkout."""
     root = Path.cwd()
+    tracked = tracked_paths()
     removed = 0
     for path in root.rglob("*"):
-        if not path.is_dir() and path.suffix.lower() in GENERATED_SUFFIXES:
-            try:
-                path.unlink()
-                removed += 1
-            except OSError as exc:
-                print(f"CLEANUP WARNING: cannot remove {path}: {exc}", flush=True)
+        if path.is_dir() or path.suffix.lower() not in GENERATED_SUFFIXES:
+            continue
+        try:
+            relative = path.relative_to(root).as_posix()
+        except ValueError:
+            continue
+        if relative in tracked:
+            continue
+        try:
+            path.unlink()
+            removed += 1
+        except OSError as exc:
+            print(f"CLEANUP WARNING: cannot remove {path}: {exc}", flush=True)
     for directory in sorted(root.rglob("__pycache__"), reverse=True):
         if not directory.is_dir():
             continue
         try:
             for child in directory.iterdir():
-                if child.is_file() and child.suffix.lower() in GENERATED_SUFFIXES:
-                    child.unlink()
-                    removed += 1
-            directory.rmdir()
+                if not child.is_file() or child.suffix.lower() not in GENERATED_SUFFIXES:
+                    continue
+                relative = child.relative_to(root).as_posix()
+                if relative in tracked:
+                    continue
+                child.unlink()
+                removed += 1
+            if not any(directory.iterdir()):
+                directory.rmdir()
         except OSError as exc:
             print(f"CLEANUP WARNING: cannot remove {directory}: {exc}", flush=True)
     if removed:
