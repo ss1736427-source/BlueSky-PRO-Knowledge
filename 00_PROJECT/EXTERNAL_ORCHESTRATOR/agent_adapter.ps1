@@ -25,50 +25,29 @@ if (-not $AgentExecutable) {
 
 $agentLeaf = Split-Path $AgentExecutable -Leaf
 $defaultArguments = @("--dangerously-bypass-approvals-and-sandbox", "exec", "-")
+$codexArgs = if ($AgentArguments) { $AgentArguments -split '\s+' | Where-Object { $_ } } else { $defaultArguments }
 
-if ($agentLeaf -match '(?i)^codex\.exe$') {
-    $psiFileName = $AgentExecutable
-    $psiArguments = if ($AgentArguments) { $AgentArguments } else { $defaultArguments -join ' ' }
-} elseif ($agentLeaf -match '(?i)^codex\.cmd$') {
-    # npm installs Codex as a Windows .cmd shim. Run the shim with cmd.exe /d /c CALL.
-    # Keep the executable path quoted as a single cmd token and pass the agent
-    # arguments unchanged so stdin remains the Codex prompt stream.
-    $psiFileName = $env:ComSpec
-    $codexArgs = if ($AgentArguments) { $AgentArguments } else { $defaultArguments -join ' ' }
-    $quotedExecutable = '"' + $AgentExecutable + '"'
-    $psiArguments = '/d /c call ' + $quotedExecutable + ' ' + $codexArgs
+$prompt = [Console]::In.ReadToEnd()
+
+if ($agentLeaf -match '(?i)^codex\.cmd$') {
+    # Invoke the npm Windows shim directly from PowerShell. Do not construct a
+    # cmd.exe command line: that path is sensitive to quoting and file
+    # association behavior on Windows installations with spaces in PATHs.
+    $prompt | & $AgentExecutable @codexArgs
+    $exitCode = $LASTEXITCODE
+} elseif ($agentLeaf -match '(?i)^codex\.exe$') {
+    $prompt | & $AgentExecutable @codexArgs
+    $exitCode = $LASTEXITCODE
 } elseif ($agentLeaf -match '(?i)^codex\.ps1$') {
-    $psiFileName = 'powershell.exe'
-    $codexArgs = if ($AgentArguments) { $AgentArguments } else { '--dangerously-bypass-approvals-and-sandbox exec -' }
-    $psiArguments = '-NoProfile -ExecutionPolicy Bypass -File "' + $AgentExecutable + '" ' + $codexArgs
+    $prompt | & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $AgentExecutable @codexArgs
+    $exitCode = $LASTEXITCODE
 } else {
     Write-Error "Unsupported agent executable: $AgentExecutable"
     exit 1
 }
 
-if (-not $psiFileName) {
-    Write-Error "Unable to determine the agent launcher executable."
-    exit 1
+if ($null -eq $exitCode) {
+    $exitCode = 1
 }
 
-$psi = [System.Diagnostics.ProcessStartInfo]::new()
-$psi.FileName = $psiFileName
-$psi.Arguments = $psiArguments
-$psi.UseShellExecute = $false
-$psi.CreateNoWindow = $true
-$psi.RedirectStandardInput = $true
-$psi.RedirectStandardOutput = $false
-$psi.RedirectStandardError = $false
-
-$process = [System.Diagnostics.Process]::new()
-$process.StartInfo = $psi
-if (-not $process.Start()) {
-    Write-Error "Failed to start agent: $AgentExecutable"
-    exit 1
-}
-
-$prompt = [Console]::In.ReadToEnd()
-$process.StandardInput.Write($prompt)
-$process.StandardInput.Close()
-$process.WaitForExit()
-exit $process.ExitCode
+exit $exitCode
