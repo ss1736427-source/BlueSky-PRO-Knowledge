@@ -25,11 +25,13 @@ GENERATED_DIR_NAMES = {"__pycache__"}
 GENERATED_SUFFIXES = {".pyc", ".pyo"}
 
 
-def tracked_paths():
+def tracked_paths() -> set[str] | None:
     """Return Git-tracked paths so cleanup never creates a working-tree deletion."""
     result = git_run(["ls-files", "-z"])
     if result.returncode != 0:
-        return set()
+        detail = result.stderr.strip() or result.stdout.strip() or "git ls-files failed"
+        print(f"CLEANUP WARNING: cannot determine tracked paths: {detail}", flush=True)
+        return None
     return {p for p in result.stdout.split("\0") if p}
 
 
@@ -37,6 +39,8 @@ def cleanup_generated_artifacts():
     """Remove only untracked disposable Python runtime artifacts from the checkout."""
     root = Path.cwd()
     tracked = tracked_paths()
+    if tracked is None:
+        return
     removed = 0
     for path in root.rglob("*"):
         if path.is_dir() or path.suffix.lower() not in GENERATED_SUFFIXES:
