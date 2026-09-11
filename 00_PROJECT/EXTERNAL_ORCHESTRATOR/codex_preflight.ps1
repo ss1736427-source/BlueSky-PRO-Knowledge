@@ -21,7 +21,7 @@ if (-not $CodexExecutable) {
 
 if (-not $CodexExecutable) {
     Write-Error "Codex executable not found."
-    exit 42
+    exit 1
 }
 
 Write-Host "Codex executable: $CodexExecutable"
@@ -40,7 +40,7 @@ Write-Host ($statusOutput -join [Environment]::NewLine)
 
 if ($statusCode -ne 0) {
     Write-Error "Codex login status failed. Re-authentication is required before the orchestrator can invoke the agent."
-    exit 42
+    exit 1
 }
 
 # Prevent a project or shell-level OpenAI API key from silently overriding
@@ -56,7 +56,7 @@ foreach ($name in $overrideVars) {
 
 if ($foundOverride) {
     Write-Error "Ambiguous Codex credential source. Remove OPENAI_* credential overrides from the orchestrator environment, then rerun."
-    exit 42
+    exit 1
 }
 
 if ($CheckOnly) {
