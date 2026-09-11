@@ -62,11 +62,12 @@ public:
         CandidateSolution candidate;
         candidate.candidate_id = context.problem().mission_id + ":invalid:1";
         candidate.solver_id = "invalid";
-        candidate.solver_version = "test";
-        candidate.feasibility = Feasibility::Feasible;
+        // Deliberately incomplete candidate: solver provenance is mandatory.
+        candidate.solver_version.clear();
+        candidate.route_elements = {"A", "B"};
         candidate.estimated_time_s = 1.0;
         candidate.objective_score = 0.1;
-        // Deliberately incomplete candidate: a feasible route must contain route elements.
+        candidate.feasibility = Feasibility::Feasible;
         context.publish(std::move(candidate));
         return RunState::Completed;
     }
@@ -128,8 +129,6 @@ int main() {
     problem.planning_graph = &graph;
     problem.objective_priorities = {"completion_time"};
 
-    // Real graph geometry contains useful heuristic information, so A* is
-    // evaluated first for the time-critical mission profile.
     TestContext context(problem, ComputeBudget{1000, 256, 8});
     AlgorithmOrchestrator orchestrator(make_solvers());
     const auto decision = orchestrator.solve(context);
@@ -227,8 +226,6 @@ int main() {
     assert(validation_decision.selected_candidate_id == "ORCH-VALIDATION-006:valid:1");
     assert(validation_context.candidates().size() == 2);
 
-    // Solver execution state is authoritative: a candidate published by a
-    // timed-out solver must not enter final ranking.
     MissionProblem timeout_problem = problem;
     timeout_problem.mission_id = "ORCH-STATE-007";
     TestContext timeout_context(timeout_problem, ComputeBudget{1000, 256, 8});
