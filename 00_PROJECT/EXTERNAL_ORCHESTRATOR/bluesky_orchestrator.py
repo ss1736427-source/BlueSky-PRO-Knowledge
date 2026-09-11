@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 """BlueSky PRO external development orchestrator.
 
-Polls main, waits for CI for the exact SHA, then invokes a configurable
-external agent after a five-second grace period. Exit code 42 means that a
-user decision is required and the loop must stop.
+Polls main, waits for CI for the exact SHA, then invokes the Windows agent
+adapter after a five-second grace period. Exit code 42 means that a user
+decision is required and the loop must stop.
 """
 from __future__ import annotations
 
 import json
 import os
-import shlex
 import subprocess
 import sys
 import time
@@ -22,7 +21,7 @@ BRANCH = os.getenv("BS_BRANCH", "main")
 POLL_SECONDS = int(os.getenv("BS_POLL_SECONDS", "5"))
 CI_GRACE_SECONDS = int(os.getenv("BS_CI_GRACE_SECONDS", "5"))
 STATE_FILE = Path(os.getenv("BS_STATE_FILE", ".bluesky_orchestrator_state.json"))
-AGENT_COMMAND = os.getenv("BS_AGENT_COMMAND", "").strip()
+ADAPTER = Path(os.getenv("BS_AGENT_ADAPTER", Path(__file__).with_name("agent_adapter.ps1")))
 API = "https://api.github.com"
 
 
@@ -71,9 +70,8 @@ def ci_state(sha):
 
 
 def invoke_agent(sha, reason):
-    if not AGENT_COMMAND:
-        print("AGENT: not configured; verified CI reached.")
-        return 42
+    if not ADAPTER.exists():
+        raise RuntimeError(f"Agent adapter not found: {ADAPTER}")
     env = os.environ.copy()
     env.update({
         "BS_CURRENT_SHA": sha,
@@ -83,12 +81,16 @@ def invoke_agent(sha, reason):
         "BS_PROTOCOL": "00_PROJECT/GITHUB_DEVELOPMENT_PROTOCOL.md",
         "BS_WORKING_RULES": "00_PROJECT/BLUE_SKY_PRO_WORKING_RULES.md",
     })
-    return subprocess.run(shlex.split(AGENT_COMMAND, posix=(os.name != "nt")), env=env).returncode
+    return subprocess.run(
+        ["powershell.exe", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", str(ADAPTER)],
+        env=env,
+    ).returncode
 
 
 def loop():
     state = load_state()
     print(f"BlueSky PRO orchestrator: {REPO}@{BRANCH}")
+    print(f"Polling: {POLL_SECONDS}s; CI grace: {CI_GRACE_SECONDS}s")
     while True:
         try:
             sha = main_sha()
