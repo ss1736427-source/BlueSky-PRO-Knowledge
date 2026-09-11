@@ -1,4 +1,6 @@
 #include "universal_autopilot_adapter.hpp"
+#include "../../../PLANNING/model/mission_model.hpp"
+#include "../../../PLANNING/model/vehicle_equipment_capability.hpp"
 
 #include <cassert>
 #include <type_traits>
@@ -74,13 +76,12 @@ public:
 int main() {
     static_assert(std::is_abstract_v<bluesky::autopilot::UniversalAutopilotAdapter>);
     ContractAdapter adapter;
+    const bluesky::planning::Mission mission{};
+    const bluesky::planning::VehicleEquipmentCapabilityProfile capabilities{};
 
     assert(adapter.getConnectionState() == bluesky::autopilot::ConnectionState::Connected);
     assert(adapter.getAutopilotIdentity().empty());
-    assert(adapter.compileMission(
-        *static_cast<const bluesky::planning::Mission*>(nullptr),
-        *static_cast<const bluesky::planning::VehicleEquipmentCapabilityProfile*>(nullptr))
-        .has_value());
+    assert(adapter.compileMission(mission, capabilities).has_value());
     assert(adapter.readBackMission().has_value());
     assert(adapter.readBaseline().has_value());
     assert(adapter.compare("baseline", "baseline").equal);
