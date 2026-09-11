@@ -221,7 +221,8 @@ C2 materials are separated by engineering role:
     ├── C2_VERIFICATION_CONTROL_CLOSURE_001.md
     ├── C2_CONTROLLED_BASELINE_STATUS_001.md
     ├── C2_GAP_CLOSURE_PASS_001.md
-    └── C2_RECONCILIATION_PASS_002.md
+    ├── C2_RECONCILIATION_PASS_002.md
+    └── C2_RECONCILIATION_PASS_003.md
 08_HMI/C2/
 ```
 

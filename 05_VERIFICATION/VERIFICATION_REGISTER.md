@@ -253,6 +253,14 @@ The definition/configuration control closure is recorded in:
 `C2-VER-GAP-001` is closed for definition/configuration control. Execution,
 results and evidence remain open.
 
+The exact pre-execution content/scope reconciliation is recorded in:
+
+`05_VERIFICATION/C2/C2_RECONCILIATION_PASS_003.md`
+
+The pass links `C2-V01..C2-V08` to existing requirement, safety,
+architecture/interface and configuration records. It identifies no proven
+requirement gap or conflict; the cases remain `DEFINED / NOT VERIFIED`.
+
 ## 14. Audit findings — initial pass
 
 ```text
