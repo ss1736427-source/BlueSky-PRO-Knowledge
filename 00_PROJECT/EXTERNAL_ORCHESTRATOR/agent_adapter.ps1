@@ -7,11 +7,20 @@ $ErrorActionPreference = "Stop"
 
 if (-not $env:BS_CURRENT_SHA) { throw "BS_CURRENT_SHA is not set." }
 
-# A missing agent executable is a user/environment decision, not a transient
-# agent failure. Return 42 so the orchestrator stops instead of retrying every
-# five seconds until the same configuration is changed.
+# If no agent was explicitly configured, discover the supported local
+# development agent automatically. A configured executable always wins.
 if (-not $AgentExecutable) {
-    Write-Host "BS_AGENT_EXECUTABLE is not set. Configure the local development agent executable before continuing."
+    $copilot = Get-Command copilot -ErrorAction SilentlyContinue
+    if ($copilot) {
+        $AgentExecutable = $copilot.Source
+        Write-Host "Agent auto-detected: GitHub Copilot CLI ($AgentExecutable)"
+    }
+}
+
+# No executable means the local environment still needs one user decision.
+# Return 42 so the orchestrator stops instead of retrying the same condition.
+if (-not $AgentExecutable) {
+    Write-Host "No supported local development agent found. Install GitHub Copilot CLI or configure BS_AGENT_EXECUTABLE."
     exit 42
 }
 
@@ -37,9 +46,19 @@ Run appropriate tests after changes and do not claim CI success unless it belong
 When no user decision is required, return 0. When a user decision is required, return 42.
 "@
 
-$psi = [System.Diagnostics.ProcessStartInfo]::new()
-$psi.FileName = $AgentExecutable
-$psi.Arguments = $AgentArguments
+# GitHub Copilot CLI supports non-interactive execution with -p. Build the
+# command directly so the adapter works without a separate argument template.
+if ($AgentExecutable -match '(?i)(^|[\\/])copilot(\.exe)?$' -or (Split-Path $AgentExecutable -Leaf) -match '(?i)^copilot(\.exe)?$') {
+    $psiArguments = "-p " + '"' + ($prompt -replace '([`"\\])', '`$1' -replace '"', '\\"') + '"' + " --allow-tool='read,write,shell'"
+    $psi = [System.Diagnostics.ProcessStartInfo]::new()
+    $psi.FileName = $AgentExecutable
+    $psi.Arguments = $psiArguments
+} else {
+    $psi = [System.Diagnostics.ProcessStartInfo]::new()
+    $psi.FileName = $AgentExecutable
+    $psi.Arguments = $AgentArguments
+}
+
 $psi.WorkingDirectory = (Get-Location).Path
 $psi.UseShellExecute = $false
 $psi.RedirectStandardInput = $true
@@ -48,7 +67,9 @@ $psi.RedirectStandardError = $false
 
 $p = [System.Diagnostics.Process]::Start($psi)
 try {
-    $p.StandardInput.WriteLine($prompt)
+    if ($psi.Arguments -notmatch '(^|\s)-p\s') {
+        $p.StandardInput.WriteLine($prompt)
+    }
     $p.StandardInput.Close()
     $p.WaitForExit()
     exit $p.ExitCode
