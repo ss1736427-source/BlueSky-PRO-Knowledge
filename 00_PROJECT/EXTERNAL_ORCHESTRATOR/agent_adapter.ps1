@@ -8,7 +8,7 @@ $ErrorActionPreference = "Stop"
 if (-not $env:BS_CURRENT_SHA) { throw "BS_CURRENT_SHA is not set." }
 
 # If no agent was explicitly configured, discover the supported local
-development agent automatically. A configured executable always wins.
+# development agent automatically. A configured executable always wins.
 if (-not $AgentExecutable) {
     $copilot = Get-Command copilot -ErrorAction SilentlyContinue
     if ($copilot) {
