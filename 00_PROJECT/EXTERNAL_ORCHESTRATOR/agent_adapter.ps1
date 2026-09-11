@@ -30,20 +30,24 @@ if ($agentLeaf -match '(?i)^codex\.exe$') {
     $psiFileName = $AgentExecutable
     $psiArguments = if ($AgentArguments) { $AgentArguments } else { $defaultArguments -join ' ' }
 } elseif ($agentLeaf -match '(?i)^codex\.cmd$') {
-    # npm installs Codex as a Windows .cmd shim. Invoke the shim through cmd.exe
-    # with /c CALL so paths containing spaces are handled correctly and the shim's
-    # exit code is propagated back to the orchestrator.
+    # npm installs Codex as a Windows .cmd shim. Run the shim with cmd.exe /d /c CALL.
+    # Keep the executable path quoted as a single cmd token and pass the agent
+    # arguments unchanged so stdin remains the Codex prompt stream.
     $psiFileName = $env:ComSpec
     $codexArgs = if ($AgentArguments) { $AgentArguments } else { $defaultArguments -join ' ' }
-    $quotedExecutable = '"' + $AgentExecutable.Replace('"', '\"') + '"'
-    $commandLine = "call $quotedExecutable $codexArgs"
-    $psiArguments = '/d /s /c "' + $commandLine.Replace('"', '\"') + '"'
+    $quotedExecutable = '"' + $AgentExecutable + '"'
+    $psiArguments = '/d /c call ' + $quotedExecutable + ' ' + $codexArgs
 } elseif ($agentLeaf -match '(?i)^codex\.ps1$') {
     $psiFileName = 'powershell.exe'
     $codexArgs = if ($AgentArguments) { $AgentArguments } else { '--dangerously-bypass-approvals-and-sandbox exec -' }
     $psiArguments = '-NoProfile -ExecutionPolicy Bypass -File "' + $AgentExecutable + '" ' + $codexArgs
 } else {
     Write-Error "Unsupported agent executable: $AgentExecutable"
+    exit 1
+}
+
+if (-not $psiFileName) {
+    Write-Error "Unable to determine the agent launcher executable."
     exit 1
 }
 
