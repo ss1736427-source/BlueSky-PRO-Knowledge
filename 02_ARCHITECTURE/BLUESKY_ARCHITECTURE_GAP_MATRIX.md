@@ -54,8 +54,8 @@ CORRECTIONS
 |---|---|---|---|---|
 | Mission Model | BASELINED | IMPLEMENTED | pending | P0 |
 | Mission Objective Profiles | BASELINED | pending | pending | P0 |
-| Vehicle Capability Model | BASELINED | pending | pending | P0 |
-| Payload Capability Model | BASELINED | pending | pending | P0 |
+| Vehicle Capability Model | BASELINED | IMPLEMENTED | pending | P0 |
+| Payload Capability Model | BASELINED | IMPLEMENTED | pending | P0 |
 | Algorithm Orchestration | BASELINED | IMPLEMENTED | pending | P0 |
 | Universal Autopilot API | BASELINED | pending | pending | P0 |
 | ArduPilot adapter | required | pending | pending | P0 |
@@ -174,6 +174,8 @@ The following P0 contracts are now baselined in the repository:
 These baselines close architectural definition gaps but do **not** imply implementation or verification completion.
 
 The Mission Model now also has a typed planning-layer contract in `04_SOFTWARE/PLANNING/model/mission_model.hpp` with a dedicated contract test. Integration/verification remains pending.
+
+The Vehicle/Equipment Capability Model now also has a typed planning-layer contract in `04_SOFTWARE/PLANNING/model/vehicle_equipment_capability.hpp` with a dedicated contract test. Integration/verification remains pending.
 
 The Algorithm Orchestrator is additionally implemented in `04_SOFTWARE/PLANNING`, with dedicated integration, route-validation, determinism, objective-selection and rejection-reason tests. Its integration/verification status remains pending until execution is confirmed for the exact repository version.
 
