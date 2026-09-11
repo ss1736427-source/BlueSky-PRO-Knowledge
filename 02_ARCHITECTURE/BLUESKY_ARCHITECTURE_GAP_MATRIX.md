@@ -52,7 +52,7 @@ CORRECTIONS
 
 | Capability | Architectural contract | Implementation | Integration / verification | Priority |
 |---|---|---|---|---|
-| Mission Model | BASELINED | pending | pending | P0 |
+| Mission Model | BASELINED | IMPLEMENTED | pending | P0 |
 | Mission Objective Profiles | BASELINED | pending | pending | P0 |
 | Vehicle Capability Model | BASELINED | pending | pending | P0 |
 | Payload Capability Model | BASELINED | pending | pending | P0 |
@@ -172,6 +172,8 @@ The following P0 contracts are now baselined in the repository:
 - End-to-End Operational Lifecycle.
 
 These baselines close architectural definition gaps but do **not** imply implementation or verification completion.
+
+The Mission Model now also has a typed planning-layer contract in `04_SOFTWARE/PLANNING/model/mission_model.hpp` with a dedicated contract test. Integration/verification remains pending.
 
 The Algorithm Orchestrator is additionally implemented in `04_SOFTWARE/PLANNING`, with dedicated integration, route-validation, determinism, objective-selection and rejection-reason tests. Its integration/verification status remains pending until execution is confirmed for the exact repository version.
 
