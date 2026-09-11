@@ -4,7 +4,7 @@
 Polls main, determines whether the repository CI workflow is triggered by the
 exact SHA, waits for that SHA's CI when required, then invokes the Windows
 agent adapter after a five-second grace period. Exit code 42 means that a
-user decision is required and the loop must stop.
+user decision is required and the loop must stop for the current SHA.
 """
 from __future__ import annotations
 
@@ -110,16 +110,21 @@ def loop():
         try:
             commit = main_commit()
             sha = commit["sha"]
-            if state.get("decision_required"):
-                print("STOP: user decision required")
-                return 42
-            if sha != state.get("last_main_sha"):
+
+            # A user-decision stop belongs to the SHA that caused it. A new
+            # main commit clears the stop automatically so the next cycle can run.
+            is_new_sha = sha != state.get("last_main_sha")
+            if is_new_sha:
                 state["last_main_sha"] = sha
                 state["verified_sha"] = None
+                state["decision_required"] = False
                 state["ci_required"] = workflow_required_for_commit(commit)
                 save_state(state)
                 print(f"NEW MAIN SHA: {sha}")
                 print(f"CI REQUIRED: {state['ci_required']}")
+            elif state.get("decision_required"):
+                print("STOP: user decision required for current SHA")
+                return 42
 
             ci_required = bool(state.get("ci_required", True))
             if ci_required:
