@@ -56,6 +56,7 @@ CORRECTIONS
 | Mission Objective Profiles | BASELINED | pending | pending | P0 |
 | Vehicle Capability Model | BASELINED | pending | pending | P0 |
 | Payload Capability Model | BASELINED | pending | pending | P0 |
+| Algorithm Orchestration | BASELINED | IMPLEMENTED | pending | P0 |
 | Universal Autopilot API | BASELINED | pending | pending | P0 |
 | ArduPilot adapter | required | pending | pending | P0 |
 | PX4 adapter | required | pending | pending | P0 |
@@ -171,6 +172,8 @@ The following P0 contracts are now baselined in the repository:
 - End-to-End Operational Lifecycle.
 
 These baselines close architectural definition gaps but do **not** imply implementation or verification completion.
+
+The Algorithm Orchestrator is additionally implemented in `04_SOFTWARE/PLANNING`, with dedicated integration, route-validation, determinism, objective-selection and rejection-reason tests. Its integration/verification status remains pending until execution is confirmed for the exact repository version.
 
 ## 9. Remaining P0 implementation gaps
 
