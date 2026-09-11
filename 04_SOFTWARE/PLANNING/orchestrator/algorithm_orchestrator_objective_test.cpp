@@ -57,6 +57,7 @@ std::vector<std::unique_ptr<Solver>> make_solvers() {
     solvers.push_back(std::make_unique<ObjectiveSolver>("a", 10.0, 8.0, 20.0, 1.0));
     solvers.push_back(std::make_unique<ObjectiveSolver>("b", 20.0, 5.0, 10.0, 9.0));
     solvers.push_back(std::make_unique<ObjectiveSolver>("c", 30.0, 5.0, 30.0, 9.0));
+    solvers.push_back(std::make_unique<ObjectiveSolver>("d", 40.0, 5.0, 10.0, 0.0));
     return solvers;
 }
 
@@ -101,9 +102,21 @@ int main() {
         assert(decision.selected_candidate_id == "ORCH-LEX-003:c:1");
     }
 
+    // Declared priorities are exhaustive: objective_score must not become an implicit fallback.
+    // b and d tie on all declared objectives, while d has a better score; deterministic ID wins.
+    {
+        auto problem = base_problem("ORCH-TIE-004", {"energy", "reserve"});
+        Context context(problem);
+        AlgorithmOrchestrator orchestrator(make_solvers());
+        const auto decision = orchestrator.solve(context);
+        assert(decision.feasibility == Feasibility::Feasible);
+        assert(decision.selected_solver_id == "b");
+        assert(decision.selected_candidate_id == "ORCH-TIE-004:b:1");
+    }
+
     // Unsupported objective priorities must not silently fall back to an arbitrary ranking.
     {
-        auto problem = base_problem("ORCH-INVALID-004", {"unknown_priority"});
+        auto problem = base_problem("ORCH-INVALID-005", {"unknown_priority"});
         Context context(problem);
         AlgorithmOrchestrator orchestrator(make_solvers());
         const auto decision = orchestrator.solve(context);
@@ -111,6 +124,18 @@ int main() {
         assert(decision.selected_solver_id.empty());
         assert(decision.selected_candidate_id.empty());
         assert(decision.explanation.find("неподдерживаемый приоритет") != std::string::npos);
+    }
+
+    // Missing priorities are also uncertain: the orchestrator must not invent a default objective.
+    {
+        auto problem = base_problem("ORCH-NO-PRIORITY-006", {});
+        Context context(problem);
+        AlgorithmOrchestrator orchestrator(make_solvers());
+        const auto decision = orchestrator.solve(context);
+        assert(decision.feasibility == Feasibility::Uncertain);
+        assert(decision.selected_solver_id.empty());
+        assert(decision.selected_candidate_id.empty());
+        assert(decision.explanation.find("не определены приоритеты") != std::string::npos);
     }
 
     return 0;
