@@ -47,7 +47,32 @@ int priority_rank(const MissionProblem& problem, const std::string& solver_id) {
     return 0;
 }
 
-bool valid_candidate(const CandidateSolution& candidate) {
+bool route_matches_graph(const CandidateSolution& candidate, const MissionProblem& problem) {
+    const auto* graph = problem.planning_graph;
+    if (!graph) return true;
+    if (candidate.route_elements.empty()) return false;
+    if (candidate.route_elements.front() != graph->start_node ||
+        candidate.route_elements.back() != graph->goal_node) return false;
+    if (!graph->find_node(candidate.route_elements.front()) ||
+        !graph->find_node(candidate.route_elements.back())) return false;
+
+    for (std::size_t i = 1; i < candidate.route_elements.size(); ++i) {
+        const auto& from = candidate.route_elements[i - 1];
+        const auto& to = candidate.route_elements[i];
+        if (!graph->find_node(from) || !graph->find_node(to)) return false;
+
+        const bool edge_exists = std::any_of(
+            graph->edges.begin(), graph->edges.end(),
+            [&](const PlanningGraphEdge& edge) {
+                return edge.from == from && edge.to == to &&
+                       std::isfinite(edge.cost) && edge.cost >= 0.0;
+            });
+        if (!edge_exists) return false;
+    }
+    return true;
+}
+
+bool valid_candidate(const CandidateSolution& candidate, const MissionProblem& problem) {
     if (candidate.feasibility != Feasibility::Feasible) return false;
     if (candidate.candidate_id.empty() || candidate.solver_id.empty() ||
         candidate.solver_version.empty()) return false;
@@ -63,6 +88,7 @@ bool valid_candidate(const CandidateSolution& candidate) {
     if (candidate.estimated_time_s < 0.0 ||
         candidate.estimated_energy_wh < 0.0 ||
         candidate.estimated_reserve_wh < 0.0) return false;
+    if (!route_matches_graph(candidate, problem)) return false;
     return true;
 }
 
@@ -152,7 +178,7 @@ OrchestratorDecision AlgorithmOrchestrator::solve(SolverContext& context) {
         for (const auto& candidate : context.candidates()) {
             if (candidate.solver_id != meta.solver_id ||
                 candidate.solver_version != meta.version ||
-                !valid_candidate(candidate)) {
+                !valid_candidate(candidate, context.problem())) {
                 continue;
             }
             if (!have_best || better_candidate(candidate, best, context.problem())) {
