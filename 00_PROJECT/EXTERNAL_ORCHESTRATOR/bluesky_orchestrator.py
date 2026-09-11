@@ -13,7 +13,7 @@ from urllib.request import Request, urlopen
 
 REPO = os.getenv("BS_REPO", "ss1736427-source/BlueSky-PRO-Knowledge")
 BRANCH = os.getenv("BS_BRANCH", "main")
-POLL_SECONDS = int(os.getenv("BS_POLL_SECONDS", "5"))
+POLL_SECONDS = int(os.getenv("BS_POLL_SECONDS", "1"))
 CI_GRACE_SECONDS = int(os.getenv("BS_CI_GRACE_SECONDS", "5"))
 GH_TIMEOUT_SECONDS = int(os.getenv("BS_GH_TIMEOUT_SECONDS", "20"))
 STATE_FILE = Path(os.getenv("BS_STATE_FILE", ".bluesky_orchestrator_state.json"))
