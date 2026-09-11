@@ -3,7 +3,7 @@ id: C2-VERIFICATION-CONFIGURATION-001
 type: c2_verification_configuration_record
 status: controlled_working_draft
 system: BlueSky PRO
-basis: C2-VERIFICATION-CASES-001; CONFIGURATION-BASELINE-001; CONFIGURATION-ITEM-REGISTER-001
+basis: C2-VERIFICATION-CASES-001; C2-RECONCILIATION-PASS-003; CONFIGURATION-BASELINE-001; CONFIGURATION-ITEM-REGISTER-001
 configuration_item: CI-007
 ---
 
@@ -72,23 +72,30 @@ provider obligations or certification applicability.
 
 ## 6. Pre-execution basis review
 
-The case basis was checked against
-`01_REQUIREMENTS/SYSTEM/MASTER_REQUIREMENTS_REGISTER.md` before execution
-planning:
+`C2-RECONCILIATION-PASS-003` completed the exact content and scope
+reconciliation against `MASTER_REQUIREMENTS_REGISTER.md`. It confirms the
+following authoritative or controlled bases without promoting the subordinate
+`C2-REQ-*` or `SYS-C2-*` references to new requirement identities:
 
-| Case group | Basis references checked | Review disposition |
+| Case group | Reconciled authoritative or controlled basis | Review disposition |
 |---|---|---|
-| C2-V01, C2-V02, C2-V04, C2-V05, C2-V06, C2-V07, C2-V08 | `C2-REQ-*`, `SYS-C2-*`, `C2-142-*`, `IF-C2-001`, `C2-F-*` | Controlled subordinate allocation confirmed; no matching authoritative C2 requirement identity was found in the Master Requirements Register. |
-| C2-V03 | `C2-REQ-008`, `SYS-C2-008`, `C2-F-005`, `IF-C2-001` | Controlled subordinate allocation confirmed; no matching authoritative C2 requirement identity was found in the Master Requirements Register. |
+| C2-V01 | `IF-C2-001`; C2 mode/interface allocation; `DEC-012` | DERIVED — interface allocation; no duplicated requirement wording. |
+| C2-V02 | `SAF-REQ-001`, `SAF-REQ-002`, `SAF-REQ-003`; `IF-C2-001` | DERIVED — validated-state and invalid/stale-data control. |
+| C2-V03 | `SAF-REQ-003`, `SAF-REQ-013`; `SYS-REQ-091`; `IF-C2-001` | DERIVED — qualitative freshness, ordering and latency coverage. |
+| C2-V04 | `SAF-REQ-001..004`, `SAF-REQ-013`, `SAF-REQ-014`; `IF-C2-001` | MERGE — existing validity and quality gating coverage. |
+| C2-V05 | `SAF-REQ-013`; `SYS-REQ-081`, `SYS-REQ-086`, `SYS-REQ-093`; `C2-F-001..003` | MERGE — existing degradation, tolerance and recovery coverage. |
+| C2-V06 | `SAF-REQ-001..004`, `SAF-REQ-013..015`; `SYS-REQ-086`, `SYS-REQ-093`; `IF-C2-001` | MERGE — existing abnormal-input and controlled-recovery coverage. |
+| C2-V07 | `SYS-REQ-083`; `DEC-012`; `IF-C2-001` | DERIVED — controlled DIRECT-C2 / PROVIDER-C2 boundary. |
+| C2-V08 | `SAF-REQ-017`; `IF-C2-001`; `CONFIGURATION-BASELINE.md` | DERIVED — configuration and interface compatibility control. |
 
 This review does not promote candidate or subordinate references, create a
-duplicate requirement, or establish quantitative acceptance values. The
-authoritative requirement mapping remains an execution prerequisite; until it
-is resolved through controlled change, the cases remain `DEFINED` and
-execution remains blocked.
+duplicate requirement, establish quantitative acceptance values, or create a
+verification result. The authoritative requirement/design mapping prerequisite
+is complete for pre-execution control. Execution remains blocked until the
+applicable configuration fields in this record are established and reviewed.
 
-**Basis review status: COMPLETE — AUTHORITATIVE C2 REQUIREMENT MAPPING
-REMAINS OPEN.**
+**Basis review status: COMPLETE — PRE-EXECUTION REQUIREMENT/DESIGN MAPPING
+RECONCILED; EXECUTION CONFIGURATION REMAINS PLANNED.**
 
 ## 7. Traceability
 
