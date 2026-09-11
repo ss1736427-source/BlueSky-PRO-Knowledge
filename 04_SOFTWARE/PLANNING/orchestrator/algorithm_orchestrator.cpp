@@ -42,25 +42,6 @@ bool graph_has_heuristic_information(const MissionProblem& problem) {
     return std::sqrt(dx * dx + dy * dy) > 1e-9;
 }
 
-int priority_rank(const MissionProblem& problem, const std::string& solver_id) {
-    if (has_priority(problem, "completion_time") ||
-        has_priority(problem, "time") ||
-        has_priority(problem, "fast")) {
-        if (solver_id == "astar") {
-            return graph_has_heuristic_information(problem) ? 0 : 1;
-        }
-        return solver_id == "dijkstra" ? 0 : 1;
-    }
-
-    if (has_priority(problem, "deterministic") ||
-        has_priority(problem, "minimum_cost") ||
-        has_priority(problem, "route_efficiency")) {
-        return solver_id == "dijkstra" ? 0 : 1;
-    }
-
-    return 0;
-}
-
 bool route_matches_graph(const CandidateSolution& candidate, const MissionProblem& problem) {
     const auto* graph = problem.planning_graph;
     if (!graph) return true;
@@ -138,12 +119,8 @@ bool better_candidate(const CandidateSolution& candidate,
         }
     }
 
-    // Do not introduce an implicit optimization criterion after the declared priorities.
-    // Once all declared objectives are tied, use stable deterministic ordering only.
-    const int candidate_rank = priority_rank(problem, candidate.solver_id);
-    const int current_rank = priority_rank(problem, current.solver_id);
-    if (candidate_rank != current_rank) return candidate_rank < current_rank;
-
+    // No implicit optimization criterion is allowed after the declared priorities.
+    // Once all declared objectives are tied, candidate_id is the sole stable tie-breaker.
     return candidate.candidate_id < current.candidate_id;
 }
 
@@ -164,16 +141,6 @@ OrchestratorDecision AlgorithmOrchestrator::solve(SolverContext& context) {
             : "Расчёт остановлен: задача содержит неподдерживаемый приоритет выбора маршрута.";
         return decision;
     }
-
-    std::stable_sort(solvers_.begin(), solvers_.end(),
-                     [&context](const std::unique_ptr<Solver>& lhs,
-                                const std::unique_ptr<Solver>& rhs) {
-                         if (!lhs) return false;
-                         if (!rhs) return true;
-                         const int lrank = priority_rank(context.problem(), lhs->metadata().solver_id);
-                         const int rrank = priority_rank(context.problem(), rhs->metadata().solver_id);
-                         return lrank < rrank;
-                     });
 
     for (auto& solver : solvers_) {
         if (context.cancelled()) {
