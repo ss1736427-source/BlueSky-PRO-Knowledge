@@ -74,6 +74,7 @@ bool route_matches_graph(const CandidateSolution& candidate, const MissionProble
 
 bool valid_candidate(const CandidateSolution& candidate, const MissionProblem& problem) {
     if (candidate.feasibility != Feasibility::Feasible) return false;
+    if (!candidate.constraint_violations.empty()) return false;
     if (candidate.candidate_id.empty() || candidate.solver_id.empty() ||
         candidate.solver_version.empty()) return false;
     if (candidate.route_elements.empty()) return false;
