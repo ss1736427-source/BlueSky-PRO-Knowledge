@@ -33,25 +33,33 @@ if ($LASTEXITCODE -ne 0) {
 }
 Write-Host "Codex version: $($versionOutput -join ' ')"
 
-# Codex CLI writes the successful login-status message to stderr on Windows.
-# Capture that stream explicitly so PowerShell's ErrorActionPreference=Stop does
-# not turn a successful native command into a terminating PowerShell error.
+# Windows PowerShell may surface native stderr as a terminating ErrorRecord.
+# Run the batch wrapper through cmd.exe and capture both streams to files so
+# login status is evaluated solely by the native process exit code.
+$statusOutputFile = [System.IO.Path]::GetTempFileName()
 $statusErrorFile = [System.IO.Path]::GetTempFileName()
 try {
-    $statusOutput = & $CodexExecutable login status 2> $statusErrorFile
-    $statusCode = $LASTEXITCODE
+    $quotedCodex = '"{0}"' -f $CodexExecutable
+    $cmdArguments = '/d /c {0} login status 1>"{1}" 2>"{2}"' -f $quotedCodex, $statusOutputFile, $statusErrorFile
+    $process = Start-Process -FilePath "cmd.exe" -ArgumentList $cmdArguments -Wait -PassThru -WindowStyle Hidden
+    $statusCode = $process.ExitCode
+    $statusOutput = if (Test-Path -LiteralPath $statusOutputFile) {
+        Get-Content -LiteralPath $statusOutputFile -Raw -ErrorAction SilentlyContinue
+    } else {
+        ""
+    }
     $statusError = if (Test-Path -LiteralPath $statusErrorFile) {
         Get-Content -LiteralPath $statusErrorFile -Raw -ErrorAction SilentlyContinue
     } else {
         ""
     }
 } finally {
-    Remove-Item -LiteralPath $statusErrorFile -Force -ErrorAction SilentlyContinue
+    Remove-Item -LiteralPath $statusOutputFile, $statusErrorFile -Force -ErrorAction SilentlyContinue
 }
 
 Write-Host "Codex login status exit code: $statusCode"
 if ($statusOutput) {
-    Write-Host ($statusOutput -join [Environment]::NewLine)
+    Write-Host $statusOutput.TrimEnd()
 }
 if ($statusError) {
     Write-Host $statusError.TrimEnd()
