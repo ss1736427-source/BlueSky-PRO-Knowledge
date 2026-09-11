@@ -14,7 +14,7 @@ from urllib.request import Request, urlopen
 
 REPO = os.getenv("BS_REPO", "ss1736427-source/BlueSky-PRO-Knowledge")
 BRANCH = os.getenv("BS_BRANCH", "main")
-POLL_SECONDS = int(os.getenv("BS_POLL_SECONDS", "1"))
+POLL_SECONDS = int(os.getenv("BS_POLL_SECONDS", "5"))
 CI_GRACE_SECONDS = int(os.getenv("BS_CI_GRACE_SECONDS", "5"))
 AGENT_CONTINUE_SECONDS = int(os.getenv("BS_AGENT_CONTINUE_SECONDS", "5"))
 GH_TIMEOUT_SECONDS = int(os.getenv("BS_GH_TIMEOUT_SECONDS", "20"))
@@ -168,7 +168,7 @@ def local_head_sha():
 
 
 def sync_local_checkout(target_sha):
-    """Fast-forward local checkout safely, preserving known runtime files."""
+    """Fast-forward local checkout to the exact GitHub target SHA, preserving runtime files."""
     local_sha = local_head_sha()
     if local_sha == target_sha:
         return True
@@ -197,16 +197,13 @@ def sync_local_checkout(target_sha):
         return False
     remote_sha = remote.stdout.strip()
 
-    if remote_sha == local_sha:
-        return True
-
-    target_in_local = git_run(["merge-base", "--is-ancestor", target_sha, local_sha])
-    if target_in_local.returncode == 0:
-        return True
+    if remote_sha != target_sha:
+        print(f"LOCAL SYNC BLOCKED: origin/{BRANCH} is {remote_sha}, expected GitHub target {target_sha}", flush=True)
+        return False
 
     local_in_remote = git_run(["merge-base", "--is-ancestor", local_sha, remote_sha])
     if local_in_remote.returncode != 0:
-        print("LOCAL SYNC BLOCKED: local and origin/main have diverged", flush=True)
+        print("LOCAL SYNC BLOCKED: local HEAD is not an ancestor of origin/main", flush=True)
         return False
 
     stash = git_run(["stash", "push", "-m", "BlueSky PRO orchestrator runtime state", "--", ".bluesky_orchestrator_state.json", ".obsidian/workspace.json"])
@@ -214,7 +211,7 @@ def sync_local_checkout(target_sha):
         print(f"LOCAL SYNC ERROR: cannot preserve runtime files: {stash.stderr.strip() or stash.stdout.strip()}", flush=True)
         return False
 
-    merge = git_run(["merge", "--ff-only", f"origin/{BRANCH}"])
+    merge = git_run(["merge", "--ff-only", remote_sha])
     if merge.returncode != 0:
         print(f"LOCAL SYNC ERROR: fast-forward failed: {merge.stderr.strip() or merge.stdout.strip()}", flush=True)
         if not stash.stdout.strip().lower().startswith("no local changes"):
@@ -230,11 +227,11 @@ def sync_local_checkout(target_sha):
             return False
 
     new_head = local_head_sha()
-    if new_head != remote_sha:
-        print("LOCAL SYNC ERROR: local HEAD did not reach fetched origin/main", flush=True)
+    if new_head != target_sha:
+        print(f"LOCAL SYNC ERROR: local HEAD is {new_head}, expected {target_sha}", flush=True)
         return False
 
-    print(f"LOCAL SYNC: {local_sha[:12]} -> {remote_sha[:12]}", flush=True)
+    print(f"LOCAL SYNC: {local_sha[:12]} -> {target_sha[:12]}", flush=True)
     return True
 
 
