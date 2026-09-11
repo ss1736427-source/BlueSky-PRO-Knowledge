@@ -52,6 +52,27 @@ private:
     double score_;
 };
 
+class InvalidCandidateSolver final : public Solver {
+public:
+    SolverMetadata metadata() const override { return {"invalid", "test", {"point_to_point"}, false, true}; }
+    bool eligible(const MissionProblem& problem) const override {
+        return problem.problem_class == "point_to_point";
+    }
+    RunState run(SolverContext& context) override {
+        CandidateSolution candidate;
+        candidate.candidate_id = context.problem().mission_id + ":invalid:1";
+        candidate.solver_id = "invalid";
+        candidate.solver_version = "test";
+        candidate.feasibility = Feasibility::Feasible;
+        candidate.estimated_time_s = 1.0;
+        candidate.objective_score = 0.1;
+        // Deliberately incomplete candidate: a feasible route must contain route elements.
+        context.publish(std::move(candidate));
+        return RunState::Completed;
+    }
+    void cancel() override {}
+};
+
 std::vector<std::unique_ptr<Solver>> make_solvers() {
     auto heuristic = [](const PlanningNode& from, const PlanningNode& to) {
         const double dx = from.x - to.x;
@@ -178,6 +199,22 @@ int main() {
     assert(ranking_decision.feasibility == Feasibility::Feasible);
     assert(ranking_decision.selected_solver_id == "slow-cheap");
     assert(ranking_decision.selected_candidate_id == "ORCH-RANKING-005:slow-cheap:1");
+
+    // Candidate integrity gate: an invalid feasible candidate must never win
+    // ranking merely because it reports a better objective score.
+    MissionProblem validation_problem = problem;
+    validation_problem.mission_id = "ORCH-VALIDATION-006";
+    TestContext validation_context(validation_problem, ComputeBudget{1000, 256, 8});
+    std::vector<std::unique_ptr<Solver>> validation_solvers;
+    validation_solvers.push_back(std::make_unique<InvalidCandidateSolver>());
+    validation_solvers.push_back(std::make_unique<RankingSolver>("valid", 5.0, 1.0));
+    AlgorithmOrchestrator validation_orchestrator(std::move(validation_solvers));
+    const auto validation_decision = validation_orchestrator.solve(validation_context);
+
+    assert(validation_decision.feasibility == Feasibility::Feasible);
+    assert(validation_decision.selected_solver_id == "valid");
+    assert(validation_decision.selected_candidate_id == "ORCH-VALIDATION-006:valid:1");
+    assert(validation_context.candidates().size() == 2);
 
     return 0;
 }
