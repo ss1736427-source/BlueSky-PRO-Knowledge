@@ -15,6 +15,7 @@ REPO = os.getenv("BS_REPO", "ss1736427-source/BlueSky-PRO-Knowledge")
 BRANCH = os.getenv("BS_BRANCH", "main")
 POLL_SECONDS = int(os.getenv("BS_POLL_SECONDS", "1"))
 CI_GRACE_SECONDS = int(os.getenv("BS_CI_GRACE_SECONDS", "5"))
+AGENT_CONTINUE_SECONDS = int(os.getenv("BS_AGENT_CONTINUE_SECONDS", "5"))
 GH_TIMEOUT_SECONDS = int(os.getenv("BS_GH_TIMEOUT_SECONDS", "20"))
 STATE_FILE = Path(os.getenv("BS_STATE_FILE", ".bluesky_orchestrator_state.json"))
 ADAPTER = Path(os.getenv("BS_AGENT_ADAPTER", Path(__file__).with_name("agent_adapter.ps1")))
@@ -26,8 +27,7 @@ def gh_get(path: str):
     """Read a GitHub API endpoint without requiring a GITHUB_TOKEN.
 
     Public repositories are read directly over HTTPS. GitHub CLI remains a
-    fallback for authenticated/private-repository setups. This avoids the
-    Windows GitHub CLI subprocess hanging seen in the local orchestrator.
+    fallback for authenticated/private-repository setups.
     """
     url = "https://api.github.com/" + path.lstrip("/")
     request = Request(url, headers={"Accept": "application/vnd.github+json", "User-Agent": "BlueSky-PRO-orchestrator"})
@@ -112,10 +112,26 @@ def invoke_agent(sha, reason):
     ).returncode
 
 
+def run_agent_and_record(state, sha, reason):
+    rc = invoke_agent(sha, reason)
+    if rc == 42:
+        state["decision_required"] = True
+        save_state(state)
+        print("STOP: agent requested user decision", flush=True)
+        return 42
+    if rc != 0:
+        print(f"AGENT returned {rc}; retrying", flush=True)
+    else:
+        print(f"AGENT completed for {sha[:12]}; continuing automatically", flush=True)
+    return rc
+
+
 def loop():
     state = load_state()
     print(f"BlueSky PRO orchestrator: {REPO}@{BRANCH}", flush=True)
-    print(f"Polling: {POLL_SECONDS}s; CI grace: {CI_GRACE_SECONDS}s", flush=True)
+    print(f"Polling: {POLL_SECONDS}s; CI grace: {CI_GRACE_SECONDS}s; agent continuation: {AGENT_CONTINUE_SECONDS}s", flush=True)
+    last_agent_sha = None
+    last_agent_time = 0.0
     while True:
         try:
             commit = main_commit()
@@ -129,6 +145,8 @@ def loop():
                 save_state(state)
                 print(f"NEW MAIN SHA: {sha}", flush=True)
                 print(f"CI REQUIRED: {state['ci_required']}", flush=True)
+                last_agent_sha = None
+                last_agent_time = 0.0
             elif state.get("decision_required"):
                 print("STOP: user decision required for current SHA", flush=True)
                 return 42
@@ -141,30 +159,34 @@ def loop():
                     state["verified_sha"] = sha
                     save_state(state)
                     time.sleep(CI_GRACE_SECONDS)
-                    rc = invoke_agent(sha, "CI passed for the exact current main SHA; continue the next unambiguous technical step.")
+                    last_agent_sha = sha
+                    last_agent_time = time.monotonic()
+                    rc = run_agent_and_record(state, sha, "CI passed for the exact current main SHA; continue the next unambiguous technical step.")
                     if rc == 42:
-                        state["decision_required"] = True
-                        save_state(state)
-                        print("STOP: agent requested user decision", flush=True)
                         return 42
-                    if rc != 0:
-                        print(f"AGENT returned {rc}; retrying", flush=True)
                 elif status == "FAIL":
                     print("STOP: current SHA has failing CI", flush=True)
                     return 1
+                elif status == "PASS" and sha == state.get("verified_sha") and last_agent_sha == sha and time.monotonic() - last_agent_time >= AGENT_CONTINUE_SECONDS:
+                    last_agent_time = time.monotonic()
+                    rc = run_agent_and_record(state, sha, "Continue the next unambiguous technical step. Do not wait for a new user command when no decision is required.")
+                    if rc == 42:
+                        return 42
             elif sha != state.get("verified_sha"):
                 print(f"{sha[:12]} CI=NOT_REQUIRED (workflow path filters do not require planning CI for this commit)", flush=True)
                 state["verified_sha"] = sha
                 save_state(state)
                 time.sleep(CI_GRACE_SECONDS)
-                rc = invoke_agent(sha, "No planning CI run is required for the exact current SHA by the workflow path filters; continue the next unambiguous technical step.")
+                last_agent_sha = sha
+                last_agent_time = time.monotonic()
+                rc = run_agent_and_record(state, sha, "No planning CI run is required for the exact current SHA by the workflow path filters; continue the next unambiguous technical step.")
                 if rc == 42:
-                    state["decision_required"] = True
-                    save_state(state)
-                    print("STOP: agent requested user decision", flush=True)
                     return 42
-                if rc != 0:
-                    print(f"AGENT returned {rc}; retrying", flush=True)
+            elif last_agent_sha == sha and time.monotonic() - last_agent_time >= AGENT_CONTINUE_SECONDS:
+                last_agent_time = time.monotonic()
+                rc = run_agent_and_record(state, sha, "Continue the next unambiguous technical step. Do not wait for a new user command when no decision is required.")
+                if rc == 42:
+                    return 42
             time.sleep(POLL_SECONDS)
         except (RuntimeError, KeyError, json.JSONDecodeError) as exc:
             print(f"ORCHESTRATOR ERROR: {exc}", file=sys.stderr, flush=True)
