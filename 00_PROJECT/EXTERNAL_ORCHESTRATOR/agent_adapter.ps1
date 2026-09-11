@@ -17,8 +17,6 @@ if (-not $AgentExecutable) {
     }
 }
 
-# No executable means the local environment still needs one user decision.
-# Return 42 so the orchestrator stops instead of retrying the same condition.
 if (-not $AgentExecutable) {
     Write-Host "No supported local development agent found. Install GitHub Copilot CLI or configure BS_AGENT_EXECUTABLE."
     exit 42
@@ -46,17 +44,23 @@ Run appropriate tests after changes and do not claim CI success unless it belong
 When no user decision is required, return 0. When a user decision is required, return 42.
 "@
 
-# GitHub Copilot CLI supports programmatic execution from piped stdin.
-# Keep permissions explicit rather than using the unrestricted --allow-all mode.
+# GitHub Copilot CLI uses a comma-separated tool list. Do not quote the value
+# inside the argument itself, otherwise PowerShell passes the quote as part of
+# the --allow-tool value.
 if ((Split-Path $AgentExecutable -Leaf) -match '(?i)^copilot(\.exe)?$') {
-    $psiArguments = "--allow-tool='read,write,shell' --no-ask-user -s"
+    $psiArgumentList = @("--allow-tool=read,write,shell", "--no-ask-user", "-s")
 } else {
-    $psiArguments = $AgentArguments
+    $psiArgumentList = @()
+    if ($AgentArguments) {
+        $psiArgumentList = $AgentArguments -split '\s+'
+    }
 }
 
 $psi = [System.Diagnostics.ProcessStartInfo]::new()
 $psi.FileName = $AgentExecutable
-$psi.Arguments = $psiArguments
+foreach ($arg in $psiArgumentList) {
+    [void]$psi.ArgumentList.Add($arg)
+}
 $psi.WorkingDirectory = (Get-Location).Path
 $psi.UseShellExecute = $false
 $psi.RedirectStandardInput = $true
