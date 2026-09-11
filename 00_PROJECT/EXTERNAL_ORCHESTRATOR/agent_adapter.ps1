@@ -1,11 +1,12 @@
 param(
-    [string]$AgentCommand = $env:BS_AGENT_COMMAND
+    [string]$AgentExecutable = $env:BS_AGENT_EXECUTABLE,
+    [string]$AgentArguments = $env:BS_AGENT_ARGUMENTS
 )
 
 $ErrorActionPreference = "Stop"
 
 if (-not $env:BS_CURRENT_SHA) { throw "BS_CURRENT_SHA is not set." }
-if (-not $AgentCommand) { throw "BS_AGENT_COMMAND is not set." }
+if (-not $AgentExecutable) { throw "BS_AGENT_EXECUTABLE is not set." }
 
 $repo = if ($env:BS_REPO) { $env:BS_REPO } else { "ss1736427-source/BlueSky-PRO-Knowledge" }
 $branch = if ($env:BS_BRANCH) { $env:BS_BRANCH } else { "main" }
@@ -29,17 +30,23 @@ Run appropriate tests after changes and do not claim CI success unless it belong
 When no user decision is required, return 0. When a user decision is required, return 42.
 "@
 
-# Adapter contract: the configured local agent is responsible for execution.
-# It must return 0 for continuation and 42 when a user decision is required.
 $psi = [System.Diagnostics.ProcessStartInfo]::new()
-$psi.FileName = "powershell.exe"
-$psi.Arguments = "-NoProfile -Command `"$AgentCommand`""
+$psi.FileName = $AgentExecutable
+$psi.Arguments = $AgentArguments
+$psi.WorkingDirectory = (Get-Location).Path
 $psi.UseShellExecute = $false
 $psi.RedirectStandardInput = $true
 $psi.RedirectStandardOutput = $false
 $psi.RedirectStandardError = $false
+
 $p = [System.Diagnostics.Process]::Start($psi)
-$p.StandardInput.WriteLine($prompt)
-$p.StandardInput.Close()
-$p.WaitForExit()
-exit $p.ExitCode
+try {
+    $p.StandardInput.WriteLine($prompt)
+    $p.StandardInput.Close()
+    $p.WaitForExit()
+    exit $p.ExitCode
+}
+finally {
+    if (-not $p.HasExited) { $p.Kill() }
+    $p.Dispose()
+}
