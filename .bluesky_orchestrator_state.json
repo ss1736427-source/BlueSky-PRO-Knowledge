@@ -1,6 +1,8 @@
 {
-  "last_main_sha": "9c1533ee7aada01ac3b5ebd81c86ab76e6a2b788",
-  "verified_sha": "9c1533ee7aada01ac3b5ebd81c86ab76e6a2b788",
+  "last_main_sha": "bb9d0059b67404545be333a308cb16c677c198bc",
+  "verified_sha": "bb9d0059b67404545be333a308cb16c677c198bc",
   "decision_required": false,
-  "ci_required": false
+  "ci_required": false,
+  "agent_error_sha": "bb9d0059b67404545be333a308cb16c677c198bc",
+  "agent_error_code": 1
 }
