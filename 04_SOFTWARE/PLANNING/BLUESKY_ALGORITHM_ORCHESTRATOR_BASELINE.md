@@ -72,7 +72,21 @@ The orchestrator shall prefer the simplest algorithm that adequately solves the 
 
 Safety and mandatory constraints are feasibility gates, not soft optimization preferences.
 
-A candidate violating a mandatory constraint is rejected before economic or quality scoring.
+The decision sequence is mandatory:
+
+```text
+MANDATORY REQUIREMENTS
+      ↓
+ADMISSIBILITY CHECK
+      ↓
+REJECT NON-ADMISSIBLE CANDIDATES
+      ↓
+COMPARE REMAINING CANDIDATES
+      ↓
+BEST SAFE SOLUTION
+```
+
+A candidate violating a mandatory constraint is rejected before economic, quality, time or other optimization scoring. A candidate shall not become admissible merely because it has a better optimization score.
 
 Typical hard constraints:
 
@@ -85,6 +99,8 @@ Typical hard constraints:
 - C2 requirements;
 - navigation requirements;
 - mission-specific safety constraints.
+
+The normalized solver result shall carry any detected mandatory-constraint violations in `constraint_violations`. The orchestrator uses this field as a feasibility gate: a candidate with one or more reported violations is not eligible for ranking or final selection.
 
 ## 6. Mission-specific priorities
 
