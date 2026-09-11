@@ -10,17 +10,10 @@ namespace bluesky::planning {
 
 namespace {
 
-bool has_priority(const MissionProblem& problem, const std::string& token) {
-    return std::find(problem.objective_priorities.begin(),
-                     problem.objective_priorities.end(), token) !=
-           problem.objective_priorities.end();
-}
-
 bool supported_priority(const std::string& priority) {
     return priority == "completion_time" || priority == "time" || priority == "fast" ||
            priority == "minimum_cost" || priority == "route_efficiency" ||
-           priority == "energy" || priority == "endurance" || priority == "reserve" ||
-           priority == "deterministic";
+           priority == "energy" || priority == "endurance" || priority == "reserve";
 }
 
 bool objective_priorities_are_supported(const MissionProblem& problem) {
@@ -28,18 +21,6 @@ bool objective_priorities_are_supported(const MissionProblem& problem) {
            std::all_of(problem.objective_priorities.begin(),
                        problem.objective_priorities.end(),
                        supported_priority);
-}
-
-bool graph_has_heuristic_information(const MissionProblem& problem) {
-    if (!problem.planning_graph) return false;
-
-    const auto* start = problem.planning_graph->find_node(problem.planning_graph->start_node);
-    const auto* goal = problem.planning_graph->find_node(problem.planning_graph->goal_node);
-    if (!start || !goal) return false;
-
-    const double dx = start->x - goal->x;
-    const double dy = start->y - goal->y;
-    return std::sqrt(dx * dx + dy * dy) > 1e-9;
 }
 
 bool route_matches_graph(const CandidateSolution& candidate, const MissionProblem& problem) {
@@ -67,9 +48,9 @@ bool route_matches_graph(const CandidateSolution& candidate, const MissionProble
     return true;
 }
 
-bool valid_candidate(const CandidateSolution& candidate, const MissionProblem& problem) {
+bool structurally_valid_candidate(const CandidateSolution& candidate,
+                                  const MissionProblem& problem) {
     if (candidate.feasibility != Feasibility::Feasible) return false;
-    if (!candidate.constraint_violations.empty()) return false;
     if (candidate.candidate_id.empty() || candidate.solver_id.empty() ||
         candidate.solver_version.empty()) return false;
     if (candidate.route_elements.empty()) return false;
@@ -84,8 +65,7 @@ bool valid_candidate(const CandidateSolution& candidate, const MissionProblem& p
     if (candidate.estimated_time_s < 0.0 ||
         candidate.estimated_energy_wh < 0.0 ||
         candidate.estimated_reserve_wh < 0.0) return false;
-    if (!route_matches_graph(candidate, problem)) return false;
-    return true;
+    return route_matches_graph(candidate, problem);
 }
 
 bool accepts_candidates(RunState state) {
@@ -103,8 +83,7 @@ bool better_candidate(const CandidateSolution& candidate,
     };
 
     for (const auto& priority : problem.objective_priorities) {
-        if (priority == "completion_time" || priority == "time" ||
-            priority == "fast") {
+        if (priority == "completion_time" || priority == "time" || priority == "fast") {
             if (better_lower(candidate.estimated_time_s, current.estimated_time_s)) return true;
             if (better_lower(current.estimated_time_s, candidate.estimated_time_s)) return false;
         } else if (priority == "minimum_cost" || priority == "route_efficiency") {
@@ -126,8 +105,11 @@ bool better_candidate(const CandidateSolution& candidate,
 
 } // namespace
 
-AlgorithmOrchestrator::AlgorithmOrchestrator(std::vector<std::unique_ptr<Solver>> solvers)
-    : solvers_(std::move(solvers)) {}
+AlgorithmOrchestrator::AlgorithmOrchestrator(
+    std::vector<std::unique_ptr<Solver>> solvers,
+    CandidateConstraintValidator constraint_validator)
+    : solvers_(std::move(solvers)),
+      constraint_validator_(std::move(constraint_validator)) {}
 
 OrchestratorDecision AlgorithmOrchestrator::solve(SolverContext& context) {
     OrchestratorDecision decision;
@@ -170,9 +152,20 @@ OrchestratorDecision AlgorithmOrchestrator::solve(SolverContext& context) {
         for (const auto& candidate : context.candidates()) {
             if (candidate.solver_id != meta.solver_id ||
                 candidate.solver_version != meta.version ||
-                !valid_candidate(candidate, context.problem())) {
+                !structurally_valid_candidate(candidate, context.problem())) {
                 continue;
             }
+
+            std::vector<std::string> violations;
+            if (constraint_validator_) {
+                violations = constraint_validator_(context.problem(), candidate);
+            } else {
+                violations = candidate.constraint_violations;
+            }
+
+            // Mandatory constraints are evaluated before any objective ranking.
+            if (!violations.empty()) continue;
+
             if (!have_best || better_candidate(candidate, best, context.problem())) {
                 best = candidate;
                 have_best = true;
@@ -193,7 +186,7 @@ OrchestratorDecision AlgorithmOrchestrator::solve(SolverContext& context) {
     std::ostringstream explanation;
     explanation << "Выбран маршрут, рассчитанный алгоритмом " << best.solver_id
                 << ", как лучший допустимый кандидат с учётом приоритетов текущей задачи."
-                << " Ограничения безопасности прошли проверку до ранжирования.";
+                << " Обязательные ограничения проверены до ранжирования.";
     decision.explanation = explanation.str();
     return decision;
 }
