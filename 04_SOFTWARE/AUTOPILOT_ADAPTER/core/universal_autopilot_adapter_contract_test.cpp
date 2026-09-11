@@ -1,6 +1,6 @@
 #include "universal_autopilot_adapter.hpp"
-#include "../../../PLANNING/model/mission_model.hpp"
-#include "../../../PLANNING/model/vehicle_equipment_capability.hpp"
+#include "../../PLANNING/model/mission_model.hpp"
+#include "../../PLANNING/model/vehicle_equipment_capability.hpp"
 
 #include <cassert>
 #include <type_traits>
