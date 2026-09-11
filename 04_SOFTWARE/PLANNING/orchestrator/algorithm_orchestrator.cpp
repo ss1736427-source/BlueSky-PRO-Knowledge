@@ -51,8 +51,13 @@ int priority_rank(const MissionProblem& problem, const std::string& solver_id) {
 
 bool valid_candidate(const CandidateSolution& candidate) {
     if (candidate.feasibility != Feasibility::Feasible) return false;
-    if (candidate.candidate_id.empty() || candidate.solver_id.empty()) return false;
+    if (candidate.candidate_id.empty() || candidate.solver_id.empty() ||
+        candidate.solver_version.empty()) return false;
     if (candidate.route_elements.empty()) return false;
+    if (std::any_of(candidate.route_elements.begin(), candidate.route_elements.end(),
+                    [](const std::string& element) { return element.empty(); })) {
+        return false;
+    }
     if (!std::isfinite(candidate.estimated_time_s) ||
         !std::isfinite(candidate.estimated_energy_wh) ||
         !std::isfinite(candidate.estimated_reserve_wh) ||
