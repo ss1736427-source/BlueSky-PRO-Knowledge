@@ -146,12 +146,16 @@ def git_run(args):
     return subprocess.run(["git", *args], cwd=Path.cwd(), capture_output=True, text=True)
 
 
+def local_head_sha():
+    result = git_run(["rev-parse", "HEAD"])
+    if result.returncode != 0:
+        raise RuntimeError(f"Local Git HEAD check failed: {result.stderr.strip()}")
+    return result.stdout.strip()
+
+
 def sync_local_checkout(target_sha):
     """Fast-forward local checkout safely, preserving known runtime files."""
-    head = git_run(["rev-parse", "HEAD"])
-    if head.returncode != 0:
-        raise RuntimeError(f"Local Git HEAD check failed: {head.stderr.strip()}")
-    local_sha = head.stdout.strip()
+    local_sha = local_head_sha()
     if local_sha == target_sha:
         return True
 
@@ -211,8 +215,8 @@ def sync_local_checkout(target_sha):
             print(f"LOCAL SYNC ERROR: runtime-state restore failed: {pop.stderr.strip() or pop.stdout.strip()}", flush=True)
             return False
 
-    new_head = git_run(["rev-parse", "HEAD"])
-    if new_head.returncode != 0 or new_head.stdout.strip() != remote_sha:
+    new_head = local_head_sha()
+    if new_head != remote_sha:
         print("LOCAL SYNC ERROR: local HEAD did not reach fetched origin/main", flush=True)
         return False
 
@@ -239,19 +243,25 @@ def invoke_agent(sha, reason):
 
 
 def run_agent_and_record(state, sha, reason):
+    before_sha = local_head_sha()
     rc = invoke_agent(sha, reason)
+    after_sha = local_head_sha()
     if rc == 42:
         state["decision_required"] = True
         save_state(state)
         cleanup_generated_artifacts()
         print("STOP: agent requested user decision", flush=True)
-        return 42
+        return 42, False
     if rc != 0:
         print(f"AGENT returned {rc}; retrying", flush=True)
     else:
         print(f"AGENT completed for {sha[:12]}; continuing automatically", flush=True)
     cleanup_generated_artifacts()
-    return rc
+    changed = after_sha != before_sha
+    if rc == 0 and not changed:
+        print(f"STOP: agent completed without creating a new commit for {sha[:12]}", flush=True)
+        return 0, False
+    return rc, changed
 
 
 def loop():
@@ -293,17 +303,17 @@ def loop():
                     time.sleep(CI_GRACE_SECONDS)
                     last_agent_sha = sha
                     last_agent_time = time.monotonic()
-                    rc = run_agent_and_record(state, sha, "CI passed for the exact current main SHA; continue the next unambiguous technical step.")
-                    if rc == 42:
-                        return 42
+                    rc, changed = run_agent_and_record(state, sha, "CI passed for the exact current main SHA; continue the next unambiguous technical step.")
+                    if rc == 42 or (rc == 0 and not changed):
+                        return rc
                 elif status == "FAIL":
                     print("STOP: current SHA has failing CI", flush=True)
                     return 1
                 elif status == "PASS" and sha == state.get("verified_sha") and last_agent_sha == sha and time.monotonic() - last_agent_time >= AGENT_CONTINUE_SECONDS:
                     last_agent_time = time.monotonic()
-                    rc = run_agent_and_record(state, sha, "Continue the next unambiguous technical step. Do not wait for a new user command when no decision is required.")
-                    if rc == 42:
-                        return 42
+                    rc, changed = run_agent_and_record(state, sha, "Continue the next unambiguous technical step. Do not wait for a new user command when no decision is required.")
+                    if rc == 42 or (rc == 0 and not changed):
+                        return rc
             elif sha != state.get("verified_sha"):
                 print(f"{sha[:12]} CI=NOT_REQUIRED (workflow path filters do not require planning CI for this commit)", flush=True)
                 state["verified_sha"] = sha
@@ -311,14 +321,14 @@ def loop():
                 time.sleep(CI_GRACE_SECONDS)
                 last_agent_sha = sha
                 last_agent_time = time.monotonic()
-                rc = run_agent_and_record(state, sha, "No planning CI run is required for the exact current SHA by the workflow path filters; continue the next unambiguous technical step.")
-                if rc == 42:
-                    return 42
+                rc, changed = run_agent_and_record(state, sha, "No planning CI run is required for the exact current SHA by the workflow path filters; continue the next unambiguous technical step.")
+                if rc == 42 or (rc == 0 and not changed):
+                    return rc
             elif last_agent_sha == sha and time.monotonic() - last_agent_time >= AGENT_CONTINUE_SECONDS:
                 last_agent_time = time.monotonic()
-                rc = run_agent_and_record(state, sha, "Continue the next unambiguous technical step. Do not wait for a new user command when no decision is required.")
-                if rc == 42:
-                    return 42
+                rc, changed = run_agent_and_record(state, sha, "Continue the next unambiguous technical step. Do not wait for a new user command when no decision is required.")
+                if rc == 42 or (rc == 0 and not changed):
+                    return rc
             time.sleep(POLL_SECONDS)
         except (RuntimeError, KeyError, json.JSONDecodeError, subprocess.CalledProcessError) as exc:
             print(f"ORCHESTRATOR ERROR: {exc}", file=sys.stderr, flush=True)
