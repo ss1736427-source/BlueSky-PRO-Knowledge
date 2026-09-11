@@ -36,8 +36,8 @@ system: BlueSky PRO
 | C2-CAND-004 | DERIVED | сохранить как interface/system allocation |
 | C2-CAND-005 | DERIVED | использовать существующий logging/evidence контур |
 | C2-CAND-006 | MERGE/SCOPE REVIEW | не создавать новый SYS-REQ; проверить operational responsibility |
-| C2-CAND-007 | GAP CHECK | подтвердить отсутствие существующего diagnostics requirement |
-| C2-CAND-008 | GAP CHECK | подтвердить существующий time/data model до создания требования |
+| C2-CAND-007 | DERIVED / COVERED | использовать controlled cause/status distinction и существующую diagnostics/safety allocation |
+| C2-CAND-008 | DERIVED / COVERED | использовать controlled common time reference и существующий IF-C2-001 |
 
 ## 3. Baseline decision
 
@@ -74,12 +74,11 @@ source
 
 ## 6. Следующий controlled action
 
-Точечно закрыть два оставшихся вопроса:
+Точечно проверить оставшийся количественный вопрос:
 
-1. `C2-CAND-007` — наличие/отсутствие существующего требования по классификации причин нарушения C2.
-2. `C2-CAND-008` — наличие/отсутствие существующей контролируемой временной базы и data/time allocation.
+1. `C2-CAND-003` — наличие контролируемой основы для количественных C2 quality/QoS parameters.
 
-Только после получения подтверждения выполняется изменение `MASTER_REQUIREMENTS_REGISTER.md`.
+До получения такой основы `MASTER_REQUIREMENTS_REGISTER.md` не изменяется.
 
 ## 7. Authoritative rule
 

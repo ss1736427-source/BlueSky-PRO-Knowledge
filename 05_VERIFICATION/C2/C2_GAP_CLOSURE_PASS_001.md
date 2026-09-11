@@ -15,43 +15,43 @@ basis: C2-RECONCILIATION-PASS-002
 
 ## 2. Проверка C2-REQ-007 — Event Recording
 
-**Disposition: OPEN EVIDENCE CHECK.**
+**Disposition: DERIVED / COVERAGE CONFIRMED.**
 
-Текущая база подтверждает наличие C2 degradation/failure handling и requirement-to-verification цепочки, но в доступном controlled wording не подтверждает отдельным текстом требование именно к регистрации C2-событий.
+Controlled wording подтверждает требование к регистрации событий установления, завершения, деградации, переключения и потери C2 с временными и позиционными данными (`SYS-C2-005`). Clause mapping связывает это с `C2-142-021`, а `C2-ICD-BASELINE-001` определяет C2 event recording как ответственность BlueSky в пределах интерфейсной границы.
 
 Поэтому:
 
 ```text
 C2-REQ-007
-→ GAP NOT PROVEN
-→ GAP NOT REJECTED
-→ HOLD
+→ DERIVED / COVERAGE CONFIRMED
+→ allocate to existing event/archive model
+→ no new SYS-REQ
 ```
 
-Запрещено создавать новый `SYS-REQ` до получения полного исходного требования/архивного требования и проверки его покрытия.
+Новый `SYS-REQ` не создаётся.
 
 ## 3. Проверка C2-REQ-010 — Operator Warning
 
-**Disposition: OPEN EVIDENCE CHECK.**
+**Disposition: DERIVED / COVERAGE CONFIRMED.**
 
-Текущая база подтверждает существование HMI и Safety Gate контуров, но доступный controlled wording не позволяет доказать полное покрытие конкретной функции операторского предупреждения о состоянии C2.
+Controlled wording подтверждает, что при потере C2 BlueSky должен обеспечить оператору необходимые предупреждения и данные для обязательных действий (`SYS-C2-006`). Clause mapping связывает это с `C2-142-020`, а `C2-HMI-ALLOCATION-001` фиксирует операторскую индикацию в пределах HMI scope без ослабления Safety Gate.
 
 Поэтому:
 
 ```text
 C2-REQ-010
-→ GAP NOT PROVEN
-→ GAP NOT REJECTED
-→ HOLD
+→ DERIVED / COVERAGE CONFIRMED
+→ allocate to existing HMI and safety workflow
+→ no new SYS-REQ
 ```
 
 Новый `SYS-REQ` не создаётся.
 
 ## 4. C2-REQ-008 — Common Time Base
 
-**Disposition: DERIVED / COVERAGE CHECK.**
+**Disposition: DERIVED / COVERAGE CONFIRMED.**
 
-`IF-C2-001` уже включает timestamp / temporal-validity аспект. Отдельный системный requirement не создаётся без доказательства, что существующего требования недостаточно.
+`IF-C2-001` уже включает timestamp / temporal-validity аспект, а controlled wording дополнительно устанавливает единую временную базу для telemetry, commands, state transitions, alerts и event records (`SYS-C2-008`). Отдельный системный requirement не создаётся.
 
 ## 5. C2-REQ-003 — Quality Parameters
 
@@ -74,21 +74,21 @@ MASTER REGISTER: NO CHANGE
 
 ## 7. Evidence closure gate
 
-Для закрытия оставшихся двух OPEN CHECK необходимы исходные controlled records:
+Для дальнейшего контроля достаточно сохранить ссылки на следующие controlled records:
 
 ```text
 C2-REQ-007
-→ существующее data/archive/logging requirement
-→ exact wording
-→ verification/evidence
+→ SYS-C2-005 / C2-142-021
+→ C2 ICD event model
+→ record/replay verification
 
 C2-REQ-010
-→ существующее HMI/operator notification requirement
-→ exact wording
-→ verification/evidence
+→ SYS-C2-006 / C2-142-020
+→ C2 HMI allocation
+→ functional/safety verification
 ```
 
-После получения этих записей выполняется только один из вариантов:
+Дальнейшая baseline-проверка выполняется только по цепочке:
 
 ```text
 KEEP / DERIVED / MERGE / GAP / CONFLICT
@@ -102,7 +102,7 @@ KEEP / DERIVED / MERGE / GAP / CONFLICT
 
 **NO PROVEN SYSTEM REQUIREMENT GAP.**
 
-`C2-REQ-007`, `C2-REQ-010` — HOLD до exact-text evidence review.
+`C2-REQ-007`, `C2-REQ-010` — DERIVED / COVERAGE CONFIRMED.
 
 `C2-REQ-003`, `C2-REQ-008` — не порождают новый SYS-REQ на текущем evidence level.
 

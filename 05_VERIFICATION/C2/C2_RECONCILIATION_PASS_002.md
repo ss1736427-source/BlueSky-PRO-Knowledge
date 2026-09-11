@@ -41,10 +41,10 @@ basis: C2-CLAUSE-LEVEL-MAPPING-001
 | C2-REQ-004 / provider boundary | DERIVED | покрывается DEC-012 и IF-C2-001; обязанности provider остаются внешними |
 | C2-REQ-005 / cause/status | DERIVED / OVERLAP | покрывается C2 safety allocation и существующим degradation handling |
 | C2-REQ-006 / loss response | MERGE CANDIDATE | использовать SYS-REQ-081/086/093 + SAF allocation; новый SYS-REQ не создавать |
-| C2-REQ-007 / event recording | GAP CANDIDATE | требуется проверка полного controlled wording существующего data/archive requirement |
-| C2-REQ-008 / common time base | PARTIAL / GAP CHECK | IF-C2-001 уже требует timestamp/temporal validity; отдельный SYS-REQ пока не создавать |
+| C2-REQ-007 / event recording | DERIVED / COVERAGE CONFIRMED | SYS-C2-005, C2-142-021 and C2 ICD event model provide controlled allocation; new SYS-REQ не создавать |
+| C2-REQ-008 / common time base | DERIVED / COVERAGE CONFIRMED | IF-C2-001 and SYS-C2-008 provide timestamp and common time-base allocation; new SYS-REQ не создавать |
 | C2-REQ-009 / authority boundary | DERIVED / MERGE | покрывается существующим Safety Gate / authority chain |
-| C2-REQ-010 / operator warning | GAP CANDIDATE | требуется проверка полного controlled wording существующего HMI requirement |
+| C2-REQ-010 / operator warning | DERIVED / COVERAGE CONFIRMED | SYS-C2-006, C2-142-020 and HMI allocation provide controlled warning/data allocation; new SYS-REQ не создавать |
 
 ## 4. Confirmed existing architecture
 
@@ -109,12 +109,11 @@ BASELINE CHANGES: 0
 
 ## 9. Remaining controlled actions
 
-Только два пункта требуют дополнительной проверки полного controlled wording:
+Остаётся один количественный вопрос, требующий controlled basis:
 
-1. C2 event recording (`C2-REQ-007`);
-2. operator C2 warning/display (`C2-REQ-010`).
+1. C2 quality/QoS parameters (`C2-REQ-003`).
 
-Если существующее требование покрывает функцию — `KEEP/DERIVED/MERGE`. Если покрытие отсутствует — только тогда создаётся новый requirement через controlled change.
+До установления source, applicability, allocation и verification method новые quantitative values и SYS-REQ не создаются.
 
 ## 10. Boundary rule
 
@@ -124,7 +123,7 @@ BASELINE CHANGES: 0
 
 **C2 RECONCILIATION PASS 002: NO PROVEN SYSTEM REQUIREMENT GAP.**
 
-`C2-REQ-007` и `C2-REQ-010` остаются candidate gaps до exact wording review.
+`C2-REQ-007`, `C2-REQ-008` и `C2-REQ-010` имеют статус `DERIVED / COVERAGE CONFIRMED`; `C2-REQ-003` остаётся `PARTIAL` без доказанного GAP.
 
 ## 12. Status
 

@@ -25,7 +25,7 @@ RESTORED
 
 и требует, чтобы переходы состояний были allocated to system/safety requirements; восстановленное состояние не должно считаться валидным до выполнения recovery criteria.
 
-`C2-VERIFICATION-RECONCILIATION-001` определяет `C2-REQ-010` как `PARTIAL` и требует exact controlled wording существующего HMI requirement до решения о новом SYS-REQ.
+`C2-VERIFICATION-RECONCILIATION-001` определяет `C2-REQ-010` как candidate gap pending exact wording review. Controlled wording `SYS-C2-006` и clause mapping `C2-142-020` подтверждают операторские предупреждения и данные при потере C2.
 
 ## 3. Allocation decision
 
@@ -40,14 +40,14 @@ C2 state / failure information
 
 Это является функциональной областью BlueSky, если конкретная индикация/предупреждение входит в утверждённый HMI scope.
 
-Но из доступных controlled records пока нельзя установить, что `C2-REQ-010` отсутствует в существующих HMI/Safety requirements.
+Операторская функция уже распределена между существующим safety workflow и HMI scope; новый authoritative SYS-REQ не требуется.
 
 Therefore:
 
 ```text
 C2-REQ-010
-→ PARTIAL
-→ EXISTING HMI REQUIREMENT TEXT REVIEW REQUIRED
+→ DERIVED / COVERAGE CONFIRMED
+→ SYS-C2-006 / C2-142-020
 → NO NEW SYS-REQ
 ```
 
@@ -57,7 +57,7 @@ C2 degradation/failure processing already has safety allocation. Operator indica
 
 ## 5. HMI information classes
 
-Subject to exact existing HMI wording, the controlled interface model may expose:
+The controlled interface model may expose:
 
 - current C2 state;
 - degraded/lost condition;
@@ -87,12 +87,12 @@ C2-REQ-010
 NEW SYS-REQ: 0
 NEW SAF-REQ: 0
 MASTER REGISTER CHANGE: 0
-STATUS: HOLD / EXACT-TEXT REVIEW
+STATUS: DERIVED / COVERAGE CONFIRMED
 ```
 
 ## 8. Next controlled action
 
-Obtain the exact controlled HMI/operator-warning requirement wording. If equivalent coverage is found, link it. If a functional gap remains, create a single controlled requirement with a new identity and corresponding verification/evidence linkage.
+Maintain the allocation links to `SYS-C2-006`, `C2-142-020`, `IF-C2-001` and the applicable HMI/safety verification. No new SYS-REQ is created by this record.
 
 ## 9. Scope protection
 

@@ -46,10 +46,10 @@ authority: MASTER-REQUIREMENTS-REGISTER-001
 | C2-REQ-004 Provider-C2 availability/boundary | DEC-012; IF-C2-001 | DEC-012 defines provider boundary; ICD defines provider interface | DERIVED | interface allocation, not new independent SYS-REQ |
 | C2-REQ-005 cause/status distinction | SAF-REQ-013; C2 safety allocation C2-F-001..005 | Safety baseline covers C2 degradation; C2 safety model separates failure conditions and states | DERIVED / OVERLAP | use existing safety allocation; create requirement only if a real functional gap remains |
 | C2-REQ-006 approved response to C2 loss/degradation | SYS-REQ-081; SYS-REQ-086; SYS-REQ-093; SAF-REQ-013 | existing failure/recovery cluster + C2 safety allocation | MERGE candidate | preserve existing requirement identity; derive scenario/verification |
-| C2-REQ-007 C2 event recording | C2-142-021; C2 ICD; archive/data model | C2 mapping explicitly calls for event recording; ICD identifies event/state data; archive principle exists | GAP candidate | determine whether existing data/event requirement already covers it before creating SYS-REQ |
-| C2-REQ-008 controlled time reference | SYS-REQ-091; IF-C2-001 | SYS-REQ-091 = Critical Latency; ICD requires timestamp for safety-significant events | PARTIAL / GAP CHECK | verify whether common time-base semantics are already controlled elsewhere |
+| C2-REQ-007 C2 event recording | SYS-C2-005; C2-142-021; C2 ICD; archive/data model | Controlled wording defines C2 event logging and the ICD identifies event/state data | DERIVED / COVERAGE CONFIRMED | allocate to existing event/archive model; no new SYS-REQ |
+| C2-REQ-008 controlled time reference | SYS-REQ-091; IF-C2-001; SYS-C2-008 | SYS-REQ-091 and controlled wording define timestamp and common time-base semantics for C2 data/events | DERIVED / COVERAGE CONFIRMED | allocate to existing interface/time model; no new SYS-REQ |
 | C2-REQ-009 AI/optimization cannot bypass safety authority | SYS-REQ-085; SYS-REQ-082; SAF-REQ-005; SAF-REQ-018; ARCH-DEC-016 | explicit Safety Gate and AI authority boundary | MERGE / DERIVED | no duplicate authority requirement |
-| C2-REQ-010 C2 state/warnings to operator | C2-142-015/020; HMI interface | regulatory mapping + ICD HMI model | GAP candidate | check existing HMI/system requirement wording before new ID |
+| C2-REQ-010 C2 state/warnings to operator | SYS-C2-006; C2-142-020; HMI interface | Controlled wording defines operator warnings/data on C2 loss and HMI allocation is established | DERIVED / COVERAGE CONFIRMED | allocate to existing HMI and safety workflow; no new SYS-REQ |
 
 ## 5. Safety reconciliation
 
