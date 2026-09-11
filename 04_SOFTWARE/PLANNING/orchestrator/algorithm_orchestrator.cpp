@@ -124,6 +124,13 @@ OrchestratorDecision AlgorithmOrchestrator::solve(SolverContext& context) {
                      });
 
     for (auto& solver : solvers_) {
+        if (context.cancelled()) {
+            if (solver) solver->cancel();
+            decision.feasibility = Feasibility::Uncertain;
+            decision.explanation = "Расчёт отменён до завершения поиска допустимого маршрута.";
+            return decision;
+        }
+
         if (!solver || !solver->eligible(context.problem())) {
             if (solver) decision.rejected_solvers.push_back(solver->metadata().solver_id);
             continue;
@@ -133,6 +140,12 @@ OrchestratorDecision AlgorithmOrchestrator::solve(SolverContext& context) {
         decision.considered_solvers.push_back(meta.solver_id);
 
         const auto state = solver->run(context);
+        if (context.cancelled()) {
+            solver->cancel();
+            decision.feasibility = Feasibility::Uncertain;
+            decision.explanation = "Расчёт отменён до завершения оценки кандидатов.";
+            return decision;
+        }
         if (!accepts_candidates(state)) continue;
 
         for (const auto& candidate : context.candidates()) {
