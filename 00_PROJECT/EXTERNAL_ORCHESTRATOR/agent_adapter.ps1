@@ -11,7 +11,7 @@ if (-not $env:BS_CURRENT_SHA) { throw "BS_CURRENT_SHA is not set." }
 # Resolve the repository root from this script location, not from the caller's CWD.
 if (-not $AgentExecutable) {
     $repoRoot = Split-Path $PSScriptRoot -Parent | Split-Path -Parent
-    $flightPlanningRoot = Split-Path $repoRoot -Parent
+    $flightPlanningRoot = Split-Path (Split-Path $repoRoot -Parent) -Parent
     $localCodex = Join-Path $flightPlanningRoot "TOOLS\codex\codex.cmd"
     if (Test-Path -LiteralPath $localCodex -PathType Leaf) {
         $AgentExecutable = (Resolve-Path -LiteralPath $localCodex).Path
