@@ -28,4 +28,4 @@ jobs:
       - name: Test
         run: ctest --test-dir build/planning --output-on-failure
 
-# Keep push and workflow_dispatch triggers available for verified main-branch runs.
+# CI trigger verification for the current main baseline.
