@@ -7,8 +7,34 @@ $ErrorActionPreference = "Stop"
 
 if (-not $env:BS_CURRENT_SHA) { throw "BS_CURRENT_SHA is not set." }
 
-# If no agent was explicitly configured, discover the supported local
-# development agent automatically. A configured executable always wins.
+# If no agent was explicitly configured, discover Codex first, then the
+# legacy Copilot CLI. An explicitly configured executable always wins.
+if (-not $AgentExecutable) {
+    if ($env:BS_CODEX_EXECUTABLE -and (Test-Path -LiteralPath $env:BS_CODEX_EXECUTABLE)) {
+        $AgentExecutable = (Resolve-Path -LiteralPath $env:BS_CODEX_EXECUTABLE).Path
+        Write-Host "Agent auto-detected: Codex CLI ($AgentExecutable)"
+    }
+}
+
+if (-not $AgentExecutable) {
+    $codex = Get-Command codex -ErrorAction SilentlyContinue
+    if ($codex) {
+        $AgentExecutable = $codex.Source
+        Write-Host "Agent auto-detected: Codex CLI ($AgentExecutable)"
+    }
+}
+
+if (-not $AgentExecutable) {
+    # Project-local Windows installation convention used by this workspace.
+    $repoRoot = (Get-Location).Path
+    $flightPlanningRoot = Split-Path (Split-Path $repoRoot -Parent) -Parent
+    $localCodex = Join-Path $flightPlanningRoot "TOOLS\codex\codex.cmd"
+    if (Test-Path -LiteralPath $localCodex) {
+        $AgentExecutable = (Resolve-Path -LiteralPath $localCodex).Path
+        Write-Host "Agent auto-detected: Codex CLI ($AgentExecutable)"
+    }
+}
+
 if (-not $AgentExecutable) {
     $copilot = Get-Command copilot -ErrorAction SilentlyContinue
     if ($copilot) {
@@ -18,7 +44,7 @@ if (-not $AgentExecutable) {
 }
 
 if (-not $AgentExecutable) {
-    Write-Host "No supported local development agent found. Install GitHub Copilot CLI or configure BS_AGENT_EXECUTABLE."
+    Write-Host "No supported local development agent found. Install Codex CLI or configure BS_AGENT_EXECUTABLE."
     exit 42
 }
 
@@ -50,15 +76,27 @@ Run appropriate tests after changes and do not claim CI success unless it belong
 When no user decision is required, continue automatically. When a user decision is required, return 42.
 "@
 
-# GitHub Copilot CLI accepts a comma-separated tool list.
-# Windows PowerShell 5.1 does not expose ProcessStartInfo.ArgumentList,
-# so use the legacy Arguments property with Windows-compatible quoting.
-if ((Split-Path $AgentExecutable -Leaf) -match '(?i)^copilot(\.exe)?$') {
+$agentLeaf = Split-Path $AgentExecutable -Leaf
+if ($agentLeaf -match '(?i)^copilot(\.exe|\.cmd)?$') {
+    # GitHub Copilot CLI accepts a comma-separated tool list.
     $psiArgumentList = @(
         "--allow-tool=read,write,shell",
         "--no-ask-user",
         "-s"
     )
+} elseif ($agentLeaf -match '(?i)^codex(\.exe|\.cmd)?$') {
+    # Codex exec reads the complete prompt from stdin when '-' is supplied.
+    # workspace-write is the least privilege needed for repository changes.
+    if ($AgentArguments) {
+        $psiArgumentList = $AgentArguments -split '\s+'
+    } else {
+        $psiArgumentList = @(
+            "exec",
+            "--sandbox",
+            "workspace-write",
+            "-"
+        )
+    }
 } else {
     $psiArgumentList = @()
     if ($AgentArguments) {
