@@ -1,6 +1,6 @@
 {
-  "last_main_sha": "41521c173a1e67b924e244cf40b58acc5941b443",
-  "verified_sha": "41521c173a1e67b924e244cf40b58acc5941b443",
-  "decision_required": false,
+  "last_main_sha": "bd214035dc75918ec75e4c48e324cefe44acfd95",
+  "verified_sha": "bd214035dc75918ec75e4c48e324cefe44acfd95",
+  "decision_required": true,
   "ci_required": false
 }
