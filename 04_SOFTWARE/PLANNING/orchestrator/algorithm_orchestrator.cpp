@@ -63,6 +63,10 @@ bool valid_candidate(const CandidateSolution& candidate) {
     return true;
 }
 
+bool accepts_candidates(RunState state) {
+    return state == RunState::Candidate || state == RunState::Completed;
+}
+
 bool better_candidate(const CandidateSolution& candidate,
                       const CandidateSolution& current,
                       const MissionProblem& problem) {
@@ -130,7 +134,7 @@ OrchestratorDecision AlgorithmOrchestrator::solve(SolverContext& context) {
         decision.considered_solvers.push_back(meta.solver_id);
 
         const auto state = solver->run(context);
-        (void)state;
+        if (!accepts_candidates(state)) continue;
 
         for (const auto& candidate : context.candidates()) {
             if (candidate.solver_id != meta.solver_id || !valid_candidate(candidate)) {
