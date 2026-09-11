@@ -101,5 +101,17 @@ int main() {
         assert(decision.selected_candidate_id == "ORCH-LEX-003:c:1");
     }
 
+    // Unsupported objective priorities must not silently fall back to an arbitrary ranking.
+    {
+        auto problem = base_problem("ORCH-INVALID-004", {"unknown_priority"});
+        Context context(problem);
+        AlgorithmOrchestrator orchestrator(make_solvers());
+        const auto decision = orchestrator.solve(context);
+        assert(decision.feasibility == Feasibility::Uncertain);
+        assert(decision.selected_solver_id.empty());
+        assert(decision.selected_candidate_id.empty());
+        assert(decision.explanation.find("неподдерживаемый приоритет") != std::string::npos);
+    }
+
     return 0;
 }
