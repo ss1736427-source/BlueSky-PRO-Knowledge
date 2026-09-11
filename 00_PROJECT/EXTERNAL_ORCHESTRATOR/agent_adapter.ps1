@@ -91,14 +91,17 @@ if ($agentLeaf -match '(?i)^copilot(\.exe|\.cmd)?$') {
         $psiArgumentList = @("exec", "--sandbox", "workspace-write", "-")
     }
 } elseif ($agentLeaf -match '(?i)^codex\.cmd$') {
+    # .cmd is not a native executable. Run it through cmd.exe and pass the
+    # complete command as the /c payload so paths containing spaces are handled
+    # without the extra quote layer that breaks ProcessStartInfo.ArgumentList.
     $psiFileName = $env:ComSpec
-    $cmdPath = $AgentExecutable -replace '([%&()!^"<>|])', '^$1'
     if ($AgentArguments) {
         $cmdArgs = $AgentArguments
     } else {
         $cmdArgs = 'exec --sandbox workspace-write -'
     }
-    $psiArgumentList = @('/d', '/s', '/c', ('""{0}" {1}"' -f $cmdPath, $cmdArgs))
+    $cmdCommand = 'call "' + $AgentExecutable + '" ' + $cmdArgs
+    $psiArgumentList = @('/d', '/c', $cmdCommand)
 } elseif ($agentLeaf -match '(?i)^codex\.ps1$') {
     $psiFileName = 'powershell.exe'
     if ($AgentArguments) {
