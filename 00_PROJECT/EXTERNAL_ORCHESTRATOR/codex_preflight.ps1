@@ -33,10 +33,29 @@ if ($LASTEXITCODE -ne 0) {
 }
 Write-Host "Codex version: $($versionOutput -join ' ')"
 
-$statusOutput = & $CodexExecutable login status 2>&1
-$statusCode = $LASTEXITCODE
+# Codex CLI writes the successful login-status message to stderr on Windows.
+# Capture that stream explicitly so PowerShell's ErrorActionPreference=Stop does
+# not turn a successful native command into a terminating PowerShell error.
+$statusErrorFile = [System.IO.Path]::GetTempFileName()
+try {
+    $statusOutput = & $CodexExecutable login status 2> $statusErrorFile
+    $statusCode = $LASTEXITCODE
+    $statusError = if (Test-Path -LiteralPath $statusErrorFile) {
+        Get-Content -LiteralPath $statusErrorFile -Raw -ErrorAction SilentlyContinue
+    } else {
+        ""
+    }
+} finally {
+    Remove-Item -LiteralPath $statusErrorFile -Force -ErrorAction SilentlyContinue
+}
+
 Write-Host "Codex login status exit code: $statusCode"
-Write-Host ($statusOutput -join [Environment]::NewLine)
+if ($statusOutput) {
+    Write-Host ($statusOutput -join [Environment]::NewLine)
+}
+if ($statusError) {
+    Write-Host $statusError.TrimEnd()
+}
 
 if ($statusCode -ne 0) {
     Write-Error "Codex login status failed. Re-authentication is required before the orchestrator can invoke the agent."
