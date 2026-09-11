@@ -7,21 +7,20 @@ $ErrorActionPreference = "Stop"
 
 if (-not $env:BS_CURRENT_SHA) { throw "BS_CURRENT_SHA is not set." }
 
-# If no agent was explicitly configured, discover the project-local Codex first,
-# then the environment-configured Codex, then PATH, then legacy Copilot CLI.
+# Prefer the Codex installation explicitly managed for this workspace.
+# Resolve the repository root from this script location, not from the caller's CWD.
 if (-not $AgentExecutable) {
-    # Project-local Windows installation convention used by this workspace.
-    $repoRoot = (Get-Location).Path
-    $flightPlanningRoot = Split-Path (Split-Path $repoRoot -Parent) -Parent
+    $repoRoot = Split-Path $PSScriptRoot -Parent | Split-Path -Parent
+    $flightPlanningRoot = Split-Path $repoRoot -Parent
     $localCodex = Join-Path $flightPlanningRoot "TOOLS\codex\codex.cmd"
-    if (Test-Path -LiteralPath $localCodex) {
+    if (Test-Path -LiteralPath $localCodex -PathType Leaf) {
         $AgentExecutable = (Resolve-Path -LiteralPath $localCodex).Path
         Write-Host "Agent auto-detected: Codex CLI ($AgentExecutable)"
     }
 }
 
 if (-not $AgentExecutable) {
-    if ($env:BS_CODEX_EXECUTABLE -and (Test-Path -LiteralPath $env:BS_CODEX_EXECUTABLE)) {
+    if ($env:BS_CODEX_EXECUTABLE -and (Test-Path -LiteralPath $env:BS_CODEX_EXECUTABLE -PathType Leaf)) {
         $AgentExecutable = (Resolve-Path -LiteralPath $env:BS_CODEX_EXECUTABLE).Path
         Write-Host "Agent auto-detected: Codex CLI ($AgentExecutable)"
     }
@@ -78,7 +77,6 @@ When no user decision is required, continue automatically. When a user decision 
 
 $agentLeaf = Split-Path $AgentExecutable -Leaf
 if ($agentLeaf -match '(?i)^copilot(\.exe|\.cmd)?$') {
-    # GitHub Copilot CLI accepts a comma-separated tool list.
     $psiFileName = $AgentExecutable
     $psiArgumentList = @(
         "--allow-tool=read,write,shell",
@@ -86,7 +84,6 @@ if ($agentLeaf -match '(?i)^copilot(\.exe|\.cmd)?$') {
         "-s"
     )
 } elseif ($agentLeaf -match '(?i)^codex(\.exe)?$') {
-    # Native Codex executable.
     $psiFileName = $AgentExecutable
     if ($AgentArguments) {
         $psiArgumentList = $AgentArguments -split '\s+'
@@ -94,8 +91,6 @@ if ($agentLeaf -match '(?i)^copilot(\.exe|\.cmd)?$') {
         $psiArgumentList = @("exec", "--sandbox", "workspace-write", "-")
     }
 } elseif ($agentLeaf -match '(?i)^codex\.cmd$') {
-    # Windows .cmd wrappers cannot be passed directly to Process.Start.
-    # Run the wrapper through cmd.exe while preserving the existing prompt/stdin flow.
     $psiFileName = $env:ComSpec
     $cmdPath = $AgentExecutable -replace '([%&()!^"<>|])', '^$1'
     if ($AgentArguments) {
@@ -105,7 +100,6 @@ if ($agentLeaf -match '(?i)^copilot(\.exe|\.cmd)?$') {
     }
     $psiArgumentList = @('/d', '/s', '/c', ('""{0}" {1}"' -f $cmdPath, $cmdArgs))
 } elseif ($agentLeaf -match '(?i)^codex\.ps1$') {
-    # PowerShell wrappers must be launched through powershell.exe.
     $psiFileName = 'powershell.exe'
     if ($AgentArguments) {
         $codexArgs = $AgentArguments
