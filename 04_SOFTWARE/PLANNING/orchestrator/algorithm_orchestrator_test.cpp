@@ -73,6 +73,27 @@ public:
     void cancel() override {}
 };
 
+class TimeoutCandidateSolver final : public Solver {
+public:
+    SolverMetadata metadata() const override { return {"timeout-candidate", "test", {"point_to_point"}, false, true}; }
+    bool eligible(const MissionProblem& problem) const override {
+        return problem.problem_class == "point_to_point";
+    }
+    RunState run(SolverContext& context) override {
+        CandidateSolution candidate;
+        candidate.candidate_id = context.problem().mission_id + ":timeout-candidate:1";
+        candidate.solver_id = "timeout-candidate";
+        candidate.solver_version = "test";
+        candidate.route_elements = {"A", "B"};
+        candidate.estimated_time_s = 1.0;
+        candidate.objective_score = 0.1;
+        candidate.feasibility = Feasibility::Feasible;
+        context.publish(std::move(candidate));
+        return RunState::Timeout;
+    }
+    void cancel() override {}
+};
+
 std::vector<std::unique_ptr<Solver>> make_solvers() {
     auto heuristic = [](const PlanningNode& from, const PlanningNode& to) {
         const double dx = from.x - to.x;
@@ -123,8 +144,6 @@ int main() {
     assert(std::abs(context.candidates()[0].estimated_time_s - 5.0) < 1e-9);
     assert(std::abs(context.candidates()[1].estimated_time_s - 5.0) < 1e-9);
 
-    // Mission-profile change: minimum-cost profile prefers Dijkstra and
-    // therefore evaluates it first; final selection remains candidate-based.
     MissionProblem cost_problem = problem;
     cost_problem.mission_id = "ORCH-PROFILE-002";
     cost_problem.objective_priorities = {"minimum_cost"};
@@ -140,9 +159,6 @@ int main() {
     assert(cost_decision.selected_candidate_id == "ORCH-PROFILE-002:dijkstra:1");
     assert(cost_context.candidates().size() == 2);
 
-    // Graph characteristic change: start and goal coincide, so the Euclidean
-    // heuristic carries no information. Dijkstra becomes the preferred
-    // deterministic ordering even though A* remains eligible.
     PlanningGraph zero_information_graph = graph;
     zero_information_graph.nodes[1].x = 0.0;
     zero_information_graph.nodes[1].y = 0.0;
@@ -165,7 +181,6 @@ int main() {
     assert(zero_information_decision.selected_candidate_id == "ORCH-GRAPH-003:dijkstra:1");
     assert(zero_information_context.candidates().size() == 2);
 
-    // Condition change: A* has no heuristic and becomes ineligible; Dijkstra must be selected.
     MissionProblem no_heuristic_problem = problem;
     no_heuristic_problem.mission_id = "ORCH-CONDITION-004";
     TestContext fallback_context(no_heuristic_problem, ComputeBudget{1000, 256, 8});
@@ -184,8 +199,6 @@ int main() {
     assert(fallback_context.candidates().size() == 1);
     assert(std::abs(fallback_context.candidates()[0].objective_score - 5.0) < 1e-9);
 
-    // Candidate ranking must use the metric named by the mission objective.
-    // For minimum_cost, a lower objective score wins even when its time is longer.
     MissionProblem ranking_problem = problem;
     ranking_problem.mission_id = "ORCH-RANKING-005";
     ranking_problem.objective_priorities = {"minimum_cost"};
@@ -200,8 +213,6 @@ int main() {
     assert(ranking_decision.selected_solver_id == "slow-cheap");
     assert(ranking_decision.selected_candidate_id == "ORCH-RANKING-005:slow-cheap:1");
 
-    // Candidate integrity gate: an invalid feasible candidate must never win
-    // ranking merely because it reports a better objective score.
     MissionProblem validation_problem = problem;
     validation_problem.mission_id = "ORCH-VALIDATION-006";
     TestContext validation_context(validation_problem, ComputeBudget{1000, 256, 8});
@@ -215,6 +226,22 @@ int main() {
     assert(validation_decision.selected_solver_id == "valid");
     assert(validation_decision.selected_candidate_id == "ORCH-VALIDATION-006:valid:1");
     assert(validation_context.candidates().size() == 2);
+
+    // Solver execution state is authoritative: a candidate published by a
+    // timed-out solver must not enter final ranking.
+    MissionProblem timeout_problem = problem;
+    timeout_problem.mission_id = "ORCH-STATE-007";
+    TestContext timeout_context(timeout_problem, ComputeBudget{1000, 256, 8});
+    std::vector<std::unique_ptr<Solver>> timeout_solvers;
+    timeout_solvers.push_back(std::make_unique<TimeoutCandidateSolver>());
+    timeout_solvers.push_back(std::make_unique<RankingSolver>("valid", 5.0, 1.0));
+    AlgorithmOrchestrator timeout_orchestrator(std::move(timeout_solvers));
+    const auto timeout_decision = timeout_orchestrator.solve(timeout_context);
+
+    assert(timeout_decision.feasibility == Feasibility::Feasible);
+    assert(timeout_decision.selected_solver_id == "valid");
+    assert(timeout_decision.selected_candidate_id == "ORCH-STATE-007:valid:1");
+    assert(timeout_context.candidates().size() == 2);
 
     return 0;
 }
