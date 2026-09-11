@@ -28,20 +28,20 @@ $defaultArguments = @("--dangerously-bypass-approvals-and-sandbox", "exec", "-")
 
 if ($agentLeaf -match '(?i)^codex\.exe$') {
     $psiFileName = $AgentExecutable
-    $psiArgumentList = if ($AgentArguments) { $AgentArguments -split '\s+' } else { $defaultArguments }
+    $psiArguments = if ($AgentArguments) { $AgentArguments } else { $defaultArguments -join ' ' }
 } elseif ($agentLeaf -match '(?i)^codex\.cmd$') {
     # npm installs Codex as a Windows .cmd shim. Invoke the shim through cmd.exe
     # with /c CALL so paths containing spaces are handled correctly and the shim's
     # exit code is propagated back to the orchestrator.
-    $psiFileName = Join-Path $env:ComSpec ""
-    $codexArgs = if ($AgentArguments) { $AgentArguments -split '\s+' } else { $defaultArguments }
+    $psiFileName = $env:ComSpec
+    $codexArgs = if ($AgentArguments) { $AgentArguments } else { $defaultArguments -join ' ' }
     $quotedExecutable = '"' + $AgentExecutable.Replace('"', '\"') + '"'
-    $commandLine = "call $quotedExecutable " + ($codexArgs -join ' ')
-    $psiArgumentList = @('/d', '/s', '/c', $commandLine)
+    $commandLine = "call $quotedExecutable $codexArgs"
+    $psiArguments = '/d /s /c "' + $commandLine.Replace('"', '\"') + '"'
 } elseif ($agentLeaf -match '(?i)^codex\.ps1$') {
     $psiFileName = 'powershell.exe'
     $codexArgs = if ($AgentArguments) { $AgentArguments } else { '--dangerously-bypass-approvals-and-sandbox exec -' }
-    $psiArgumentList = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $AgentExecutable) + ($codexArgs -split '\s+')
+    $psiArguments = '-NoProfile -ExecutionPolicy Bypass -File "' + $AgentExecutable + '" ' + $codexArgs
 } else {
     Write-Error "Unsupported agent executable: $AgentExecutable"
     exit 1
@@ -49,12 +49,12 @@ if ($agentLeaf -match '(?i)^codex\.exe$') {
 
 $psi = [System.Diagnostics.ProcessStartInfo]::new()
 $psi.FileName = $psiFileName
+$psi.Arguments = $psiArguments
 $psi.UseShellExecute = $false
 $psi.CreateNoWindow = $true
 $psi.RedirectStandardInput = $true
 $psi.RedirectStandardOutput = $false
 $psi.RedirectStandardError = $false
-foreach ($arg in $psiArgumentList) { [void]$psi.ArgumentList.Add($arg) }
 
 $process = [System.Diagnostics.Process]::new()
 $process.StartInfo = $psi
