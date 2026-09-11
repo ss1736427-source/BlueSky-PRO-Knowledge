@@ -54,6 +54,12 @@ add_executable(orchestrator_rejection_reason_test
 
 target_link_libraries(orchestrator_rejection_reason_test PRIVATE bluesky_planning)
 
+add_executable(mission_model_contract_test
+    model/mission_model_contract_test.cpp
+)
+
+target_link_libraries(mission_model_contract_test PRIVATE bluesky_planning)
+
 enable_testing()
 add_test(NAME astar_dijkstra_benchmark COMMAND astar_dijkstra_benchmark)
 add_test(NAME orchestrator_integration_test COMMAND orchestrator_integration_test)
@@ -61,3 +67,4 @@ add_test(NAME orchestrator_route_validation_test COMMAND orchestrator_route_vali
 add_test(NAME orchestrator_determinism_test COMMAND orchestrator_determinism_test)
 add_test(NAME orchestrator_objective_test COMMAND orchestrator_objective_test)
 add_test(NAME orchestrator_rejection_reason_test COMMAND orchestrator_rejection_reason_test)
+add_test(NAME mission_model_contract_test COMMAND mission_model_contract_test)
