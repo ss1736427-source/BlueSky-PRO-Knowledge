@@ -55,9 +55,9 @@ C2-REQ-010
 
 ## 5. C2-REQ-003 — Quality Parameters
 
-**Disposition: PARTIAL / QUANTITATIVE BASIS HOLD.**
+**Disposition: PARTIAL / CONTROLLED BASIS IDENTIFIED; QUANTITATIVE BASIS HOLD.**
 
-Параметры качества C2 не получают произвольных численных значений. Для baseline требуется source/basis + applicability + allocation + verification method.
+`SYS-C2-003`, `C2-142-004/011/013/014`, `IF-C2-001` и `IV-C2-004` обеспечивают controlled qualitative basis, applicability gate, interface allocation и verification path для параметров качества C2. Произвольные численные значения не вводятся: quantitative baseline остаётся на hold до утверждения применимой operational/certification basis.
 
 ## 6. Master Register action
 
@@ -104,7 +104,7 @@ KEEP / DERIVED / MERGE / GAP / CONFLICT
 
 `C2-REQ-007`, `C2-REQ-010` — DERIVED / COVERAGE CONFIRMED.
 
-`C2-REQ-003`, `C2-REQ-008` — не порождают новый SYS-REQ на текущем evidence level.
+`C2-REQ-003`, `C2-REQ-008` — не порождают новый SYS-REQ на текущем evidence level; для `C2-REQ-003` quantitative closure остаётся открытым.
 
 ## 10. Status
 

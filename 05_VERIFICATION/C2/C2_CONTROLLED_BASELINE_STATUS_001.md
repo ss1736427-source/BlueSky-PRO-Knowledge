@@ -32,7 +32,7 @@ system: BlueSky PRO
 |---|---|---|
 | C2-CAND-001 | DERIVED | сохранить как derived allocation до exact reconciliation |
 | C2-CAND-002 | DERIVED | связать с существующим C2/Safety контуром; не дублировать |
-| C2-CAND-003 | PARTIAL | количественные критерии не назначать без controlled basis |
+| C2-CAND-003 | PARTIAL / CONTROLLED BASIS IDENTIFIED | использовать SYS-C2-003, C2-142-004/011/013/014, IF-C2-001 и IV-C2-004; количественные значения не назначать без утверждённой operational/certification basis |
 | C2-CAND-004 | DERIVED | сохранить как interface/system allocation |
 | C2-CAND-005 | DERIVED | использовать существующий logging/evidence контур |
 | C2-CAND-006 | MERGE/SCOPE REVIEW | не создавать новый SYS-REQ; проверить operational responsibility |
@@ -74,11 +74,11 @@ source
 
 ## 6. Следующий controlled action
 
-Точечно проверить оставшийся количественный вопрос:
+Сохранить quantitative closure hold по оставшемуся вопросу:
 
 1. `C2-CAND-003` — наличие контролируемой основы для количественных C2 quality/QoS parameters.
 
-До получения такой основы `MASTER_REQUIREMENTS_REGISTER.md` не изменяется.
+Контролируемая qualitative basis подтверждена через clause mapping, `SYS-C2-003`, `IF-C2-001` и `IV-C2-004`. До утверждения source-specific quantitative values `MASTER_REQUIREMENTS_REGISTER.md` не изменяется.
 
 ## 7. Authoritative rule
 

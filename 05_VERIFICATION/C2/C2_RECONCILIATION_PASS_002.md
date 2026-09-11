@@ -37,7 +37,7 @@ basis: C2-CLAUSE-LEVEL-MAPPING-001
 |---|---|---|
 | C2-REQ-001 / C2 mode | DERIVED / OVERLAP | покрывается DEC-012 и существующей архитектурной границей; новый SYS-REQ не создавать |
 | C2-REQ-002 / state monitoring | DERIVED / MERGE | распределить через существующий degradation/safety контур; новый SYS-REQ не создавать |
-| C2-REQ-003 / quality parameters | PARTIAL | требуется контролируемая количественная основа; GAP не доказан |
+| C2-REQ-003 / quality parameters | PARTIAL / CONTROLLED BASIS IDENTIFIED | SYS-C2-003, C2-142-004/011/013/014, IF-C2-001 and IV-C2-004 provide the controlled scope, allocation and verification path; quantitative values remain conditional on approved operational/certification basis |
 | C2-REQ-004 / provider boundary | DERIVED | покрывается DEC-012 и IF-C2-001; обязанности provider остаются внешними |
 | C2-REQ-005 / cause/status | DERIVED / OVERLAP | покрывается C2 safety allocation и существующим degradation handling |
 | C2-REQ-006 / loss response | MERGE CANDIDATE | использовать SYS-REQ-081/086/093 + SAF allocation; новый SYS-REQ не создавать |
@@ -109,11 +109,11 @@ BASELINE CHANGES: 0
 
 ## 9. Remaining controlled actions
 
-Остаётся один количественный вопрос, требующий controlled basis:
+Количественное закрытие остаётся на hold до утверждения применимой operational/certification basis:
 
 1. C2 quality/QoS parameters (`C2-REQ-003`).
 
-До установления source, applicability, allocation и verification method новые quantitative values и SYS-REQ не создаются.
+Контролируемая qualitative basis уже определена через `SYS-C2-003`, clause mapping, `IF-C2-001` и `IV-C2-004`. До утверждения source-specific quantitative values новые numerical values и SYS-REQ не создаются.
 
 ## 10. Boundary rule
 
@@ -123,7 +123,7 @@ BASELINE CHANGES: 0
 
 **C2 RECONCILIATION PASS 002: NO PROVEN SYSTEM REQUIREMENT GAP.**
 
-`C2-REQ-007`, `C2-REQ-008` и `C2-REQ-010` имеют статус `DERIVED / COVERAGE CONFIRMED`; `C2-REQ-003` остаётся `PARTIAL` без доказанного GAP.
+`C2-REQ-007`, `C2-REQ-008` и `C2-REQ-010` имеют статус `DERIVED / COVERAGE CONFIRMED`; `C2-REQ-003` остаётся `PARTIAL / CONTROLLED BASIS IDENTIFIED` без доказанного GAP, с quantitative closure hold.
 
 ## 12. Status
 
