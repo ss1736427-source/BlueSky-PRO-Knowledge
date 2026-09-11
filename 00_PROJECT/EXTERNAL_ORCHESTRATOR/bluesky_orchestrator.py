@@ -24,11 +24,7 @@ CI_WORKFLOW_PATH = ".github/workflows/planning-benchmark.yml"
 
 
 def gh_get(path: str):
-    """Read a GitHub API endpoint without requiring a GITHUB_TOKEN.
-
-    Public repositories are read directly over HTTPS. GitHub CLI remains a
-    fallback for authenticated/private-repository setups.
-    """
+    """Read a GitHub API endpoint without requiring a GITHUB_TOKEN."""
     url = "https://api.github.com/" + path.lstrip("/")
     request = Request(url, headers={"Accept": "application/vnd.github+json", "User-Agent": "BlueSky-PRO-orchestrator"})
     try:
@@ -75,8 +71,7 @@ def main_commit():
 
 
 def workflow_required_for_commit(commit):
-    files = commit.get("files", [])
-    changed = [f.get("filename", "") for f in files]
+    changed = [f.get("filename", "") for f in commit.get("files", [])]
     return any(p.startswith(CI_PATH_PREFIXES) for p in changed) or CI_WORKFLOW_PATH in changed
 
 
@@ -92,6 +87,62 @@ def ci_state(sha):
     if run.get("conclusion") == "success":
         return "PASS", f"{run.get('name', 'workflow')}: success"
     return "FAIL", f"{run.get('name', 'workflow')}: {run.get('conclusion') or 'unknown'}"
+
+
+def git_run(args):
+    return subprocess.run(["git", *args], cwd=Path.cwd(), capture_output=True, text=True)
+
+
+def sync_local_checkout(target_sha):
+    """Fast-forward local checkout safely, preserving known runtime files."""
+    head = git_run(["rev-parse", "HEAD"])
+    if head.returncode != 0:
+        raise RuntimeError(f"Local Git HEAD check failed: {head.stderr.strip()}")
+    local_sha = head.stdout.strip()
+    if local_sha == target_sha:
+        return True
+
+    status = git_run(["status", "--porcelain"]).stdout.splitlines()
+    allowed_runtime = {".bluesky_orchestrator_state.json", ".obsidian/workspace.json"}
+    protected = []
+    for line in status:
+        path = line[3:] if len(line) >= 4 else line
+        if path not in allowed_runtime:
+            protected.append(line)
+    if protected:
+        print("LOCAL SYNC BLOCKED: uncommitted user changes are present", flush=True)
+        for line in protected:
+            print(f"  {line}", flush=True)
+        return False
+
+    fetch = git_run(["fetch", "origin", BRANCH])
+    if fetch.returncode != 0:
+        print(f"LOCAL SYNC ERROR: {fetch.stderr.strip() or fetch.stdout.strip()}", flush=True)
+        return False
+
+    stash = git_run(["stash", "push", "-m", "BlueSky PRO orchestrator runtime state", "--", ".bluesky_orchestrator_state.json", ".obsidian/workspace.json"])
+    if stash.returncode != 0:
+        print(f"LOCAL SYNC ERROR: cannot preserve runtime files: {stash.stderr.strip() or stash.stdout.strip()}", flush=True)
+        return False
+
+    merge = git_run(["merge", "--ff-only", f"origin/{BRANCH}"])
+    if merge.returncode != 0:
+        print(f"LOCAL SYNC ERROR: fast-forward failed: {merge.stderr.strip() or merge.stdout.strip()}", flush=True)
+        if stash.stdout.strip().lower().startswith("no local changes"):
+            return False
+        pop = git_run(["stash", "pop"])
+        if pop.returncode != 0:
+            print("LOCAL SYNC ERROR: runtime-state restore also failed; user intervention required", flush=True)
+        return False
+
+    if not stash.stdout.strip().lower().startswith("no local changes"):
+        pop = git_run(["stash", "pop"])
+        if pop.returncode != 0:
+            print(f"LOCAL SYNC ERROR: runtime-state restore failed: {pop.stderr.strip() or pop.stdout.strip()}", flush=True)
+            return False
+
+    print(f"LOCAL SYNC: {local_sha[:12]} -> {target_sha[:12]}", flush=True)
+    return True
 
 
 def invoke_agent(sha, reason):
@@ -151,6 +202,10 @@ def loop():
                 print("STOP: user decision required for current SHA", flush=True)
                 return 42
 
+            if not sync_local_checkout(sha):
+                print("STOP: local checkout requires user intervention", flush=True)
+                return 42
+
             ci_required = bool(state.get("ci_required", True))
             if ci_required:
                 status, detail = ci_state(sha)
@@ -188,7 +243,7 @@ def loop():
                 if rc == 42:
                     return 42
             time.sleep(POLL_SECONDS)
-        except (RuntimeError, KeyError, json.JSONDecodeError) as exc:
+        except (RuntimeError, KeyError, json.JSONDecodeError, subprocess.CalledProcessError) as exc:
             print(f"ORCHESTRATOR ERROR: {exc}", file=sys.stderr, flush=True)
             time.sleep(POLL_SECONDS)
 
