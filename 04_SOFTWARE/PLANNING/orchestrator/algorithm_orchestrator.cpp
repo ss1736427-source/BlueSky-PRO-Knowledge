@@ -16,9 +16,6 @@ bool has_priority(const MissionProblem& problem, const std::string& token) {
            problem.objective_priorities.end();
 }
 
-// A* is useful only when the supplied graph geometry gives its heuristic
-// information. If start and goal coincide, Euclidean h is zero everywhere
-// for this model and Dijkstra is the appropriate deterministic ordering.
 bool graph_has_heuristic_information(const MissionProblem& problem) {
     if (!problem.planning_graph) return false;
 
@@ -116,9 +113,6 @@ OrchestratorDecision AlgorithmOrchestrator::solve(SolverContext& context) {
     CandidateSolution best;
     bool have_best = false;
 
-    // Mission profile and graph characteristics define a deterministic solver
-    // preference. The preferred solver is evaluated first, while all eligible
-    // solvers remain available so that the final decision is candidate-based.
     std::stable_sort(solvers_.begin(), solvers_.end(),
                      [&context](const std::unique_ptr<Solver>& lhs,
                                 const std::unique_ptr<Solver>& rhs) {
@@ -142,7 +136,9 @@ OrchestratorDecision AlgorithmOrchestrator::solve(SolverContext& context) {
         if (!accepts_candidates(state)) continue;
 
         for (const auto& candidate : context.candidates()) {
-            if (candidate.solver_id != meta.solver_id || !valid_candidate(candidate)) {
+            if (candidate.solver_id != meta.solver_id ||
+                candidate.solver_version != meta.version ||
+                !valid_candidate(candidate)) {
                 continue;
             }
             if (!have_best || better_candidate(candidate, best, context.problem())) {
