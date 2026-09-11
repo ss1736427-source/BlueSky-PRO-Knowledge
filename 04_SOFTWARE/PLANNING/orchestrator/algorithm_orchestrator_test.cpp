@@ -16,12 +16,14 @@ public:
     TestContext(const MissionProblem& p, ComputeBudget b) : p_(p), b_(b) {}
     const MissionProblem& problem() const override { return p_; }
     const ComputeBudget& budget() const override { return b_; }
-    bool cancelled() const override { return false; }
+    bool cancelled() const override { return cancelled_; }
     void publish(CandidateSolution c) override { candidates_.push_back(std::move(c)); }
     const std::vector<CandidateSolution>& candidates() const override { return candidates_; }
+    void set_cancelled(bool value) { cancelled_ = value; }
 private:
     const MissionProblem& p_;
     ComputeBudget b_;
+    bool cancelled_{false};
     std::vector<CandidateSolution> candidates_;
 };
 
@@ -239,6 +241,19 @@ int main() {
     assert(timeout_decision.selected_solver_id == "valid");
     assert(timeout_decision.selected_candidate_id == "ORCH-STATE-007:valid:1");
     assert(timeout_context.candidates().size() == 2);
+
+    MissionProblem cancelled_problem = problem;
+    cancelled_problem.mission_id = "ORCH-CANCEL-008";
+    TestContext cancelled_context(cancelled_problem, ComputeBudget{1000, 256, 8});
+    cancelled_context.set_cancelled(true);
+    AlgorithmOrchestrator cancelled_orchestrator(make_solvers());
+    const auto cancelled_decision = cancelled_orchestrator.solve(cancelled_context);
+
+    assert(cancelled_decision.feasibility == Feasibility::Uncertain);
+    assert(cancelled_decision.considered_solvers.empty());
+    assert(cancelled_decision.selected_solver_id.empty());
+    assert(cancelled_decision.selected_candidate_id.empty());
+    assert(cancelled_context.candidates().empty());
 
     return 0;
 }
