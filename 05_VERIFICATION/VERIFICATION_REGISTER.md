@@ -225,7 +225,21 @@ Evidence
 
 These documents are linked through the register; their contents are not duplicated here.
 
-## 13. Audit findings — initial pass
+## 13. C2 verification allocation
+
+The C2 verification case definitions are controlled in:
+
+`05_VERIFICATION/C2/C2_VERIFICATION_CASES_001.md`
+
+The stable case identities are:
+
+```text
+C2-V01 … C2-V08
+```
+
+They map to the existing interface allocations `IV-C2-001..IV-C2-008`. The cases are `DEFINED`; no execution result, evidence or verification claim exists yet.
+
+## 14. Audit findings — initial pass
 
 ```text
 V-REG-001  Verification Register was not previously present as a dedicated controlled identity register.
@@ -236,7 +250,7 @@ V-REG-005  Exact requirement allocation for Navigation cases remains pending rec
 V-REG-006  Navigation requirement allocation is maintained as a separate working record and does not create requirement authority.
 ```
 
-## 14. Completion gate
+## 15. Completion gate
 
 ```text
 [ ] all existing verification IDs inventoried
