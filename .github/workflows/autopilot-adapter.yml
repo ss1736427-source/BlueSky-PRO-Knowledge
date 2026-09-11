@@ -1,0 +1,31 @@
+name: BlueSky Autopilot Adapter
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '04_SOFTWARE/AUTOPILOT_ADAPTER/**'
+      - '04_SOFTWARE/PLANNING/model/**'
+      - '.github/workflows/autopilot-adapter.yml'
+  pull_request:
+    paths:
+      - '04_SOFTWARE/AUTOPILOT_ADAPTER/**'
+      - '04_SOFTWARE/PLANNING/model/**'
+      - '.github/workflows/autopilot-adapter.yml'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure
+        run: cmake -S 04_SOFTWARE/AUTOPILOT_ADAPTER -B build/autopilot-adapter -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build/autopilot-adapter --config Release --parallel
+
+      - name: Test
+        run: ctest --test-dir build/autopilot-adapter --output-on-failure
