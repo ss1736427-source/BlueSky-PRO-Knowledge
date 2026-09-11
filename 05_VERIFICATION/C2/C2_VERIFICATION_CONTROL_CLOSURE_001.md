@@ -69,10 +69,16 @@ No new value is inferred from this record.
 ## 5. Remaining controlled actions
 
 1. Complete and review the applicable fields of `C2-VER-CFG-001`.
-2. Confirm each case basis against `MASTER_REQUIREMENTS_REGISTER.md` before
-   execution.
+2. Resolve the authoritative C2 requirement mapping through controlled change
+   before execution.
 3. Execute the cases and create separate result records.
 4. Register resulting evidence and update verification status.
+
+The pre-execution basis review is recorded in
+`C2-VERIFICATION-CONFIGURATION-001`. It confirmed that the current case bases
+are controlled subordinate allocations, but no authoritative C2 requirement
+identity is present in `MASTER_REQUIREMENTS_REGISTER.md`. No requirement was
+promoted or created by that review.
 
 ## 6. Status
 

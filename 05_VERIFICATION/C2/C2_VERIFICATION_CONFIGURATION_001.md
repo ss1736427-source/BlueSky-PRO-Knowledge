@@ -70,7 +70,27 @@ result invalid for the claimed configuration under `CONFIGURATION-BASELINE-001`.
 The record does not establish quantitative C2 thresholds, protocol values,
 provider obligations or certification applicability.
 
-## 6. Traceability
+## 6. Pre-execution basis review
+
+The case basis was checked against
+`01_REQUIREMENTS/SYSTEM/MASTER_REQUIREMENTS_REGISTER.md` before execution
+planning:
+
+| Case group | Basis references checked | Review disposition |
+|---|---|---|
+| C2-V01, C2-V02, C2-V04, C2-V05, C2-V06, C2-V07, C2-V08 | `C2-REQ-*`, `SYS-C2-*`, `C2-142-*`, `IF-C2-001`, `C2-F-*` | Controlled subordinate allocation confirmed; no matching authoritative C2 requirement identity was found in the Master Requirements Register. |
+| C2-V03 | `C2-REQ-008`, `SYS-C2-008`, `C2-F-005`, `IF-C2-001` | Controlled subordinate allocation confirmed; no matching authoritative C2 requirement identity was found in the Master Requirements Register. |
+
+This review does not promote candidate or subordinate references, create a
+duplicate requirement, or establish quantitative acceptance values. The
+authoritative requirement mapping remains an execution prerequisite; until it
+is resolved through controlled change, the cases remain `DEFINED` and
+execution remains blocked.
+
+**Basis review status: COMPLETE — AUTHORITATIVE C2 REQUIREMENT MAPPING
+REMAINS OPEN.**
+
+## 7. Traceability
 
 ```text
 C2-VERIFICATION-CONFIGURATION-001
