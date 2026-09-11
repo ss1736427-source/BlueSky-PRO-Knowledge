@@ -44,8 +44,9 @@ Run appropriate tests after changes and do not claim CI success unless it belong
 When no user decision is required, return 0. When a user decision is required, return 42.
 "@
 
-# GitHub Copilot CLI accepts a comma-separated tool list. ProcessStartInfo
-# ArgumentList keeps it as one argument and avoids shell re-parsing.
+# GitHub Copilot CLI accepts a comma-separated tool list.
+# Windows PowerShell 5.1 does not expose ProcessStartInfo.ArgumentList,
+# so use the legacy Arguments property with Windows-compatible quoting.
 if ((Split-Path $AgentExecutable -Leaf) -match '(?i)^copilot(\.exe)?$') {
     $psiArgumentList = @(
         "--allow-tool=read,write,shell",
@@ -59,16 +60,24 @@ if ((Split-Path $AgentExecutable -Leaf) -match '(?i)^copilot(\.exe)?$') {
     }
 }
 
-$psi = [System.Diagnostics.ProcessStartInfo]::new()
+$psi = New-Object System.Diagnostics.ProcessStartInfo
 $psi.FileName = $AgentExecutable
-foreach ($arg in $psiArgumentList) {
-    [void]$psi.ArgumentList.Add($arg)
-}
 $psi.WorkingDirectory = (Get-Location).Path
 $psi.UseShellExecute = $false
 $psi.RedirectStandardInput = $true
 $psi.RedirectStandardOutput = $false
 $psi.RedirectStandardError = $false
+
+if ($psi.PSObject.Properties.Name -contains 'ArgumentList') {
+    foreach ($arg in $psiArgumentList) {
+        [void]$psi.ArgumentList.Add($arg)
+    }
+} else {
+    $quotedArgs = foreach ($arg in $psiArgumentList) {
+        '"' + ($arg -replace '(\\*)"', '$1$1\"' -replace '(\\+)$', '$1$1') + '"'
+    }
+    $psi.Arguments = ($quotedArgs -join ' ')
+}
 
 $p = [System.Diagnostics.Process]::Start($psi)
 try {
