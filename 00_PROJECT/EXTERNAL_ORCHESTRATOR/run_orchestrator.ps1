@@ -14,4 +14,11 @@ $env:BS_AGENT_CONTINUE_SECONDS = "1"
 if ($AgentExecutable) { $env:BS_AGENT_EXECUTABLE = $AgentExecutable }
 if ($AgentArguments) { $env:BS_AGENT_ARGUMENTS = $AgentArguments }
 
-python "$PSScriptRoot\bluesky_orchestrator.py"
+$repoRoot = Split-Path $PSScriptRoot -Parent | Split-Path -Parent
+Push-Location $repoRoot
+try {
+    python "$PSScriptRoot\bluesky_orchestrator.py"
+}
+finally {
+    Pop-Location
+}
