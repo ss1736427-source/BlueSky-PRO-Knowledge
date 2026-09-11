@@ -8,7 +8,7 @@ $ErrorActionPreference = "Stop"
 if (-not $env:BS_CURRENT_SHA) { throw "BS_CURRENT_SHA is not set." }
 
 # If no agent was explicitly configured, discover the supported local
-# development agent automatically. A configured executable always wins.
+development agent automatically. A configured executable always wins.
 if (-not $AgentExecutable) {
     $copilot = Get-Command copilot -ErrorAction SilentlyContinue
     if ($copilot) {
@@ -38,10 +38,16 @@ Read these repository files before acting:
 - $protocol
 - $rules
 
-Verify local HEAD matches the supplied SHA. Continue only with an unambiguous technical step.
-Do not make product or architectural decisions. If one is required, stop and return exit code 42.
+Verify local HEAD matches the supplied SHA. Continue the current project work package from the recorded repository state.
+
+Select and execute the next smallest concrete technical step that is supported by the existing project documents and does not require a user decision. This may be documentation decomposition, traceability, controlled-record preparation, implementation, or verification, as appropriate to the current work package.
+
+Do not make product or architectural decisions. If a decision listed by the protocol is genuinely required and cannot be resolved from existing approved material, stop and return exit code 42.
+
+Do not stop with exit code 0 merely because the user did not name a clause, file, or exact action: first inspect the recorded current work package, open checkpoints, existing records, and repository history and continue the next deterministic technical step. Only return 0 without a new commit when the current work package has no remaining deterministic technical work or when the protocol explicitly requires stopping.
+
 Run appropriate tests after changes and do not claim CI success unless it belongs to the exact resulting SHA.
-When no user decision is required, return 0. When a user decision is required, return 42.
+When no user decision is required, continue automatically. When a user decision is required, return 42.
 "@
 
 # GitHub Copilot CLI accepts a comma-separated tool list.
