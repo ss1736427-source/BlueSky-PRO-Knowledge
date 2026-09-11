@@ -103,7 +103,7 @@ if ($agentLeaf -match '(?i)^copilot(\.exe|\.cmd)?$') {
     if ($AgentArguments) {
         $psiArgumentList = $AgentArguments -split '\s+'
     } else {
-        $psiArgumentList = @("exec", "--sandbox", "workspace-write", "-")
+        $psiArgumentList = @("-c", 'windows.sandbox="unelevated"', "exec", "--sandbox", "workspace-write", "-")
     }
     $psiArgumentsDirect = $false
 } elseif ($agentLeaf -match '(?i)^codex\.cmd$') {
@@ -112,7 +112,7 @@ if ($agentLeaf -match '(?i)^copilot(\.exe|\.cmd)?$') {
     # as independent ProcessStartInfo arguments, because that breaks cmd.exe's
     # parsing of paths containing spaces.
     $psiFileName = $env:ComSpec
-    $cmdArgs = if ($AgentArguments) { $AgentArguments } else { 'exec --sandbox workspace-write -' }
+    $cmdArgs = if ($AgentArguments) { $AgentArguments } else { '-c windows.sandbox="unelevated" exec --sandbox workspace-write -' }
     $psiArgumentsDirect = $true
     $psiArgumentsValue = '/d /c call "{0}" {1}' -f $AgentExecutable, $cmdArgs
     $psiArgumentList = @()
@@ -121,7 +121,7 @@ if ($agentLeaf -match '(?i)^copilot(\.exe|\.cmd)?$') {
     if ($AgentArguments) {
         $codexArgs = $AgentArguments
     } else {
-        $codexArgs = 'exec --sandbox workspace-write -'
+        $codexArgs = '-c windows.sandbox="unelevated" exec --sandbox workspace-write -'
     }
     $psiArgumentList = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $AgentExecutable) + ($codexArgs -split '\s+')
     $psiArgumentsDirect = $false
