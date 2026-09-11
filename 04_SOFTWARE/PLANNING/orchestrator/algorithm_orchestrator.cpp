@@ -126,8 +126,11 @@ bool better_candidate(const CandidateSolution& candidate,
     if (candidate.objective_score + 1e-9 < current.objective_score) return true;
     if (current.objective_score + 1e-9 < candidate.objective_score) return false;
 
-    return priority_rank(problem, candidate.solver_id) <
-           priority_rank(problem, current.solver_id);
+    const int candidate_rank = priority_rank(problem, candidate.solver_id);
+    const int current_rank = priority_rank(problem, current.solver_id);
+    if (candidate_rank != current_rank) return candidate_rank < current_rank;
+
+    return candidate.candidate_id < current.candidate_id;
 }
 
 } // namespace
