@@ -46,19 +46,17 @@ Run appropriate tests after changes and do not claim CI success unless it belong
 When no user decision is required, return 0. When a user decision is required, return 42.
 "@
 
-# GitHub Copilot CLI supports non-interactive execution with -p. Build the
-# command directly so the adapter works without a separate argument template.
-if ($AgentExecutable -match '(?i)(^|[\\/])copilot(\.exe)?$' -or (Split-Path $AgentExecutable -Leaf) -match '(?i)^copilot(\.exe)?$') {
-    $psiArguments = "-p " + '"' + ($prompt -replace '([`"\\])', '`$1' -replace '"', '\\"') + '"' + " --allow-tool='read,write,shell'"
-    $psi = [System.Diagnostics.ProcessStartInfo]::new()
-    $psi.FileName = $AgentExecutable
-    $psi.Arguments = $psiArguments
+# GitHub Copilot CLI supports programmatic execution from piped stdin.
+# Keep permissions explicit rather than using the unrestricted --allow-all mode.
+if ((Split-Path $AgentExecutable -Leaf) -match '(?i)^copilot(\.exe)?$') {
+    $psiArguments = "--allow-tool='read,write,shell' --no-ask-user -s"
 } else {
-    $psi = [System.Diagnostics.ProcessStartInfo]::new()
-    $psi.FileName = $AgentExecutable
-    $psi.Arguments = $AgentArguments
+    $psiArguments = $AgentArguments
 }
 
+$psi = [System.Diagnostics.ProcessStartInfo]::new()
+$psi.FileName = $AgentExecutable
+$psi.Arguments = $psiArguments
 $psi.WorkingDirectory = (Get-Location).Path
 $psi.UseShellExecute = $false
 $psi.RedirectStandardInput = $true
@@ -67,9 +65,7 @@ $psi.RedirectStandardError = $false
 
 $p = [System.Diagnostics.Process]::Start($psi)
 try {
-    if ($psi.Arguments -notmatch '(^|\s)-p\s') {
-        $p.StandardInput.WriteLine($prompt)
-    }
+    $p.StandardInput.WriteLine($prompt)
     $p.StandardInput.Close()
     $p.WaitForExit()
     exit $p.ExitCode
