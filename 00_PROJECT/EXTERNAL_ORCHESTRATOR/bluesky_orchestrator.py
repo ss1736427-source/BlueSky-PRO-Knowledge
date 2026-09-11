@@ -14,8 +14,6 @@ import subprocess
 import sys
 import time
 from pathlib import Path
-from urllib.request import Request, urlopen
-from urllib.error import HTTPError, URLError
 
 REPO = os.getenv("BS_REPO", "ss1736427-source/BlueSky-PRO-Knowledge")
 BRANCH = os.getenv("BS_BRANCH", "main")
@@ -23,29 +21,30 @@ POLL_SECONDS = int(os.getenv("BS_POLL_SECONDS", "5"))
 CI_GRACE_SECONDS = int(os.getenv("BS_CI_GRACE_SECONDS", "5"))
 STATE_FILE = Path(os.getenv("BS_STATE_FILE", ".bluesky_orchestrator_state.json"))
 ADAPTER = Path(os.getenv("BS_AGENT_ADAPTER", Path(__file__).with_name("agent_adapter.ps1")))
-API = "https://api.github.com"
 CI_PATH_PREFIXES = ("04_SOFTWARE/PLANNING/",)
 CI_WORKFLOW_PATH = ".github/workflows/planning-benchmark.yml"
 
 
 def gh_get(path: str):
-    token = os.getenv("GITHUB_TOKEN", "").strip()
-    if not token:
-        raise RuntimeError("GITHUB_TOKEN is not set")
-    # GitHub tokens are ASCII; fail early with a useful message instead of a
-    # low-level UnicodeEncodeError from http.client.
+    """Read a GitHub API endpoint using the authenticated GitHub CLI."""
     try:
-        token.encode("ascii")
-    except UnicodeEncodeError as exc:
-        raise RuntimeError("GITHUB_TOKEN contains non-ASCII characters; set the real GitHub token, not a placeholder") from exc
-    req = Request(API + path, headers={
-        "Accept": "application/vnd.github+json",
-        "Authorization": f"Bearer {token}",
-        "X-GitHub-Api-Version": "2022-11-28",
-        "User-Agent": "BlueSky-PRO-External-Orchestrator",
-    })
-    with urlopen(req, timeout=20) as response:
-        return json.load(response)
+        result = subprocess.run(
+            ["gh", "api", path],
+            check=True,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+        )
+    except FileNotFoundError as exc:
+        raise RuntimeError("GitHub CLI (gh) is not installed or is not in PATH") from exc
+    except subprocess.CalledProcessError as exc:
+        detail = (exc.stderr or exc.stdout or "GitHub CLI request failed").strip()
+        raise RuntimeError(f"GitHub CLI request failed: {detail}") from exc
+
+    try:
+        return json.loads(result.stdout)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError("GitHub CLI returned invalid JSON") from exc
 
 
 def load_state():
@@ -61,7 +60,7 @@ def save_state(state):
 
 
 def main_commit():
-    return gh_get(f"/repos/{REPO}/commits/{BRANCH}")
+    return gh_get(f"repos/{REPO}/commits/{BRANCH}")
 
 
 def workflow_required_for_commit(commit):
@@ -72,7 +71,7 @@ def workflow_required_for_commit(commit):
 
 
 def ci_state(sha):
-    runs = gh_get(f"/repos/{REPO}/actions/runs?head_sha={sha}&per_page=20").get("workflow_runs", [])
+    runs = gh_get(f"repos/{REPO}/actions/runs?head_sha={sha}&per_page=20").get("workflow_runs", [])
     runs = [r for r in runs if r.get("head_branch") == BRANCH and r.get("head_sha") == sha]
     if not runs:
         return "UNVERIFIED", "No CI run for this SHA"
@@ -155,7 +154,7 @@ def loop():
                 if rc != 0:
                     print(f"AGENT returned {rc}; retrying")
             time.sleep(POLL_SECONDS)
-        except (HTTPError, URLError, TimeoutError, RuntimeError, KeyError, json.JSONDecodeError) as exc:
+        except (RuntimeError, KeyError, json.JSONDecodeError) as exc:
             print(f"ORCHESTRATOR ERROR: {exc}", file=sys.stderr)
             time.sleep(POLL_SECONDS)
 
