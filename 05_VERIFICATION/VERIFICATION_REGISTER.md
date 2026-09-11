@@ -239,6 +239,13 @@ C2-V01 … C2-V08
 
 They map to the existing interface allocations `IV-C2-001..IV-C2-008`. The cases are `DEFINED`; no execution result, evidence or verification claim exists yet.
 
+The execution configuration is controlled in:
+
+`05_VERIFICATION/C2/C2_VERIFICATION_CONFIGURATION_001.md`
+
+The configuration record is `C2-VER-CFG-001`, linked to `CI-007` and `BL-VER`.
+It is `PLANNED`; no execution result or evidence is implied.
+
 ## 14. Audit findings — initial pass
 
 ```text
