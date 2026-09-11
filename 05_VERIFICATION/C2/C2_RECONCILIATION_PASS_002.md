@@ -95,7 +95,39 @@ IV-C2-008 version compatibility
 
 Значение допускается в baseline только после установления источника, applicability, system allocation и verification method.
 
-## 8. Master Register impact
+## 8. Verification record audit
+
+Проверка текущего каталога verification установила:
+
+```text
+IV-C2-001..IV-C2-008
+→ упоминаются в C2 allocation/ICD документах
+→ отдельные controlled verification-case records в репозитории не обнаружены
+```
+
+Найденный `09_VERIFICATION/Results/VER-007.md` относится к `SW-REQ-007` и `TEST-007`, имеет статус `NOT_RUN` и не подтверждает ни один C2 verification case.
+
+Следовательно:
+
+```text
+Verification allocation
+≠
+Verification case definition
+≠
+Execution result
+≠
+Evidence
+```
+
+Фактический control gap:
+
+```text
+C2-VER-GAP-001 — controlled C2 verification-case records are absent
+```
+
+Этот gap относится к verification-control layer и не является доказанным функциональным gap системы. Новые C2 verification cases, acceptance criteria и evidence records не создаются автоматически; их создание выполняется отдельным controlled action после проверки требований, интерфейса и safety allocation.
+
+## 9. Master Register impact
 
 ```text
 NEW SYS-REQ: 0
