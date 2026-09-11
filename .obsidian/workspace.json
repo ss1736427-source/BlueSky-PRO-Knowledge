@@ -11,10 +11,14 @@
             "id": "058fcba7e26ecc4b",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Граф"
+              "type": "markdown",
+              "state": {
+                "file": "PROJECT_KNOWLEDGE_IMPORT/README.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "README"
             }
           }
         ]
@@ -187,6 +191,7 @@
   },
   "active": "058fcba7e26ecc4b",
   "lastOpenFiles": [
+    "04_SOFTWARE/PLANNING/orchestrator/algorithm_orchestrator_rejection_reason_test.cpp",
     "06_PAYLOAD/BLUESKY_PAYLOAD_EQUIPMENT_INTEGRATION_SPEC.md",
     "04_SOFTWARE/PLANNING/orchestrator/algorithm_orchestrator_objective_test.cpp",
     "04_SOFTWARE/PLANNING/orchestrator/algorithm_orchestrator_determinism_test.cpp",
@@ -221,7 +226,6 @@
     "02_ARCHITECTURE/MISSION_PACKAGE/BLUESKY_MISSION_PACKAGE_BASELINE.md",
     "02_ARCHITECTURE/BLUESKY_ARCHITECTURE_GAP_MATRIX.md",
     "02_ARCHITECTURE/BLUESKY_MISSION_MODEL.md",
-    "02_ARCHITECTURE/BLUESKY_MISSION_OBJECTIVE_PROFILES.md",
-    "08_PLANNING/BLUESKY_ROUTE_CALCULATION_AND_OPTIMIZATION_SPEC.md"
+    "02_ARCHITECTURE/BLUESKY_MISSION_OBJECTIVE_PROFILES.md"
   ]
 }
