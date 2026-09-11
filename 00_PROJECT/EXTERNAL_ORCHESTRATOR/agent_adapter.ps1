@@ -6,7 +6,14 @@ param(
 $ErrorActionPreference = "Stop"
 
 if (-not $env:BS_CURRENT_SHA) { throw "BS_CURRENT_SHA is not set." }
-if (-not $AgentExecutable) { throw "BS_AGENT_EXECUTABLE is not set." }
+
+# A missing agent executable is a user/environment decision, not a transient
+# agent failure. Return 42 so the orchestrator stops instead of retrying every
+# five seconds until the same configuration is changed.
+if (-not $AgentExecutable) {
+    Write-Host "BS_AGENT_EXECUTABLE is not set. Configure the local development agent executable before continuing."
+    exit 42
+}
 
 $repo = if ($env:BS_REPO) { $env:BS_REPO } else { "ss1736427-source/BlueSky-PRO-Knowledge" }
 $branch = if ($env:BS_BRANCH) { $env:BS_BRANCH } else { "main" }
