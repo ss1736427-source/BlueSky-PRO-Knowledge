@@ -19,6 +19,7 @@ REPO = os.getenv("BS_REPO", "ss1736427-source/BlueSky-PRO-Knowledge")
 BRANCH = os.getenv("BS_BRANCH", "main")
 POLL_SECONDS = int(os.getenv("BS_POLL_SECONDS", "5"))
 CI_GRACE_SECONDS = int(os.getenv("BS_CI_GRACE_SECONDS", "5"))
+GH_TIMEOUT_SECONDS = int(os.getenv("BS_GH_TIMEOUT_SECONDS", "20"))
 STATE_FILE = Path(os.getenv("BS_STATE_FILE", ".bluesky_orchestrator_state.json"))
 ADAPTER = Path(os.getenv("BS_AGENT_ADAPTER", Path(__file__).with_name("agent_adapter.ps1")))
 CI_PATH_PREFIXES = ("04_SOFTWARE/PLANNING/",)
@@ -27,6 +28,9 @@ CI_WORKFLOW_PATH = ".github/workflows/planning-benchmark.yml"
 
 def gh_get(path: str):
     """Read a GitHub API endpoint using the authenticated GitHub CLI."""
+    env = os.environ.copy()
+    # Never allow gh to stop the orchestrator waiting for an interactive prompt.
+    env["GH_PROMPT_DISABLED"] = "1"
     try:
         result = subprocess.run(
             ["gh", "api", path],
@@ -34,9 +38,13 @@ def gh_get(path: str):
             capture_output=True,
             text=True,
             encoding="utf-8",
+            timeout=GH_TIMEOUT_SECONDS,
+            env=env,
         )
     except FileNotFoundError as exc:
         raise RuntimeError("GitHub CLI (gh) is not installed or is not in PATH") from exc
+    except subprocess.TimeoutExpired as exc:
+        raise RuntimeError(f"GitHub CLI request timed out after {GH_TIMEOUT_SECONDS}s: {path}") from exc
     except subprocess.CalledProcessError as exc:
         detail = (exc.stderr or exc.stdout or "GitHub CLI request failed").strip()
         raise RuntimeError(f"GitHub CLI request failed: {detail}") from exc
@@ -104,10 +112,11 @@ def invoke_agent(sha, reason):
 
 def loop():
     state = load_state()
-    print(f"BlueSky PRO orchestrator: {REPO}@{BRANCH}")
-    print(f"Polling: {POLL_SECONDS}s; CI grace: {CI_GRACE_SECONDS}s")
+    print(f"BlueSky PRO orchestrator: {REPO}@{BRANCH}", flush=True)
+    print(f"Polling: {POLL_SECONDS}s; CI grace: {CI_GRACE_SECONDS}s", flush=True)
     while True:
         try:
+            print("Checking GitHub main...", flush=True)
             commit = main_commit()
             sha = commit["sha"]
 
@@ -160,7 +169,7 @@ def loop():
                     print(f"AGENT returned {rc}; retrying")
             time.sleep(POLL_SECONDS)
         except (RuntimeError, KeyError, json.JSONDecodeError) as exc:
-            print(f"ORCHESTRATOR ERROR: {exc}", file=sys.stderr)
+            print(f"ORCHESTRATOR ERROR: {exc}", file=sys.stderr, flush=True)
             time.sleep(POLL_SECONDS)
 
 
