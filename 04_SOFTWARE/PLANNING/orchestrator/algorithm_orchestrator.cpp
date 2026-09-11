@@ -31,15 +31,16 @@ bool graph_has_heuristic_information(const MissionProblem& problem) {
 int priority_rank(const MissionProblem& problem, const std::string& solver_id) {
     if (has_priority(problem, "completion_time") ||
         has_priority(problem, "time") ||
-        has_priority(problem, "fast") ||
-        has_priority(problem, "route_efficiency")) {
+        has_priority(problem, "fast")) {
         if (solver_id == "astar") {
             return graph_has_heuristic_information(problem) ? 0 : 1;
         }
         return solver_id == "dijkstra" ? 0 : 1;
     }
 
-    if (has_priority(problem, "deterministic") || has_priority(problem, "minimum_cost")) {
+    if (has_priority(problem, "deterministic") ||
+        has_priority(problem, "minimum_cost") ||
+        has_priority(problem, "route_efficiency")) {
         return solver_id == "dijkstra" ? 0 : 1;
     }
 
@@ -81,10 +82,10 @@ bool better_candidate(const CandidateSolution& candidate,
 
     for (const auto& priority : problem.objective_priorities) {
         if (priority == "completion_time" || priority == "time" ||
-            priority == "fast" || priority == "route_efficiency") {
+            priority == "fast") {
             if (better_lower(candidate.estimated_time_s, current.estimated_time_s)) return true;
             if (better_lower(current.estimated_time_s, candidate.estimated_time_s)) return false;
-        } else if (priority == "minimum_cost") {
+        } else if (priority == "minimum_cost" || priority == "route_efficiency") {
             if (better_lower(candidate.objective_score, current.objective_score)) return true;
             if (better_lower(current.objective_score, candidate.objective_score)) return false;
         } else if (priority == "energy") {
