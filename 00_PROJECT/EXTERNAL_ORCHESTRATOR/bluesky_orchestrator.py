@@ -1,11 +1,5 @@
 #!/usr/bin/env python3
-"""BlueSky PRO external development orchestrator.
-
-Polls main, determines whether the repository CI workflow is triggered by the
-exact SHA, waits for that SHA's CI when required, then invokes the Windows
-agent adapter after a five-second grace period. Exit code 42 means that a
-user decision is required and the loop must stop for the current SHA.
-"""
+"""BlueSky PRO external development orchestrator."""
 from __future__ import annotations
 
 import json
@@ -27,19 +21,14 @@ CI_WORKFLOW_PATH = ".github/workflows/planning-benchmark.yml"
 
 
 def gh_get(path: str):
-    """Read a GitHub API endpoint using the authenticated GitHub CLI."""
-    env = os.environ.copy()
-    # Never allow gh to stop the orchestrator waiting for an interactive prompt.
-    env["GH_PROMPT_DISABLED"] = "1"
     try:
         result = subprocess.run(
-            ["gh", "api", path],
+            ["gh", "api", path, "--hostname", "github.com"],
             check=True,
             capture_output=True,
             text=True,
             encoding="utf-8",
             timeout=GH_TIMEOUT_SECONDS,
-            env=env,
         )
     except FileNotFoundError as exc:
         raise RuntimeError("GitHub CLI (gh) is not installed or is not in PATH") from exc
@@ -48,7 +37,6 @@ def gh_get(path: str):
     except subprocess.CalledProcessError as exc:
         detail = (exc.stderr or exc.stdout or "GitHub CLI request failed").strip()
         raise RuntimeError(f"GitHub CLI request failed: {detail}") from exc
-
     try:
         return json.loads(result.stdout)
     except json.JSONDecodeError as exc:
@@ -68,11 +56,11 @@ def save_state(state):
 
 
 def main_commit():
+    print("Checking GitHub main...", flush=True)
     return gh_get(f"repos/{REPO}/commits/{BRANCH}")
 
 
 def workflow_required_for_commit(commit):
-    """Return whether planning-benchmark.yml is triggered by this commit."""
     files = commit.get("files", [])
     changed = [f.get("filename", "") for f in files]
     return any(p.startswith(CI_PATH_PREFIXES) for p in changed) or CI_WORKFLOW_PATH in changed
@@ -116,12 +104,8 @@ def loop():
     print(f"Polling: {POLL_SECONDS}s; CI grace: {CI_GRACE_SECONDS}s", flush=True)
     while True:
         try:
-            print("Checking GitHub main...", flush=True)
             commit = main_commit()
             sha = commit["sha"]
-
-            # A user-decision stop belongs to the SHA that caused it. A new
-            # main commit clears the stop automatically so the next cycle can run.
             is_new_sha = sha != state.get("last_main_sha")
             if is_new_sha:
                 state["last_main_sha"] = sha
@@ -129,16 +113,16 @@ def loop():
                 state["decision_required"] = False
                 state["ci_required"] = workflow_required_for_commit(commit)
                 save_state(state)
-                print(f"NEW MAIN SHA: {sha}")
-                print(f"CI REQUIRED: {state['ci_required']}")
+                print(f"NEW MAIN SHA: {sha}", flush=True)
+                print(f"CI REQUIRED: {state['ci_required']}", flush=True)
             elif state.get("decision_required"):
-                print("STOP: user decision required for current SHA")
+                print("STOP: user decision required for current SHA", flush=True)
                 return 42
 
             ci_required = bool(state.get("ci_required", True))
             if ci_required:
                 status, detail = ci_state(sha)
-                print(f"{sha[:12]} CI={status} ({detail})")
+                print(f"{sha[:12]} CI={status} ({detail})", flush=True)
                 if status == "PASS" and sha != state.get("verified_sha"):
                     state["verified_sha"] = sha
                     save_state(state)
@@ -147,15 +131,15 @@ def loop():
                     if rc == 42:
                         state["decision_required"] = True
                         save_state(state)
-                        print("STOP: agent requested user decision")
+                        print("STOP: agent requested user decision", flush=True)
                         return 42
                     if rc != 0:
-                        print(f"AGENT returned {rc}; retrying")
+                        print(f"AGENT returned {rc}; retrying", flush=True)
                 elif status == "FAIL":
-                    print("STOP: current SHA has failing CI")
+                    print("STOP: current SHA has failing CI", flush=True)
                     return 1
             elif sha != state.get("verified_sha"):
-                print(f"{sha[:12]} CI=NOT_REQUIRED (workflow path filters do not require planning CI for this commit)")
+                print(f"{sha[:12]} CI=NOT_REQUIRED (workflow path filters do not require planning CI for this commit)", flush=True)
                 state["verified_sha"] = sha
                 save_state(state)
                 time.sleep(CI_GRACE_SECONDS)
@@ -163,10 +147,10 @@ def loop():
                 if rc == 42:
                     state["decision_required"] = True
                     save_state(state)
-                    print("STOP: agent requested user decision")
+                    print("STOP: agent requested user decision", flush=True)
                     return 42
                 if rc != 0:
-                    print(f"AGENT returned {rc}; retrying")
+                    print(f"AGENT returned {rc}; retrying", flush=True)
             time.sleep(POLL_SECONDS)
         except (RuntimeError, KeyError, json.JSONDecodeError) as exc:
             print(f"ORCHESTRATOR ERROR: {exc}", file=sys.stderr, flush=True)
