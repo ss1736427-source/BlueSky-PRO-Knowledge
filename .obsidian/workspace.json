@@ -185,11 +185,11 @@
       "bases:Создать новую базу": false
     }
   },
-  "active": "058fcba7e26ecc4b",
+  "active": "0edc1e8c7f140214",
   "lastOpenFiles": [
     "00_PROJECT/EXTERNAL_ORCHESTRATOR/__pycache__/bluesky_orchestrator.cpython-314.pyc",
-    "00_PROJECT/EXTERNAL_ORCHESTRATOR/__pycache__/bluesky_orchestrator.cpython-314.pyc.2548818079664",
     "00_PROJECT/EXTERNAL_ORCHESTRATOR/__pycache__",
+    "00_PROJECT/EXTERNAL_ORCHESTRATOR/__pycache__/bluesky_orchestrator.cpython-314.pyc.2548818079664",
     "00_PROJECT/EXTERNAL_ORCHESTRATOR/agent_adapter.ps1",
     "00_PROJECT/EXTERNAL_ORCHESTRATOR/run_orchestrator.ps1",
     "00_PROJECT/EXTERNAL_ORCHESTRATOR/config.example.json",
