@@ -3,7 +3,7 @@ id: C2-VERIFICATION-CONTROL-CLOSURE-001
 type: c2_verification_control_closure_record
 status: controlled_working_draft
 system: BlueSky PRO
-basis: C2-RECONCILIATION-PASS-002; C2-VERIFICATION-CASES-001; C2-VERIFICATION-CONFIGURATION-001
+basis: C2-RECONCILIATION-PASS-003; C2-VERIFICATION-CASES-001; C2-VERIFICATION-CONFIGURATION-001
 authority: VERIFICATION-REGISTER-001
 ---
 
@@ -69,16 +69,17 @@ No new value is inferred from this record.
 ## 5. Remaining controlled actions
 
 1. Complete and review the applicable fields of `C2-VER-CFG-001`.
-2. Resolve the authoritative C2 requirement mapping through controlled change
-   before execution.
+2. Confirm each execution result identifies the reconciled authoritative
+   requirement/design basis from `C2-RECONCILIATION-PASS-003`.
 3. Execute the cases and create separate result records.
 4. Register resulting evidence and update verification status.
 
 The pre-execution basis review is recorded in
-`C2-VERIFICATION-CONFIGURATION-001`. It confirmed that the current case bases
-are controlled subordinate allocations, but no authoritative C2 requirement
-identity is present in `MASTER_REQUIREMENTS_REGISTER.md`. No requirement was
-promoted or created by that review.
+`C2-VERIFICATION-CONFIGURATION-001` and reconciled by
+`C2-RECONCILIATION-PASS-003`. The case bases are controlled subordinate
+allocations linked to existing authoritative requirements, safety records or
+interface/configuration allocations as applicable. No requirement was promoted
+or created by that review.
 
 ## 6. Status
 

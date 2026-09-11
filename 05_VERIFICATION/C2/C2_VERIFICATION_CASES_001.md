@@ -114,7 +114,8 @@ No `PASSED`, `VERIFIED` or certification claim is made by this document.
 
 1. Establish the controlled test configuration and environment for each case
    using `C2-VERIFICATION-CONFIGURATION-001` / `C2-VER-CFG-001`.
-2. Confirm the applicable requirement/design basis against the authoritative master register before execution.
+2. Carry the reconciled requirement/design basis from
+   `C2-RECONCILIATION-PASS-003` into each execution result.
 3. Execute the cases and create separate result/evidence records.
 4. Update the verification register and evidence index from the resulting records.
 

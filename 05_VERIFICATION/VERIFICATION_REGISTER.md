@@ -271,7 +271,7 @@ V-REG-004  Execution evidence is not implied by DEFINED / READY status.
 V-REG-005  Exact requirement allocation for Navigation cases remains pending reconciliation with MASTER-REQUIREMENTS-REGISTER.
 V-REG-006  Navigation requirement allocation is maintained as a separate working record and does not create requirement authority.
 V-REG-007  C2-VER-GAP-001 is closed for definition/configuration control; execution and evidence remain open.
-V-REG-008  C2 pre-execution basis review is complete; authoritative C2 requirement mapping remains open and execution is blocked pending controlled change.
+V-REG-008  C2 pre-execution basis review and exact content/scope reconciliation are complete; execution remains blocked pending established configuration, execution results and evidence.
 ```
 
 ## 15. Completion gate
