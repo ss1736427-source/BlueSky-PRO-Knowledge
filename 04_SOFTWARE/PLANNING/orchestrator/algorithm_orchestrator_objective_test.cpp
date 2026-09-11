@@ -138,5 +138,23 @@ int main() {
         assert(decision.explanation.find("не определены приоритеты") != std::string::npos);
     }
 
+    // Mandatory constraints are validated independently of the solver's self-report.
+    {
+        auto problem = base_problem("ORCH-CONSTRAINT-007", {"completion_time"});
+        problem.hard_constraints = {"restricted_airspace"};
+        Context context(problem);
+        AlgorithmOrchestrator orchestrator(
+            make_solvers(),
+            [](const MissionProblem& p, const CandidateSolution& candidate) {
+                if (!p.hard_constraints.empty() && candidate.solver_id == "a") {
+                    return std::vector<std::string>{"restricted_airspace"};
+                }
+                return std::vector<std::string>{};
+            });
+        const auto decision = orchestrator.solve(context);
+        assert(decision.feasibility == Feasibility::Feasible);
+        assert(decision.selected_solver_id == "dijkstra");
+    }
+
     return 0;
 }
