@@ -94,7 +94,12 @@ def git_run(args):
 
 
 def sync_local_checkout(target_sha):
-    """Fast-forward local checkout safely, preserving known runtime files."""
+    """Fast-forward local checkout safely, preserving known runtime files.
+
+    GitHub may briefly return the previous main SHA after an agent push. If the
+    local HEAD is already ahead of that stale SHA, do not attempt a backwards
+    sync and do not report a false LOCAL SYNC.
+    """
     head = git_run(["rev-parse", "HEAD"])
     if head.returncode != 0:
         raise RuntimeError(f"Local Git HEAD check failed: {head.stderr.strip()}")
@@ -120,6 +125,29 @@ def sync_local_checkout(target_sha):
         print(f"LOCAL SYNC ERROR: {fetch.stderr.strip() or fetch.stdout.strip()}", flush=True)
         return False
 
+    remote = git_run(["rev-parse", f"origin/{BRANCH}"])
+    if remote.returncode != 0:
+        print(f"LOCAL SYNC ERROR: cannot read origin/{BRANCH}: {remote.stderr.strip()}", flush=True)
+        return False
+    remote_sha = remote.stdout.strip()
+
+    if remote_sha == local_sha:
+        return True
+
+    # The API can lag behind the just-pushed origin ref. Never move local HEAD
+    # backwards merely because target_sha is stale. A target that is already an
+    # ancestor of local HEAD needs no synchronization.
+    ancestor = git_run(["merge-base", "--is-ancestor", target_sha, local_sha])
+    if ancestor.returncode == 0:
+        return True
+
+    # Only fast-forward when the fetched remote branch is actually ahead of
+    # the local HEAD. This prevents a false LOCAL SYNC on a stale target SHA.
+    remote_ahead = git_run(["merge-base", "--is-ancestor", local_sha, remote_sha])
+    if remote_ahead.returncode != 0:
+        print("LOCAL SYNC BLOCKED: local and origin/main have diverged", flush=True)
+        return False
+
     stash = git_run(["stash", "push", "-m", "BlueSky PRO orchestrator runtime state", "--", ".bluesky_orchestrator_state.json", ".obsidian/workspace.json"])
     if stash.returncode != 0:
         print(f"LOCAL SYNC ERROR: cannot preserve runtime files: {stash.stderr.strip() or stash.stdout.strip()}", flush=True)
@@ -128,11 +156,10 @@ def sync_local_checkout(target_sha):
     merge = git_run(["merge", "--ff-only", f"origin/{BRANCH}"])
     if merge.returncode != 0:
         print(f"LOCAL SYNC ERROR: fast-forward failed: {merge.stderr.strip() or merge.stdout.strip()}", flush=True)
-        if stash.stdout.strip().lower().startswith("no local changes"):
-            return False
-        pop = git_run(["stash", "pop"])
-        if pop.returncode != 0:
-            print("LOCAL SYNC ERROR: runtime-state restore also failed; user intervention required", flush=True)
+        if not stash.stdout.strip().lower().startswith("no local changes"):
+            pop = git_run(["stash", "pop"])
+            if pop.returncode != 0:
+                print("LOCAL SYNC ERROR: runtime-state restore also failed; user intervention required", flush=True)
         return False
 
     if not stash.stdout.strip().lower().startswith("no local changes"):
@@ -141,7 +168,12 @@ def sync_local_checkout(target_sha):
             print(f"LOCAL SYNC ERROR: runtime-state restore failed: {pop.stderr.strip() or pop.stdout.strip()}", flush=True)
             return False
 
-    print(f"LOCAL SYNC: {local_sha[:12]} -> {target_sha[:12]}", flush=True)
+    new_head = git_run(["rev-parse", "HEAD"])
+    if new_head.returncode != 0 or new_head.stdout.strip() != remote_sha:
+        print("LOCAL SYNC ERROR: local HEAD did not reach fetched origin/main", flush=True)
+        return False
+
+    print(f"LOCAL SYNC: {local_sha[:12]} -> {remote_sha[:12]}", flush=True)
     return True
 
 
