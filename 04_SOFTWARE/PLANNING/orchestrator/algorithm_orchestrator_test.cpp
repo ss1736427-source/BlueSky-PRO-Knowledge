@@ -25,6 +25,33 @@ private:
     std::vector<CandidateSolution> candidates_;
 };
 
+class RankingSolver final : public Solver {
+public:
+    RankingSolver(std::string id, double time_s, double score)
+        : id_(std::move(id)), time_s_(time_s), score_(score) {}
+    SolverMetadata metadata() const override { return {id_, "test", {"point_to_point"}, false, true}; }
+    bool eligible(const MissionProblem& problem) const override {
+        return problem.problem_class == "point_to_point";
+    }
+    RunState run(SolverContext& context) override {
+        CandidateSolution candidate;
+        candidate.candidate_id = context.problem().mission_id + ":" + id_ + ":1";
+        candidate.solver_id = id_;
+        candidate.solver_version = "test";
+        candidate.route_elements = {"A", "B"};
+        candidate.estimated_time_s = time_s_;
+        candidate.objective_score = score_;
+        candidate.feasibility = Feasibility::Feasible;
+        context.publish(std::move(candidate));
+        return RunState::Completed;
+    }
+    void cancel() override {}
+private:
+    std::string id_;
+    double time_s_;
+    double score_;
+};
+
 std::vector<std::unique_ptr<Solver>> make_solvers() {
     auto heuristic = [](const PlanningNode& from, const PlanningNode& to) {
         const double dx = from.x - to.x;
@@ -135,6 +162,22 @@ int main() {
     assert(fallback_decision.selected_candidate_id == "ORCH-CONDITION-004:dijkstra:1");
     assert(fallback_context.candidates().size() == 1);
     assert(std::abs(fallback_context.candidates()[0].objective_score - 5.0) < 1e-9);
+
+    // Candidate ranking must use the metric named by the mission objective.
+    // For minimum_cost, a lower objective score wins even when its time is longer.
+    MissionProblem ranking_problem = problem;
+    ranking_problem.mission_id = "ORCH-RANKING-005";
+    ranking_problem.objective_priorities = {"minimum_cost"};
+    TestContext ranking_context(ranking_problem, ComputeBudget{1000, 256, 8});
+    std::vector<std::unique_ptr<Solver>> ranking_solvers;
+    ranking_solvers.push_back(std::make_unique<RankingSolver>("slow-cheap", 20.0, 5.0));
+    ranking_solvers.push_back(std::make_unique<RankingSolver>("fast-expensive", 10.0, 9.0));
+    AlgorithmOrchestrator ranking_orchestrator(std::move(ranking_solvers));
+    const auto ranking_decision = ranking_orchestrator.solve(ranking_context);
+
+    assert(ranking_decision.feasibility == Feasibility::Feasible);
+    assert(ranking_decision.selected_solver_id == "slow-cheap");
+    assert(ranking_decision.selected_candidate_id == "ORCH-RANKING-005:slow-cheap:1");
 
     return 0;
 }

@@ -61,10 +61,12 @@ bool better_candidate(const CandidateSolution& candidate,
 
     for (const auto& priority : problem.objective_priorities) {
         if (priority == "completion_time" || priority == "time" ||
-            priority == "fast" || priority == "route_efficiency" ||
-            priority == "minimum_cost") {
+            priority == "fast" || priority == "route_efficiency") {
             if (better_lower(candidate.estimated_time_s, current.estimated_time_s)) return true;
             if (better_lower(current.estimated_time_s, candidate.estimated_time_s)) return false;
+        } else if (priority == "minimum_cost") {
+            if (better_lower(candidate.objective_score, current.objective_score)) return true;
+            if (better_lower(current.objective_score, candidate.objective_score)) return false;
         } else if (priority == "energy") {
             if (better_lower(candidate.estimated_energy_wh, current.estimated_energy_wh)) return true;
             if (better_lower(current.estimated_energy_wh, candidate.estimated_energy_wh)) return false;
