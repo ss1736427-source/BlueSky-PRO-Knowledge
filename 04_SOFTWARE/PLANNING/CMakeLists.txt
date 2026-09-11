@@ -36,7 +36,14 @@ add_executable(orchestrator_route_validation_test
 
 target_link_libraries(orchestrator_route_validation_test PRIVATE bluesky_planning)
 
+add_executable(orchestrator_determinism_test
+    orchestrator/algorithm_orchestrator_determinism_test.cpp
+)
+
+target_link_libraries(orchestrator_determinism_test PRIVATE bluesky_planning)
+
 enable_testing()
 add_test(NAME astar_dijkstra_benchmark COMMAND astar_dijkstra_benchmark)
 add_test(NAME orchestrator_integration_test COMMAND orchestrator_integration_test)
 add_test(NAME orchestrator_route_validation_test COMMAND orchestrator_route_validation_test)
+add_test(NAME orchestrator_determinism_test COMMAND orchestrator_determinism_test)
