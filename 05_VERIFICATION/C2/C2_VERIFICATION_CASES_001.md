@@ -34,7 +34,30 @@ Quantitative acceptance values remain `TBD` until the applicable operational/cer
 | C2-V07 | IV-C2-007 | Verify DIRECT-C2 and PROVIDER-C2 responsibilities are distinguished at the controlled interface boundary. | Inspection + integration test | DEFINED |
 | C2-V08 | IV-C2-008 | Verify incompatible or unexpected interface versions are detected and handled under configuration control. | Inspection + integration test | DEFINED |
 
-## 4. Common case controls
+## 4. Current basis and qualitative acceptance criteria
+
+The following allocation completes the current traceability pass without promoting
+candidate requirements to the authoritative master register. `C2-REQ-*` and
+`SYS-C2-*` references remain subordinate to the controlled records identified
+below.
+
+| Case | Current requirement/design basis | Qualitative acceptance criterion |
+|---|---|---|
+| C2-V01 | `C2-REQ-001`; `SYS-C2-001`; `IF-C2-001`; `C2-142-001`, `C2-142-003` | The controlled message/state fields, direction and operating-mode distinction are identified, processed consistently, and rejected or reported when structurally invalid. |
+| C2-V02 | `C2-REQ-003`; `SYS-C2-003`; `IF-C2-001` data model and units; `C2-142-004`, `C2-142-011`, `C2-142-013`, `C2-142-014` | Each exercised parameter has an explicit unit and semantic meaning; incompatible or ambiguous interpretation is detected rather than accepted as valid input. |
+| C2-V03 | `C2-REQ-008`; `SYS-C2-008`; `C2-F-005`; `IF-C2-001` timestamp/freshness allocation | Events and state data can be ordered using the controlled time reference, and stale or temporally invalid data is not accepted as current. |
+| C2-V04 | `C2-REQ-002`, `C2-REQ-003`; `SYS-C2-002`, `SYS-C2-003`; `C2-F-001`, `C2-F-004`; `C2-142-018`, `C2-142-020` | Validity and quality are evaluated before safety-significant state use; invalid or stale status produces the allocated degraded, rejected, or quarantined handling. |
+| C2-V05 | `C2-REQ-002`, `C2-REQ-006`; `C2-F-001`, `C2-F-002`, `C2-F-003`; `C2-142-018`, `C2-142-024`, `C2-142-025` | NORMAL, DEGRADED, LOST and RESTORED transitions are distinguishable, observable, time-ordered, and follow the allocated transition and recovery logic. |
+| C2-V06 | `C2-REQ-005`, `C2-REQ-006`; `C2-F-001..005`; `IF-C2-001` failure handling | Each listed abnormal input produces a deterministic response covered by the allocated safety/interface behaviour, with no unsafe silent fallback to normal operation. |
+| C2-V07 | `C2-REQ-004`; `SYS-C2-004`; `IF-C2-001` DIRECT-C2/PROVIDER-C2 allocation; `C2-142-001`, `C2-142-003`, `C2-142-017` | The two operating profiles and their responsibility boundaries are distinguishable; provider-side obligations are not represented as BlueSky implementation evidence. |
+| C2-V08 | `C2-REQ-004`, `C2-REQ-005`; `IF-C2-001` version/configuration control | An incompatible or unexpected interface version is detected, prevented from unvalidated use, and handled through the controlled compatibility or safe-response path. |
+
+The criteria above are qualitative. No latency, continuity, availability,
+integrity, loss-detection, recovery, or coverage value is inferred by this
+record; such values remain `TBD` pending the applicable approved
+operational/certification basis.
+
+## 5. Common case controls
 
 Each case shall identify before execution:
 
@@ -61,7 +84,7 @@ Review record
 
 Unknown values remain `TBD`; they are not treated as passing defaults.
 
-## 5. Traceability
+## 6. Traceability
 
 ```text
 C2-V01 → IF-C2-001 → C2-142-004/011/013/014 (where applicable)
@@ -76,7 +99,7 @@ C2-V08 → IF-C2-001 → controlled version/configuration allocation
 
 The exact requirement linkage remains subordinate to the authoritative master register and the applicable approved baseline.
 
-## 6. Evidence gate
+## 7. Evidence gate
 
 ```text
 CASE DEFINITION: controlled by this record
@@ -87,10 +110,10 @@ VERIFICATION STATUS: ALLOCATED / NOT VERIFIED
 
 No `PASSED`, `VERIFIED` or certification claim is made by this document.
 
-## 7. Remaining controlled actions
+## 8. Remaining controlled actions
 
-1. Establish the applicable requirement/design linkage and acceptance criteria for each case.
-2. Establish the controlled test configuration and environment.
+1. Establish the controlled test configuration and environment for each case.
+2. Confirm the applicable requirement/design basis against the authoritative master register before execution.
 3. Execute the cases and create separate result/evidence records.
 4. Update the verification register and evidence index from the resulting records.
 
