@@ -64,7 +64,6 @@ public:
         CandidateSolution candidate;
         candidate.candidate_id = context.problem().mission_id + ":invalid:1";
         candidate.solver_id = "invalid";
-        // Deliberately incomplete candidate: solver provenance is mandatory.
         candidate.solver_version.clear();
         candidate.route_elements = {"A", "B"};
         candidate.estimated_time_s = 1.0;
@@ -254,6 +253,34 @@ int main() {
     assert(cancelled_decision.selected_solver_id.empty());
     assert(cancelled_decision.selected_candidate_id.empty());
     assert(cancelled_context.candidates().empty());
+
+    MissionProblem efficiency_problem = problem;
+    efficiency_problem.mission_id = "ORCH-EFFICIENCY-009";
+    efficiency_problem.objective_priorities = {"route_efficiency"};
+    TestContext efficiency_context(efficiency_problem, ComputeBudget{1000, 256, 8});
+    std::vector<std::unique_ptr<Solver>> efficiency_solvers;
+    efficiency_solvers.push_back(std::make_unique<RankingSolver>("long-efficient", 20.0, 5.0));
+    efficiency_solvers.push_back(std::make_unique<RankingSolver>("short-inefficient", 10.0, 9.0));
+    AlgorithmOrchestrator efficiency_orchestrator(std::move(efficiency_solvers));
+    const auto efficiency_decision = efficiency_orchestrator.solve(efficiency_context);
+
+    assert(efficiency_decision.feasibility == Feasibility::Feasible);
+    assert(efficiency_decision.selected_solver_id == "long-efficient");
+    assert(efficiency_decision.selected_candidate_id == "ORCH-EFFICIENCY-009:long-efficient:1");
+
+    MissionProblem ordered_problem = problem;
+    ordered_problem.mission_id = "ORCH-ORDER-010";
+    ordered_problem.objective_priorities = {"completion_time", "minimum_cost"};
+    TestContext ordered_context(ordered_problem, ComputeBudget{1000, 256, 8});
+    std::vector<std::unique_ptr<Solver>> ordered_solvers;
+    ordered_solvers.push_back(std::make_unique<RankingSolver>("cheap-slow", 20.0, 1.0));
+    ordered_solvers.push_back(std::make_unique<RankingSolver>("fast-expensive", 10.0, 9.0));
+    AlgorithmOrchestrator ordered_orchestrator(std::move(ordered_solvers));
+    const auto ordered_decision = ordered_orchestrator.solve(ordered_context);
+
+    assert(ordered_decision.feasibility == Feasibility::Feasible);
+    assert(ordered_decision.selected_solver_id == "fast-expensive");
+    assert(ordered_decision.selected_candidate_id == "ORCH-ORDER-010:fast-expensive:1");
 
     return 0;
 }
