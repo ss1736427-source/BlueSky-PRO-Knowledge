@@ -83,6 +83,7 @@ if ($agentLeaf -match '(?i)^copilot(\.exe|\.cmd)?$') {
         "--no-ask-user",
         "-s"
     )
+    $psiArgumentsDirect = $false
 } elseif ($agentLeaf -match '(?i)^codex(\.exe)?$') {
     $psiFileName = $AgentExecutable
     if ($AgentArguments) {
@@ -90,14 +91,17 @@ if ($agentLeaf -match '(?i)^copilot(\.exe|\.cmd)?$') {
     } else {
         $psiArgumentList = @("exec", "--sandbox", "workspace-write", "-")
     }
+    $psiArgumentsDirect = $false
 } elseif ($agentLeaf -match '(?i)^codex\.cmd$') {
-    # .cmd files are command scripts, not native executables. Launch them through
-    # cmd.exe and keep the command path quoted as a single argument. Do not use
-    # /s here: it can consume the nested quotes around a path containing spaces.
+    # .cmd files are command scripts, not native executables. Start cmd.exe and
+    # pass the complete command line directly; do not quote /c or the command
+    # as independent ProcessStartInfo arguments, because that breaks cmd.exe's
+    # parsing of paths containing spaces.
     $psiFileName = $env:ComSpec
     $cmdArgs = if ($AgentArguments) { $AgentArguments } else { 'exec --sandbox workspace-write -' }
-    $command = 'call "{0}" {1}' -f $AgentExecutable, $cmdArgs
-    $psiArgumentList = @('/d', '/c', $command)
+    $psiArgumentsDirect = $true
+    $psiArgumentsValue = '/d /c call "{0}" {1}' -f $AgentExecutable, $cmdArgs
+    $psiArgumentList = @()
 } elseif ($agentLeaf -match '(?i)^codex\.ps1$') {
     $psiFileName = 'powershell.exe'
     if ($AgentArguments) {
@@ -106,12 +110,14 @@ if ($agentLeaf -match '(?i)^copilot(\.exe|\.cmd)?$') {
         $codexArgs = 'exec --sandbox workspace-write -'
     }
     $psiArgumentList = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $AgentExecutable) + ($codexArgs -split '\s+')
+    $psiArgumentsDirect = $false
 } else {
     $psiFileName = $AgentExecutable
     $psiArgumentList = @()
     if ($AgentArguments) {
         $psiArgumentList = $AgentArguments -split '\s+'
     }
+    $psiArgumentsDirect = $false
 }
 
 $psi = New-Object System.Diagnostics.ProcessStartInfo
@@ -122,7 +128,9 @@ $psi.RedirectStandardInput = $true
 $psi.RedirectStandardOutput = $false
 $psi.RedirectStandardError = $false
 
-if ($psi.PSObject.Properties.Name -contains 'ArgumentList') {
+if ($psiArgumentsDirect) {
+    $psi.Arguments = $psiArgumentsValue
+} elseif ($psi.PSObject.Properties.Name -contains 'ArgumentList') {
     foreach ($arg in $psiArgumentList) {
         [void]$psi.ArgumentList.Add($arg)
     }
