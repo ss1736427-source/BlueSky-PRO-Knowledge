@@ -32,14 +32,14 @@ evidence
 
 | SYS-REQ | C2 role | Interface | Safety / design relation | Verification |
 |---|---|---|---|---|
-| SYS-REQ-080 | mission continuity / reallocation | IF-C2-001 | ARCH-DEC-008, 012, 039 | TBD |
-| SYS-REQ-081 | UAV failure tolerance | IF-C2-001 | ARCH-DEC-017, 027, 040 | TBD |
-| SYS-REQ-082 | safe mission completion | IF-C2-001 | ARCH-DEC-016, 017, 038 | TBD |
-| SYS-REQ-085 | safety priority | IF-C2-001 | ARCH-DEC-007, 016, 036 | TBD |
-| SYS-REQ-086 | graceful degradation | IF-C2-001 | ARCH-DEC-017, 023, 039 | TBD |
-| SYS-REQ-091 | critical latency | IF-C2-001 | ARCH-DEC-022 | TBD |
-| SYS-REQ-092 | redundant recovery | IF-C2-001 | ARCH-DEC-027, 040 | TBD |
-| SYS-REQ-093 | controlled recovery | IF-C2-001 | ARCH-DEC-017, 036 | TBD |
+| SYS-REQ-080 | mission continuity / reallocation | IF-C2-001 | ARCH-DEC-008, 012, 039 | TBD — no direct C2 case allocation established |
+| SYS-REQ-081 | UAV failure tolerance | IF-C2-001 | ARCH-DEC-017, 027, 040 | C2-V05 |
+| SYS-REQ-082 | safe mission completion | IF-C2-001 | ARCH-DEC-016, 017, 038 | TBD — no direct C2 case allocation established |
+| SYS-REQ-085 | safety priority | IF-C2-001 | ARCH-DEC-007, 016, 036 | TBD — no direct C2 case allocation established |
+| SYS-REQ-086 | graceful degradation | IF-C2-001 | ARCH-DEC-017, 023, 039 | C2-V05, C2-V06 |
+| SYS-REQ-091 | critical latency | IF-C2-001 | ARCH-DEC-022 | C2-V03 |
+| SYS-REQ-092 | redundant recovery | IF-C2-001 | ARCH-DEC-027, 040 | TBD — no direct C2 case allocation established |
+| SYS-REQ-093 | controlled recovery | IF-C2-001 | ARCH-DEC-017, 036 | C2-V05, C2-V06 |
 
 ## 4. Verification status
 
@@ -51,6 +51,13 @@ case definitions are `DEFINED` and their execution configuration
 `C2-VER-CFG-001` is `PLANNED`. This closes `C2-TG-005` only for
 case-definition/configuration control; it does not create an execution
 result, evidence, quantitative acceptance value or compliance claim.
+
+The verification links shown in section 3 are limited to the exact
+authoritative requirement links established by
+`C2-RECONCILIATION-PASS-003`. A `TBD` entry means that the listed C2
+role has no direct allocation to `C2-V01..C2-V08` in the current
+reconciliation; it is not a claim that the requirement is verified or
+that no other verification is required.
 
 The following evidence classes are required as applicable:
 
