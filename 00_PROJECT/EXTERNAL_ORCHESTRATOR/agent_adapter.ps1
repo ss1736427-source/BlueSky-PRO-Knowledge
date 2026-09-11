@@ -7,8 +7,19 @@ $ErrorActionPreference = "Stop"
 
 if (-not $env:BS_CURRENT_SHA) { throw "BS_CURRENT_SHA is not set." }
 
-# If no agent was explicitly configured, discover Codex first, then the
-# legacy Copilot CLI. An explicitly configured executable always wins.
+# If no agent was explicitly configured, discover the project-local Codex first,
+# then the environment-configured Codex, then PATH, then legacy Copilot CLI.
+if (-not $AgentExecutable) {
+    # Project-local Windows installation convention used by this workspace.
+    $repoRoot = (Get-Location).Path
+    $flightPlanningRoot = Split-Path (Split-Path $repoRoot -Parent) -Parent
+    $localCodex = Join-Path $flightPlanningRoot "TOOLS\codex\codex.cmd"
+    if (Test-Path -LiteralPath $localCodex) {
+        $AgentExecutable = (Resolve-Path -LiteralPath $localCodex).Path
+        Write-Host "Agent auto-detected: Codex CLI ($AgentExecutable)"
+    }
+}
+
 if (-not $AgentExecutable) {
     if ($env:BS_CODEX_EXECUTABLE -and (Test-Path -LiteralPath $env:BS_CODEX_EXECUTABLE)) {
         $AgentExecutable = (Resolve-Path -LiteralPath $env:BS_CODEX_EXECUTABLE).Path
@@ -20,17 +31,6 @@ if (-not $AgentExecutable) {
     $codex = Get-Command codex -ErrorAction SilentlyContinue
     if ($codex) {
         $AgentExecutable = $codex.Source
-        Write-Host "Agent auto-detected: Codex CLI ($AgentExecutable)"
-    }
-}
-
-if (-not $AgentExecutable) {
-    # Project-local Windows installation convention used by this workspace.
-    $repoRoot = (Get-Location).Path
-    $flightPlanningRoot = Split-Path (Split-Path $repoRoot -Parent) -Parent
-    $localCodex = Join-Path $flightPlanningRoot "TOOLS\codex\codex.cmd"
-    if (Test-Path -LiteralPath $localCodex) {
-        $AgentExecutable = (Resolve-Path -LiteralPath $localCodex).Path
         Write-Host "Agent auto-detected: Codex CLI ($AgentExecutable)"
     }
 }
