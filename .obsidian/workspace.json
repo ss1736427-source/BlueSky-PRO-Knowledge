@@ -185,11 +185,12 @@
       "bases:Создать новую базу": false
     }
   },
-  "active": "0edc1e8c7f140214",
+  "active": "058fcba7e26ecc4b",
   "lastOpenFiles": [
-    "00_PROJECT/EXTERNAL_ORCHESTRATOR/__pycache__/bluesky_orchestrator.cpython-314.pyc.1907748204464",
     "00_PROJECT/EXTERNAL_ORCHESTRATOR/__pycache__/bluesky_orchestrator.cpython-314.pyc",
     "00_PROJECT/EXTERNAL_ORCHESTRATOR/__pycache__",
+    "00_PROJECT/EXTERNAL_ORCHESTRATOR/__pycache__/bluesky_orchestrator.cpython-314.pyc.2776334102448",
+    "00_PROJECT/EXTERNAL_ORCHESTRATOR/__pycache__/bluesky_orchestrator.cpython-314.pyc.1907748204464",
     "00_PROJECT/EXTERNAL_ORCHESTRATOR/__pycache__/bluesky_orchestrator.cpython-314.pyc.2548818079664",
     "00_PROJECT/EXTERNAL_ORCHESTRATOR/agent_adapter.ps1",
     "00_PROJECT/EXTERNAL_ORCHESTRATOR/run_orchestrator.ps1",
@@ -206,7 +207,6 @@
     "PROJECT_KNOWLEDGE_IMPORT/README.md",
     "04_SOFTWARE/PLANNING/orchestrator/algorithm_orchestrator_rejection_reason_test.cpp",
     "06_PAYLOAD/BLUESKY_PAYLOAD_EQUIPMENT_INTEGRATION_SPEC.md",
-    "04_SOFTWARE/PLANNING/orchestrator/algorithm_orchestrator_objective_test.cpp",
     "05_C2/BLUESKY_C2_CONNECTIVITY_SYSTEM_SPEC.md",
     "07_DATA/Payloads/PAYLOAD-010.md",
     "05_VERIFICATION/EVIDENCE/VERIFICATION_EVIDENCE_INDEX.md",
