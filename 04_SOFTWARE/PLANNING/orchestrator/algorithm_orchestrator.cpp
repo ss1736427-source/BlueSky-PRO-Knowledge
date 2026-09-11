@@ -24,7 +24,8 @@ bool supported_priority(const std::string& priority) {
 }
 
 bool objective_priorities_are_supported(const MissionProblem& problem) {
-    return std::all_of(problem.objective_priorities.begin(),
+    return !problem.objective_priorities.empty() &&
+           std::all_of(problem.objective_priorities.begin(),
                        problem.objective_priorities.end(),
                        supported_priority);
 }
@@ -137,9 +138,8 @@ bool better_candidate(const CandidateSolution& candidate,
         }
     }
 
-    if (candidate.objective_score + 1e-9 < current.objective_score) return true;
-    if (current.objective_score + 1e-9 < candidate.objective_score) return false;
-
+    // Do not introduce an implicit optimization criterion after the declared priorities.
+    // Once all declared objectives are tied, use stable deterministic ordering only.
     const int candidate_rank = priority_rank(problem, candidate.solver_id);
     const int current_rank = priority_rank(problem, current.solver_id);
     if (candidate_rank != current_rank) return candidate_rank < current_rank;
@@ -159,7 +159,9 @@ OrchestratorDecision AlgorithmOrchestrator::solve(SolverContext& context) {
 
     if (!objective_priorities_are_supported(context.problem())) {
         decision.feasibility = Feasibility::Uncertain;
-        decision.explanation = "Расчёт остановлен: задача содержит неподдерживаемый приоритет выбора маршрута.";
+        decision.explanation = context.problem().objective_priorities.empty()
+            ? "Расчёт остановлен: для задачи не определены приоритеты выбора маршрута."
+            : "Расчёт остановлен: задача содержит неподдерживаемый приоритет выбора маршрута.";
         return decision;
     }
 
