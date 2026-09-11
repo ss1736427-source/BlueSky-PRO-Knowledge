@@ -59,52 +59,61 @@ function Quote-ProcessArgument([string]$Value) {
     return '"' + ($Value -replace '(\\*)"', '$1$1\"' -replace '(\\+)$', '$1$1') + '"'
 }
 
-$psi = [System.Diagnostics.ProcessStartInfo]::new()
-$psi.UseShellExecute = $false
-$psi.CreateNoWindow = $true
-$psi.RedirectStandardInput = $true
-$psi.RedirectStandardOutput = $true
-$psi.RedirectStandardError = $true
+$promptFile = Join-Path $env:TEMP ("bluesky-codex-prompt-{0}.txt" -f [guid]::NewGuid().ToString("N"))
+$stdoutFile = Join-Path $env:TEMP ("bluesky-codex-stdout-{0}.txt" -f [guid]::NewGuid().ToString("N"))
+$stderrFile = Join-Path $env:TEMP ("bluesky-codex-stderr-{0}.txt" -f [guid]::NewGuid().ToString("N"))
 
-if ($agentLeaf -match '(?i)^codex\.cmd$') {
-    # npm installs Codex as a Windows .cmd shim. Run the shim through cmd.exe
-    # explicitly and capture stdin/stdout/stderr so the exec process receives
-    # EOF after the deterministic prompt and cannot hang on the parent console.
-    $psi.FileName = Join-Path $env:SystemRoot "System32\cmd.exe"
-    $command = '"' + $AgentExecutable + '"'
-    $psi.Arguments = '/d /s /c call ' + $command + ' ' + (($codexArgs | ForEach-Object { Quote-ProcessArgument $_ }) -join ' ')
-} elseif ($agentLeaf -match '(?i)^codex\.exe$') {
-    $psi.FileName = $AgentExecutable
-    $psi.Arguments = ($codexArgs | ForEach-Object { Quote-ProcessArgument $_ }) -join ' '
-} elseif ($agentLeaf -match '(?i)^codex\.ps1$') {
-    $psi.FileName = Join-Path $env:SystemRoot "System32\WindowsPowerShell\v1.0\powershell.exe"
-    $psi.Arguments = '-NoProfile -ExecutionPolicy Bypass -File ' + (Quote-ProcessArgument $AgentExecutable) + ' ' + (($codexArgs | ForEach-Object { Quote-ProcessArgument $_ }) -join ' ')
-} else {
-    Write-Error "Unsupported agent executable: $AgentExecutable"
-    exit 1
-}
-
-$process = [System.Diagnostics.Process]::new()
-$process.StartInfo = $psi
 try {
-    if (-not $process.Start()) {
-        Write-Error "Failed to start agent: $AgentExecutable"
+    [System.IO.File]::WriteAllText($promptFile, $prompt, [System.Text.UTF8Encoding]::new($false))
+
+    $psi = [System.Diagnostics.ProcessStartInfo]::new()
+    $psi.UseShellExecute = $false
+    $psi.CreateNoWindow = $true
+    $psi.RedirectStandardOutput = $true
+    $psi.RedirectStandardError = $true
+
+    if ($agentLeaf -match '(?i)^codex\.cmd$') {
+        # npm installs Codex as a Windows .cmd shim. Feed the prompt through
+        # cmd.exe input redirection so the shim receives a real EOF and cannot
+        # remain attached to the parent console.
+        $psi.FileName = Join-Path $env:SystemRoot "System32\cmd.exe"
+        $command = '"' + $AgentExecutable + '"'
+        $promptArg = Quote-ProcessArgument $promptFile
+        $psi.Arguments = '/d /s /c call ' + $command + ' ' + (($codexArgs | ForEach-Object { Quote-ProcessArgument $_ }) -join ' ') + ' < ' + $promptArg
+    } elseif ($agentLeaf -match '(?i)^codex\.exe$') {
+        $psi.FileName = $AgentExecutable
+        $psi.Arguments = ($codexArgs | ForEach-Object { Quote-ProcessArgument $_ }) -join ' '
+    } elseif ($agentLeaf -match '(?i)^codex\.ps1$') {
+        $psi.FileName = Join-Path $env:SystemRoot "System32\WindowsPowerShell\v1.0\powershell.exe"
+        $psi.Arguments = '-NoProfile -ExecutionPolicy Bypass -File ' + (Quote-ProcessArgument $AgentExecutable) + ' ' + (($codexArgs | ForEach-Object { Quote-ProcessArgument $_ }) -join ' ')
+    } else {
+        Write-Error "Unsupported agent executable: $AgentExecutable"
         exit 1
     }
 
-    $process.StandardInput.Write($prompt)
-    $process.StandardInput.Close()
+    $process = [System.Diagnostics.Process]::new()
+    $process.StartInfo = $psi
+    try {
+        if (-not $process.Start()) {
+            Write-Error "Failed to start agent: $AgentExecutable"
+            exit 1
+        }
 
-    $stdoutTask = $process.StandardOutput.ReadToEndAsync()
-    $stderrTask = $process.StandardError.ReadToEndAsync()
-    $process.WaitForExit()
+        $stdoutTask = $process.StandardOutput.ReadToEndAsync()
+        $stderrTask = $process.StandardError.ReadToEndAsync()
+        $process.WaitForExit()
 
-    $stdout = $stdoutTask.GetAwaiter().GetResult()
-    $stderr = $stderrTask.GetAwaiter().GetResult()
-    if ($stdout) { [Console]::Out.Write($stdout) }
-    if ($stderr) { [Console]::Error.Write($stderr) }
+        $stdout = $stdoutTask.GetAwaiter().GetResult()
+        $stderr = $stderrTask.GetAwaiter().GetResult()
+        if ($stdout) { [Console]::Out.Write($stdout) }
+        if ($stderr) { [Console]::Error.Write($stderr) }
 
-    exit $process.ExitCode
+        exit $process.ExitCode
+    } finally {
+        $process.Dispose()
+    }
 } finally {
-    $process.Dispose()
+    Remove-Item -LiteralPath $promptFile -Force -ErrorAction SilentlyContinue
+    Remove-Item -LiteralPath $stdoutFile -Force -ErrorAction SilentlyContinue
+    Remove-Item -LiteralPath $stderrFile -Force -ErrorAction SilentlyContinue
 }
