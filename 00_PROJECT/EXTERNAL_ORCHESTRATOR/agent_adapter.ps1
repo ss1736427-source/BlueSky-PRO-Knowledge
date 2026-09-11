@@ -27,10 +27,6 @@ $agentLeaf = Split-Path $AgentExecutable -Leaf
 $defaultArguments = @("--dangerously-bypass-approvals-and-sandbox", "exec", "-")
 $codexArgs = if ($AgentArguments) { $AgentArguments -split '\s+' | Where-Object { $_ } } else { $defaultArguments }
 
-# The orchestrator invokes this adapter without a redirected stdin. Reading
-# Console.In directly therefore blocks on the interactive console. Build the
-# deterministic project prompt from the environment supplied by the
-# orchestrator instead.
 $prompt = @"
 BlueSky PRO development continuation.
 
@@ -56,25 +52,59 @@ When no user decision is required, continue automatically. When a user decision 
 Reason for this continuation: $($env:BS_CI_REASON)
 "@
 
+function Quote-ProcessArgument([string]$Value) {
+    if ($Value -notmatch '[\s"]') {
+        return $Value
+    }
+    return '"' + ($Value -replace '(\\*)"', '$1$1\"' -replace '(\\+)$', '$1$1') + '"'
+}
+
+$psi = [System.Diagnostics.ProcessStartInfo]::new()
+$psi.UseShellExecute = $false
+$psi.CreateNoWindow = $true
+$psi.RedirectStandardInput = $true
+$psi.RedirectStandardOutput = $true
+$psi.RedirectStandardError = $true
+
 if ($agentLeaf -match '(?i)^codex\.cmd$') {
-    # Invoke the npm Windows shim directly from PowerShell. Do not construct a
-    # cmd.exe command line: that path is sensitive to quoting and file
-    # association behavior on Windows installations with spaces in PATHs.
-    $prompt | & $AgentExecutable @codexArgs
-    $exitCode = $LASTEXITCODE
+    # npm installs Codex as a Windows .cmd shim. Run the shim through cmd.exe
+    # explicitly and capture stdin/stdout/stderr so the exec process receives
+    # EOF after the deterministic prompt and cannot hang on the parent console.
+    $psi.FileName = Join-Path $env:SystemRoot "System32\cmd.exe"
+    $command = '"' + $AgentExecutable + '"'
+    $psi.Arguments = '/d /s /c call ' + $command + ' ' + (($codexArgs | ForEach-Object { Quote-ProcessArgument $_ }) -join ' ')
 } elseif ($agentLeaf -match '(?i)^codex\.exe$') {
-    $prompt | & $AgentExecutable @codexArgs
-    $exitCode = $LASTEXITCODE
+    $psi.FileName = $AgentExecutable
+    $psi.Arguments = ($codexArgs | ForEach-Object { Quote-ProcessArgument $_ }) -join ' '
 } elseif ($agentLeaf -match '(?i)^codex\.ps1$') {
-    $prompt | & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $AgentExecutable @codexArgs
-    $exitCode = $LASTEXITCODE
+    $psi.FileName = Join-Path $env:SystemRoot "System32\WindowsPowerShell\v1.0\powershell.exe"
+    $psi.Arguments = '-NoProfile -ExecutionPolicy Bypass -File ' + (Quote-ProcessArgument $AgentExecutable) + ' ' + (($codexArgs | ForEach-Object { Quote-ProcessArgument $_ }) -join ' ')
 } else {
     Write-Error "Unsupported agent executable: $AgentExecutable"
     exit 1
 }
 
-if ($null -eq $exitCode) {
-    $exitCode = 1
-}
+$process = [System.Diagnostics.Process]::new()
+$process.StartInfo = $psi
+try {
+    if (-not $process.Start()) {
+        Write-Error "Failed to start agent: $AgentExecutable"
+        exit 1
+    }
 
-exit $exitCode
+    $process.StandardInput.Write($prompt)
+    $process.StandardInput.Close()
+
+    $stdoutTask = $process.StandardOutput.ReadToEndAsync()
+    $stderrTask = $process.StandardError.ReadToEndAsync()
+    $process.WaitForExit()
+
+    $stdout = $stdoutTask.GetAwaiter().GetResult()
+    $stderr = $stderrTask.GetAwaiter().GetResult()
+    if ($stdout) { [Console]::Out.Write($stdout) }
+    if ($stderr) { [Console]::Error.Write($stderr) }
+
+    exit $process.ExitCode
+} finally {
+    $process.Dispose()
+}
