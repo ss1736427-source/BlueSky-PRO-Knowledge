@@ -246,6 +246,13 @@ The execution configuration is controlled in:
 The configuration record is `C2-VER-CFG-001`, linked to `CI-007` and `BL-VER`.
 It is `PLANNED`; no execution result or evidence is implied.
 
+The definition/configuration control closure is recorded in:
+
+`05_VERIFICATION/C2/C2_VERIFICATION_CONTROL_CLOSURE_001.md`
+
+`C2-VER-GAP-001` is closed for definition/configuration control. Execution,
+results and evidence remain open.
+
 ## 14. Audit findings — initial pass
 
 ```text
@@ -255,6 +262,7 @@ V-REG-003  NAV-TV-001..NAV-TV-010 exist as mathematical vectors in NAVIGATION_TE
 V-REG-004  Execution evidence is not implied by DEFINED / READY status.
 V-REG-005  Exact requirement allocation for Navigation cases remains pending reconciliation with MASTER-REQUIREMENTS-REGISTER.
 V-REG-006  Navigation requirement allocation is maintained as a separate working record and does not create requirement authority.
+V-REG-007  C2-VER-GAP-001 is closed for definition/configuration control; execution and evidence remain open.
 ```
 
 ## 15. Completion gate
