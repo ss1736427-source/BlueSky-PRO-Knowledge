@@ -26,47 +26,60 @@ if (-not $CodexExecutable) {
 
 Write-Host "Codex executable: $CodexExecutable"
 
-$versionOutput = & $CodexExecutable --version 2>&1
-if ($LASTEXITCODE -ne 0) {
-    Write-Error "Codex version check failed: $versionOutput"
+function Invoke-CodexCmd {
+    param(
+        [Parameter(Mandatory=$true)][string[]]$Arguments
+    )
+
+    $stdoutFile = [System.IO.Path]::GetTempFileName()
+    $stderrFile = [System.IO.Path]::GetTempFileName()
+    try {
+        $quotedCodex = '"{0}"' -f $CodexExecutable
+        $argumentText = ($Arguments -join ' ')
+        $cmdArguments = '/d /c call {0} {1} 1>"{2}" 2>"{3}"' -f `
+            $quotedCodex, $argumentText, $stdoutFile, $stderrFile
+
+        $process = Start-Process -FilePath "cmd.exe" `
+            -ArgumentList $cmdArguments `
+            -Wait -PassThru -WindowStyle Hidden
+
+        $stdout = if (Test-Path -LiteralPath $stdoutFile) {
+            Get-Content -LiteralPath $stdoutFile -Raw -ErrorAction SilentlyContinue
+        } else { "" }
+        $stderr = if (Test-Path -LiteralPath $stderrFile) {
+            Get-Content -LiteralPath $stderrFile -Raw -ErrorAction SilentlyContinue
+        } else { "" }
+
+        return [pscustomobject]@{
+            ExitCode = $process.ExitCode
+            StdOut = $stdout
+            StdErr = $stderr
+        }
+    } finally {
+        Remove-Item -LiteralPath $stdoutFile, $stderrFile -Force -ErrorAction SilentlyContinue
+    }
+}
+
+$versionResult = Invoke-CodexCmd -Arguments @('--version')
+if ($versionResult.ExitCode -ne 0) {
+    $detail = ($versionResult.StdErr, $versionResult.StdOut | Where-Object { $_ }) -join ' '
+    Write-Error "Codex version check failed (exit $($versionResult.ExitCode)): $detail"
     exit 1
 }
-Write-Host "Codex version: $($versionOutput -join ' ')"
+$versionText = ($versionResult.StdOut, $versionResult.StdErr | Where-Object { $_ }) -join ' '
+Write-Host "Codex version: $($versionText.Trim())"
 
-# Windows PowerShell may surface native stderr as a terminating ErrorRecord.
-# Run the batch wrapper through cmd.exe and capture both streams to files so
-# login status is evaluated solely by the native process exit code.
-$statusOutputFile = [System.IO.Path]::GetTempFileName()
-$statusErrorFile = [System.IO.Path]::GetTempFileName()
-try {
-    $quotedCodex = '"{0}"' -f $CodexExecutable
-    $cmdArguments = '/d /c {0} login status 1>"{1}" 2>"{2}"' -f $quotedCodex, $statusOutputFile, $statusErrorFile
-    $process = Start-Process -FilePath "cmd.exe" -ArgumentList $cmdArguments -Wait -PassThru -WindowStyle Hidden
-    $statusCode = $process.ExitCode
-    $statusOutput = if (Test-Path -LiteralPath $statusOutputFile) {
-        Get-Content -LiteralPath $statusOutputFile -Raw -ErrorAction SilentlyContinue
-    } else {
-        ""
-    }
-    $statusError = if (Test-Path -LiteralPath $statusErrorFile) {
-        Get-Content -LiteralPath $statusErrorFile -Raw -ErrorAction SilentlyContinue
-    } else {
-        ""
-    }
-} finally {
-    Remove-Item -LiteralPath $statusOutputFile, $statusErrorFile -Force -ErrorAction SilentlyContinue
-}
+$statusResult = Invoke-CodexCmd -Arguments @('login', 'status')
+$statusCode = $statusResult.ExitCode
+$statusOutput = $statusResult.StdOut.Trim()
+$statusError = $statusResult.StdErr.Trim()
 
 Write-Host "Codex login status exit code: $statusCode"
-if ($statusOutput) {
-    Write-Host $statusOutput.TrimEnd()
-}
-if ($statusError) {
-    Write-Host $statusError.TrimEnd()
-}
+if ($statusOutput) { Write-Host $statusOutput }
+if ($statusError) { Write-Host $statusError }
 
 if ($statusCode -ne 0) {
-    Write-Error "Codex login status failed. Re-authentication is required before the orchestrator can invoke the agent."
+    Write-Error "Codex login status failed. The Codex CLI authentication check did not succeed."
     exit 1
 }
 
@@ -84,11 +97,6 @@ foreach ($name in $overrideVars) {
 if ($foundOverride) {
     Write-Error "Ambiguous Codex credential source. Remove OPENAI_* credential overrides from the orchestrator environment, then rerun."
     exit 1
-}
-
-if ($CheckOnly) {
-    Write-Host "Codex preflight: PASS"
-    exit 0
 }
 
 Write-Host "Codex preflight: PASS"
