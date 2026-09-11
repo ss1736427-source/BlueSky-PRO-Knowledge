@@ -8,6 +8,8 @@ import subprocess
 import sys
 import time
 from pathlib import Path
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
 
 REPO = os.getenv("BS_REPO", "ss1736427-source/BlueSky-PRO-Knowledge")
 BRANCH = os.getenv("BS_BRANCH", "main")
@@ -21,26 +23,38 @@ CI_WORKFLOW_PATH = ".github/workflows/planning-benchmark.yml"
 
 
 def gh_get(path: str):
+    """Read a GitHub API endpoint without requiring a GITHUB_TOKEN.
+
+    Public repositories are read directly over HTTPS. GitHub CLI remains a
+    fallback for authenticated/private-repository setups. This avoids the
+    Windows GitHub CLI subprocess hanging seen in the local orchestrator.
+    """
+    url = "https://api.github.com/" + path.lstrip("/")
+    request = Request(url, headers={"Accept": "application/vnd.github+json", "User-Agent": "BlueSky-PRO-orchestrator"})
     try:
-        result = subprocess.run(
-            ["gh", "api", path, "--hostname", "github.com"],
-            check=True,
-            capture_output=True,
-            text=True,
-            encoding="utf-8",
-            timeout=GH_TIMEOUT_SECONDS,
-        )
-    except FileNotFoundError as exc:
-        raise RuntimeError("GitHub CLI (gh) is not installed or is not in PATH") from exc
-    except subprocess.TimeoutExpired as exc:
-        raise RuntimeError(f"GitHub CLI request timed out after {GH_TIMEOUT_SECONDS}s: {path}") from exc
-    except subprocess.CalledProcessError as exc:
-        detail = (exc.stderr or exc.stdout or "GitHub CLI request failed").strip()
-        raise RuntimeError(f"GitHub CLI request failed: {detail}") from exc
-    try:
-        return json.loads(result.stdout)
-    except json.JSONDecodeError as exc:
-        raise RuntimeError("GitHub CLI returned invalid JSON") from exc
+        with urlopen(request, timeout=GH_TIMEOUT_SECONDS) as response:
+            return json.loads(response.read().decode("utf-8"))
+    except (HTTPError, URLError, TimeoutError) as direct_error:
+        try:
+            result = subprocess.run(
+                ["gh", "api", path, "--hostname", "github.com"],
+                check=True,
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                timeout=GH_TIMEOUT_SECONDS,
+            )
+        except FileNotFoundError as exc:
+            raise RuntimeError(f"Direct GitHub API failed ({direct_error}); GitHub CLI is not installed or not in PATH") from exc
+        except subprocess.TimeoutExpired as exc:
+            raise RuntimeError(f"GitHub API failed and GitHub CLI timed out after {GH_TIMEOUT_SECONDS}s: {path}") from exc
+        except subprocess.CalledProcessError as exc:
+            detail = (exc.stderr or exc.stdout or "GitHub CLI request failed").strip()
+            raise RuntimeError(f"Direct GitHub API failed ({direct_error}); GitHub CLI request failed: {detail}") from exc
+        try:
+            return json.loads(result.stdout)
+        except json.JSONDecodeError as exc:
+            raise RuntimeError("GitHub CLI returned invalid JSON") from exc
 
 
 def load_state():
