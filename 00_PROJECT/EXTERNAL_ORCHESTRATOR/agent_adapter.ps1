@@ -7,14 +7,16 @@ $ErrorActionPreference = "Stop"
 
 if (-not $env:BS_CURRENT_SHA) { throw "BS_CURRENT_SHA is not set." }
 
-# Prefer the Codex installation explicitly managed for this workspace.
-# Resolve the repository root from this script location, not from the caller's CWD.
 if (-not $AgentExecutable) {
     $repoRoot = Split-Path $PSScriptRoot -Parent | Split-Path -Parent
     $flightPlanningRoot = Split-Path (Split-Path $repoRoot -Parent) -Parent
     $localCodex = Join-Path $flightPlanningRoot "TOOLS\codex\codex.cmd"
     if (Test-Path -LiteralPath $localCodex -PathType Leaf) {
         $AgentExecutable = (Resolve-Path -LiteralPath $localCodex).Path
+        $nativeCodex = [System.IO.Path]::ChangeExtension($AgentExecutable, ".exe")
+        if (Test-Path -LiteralPath $nativeCodex -PathType Leaf) {
+            $AgentExecutable = (Resolve-Path -LiteralPath $nativeCodex).Path
+        }
         Write-Host "Agent auto-detected: Codex CLI ($AgentExecutable)"
     }
 }
@@ -47,8 +49,17 @@ if (-not $AgentExecutable) {
     exit 42
 }
 
-# Fail before starting the model session if Codex authentication is not locally valid
-# or an environment API credential could silently override ChatGPT login credentials.
+# If a Codex command shim was supplied, prefer the adjacent native executable.
+$agentLeaf = Split-Path $AgentExecutable -Leaf
+if ($agentLeaf -match '(?i)^codex\.cmd$') {
+    $nativeCodex = [System.IO.Path]::ChangeExtension($AgentExecutable, ".exe")
+    if (Test-Path -LiteralPath $nativeCodex -PathType Leaf) {
+        $AgentExecutable = (Resolve-Path -LiteralPath $nativeCodex).Path
+        $agentLeaf = Split-Path $AgentExecutable -Leaf
+        Write-Host "Codex native executable selected: $AgentExecutable"
+    }
+}
+
 $preflight = Join-Path $PSScriptRoot "codex_preflight.ps1"
 if (-not (Test-Path -LiteralPath $preflight -PathType Leaf)) {
     Write-Error "Codex preflight script not found: $preflight"
@@ -89,14 +100,9 @@ Run appropriate tests after changes and do not claim CI success unless it belong
 When no user decision is required, continue automatically. When a user decision is required, return 42.
 "@
 
-$agentLeaf = Split-Path $AgentExecutable -Leaf
 if ($agentLeaf -match '(?i)^copilot(\.exe|\.cmd)?$') {
     $psiFileName = $AgentExecutable
-    $psiArgumentList = @(
-        "--allow-tool=read,write,shell",
-        "--no-ask-user",
-        "-s"
-    )
+    $psiArgumentList = @("--allow-tool=read,write,shell", "--no-ask-user", "-s")
     $psiArgumentsDirect = $false
 } elseif ($agentLeaf -match '(?i)^codex(\.exe)?$') {
     $psiFileName = $AgentExecutable
@@ -107,10 +113,6 @@ if ($agentLeaf -match '(?i)^copilot(\.exe|\.cmd)?$') {
     }
     $psiArgumentsDirect = $false
 } elseif ($agentLeaf -match '(?i)^codex\.cmd$') {
-    # .cmd files are command scripts, not native executables. Start cmd.exe and
-    # pass the complete command line directly; do not quote /c or the command
-    # as independent ProcessStartInfo arguments, because that breaks cmd.exe's
-    # parsing of paths containing spaces.
     $psiFileName = $env:ComSpec
     $cmdArgs = if ($AgentArguments) { $AgentArguments } else { '-c windows.sandbox="unelevated" exec --sandbox workspace-write -' }
     $psiArgumentsDirect = $true
@@ -118,19 +120,12 @@ if ($agentLeaf -match '(?i)^copilot(\.exe|\.cmd)?$') {
     $psiArgumentList = @()
 } elseif ($agentLeaf -match '(?i)^codex\.ps1$') {
     $psiFileName = 'powershell.exe'
-    if ($AgentArguments) {
-        $codexArgs = $AgentArguments
-    } else {
-        $codexArgs = '-c windows.sandbox="unelevated" exec --sandbox workspace-write -'
-    }
+    $codexArgs = if ($AgentArguments) { $AgentArguments } else { '-c windows.sandbox="unelevated" exec --sandbox workspace-write -' }
     $psiArgumentList = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $AgentExecutable) + ($codexArgs -split '\s+')
     $psiArgumentsDirect = $false
 } else {
     $psiFileName = $AgentExecutable
-    $psiArgumentList = @()
-    if ($AgentArguments) {
-        $psiArgumentList = $AgentArguments -split '\s+'
-    }
+    $psiArgumentList = if ($AgentArguments) { $AgentArguments -split '\s+' } else { @() }
     $psiArgumentsDirect = $false
 }
 
@@ -145,9 +140,7 @@ $psi.RedirectStandardError = $false
 if ($psiArgumentsDirect) {
     $psi.Arguments = $psiArgumentsValue
 } elseif ($psi.PSObject.Properties.Name -contains 'ArgumentList') {
-    foreach ($arg in $psiArgumentList) {
-        [void]$psi.ArgumentList.Add($arg)
-    }
+    foreach ($arg in $psiArgumentList) { [void]$psi.ArgumentList.Add($arg) }
 } else {
     $quotedArgs = foreach ($arg in $psiArgumentList) {
         '"' + ($arg -replace '(\\*)"', '$1$1\"' -replace '(\\+)$', '$1$1') + '"'
