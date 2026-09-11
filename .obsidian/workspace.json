@@ -189,6 +189,7 @@
   "lastOpenFiles": [
     "00_PROJECT/EXTERNAL_ORCHESTRATOR/__pycache__/bluesky_orchestrator.cpython-314.pyc",
     "00_PROJECT/EXTERNAL_ORCHESTRATOR/__pycache__",
+    "00_PROJECT/EXTERNAL_ORCHESTRATOR/__pycache__/bluesky_orchestrator.cpython-314.pyc.2377818402736",
     "00_PROJECT/EXTERNAL_ORCHESTRATOR/__pycache__/bluesky_orchestrator.cpython-314.pyc.2776334102448",
     "00_PROJECT/EXTERNAL_ORCHESTRATOR/__pycache__/bluesky_orchestrator.cpython-314.pyc.1907748204464",
     "00_PROJECT/EXTERNAL_ORCHESTRATOR/__pycache__/bluesky_orchestrator.cpython-314.pyc.2548818079664",
@@ -205,7 +206,6 @@
     "00_PROJECT/GOVERNANCE/BLUE_SKY_DOCUMENT_CONTROL_MAP.md",
     "00_PROJECT/GITHUB_DEVELOPMENT_PROTOCOL.md",
     "PROJECT_KNOWLEDGE_IMPORT/README.md",
-    "04_SOFTWARE/PLANNING/orchestrator/algorithm_orchestrator_rejection_reason_test.cpp",
     "06_PAYLOAD/BLUESKY_PAYLOAD_EQUIPMENT_INTEGRATION_SPEC.md",
     "05_C2/BLUESKY_C2_CONNECTIVITY_SYSTEM_SPEC.md",
     "07_DATA/Payloads/PAYLOAD-010.md",
