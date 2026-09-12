@@ -65,7 +65,7 @@ The adapter shall expose, where supported:
 - mission state/progress;
 - failsafe state;
 - C2/link state;
-- payload state;
+- Equipment state;
 - timestamp and source quality.
 
 Unsupported fields shall be explicitly marked `UNSUPPORTED` or `UNKNOWN`; they shall never be fabricated.
@@ -193,10 +193,36 @@ Adapter verification shall cover:
 - log acquisition;
 - version compatibility.
 
-## 14. Acceptance criterion
+## 14. Equipment integration boundary
+
+Equipment is a first-class canonical BlueSky object and is integrated through the universal Vehicle/Equipment adapter boundary.
+
+```text
+External Vehicle / Equipment representation
+                    ↓
+              Adapter mapping
+                    ↓
+Canonical Vehicle / Equipment Schema
+                    ↓
+             Core services
+```
+
+The detailed canonical Equipment model and adapter obligations are defined in:
+
+```text
+03_FLEET/BLUESKY_CANONICAL_VEHICLE_EQUIPMENT_SCHEMA_001.md
+03_FLEET/BLUESKY-UNIVERSAL-ADAPTER-CONTRACT-001.md
+03_FLEET/BLUESKY-ADAPTER-CONFORMANCE-MATRIX-001.md
+```
+
+If an external protocol uses legacy terminology such as `payload`, it is treated only as an external protocol term and normalized to `Equipment` at the BlueSky boundary.
+
+## 15. Acceptance criterion
 
 A representative supported aircraft can complete:
 
 `CONNECT → IDENTIFY → CAPABILITY → CONFIG → HEALTH → MISSION UPLOAD → READ-BACK VERIFY → COMMAND/CONTROL → TELEMETRY → CONTINGENCY → LAND/RTL → LOG ACQUISITION`
 
 without BlueSky core depending on autopilot-specific data structures.
+
+Equipment integration shall preserve the same adapter/configuration/verification boundary without introducing vendor-specific objects into the BlueSky core model.
