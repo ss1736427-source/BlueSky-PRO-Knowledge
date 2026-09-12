@@ -50,11 +50,11 @@ EVIDENCE
 | CB-SRC-006 | НЛГ БАС-СТ, издание 2 | CONDITIONAL | OPEN | определить применимость к A-FW |
 | CB-SRC-007 | НЛГ УИ-БАС | CONDITIONAL | OPEN | определить applicability remote identification equipment/function |
 | CB-SRC-008 | НЛГ АЗН-УВД | CONDITIONAL | OPEN | определить applicability по operational concept, airspace и оборудованию |
-| REG-013 | Приказ Минтранса №142 | DIRECT + INTERFACE | IN REVIEW | выделить требования к C2 functions/interface и трассировать в SRS/ICD/Safety |
-| REG-017 | Приказ Минтранса №140 | INTERFACE / CONDITIONAL | OPEN | определить набор landing-site data и checks внутри BlueSky |
-| REG-018 | Приказ Минтранса №312 | INTERFACE / CONDITIONAL | OPEN | определить operational/infrastructure interface requirements |
+| REG-013 | Приказ Минтранса №142 | DIRECT + INTERFACE | IN REVIEW | clause-level mapping сформирован; синхронизировать CRB/REQ/ICD/Safety |
+| REG-017 | Приказ Минтранса №140 | EXTERNAL / CONDITIONAL | CLOSED FOR BLUE SKY SYSTEM SCOPE | не создавать SYS-REQ; сохранять только как внешний нормативный контур при необходимости |
+| REG-018 | Приказ Минтранса №312 | EXTERNAL / CONDITIONAL | CLOSED FOR BLUE SKY SYSTEM SCOPE | не создавать SYS-REQ; сохранять только как внешний нормативный контур при необходимости |
 | REG-019 | Приказ №367 | CONDITIONAL / EXTERNAL INTERFACE | OPEN | определить применимость к maintenance/support scope BlueSky |
-| REG-020 | Приказ №354 | CONDITIONAL / INTERFACE | OPEN | определить применимость к equipment-check interface |
+| REG-020 | Приказ №354 | CONDITIONAL / INTERFACE | OPEN | определить применимость только к собственным status/data interfaces BlueSky |
 
 ## 4. Configuration A
 
@@ -109,6 +109,8 @@ PROVIDER-C2
 3. Configuration A ≤30 kg не объявляется автоматически mandatory type-certification target.
 4. C2 boundary должен быть разделён на DIRECT-C2 и PROVIDER-C2.
 5. Требования, относящиеся к внешним объектам, переводятся в интерфейсные/эксплуатационные ограничения только в пределах установленной ответственности BlueSky.
+6. Clause-level working register создан в `CERTIFICATION_BASIS_CLAUSE_REGISTER_001.md`; он содержит только подтверждённые рабочие положения и явно отделяет открытые applicability items.
+7. Приказы №140 и №312 не являются обязательными входами в SYS-REQ BlueSky без подтверждённой собственной функции; посадочные площадки не входят в ключевую систему управления.
 
 ## 7. Незакрытые вопросы
 
@@ -117,7 +119,7 @@ PROVIDER-C2
 | Конкретный certification object | OPEN | требуется окончательная фиксация объекта и границ |
 | Applicability НЛГ по A-MR/A-FW/A-VT | OPEN | зависит от конкретного типа БВС и intended operation |
 | Полная clause-level выборка из нормативных источников | IN WORK | требуется последовательная детализация |
-| C2 certification boundary | IN WORK | необходимо завершить clause-level mapping по №142 и ст. 78.1 |
+| C2 certification boundary | IN WORK | clause-level mapping по №142 сформирован; требуется дальнейшая синхронизация с requirements/ICD/Safety |
 | Окончательный certification target | OPEN | зависит от установленного certification object и применимости |
 
 ## 8. Следующая обязательная работа
@@ -130,4 +132,10 @@ CLAUSE-LEVEL REGULATORY MAPPING
 → CERTIFICATION REQUIREMENTS BASELINE
 ```
 
-Следующий проход должен добавлять в этот регистр конкретные положения источников, не подменяя их общими формулировками.
+Для C2 №142 clause-level mapping уже сформирован. Следующий детерминированный шаг — перенос подтверждённых C2 allocation в существующие certification-requirement records без создания дубликатов.
+
+Для НЛГ и иных источников с открытой applicability продолжается подготовка без присвоения неподтверждённого статуса.
+
+## 9. Status
+
+**CONTROLLED_WORKING_DRAFT**
