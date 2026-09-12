@@ -23,30 +23,33 @@ Record the deterministic repository-level consistency check required before conc
 | Adapter Configuration Baseline | BLUESKY-ADAPTER-CONFIGURATION-BASELINE-001 | RESOLVED | Reproducibility |
 | Adapter Implementation Stub | BLUESKY-ADAPTER-IMPLEMENTATION-STUB-001 | RESOLVED | Minimal implementation boundary |
 | Adapter Conformance Checklist | BLUESKY-ADAPTER-CONFORMANCE-CHECKLIST-001 | RESOLVED | Implementation gates |
+| Adapter Registry Boundary | BLUESKY-ADAPTER-REGISTRY-BOUNDARY-001 | RESOLVED | Service-layer lookup boundary |
 
 ## 3. Consistency results
 
 ### Reference resolution
 
 ```text
-Contract → Schema                         PASS
-Matrix → Contract / Schema                PASS
-Test Stub → Matrix / Schema / Baseline    PASS
-Configuration Baseline → Test Stub        PASS
-Implementation Stub → Contract / Schema  PASS
-Checklist → Matrix / Test Stub / Baseline PASS
+Contract → Schema                                  PASS
+Matrix → Contract / Schema                         PASS
+Test Stub → Matrix / Schema / Baseline             PASS
+Configuration Baseline → Test Stub                 PASS
+Implementation Stub → Contract / Schema           PASS
+Checklist → Matrix / Test Stub / Baseline          PASS
+Registry Boundary → Contract / Schema              PASS
 ```
 
 ### Semantic consistency
 
 ```text
-Vehicle terminology                      PASS
-Equipment terminology                    PASS
-External payload terminology boundary    PASS
-Canonical IDs / versions                 PASS
-Readiness / C2 / verification separation PASS
-Safety / authority boundary              PASS
-Real-test status discipline              PASS
+Vehicle terminology                              PASS
+Equipment terminology                            PASS
+External payload terminology boundary             PASS
+Canonical IDs / versions                           PASS
+Readiness / C2 / verification separation           PASS
+Safety / authority boundary                        PASS
+Real-test status discipline                        PASS
+Service → Registry → Adapter boundary              PASS
 ```
 
 ## 4. Verification limitation
@@ -76,6 +79,6 @@ REAL TESTING: DEFERRED
 
 ## 6. Next deterministic action
 
-Proceed to the next unresolved integration gap in the existing Interface / Service layer. No vendor selection or real hardware is required for this transition.
+Bind the adapter registry boundary to the existing service-layer integration contract. No vendor selection or real hardware is required for this transition.
 
 **Status: CONTROLLED WORKING RECORD — ADAPTER DOCUMENTATION DEPENDENCY CHAIN CONSISTENCY CHECK COMPLETED.**
