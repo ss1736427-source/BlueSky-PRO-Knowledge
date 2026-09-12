@@ -18,6 +18,8 @@ Operator / Mission Engine / Automation
                  ↓
           C2 / Vehicle API
                  ↓
+          ADAPTER REGISTRY
+                 ↓
         Universal Vehicle Adapter
                  ↓
        External Vehicle API
@@ -38,6 +40,7 @@ The adapter boundary is defined by:
 ```text
 BLUESKY-UNIVERSAL-ADAPTER-CONTRACT-001
 BLUESKY-CANONICAL-VEHICLE-EQUIPMENT-SCHEMA-001
+BLUESKY-ADAPTER-REGISTRY-BOUNDARY-001
 ```
 
 Vendor-specific command representations remain outside the BlueSky canonical domain model.
@@ -136,6 +139,8 @@ Equipment commands shall follow the same authorization and safety chain:
 Canonical Equipment Action
         ↓
 Authority + Safety Gate
+        ↓
+ADAPTER REGISTRY
         ↓
 Equipment Adapter
         ↓
