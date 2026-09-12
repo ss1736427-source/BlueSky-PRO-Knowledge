@@ -61,13 +61,14 @@ EXTERNAL INTERFACE SCHEMAS       → integration stage
 ACTUAL PROVIDER DATA             → integration/test stage
 ACTUAL MAINTENANCE STATUS        → integration stage
 QUANTITATIVE ACCEPTANCE VALUES   → approved verification basis
-EXECUTION EVIDENCE                → real test stage
+EXECUTION EVIDENCE               → real test stage
 ```
 
 ## 6. Traceability
 
 ```text
-EXTERNAL REGULATORY INTERFACE ALLOCATION
+REGULATORY-SOURCE-REGISTER-001
+→ EXTERNAL-REGULATORY-INTERFACE-ALLOCATION-001
 → EXT-V01..EXT-V07
 → execution
 → evidence
