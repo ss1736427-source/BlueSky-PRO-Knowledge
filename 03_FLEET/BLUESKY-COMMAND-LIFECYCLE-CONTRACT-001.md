@@ -139,7 +139,16 @@ The contract test `command_lifecycle_contract_stub_test` is the deterministic so
 
 ## 10. Integration handoff
 
-The concrete adapter implementation shall consume this contract through the existing Adapter Registry boundary and canonical Vehicle/Equipment model.
+The concrete adapter implementation shall consume this contract through the controlled integration chain:
+
+```text
+BLUESKY-ADAPTER-REGISTRY-BOUNDARY-001
+→ BLUESKY-CANONICAL-VEHICLE-EQUIPMENT-SCHEMA-001
+→ Command Lifecycle Contract
+→ concrete adapter
+```
+
+The registry resolves the compatible adapter boundary; the canonical Vehicle/Equipment schema supplies the domain semantics. Neither registration nor lifecycle acknowledgement grants safety or execution authority.
 
 No vendor-specific protocol is selected by this document.
 
