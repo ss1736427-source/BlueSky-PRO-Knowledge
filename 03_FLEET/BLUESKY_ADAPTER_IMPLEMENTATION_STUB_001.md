@@ -47,21 +47,40 @@ ExternalAdapterCommand
 
 ## 3. Minimal interface
 
+The stub exposes the operations required by the Universal Adapter Contract, while keeping transport and vendor implementation unspecified.
+
+### Vehicle boundary
+
 ```text
-Adapter
-  metadata()
-  discover()
-  identify()
-  readVehicleProfile()
-  readEquipment()
-  readCapabilities()
-  readState()
-  readTelemetry()
-  translateCommand()
-  mapError()
+metadata()
+discover()
+identify()
+readVehicleProfile()
+readConfiguration()
+readCapabilities()
+readState()
+readHealth()
+readC2State()
+subscribeTelemetry()
+readEquipment()
+translateCommand()
+mapError()
 ```
 
-The concrete transport is intentionally unspecified.
+### Equipment boundary
+
+```text
+identifyEquipment()
+readEquipmentProfile()
+readEquipmentConfiguration()
+readEquipmentCapabilities()
+readEquipmentState()
+readEquipmentTelemetry()
+translateAction()
+readDataOutputs()
+```
+
+The concrete transport is intentionally unspecified. Equipment operations remain semantically distinct from Vehicle operations even when implemented by the same adapter instance.
 
 ## 4. Canonical output contract
 
@@ -124,17 +143,19 @@ represent synthetic output as operational evidence
 
 ## 8. Contract-test linkage
 
-| Implementation function | Contract test |
+| Implementation boundary | Contract test |
 |---|---|
-| metadata / identify | ACT-001 |
-| readCapabilities | ACT-002 |
-| readState | ACT-003 |
-| readTelemetry | ACT-004, ACT-005 |
-| translateCommand | ACT-006 |
+| metadata / discover / identify | ACT-001 |
+| readVehicleProfile / readEquipmentProfile | ACT-001 |
+| readCapabilities / readEquipmentCapabilities | ACT-002 |
+| readState / readC2State / readHealth | ACT-003 |
+| subscribeTelemetry / readTelemetry | ACT-004, ACT-005 |
+| translateCommand / translateAction | ACT-006 |
 | mapError | ACT-007 |
 | metadata/version compatibility | ACT-008 |
-| canonical persistence | ACT-009 |
+| readConfiguration / persistence | ACT-009 |
 | deterministic normalization | ACT-010 |
+| readDataOutputs | ACT-001, ACT-002 |
 
 ## 9. Production transition
 
@@ -165,6 +186,6 @@ Approval: NOT GRANTED
 
 ## 11. Next deterministic step
 
-The implementation stub is now linked to the existing conformance checklist `BLUESKY-ADAPTER-CONFORMANCE-CHECKLIST-001`. The next deterministic step is to establish the repository-level contract/configuration consistency check, without selecting a vendor or requiring real hardware.
+The repository consistency check is complete. The next deterministic step is to reconcile the checklist's implementation-to-contract mapping with this contract-complete stub surface, without selecting a vendor or requiring real hardware.
 
-**Status: CONTROLLED WORKING DRAFT — MINIMAL ADAPTER IMPLEMENTATION BOUNDARY DEFINED; NO REAL INTEGRATION CLAIMED.**
+**Status: CONTROLLED WORKING DRAFT — CONTRACT-COMPLETE ADAPTER IMPLEMENTATION STUB DEFINED; NO REAL INTEGRATION CLAIMED.**
