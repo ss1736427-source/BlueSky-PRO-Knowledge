@@ -1,8 +1,12 @@
 {
-  "last_main_sha": "6011a46ca9a4ca67d014c007707d7ef9f0b0ad09",
-  "verified_sha": "6011a46ca9a4ca67d014c007707d7ef9f0b0ad09",
+  "last_main_sha": "64f9c5169682a9dd3a09aba39df656b89ed36de4",
+  "verified_sha": "64f9c5169682a9dd3a09aba39df656b89ed36de4",
   "decision_required": false,
   "ci_required": false,
-  "agent_error_sha": "6011a46ca9a4ca67d014c007707d7ef9f0b0ad09",
-  "agent_error_code": 1
+  "agent_error_sha": null,
+  "agent_error_code": null,
+  "current_work_package": "C2 pre-execution regulatory/requirements/interface reconciliation",
+  "checkpoint": "C2-PREEXEC-001",
+  "real_execution": "DEFERRED",
+  "quantitative_c2_basis": "DEFERRED"
 }
