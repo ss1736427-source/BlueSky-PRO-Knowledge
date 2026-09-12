@@ -17,7 +17,7 @@ public:
     bluesky::autopilot::Capabilities getCapabilities() const override { return {}; }
     std::vector<std::string> getSupportedCommands() const override { return {}; }
     std::vector<std::string> getSupportedMissionFeatures() const override { return {}; }
-    std::vector<std::string> getSupportedPayloadFeatures() const override { return {}; }
+    std::vector<std::string> getSupportedEquipmentFeatures() const override { return {}; }
 
     bool connect() override { return true; }
     void disconnect() override {}
@@ -32,7 +32,7 @@ public:
     bluesky::autopilot::NormalizedState getFailsafeState() const override { return {}; }
     bluesky::autopilot::NormalizedState getEnergyState() const override { return {}; }
     bluesky::autopilot::NormalizedState getMissionState() const override { return {}; }
-    bluesky::autopilot::NormalizedState getPayloadState() const override { return {}; }
+    bluesky::autopilot::NormalizedState getEquipmentState() const override { return {}; }
 
     bluesky::autopilot::CommandResult arm() override { return {}; }
     bluesky::autopilot::CommandResult disarm() override { return {}; }
