@@ -6,6 +6,28 @@
 
 BlueSky shall present heterogeneous aircraft and mission equipment through normalized profiles so the user can operate a supported fleet without building integrations manually.
 
+## Service integration boundary
+
+The Fleet / Vehicle / Equipment services are the controlled service-layer entry point for adapter resolution. Vendor-specific implementations are never exposed directly to the domain model.
+
+```text
+Fleet / Vehicle / Equipment Services
+                ↓
+         Adapter Registry
+                ↓
+      Universal Adapter Contract
+                ↓
+       Concrete Vehicle / Equipment Adapter
+                ↓
+      External protocol / device API
+```
+
+The registry performs deterministic lookup and compatibility resolution only. Authority, safety approval and command execution remain outside the registry and follow the applicable controlled interface contracts.
+
+The controlled registry boundary is:
+
+`BLUESKY-ADAPTER-REGISTRY-BOUNDARY-001`
+
 ## Vehicle profile
 
 Each aircraft profile shall contain:
