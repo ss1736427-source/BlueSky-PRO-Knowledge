@@ -256,15 +256,22 @@ An adapter conforms to this schema when it can:
 6. maintain the readiness/C2/verification distinctions;
 7. preserve traceability metadata required by the controlled configuration.
 
-## 15. Next deterministic step
+## 15. Current work-package transition
+
+The canonical schema is established. Its dependent conformance matrix, contract-test stub, configuration baseline and implementation checklist are present in the repository.
+
+The next deterministic action is the repository-level consistency validation of this dependency chain, followed by resolution of the next unresolved integration gap.
 
 ```text
 CANONICAL SCHEMA
-→ ADAPTER CONFORMANCE MATRIX
+→ CONFORMANCE MATRIX
 → CONTRACT TEST STUB
-→ IMPLEMENTATION
+→ CONFIGURATION BASELINE
+→ IMPLEMENTATION CHECKLIST
+→ REPOSITORY CONSISTENCY CHECK
+→ NEXT UNRESOLVED INTEGRATION GAP
 ```
 
 No real vehicle or Equipment test is implied by this schema.
 
-**Status: CONTROLLED WORKING DRAFT — CANONICAL DOMAIN SCHEMA DEFINED.**
+**Status: CONTROLLED WORKING DRAFT — CANONICAL DOMAIN SCHEMA DEFINED; DEPENDENCY CHAIN READY FOR CONSISTENCY VALIDATION.**
