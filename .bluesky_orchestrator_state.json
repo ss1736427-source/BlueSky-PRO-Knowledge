@@ -3,10 +3,10 @@
   "verified_sha": "e7d50961274b21248b61f9dd9650a4ef4f62517f",
   "decision_required": false,
   "ci_required": true,
-  "current_work_package": "C2 pre-execution regulatory/requirements/interface reconciliation",
-  "checkpoint": "C2-PREEXEC-001",
+  "current_work_package": "Phase 4 Universal Integration Layer — Interface / Service integration gap",
+  "checkpoint": "PH4-INT-001",
   "real_execution": "DEFERRED",
   "quantitative_c2_basis": "DEFERRED",
   "current_ci_status": "UNVERIFIED",
-  "next_deterministic_action": "Proceed to the next unresolved integration gap in the existing Interface / Service layer"
+  "next_deterministic_action": "Reconcile the existing universal adapter boundary with the implementation/service layer and define the smallest executable integration slice"
 }
