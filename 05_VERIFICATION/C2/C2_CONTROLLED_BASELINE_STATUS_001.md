@@ -48,7 +48,7 @@ RENUMBERING: 0
 MASTER REGISTER: no change
 ```
 
-Ни один кандидат не переводится в baseline без доказанного функционального gap и полного набора:
+Ни один кандидат не переводится в baseline без доказанного functional gap и полного набора:
 
 ```text
 source
@@ -72,19 +72,21 @@ source
 
 В частности, требования к физическим посадочным площадкам и их владельцам остаются вне system requirement boundary; они могут учитываться только в соответствующем external/operational documentation контуре, если это необходимо для конкретного certification object.
 
-## 6. Следующий controlled action
+## 6. Controlled dependency action
 
-Сохранить quantitative closure hold по оставшемуся вопросу:
+Для оставшегося вопроса `C2-CAND-003` создан отдельный controlled placeholder:
 
-1. `C2-CAND-003` — наличие контролируемой основы для количественных C2 quality/QoS parameters.
+`05_VERIFICATION/C2/C2_QUANTITATIVE_PARAMETERS_BASIS_001.md`
 
-Контролируемая qualitative basis подтверждена через clause mapping, `SYS-C2-003`, `IF-C2-001` и `IV-C2-004`. До утверждения source-specific quantitative values `MASTER_REQUIREMENTS_REGISTER.md` не изменяется.
+Он фиксирует требуемую структуру источника, applicability, параметров, порогов, метода измерения и ответственности, но **не содержит численных значений**.
 
-После подготовки execution/evidence records ссылки на них должны быть добавлены в verification chain; сами records не являются доказательством фактического выполнения.
+Количественные C2 quality/QoS parameters остаются на `OPEN / DEFERRED` до появления и проверки authoritative/approved basis.
+
+Это позволяет продолжать независимые подготовительные работы без фиктивного закрытия quantitative dependency.
 
 ## 7. Authoritative rule
 
-`MASTER_REQUIREMENTS_REGISTER.md` остаётся единственным authoritative register идентификаторов требований. Рабочие C2 documents не создают вторую независимую базу требований.
+`MASTER-REQUIREMENTS-REGISTER.md` остаётся единственным authoritative register идентификаторов требований. Рабочие C2 documents не создают вторую независимую базу требований.
 
 ## 8. Current controlled chain
 
@@ -97,3 +99,7 @@ C2-VERIFICATION-CASES-001
 ```
 
 `C2-VER-EXEC-001` и `C2-EVIDENCE-INDEX-001` являются подготовленными controlled records; фактическое execution/evidence остаётся незавершённым.
+
+## 9. Status
+
+**CONTROLLED WORKING RECORD — C2 DEFINITION/CONFIGURATION/RECORD CONTROL CLOSED; QUANTITATIVE BASIS IDENTIFIED AS EXPLICIT DEFERRED DEPENDENCY; REAL TEST EXECUTION AND EVIDENCE DEFERRED UNTIL TEST STAGE.**
