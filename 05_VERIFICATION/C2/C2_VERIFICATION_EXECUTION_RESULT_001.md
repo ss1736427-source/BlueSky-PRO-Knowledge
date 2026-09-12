@@ -45,14 +45,14 @@ Unknown values remain `TBD`. They are not evidence and are not passing defaults.
 
 | Case ID | Requirement / design basis | Configuration | Actual result | Pass / Fail | Anomaly | Evidence ID | Review | Status |
 |---|---|---|---|---|---|---|---|---|
-| C2-V01 | TBD | TBD | NOT EXECUTED | TBD | TBD | TBD | TBD | NOT EXECUTED |
-| C2-V02 | TBD | TBD | NOT EXECUTED | TBD | TBD | TBD | TBD | NOT EXECUTED |
-| C2-V03 | TBD | TBD | NOT EXECUTED | TBD | TBD | TBD | TBD | NOT EXECUTED |
-| C2-V04 | TBD | TBD | NOT EXECUTED | TBD | TBD | TBD | TBD | NOT EXECUTED |
-| C2-V05 | TBD | TBD | NOT EXECUTED | TBD | TBD | TBD | TBD | NOT EXECUTED |
-| C2-V06 | TBD | TBD | NOT EXECUTED | TBD | TBD | TBD | TBD | NOT EXECUTED |
-| C2-V07 | TBD | TBD | NOT EXECUTED | TBD | TBD | TBD | TBD | NOT EXECUTED |
-| C2-V08 | TBD | TBD | NOT EXECUTED | TBD | TBD | TBD | TBD | NOT EXECUTED |
+| C2-V01 | `IF-C2-001`; C2 mode/interface allocation; `DEC-012` | TBD | NOT EXECUTED | TBD | TBD | TBD | TBD | NOT EXECUTED |
+| C2-V02 | `SAF-REQ-001`, `SAF-REQ-002`, `SAF-REQ-003`; `IF-C2-001` | TBD | NOT EXECUTED | TBD | TBD | TBD | TBD | NOT EXECUTED |
+| C2-V03 | `SAF-REQ-003`, `SAF-REQ-013`; `SYS-REQ-091`; `IF-C2-001` | TBD | NOT EXECUTED | TBD | TBD | TBD | TBD | NOT EXECUTED |
+| C2-V04 | `SAF-REQ-001..004`, `SAF-REQ-013`, `SAF-REQ-014`; `IF-C2-001` | TBD | NOT EXECUTED | TBD | TBD | TBD | TBD | NOT EXECUTED |
+| C2-V05 | `SAF-REQ-013`; `SYS-REQ-081`, `SYS-REQ-086`, `SYS-REQ-093`; `C2-F-001..003` | TBD | NOT EXECUTED | TBD | TBD | TBD | TBD | NOT EXECUTED |
+| C2-V06 | `SAF-REQ-001..004`, `SAF-REQ-013..015`; `SYS-REQ-086`, `SYS-REQ-093`; `IF-C2-001` | TBD | NOT EXECUTED | TBD | TBD | TBD | TBD | NOT EXECUTED |
+| C2-V07 | `SYS-REQ-083`; `DEC-012`; `IF-C2-001` | TBD | NOT EXECUTED | TBD | TBD | TBD | TBD | NOT EXECUTED |
+| C2-V08 | `SAF-REQ-017`; `IF-C2-001`; `CONFIGURATION-BASELINE.md` | TBD | NOT EXECUTED | TBD | TBD | TBD | TBD | NOT EXECUTED |
 
 ## 5. Case execution record
 
