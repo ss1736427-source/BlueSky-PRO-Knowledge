@@ -11,7 +11,7 @@ The objective is to prevent rework caused by designing modules independently and
 
 ## 2. Architectural rule
 
-BlueSky core shall operate on normalized domain objects. External systems are integrated through adapters. No core business logic shall depend directly on ArduPilot, PX4, MAVLink, a particular C2 transport, payload protocol, map provider or regulatory interface.
+BlueSky core shall operate on normalized domain objects. External systems are integrated through adapters. No core business logic shall depend directly on ArduPilot, PX4, MAVLink, a particular C2 transport, equipment protocol, map provider or regulatory interface.
 
 ## 3. Core domain objects
 
@@ -28,7 +28,7 @@ ORGANIZATION
                 ├── CONFIGURATION BASELINE
                 ├── C2 LINKS
                 ├── NAVIGATION / SENSORS
-                ├── PAYLOADS
+                ├── EQUIPMENT
                 └── MAINTENANCE / RESOURCES
 
 MISSION
@@ -37,7 +37,7 @@ MISSION
    ├── ROUTE / TRAJECTORY
    ├── CONSTRAINTS
    ├── VEHICLE ASSIGNMENT
-   ├── PAYLOAD ASSIGNMENT
+   ├── EQUIPMENT ASSIGNMENT
    ├── EXTERNAL DATA SNAPSHOTS
    ├── REGULATORY PLAN(S)
    └── AUTHORIZATION
@@ -50,7 +50,7 @@ FLIGHT
    ├── TELEMETRY
    ├── COMMANDS / ACKS
    ├── EVENTS / ALERTS
-   ├── PAYLOAD DATA
+   ├── EQUIPMENT DATA
    ├── LOGS
    └── FLIGHT RECORD
 ```
@@ -71,9 +71,9 @@ Represents the flight-control system installed on a vehicle: FCS family; vendor;
 
 Versioned operational description combining vehicle characteristics and approved configuration needed by BlueSky.
 
-### 4.4 Payload
+### 4.4 Equipment
 
-Physical mission equipment installed on or associated with a vehicle. Payload profile defines capabilities, controls, status, interfaces and data outputs.
+Physical mission equipment installed on or associated with a vehicle. Equipment profile defines capabilities, controls, status, interfaces and data outputs.
 
 ### 4.5 C2 Link
 
@@ -101,7 +101,7 @@ All operational state changes and externally exchanged control actions shall car
 
 ### 4.11 Flight Record
 
-The authoritative post-flight operational record joining the mission, aircraft, configuration, authorization, telemetry/events, commands, logs and payload references.
+The authoritative post-flight operational record joining the mission, aircraft, configuration, authorization, telemetry/events, commands, logs and equipment references.
 
 ## 5. Relationships that must never be lost
 
@@ -109,12 +109,12 @@ The authoritative post-flight operational record joining the mission, aircraft, 
 Customer
   → Fleet
   → Vehicle
-  → Configuration/FCS/Payload
+  → Configuration/FCS/Equipment
   → Mission Version
   → Regulatory Authorization
   → Flight
   → Telemetry/Events/Commands
-  → Logs/Payload Data
+  → Logs/Equipment Data
   → Flight Record
 ```
 
@@ -149,7 +149,7 @@ AUTHORITY  = IS IT AUTHORIZED?
                           │
        ┌──────────┬───────┼───────┬──────────┐
        ▼          ▼       ▼       ▼          ▼
-    FCS/C2     Payload  GNSS    ATM      GIS/Weather/
+    FCS/C2     Equipment GNSS    ATM      GIS/Weather/
    adapters    adapters adapter adapter    Traffic
        │          │       │       │          │
        └──────────┴───────┴───────┴──────────┘
@@ -163,17 +163,17 @@ AUTHORITY  = IS IT AUTHORIZED?
 - Vehicle/FCS remains authoritative for aircraft-level flight-control state and onboard safety behavior.
 - External regulatory systems remain authoritative for submitted/accepted authorization state.
 - External weather/GIS/traffic providers remain authoritative for their source data; BlueSky records source, timestamp and quality.
-- Payload devices remain authoritative for device-local status and raw data; BlueSky associates and indexes it operationally.
+- Equipment devices remain authoritative for device-local status and raw data; BlueSky associates and indexes it operationally.
 
 ## 9. Configuration versioning
 
-The following must be versioned and traceable: BlueSky software build; vehicle profile; FCS/firmware; parameters/configuration baseline; payload profile; C2 configuration; mission version; regulatory submission/authorization; AI/correction model or rule version.
+The following must be versioned and traceable: BlueSky software build; vehicle profile; FCS/firmware; parameters/configuration baseline; equipment profile; C2 configuration; mission version; regulatory submission/authorization; AI/correction model or rule version.
 
 A material change invalidates the relevant verification/readiness state until revalidated.
 
 ## 10. Multi-UAV model
 
-A single operational Mission may contain multiple vehicle assignments while each vehicle retains its own identity, FCS, C2 session, telemetry, payload, regulatory relationship and Flight Record data. The mission coordinator maintains common task identity and coordination state.
+A single operational Mission may contain multiple vehicle assignments while each vehicle retains its own identity, FCS, C2 session, telemetry, equipment, regulatory relationship and Flight Record data. The mission coordinator maintains common task identity and coordination state.
 
 ```text
 MISSION
