@@ -67,6 +67,8 @@ for artifact_id, path in REQUIRED.items():
             errors.append(f"missing reference: {artifact_id} -> {linked_id}")
 
 for path in (ROOT / "04_SOFTWARE/AUTOPILOT_ADAPTER").rglob("*"):
+    if path.resolve() == Path(__file__).resolve():
+        continue
     if not path.is_file() or path.suffix not in {".hpp", ".cpp", ".yaml", ".md"}:
         continue
     text = path.read_text(encoding="utf-8")
