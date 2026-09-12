@@ -1,9 +1,11 @@
 ---
 id: BLUESKY-ADAPTER-REPOSITORY-CONSISTENCY-CHECK-001
 type: adapter_repository_consistency_check
-status: controlled_working_draft
+status: controlled_verified_repository_consistency
 system: BlueSky PRO
 work_package: Phase 4 Universal Integration Layer — Interface / Service integration gap
+verified_commit: c6d5b9322d8ed0b9b539b4790697c7b7c2efd831
+verified_workflow_run: 34702928130
 ---
 
 # BlueSky PRO — Adapter Repository Consistency Check 001
@@ -56,18 +58,24 @@ The automated repository check is:
 
 The planning and autopilot-adapter CI workflows invoke this check before their dependent build/test stages.
 
-## 5. Current baseline
+## 5. Verified baseline
 
 ```text
-Baseline: main
-Expected verification: automated repository consistency check
+Baseline: main at commit c6d5b9322d8ed0b9b539b4790697c7b7c2efd831
+Workflow: BlueSky Autopilot Adapter
+Run: 34702928130
+Consistency validation: PASS
+Configure: PASS
+Build: PASS
+Test: PASS
+Tests: 2/2 passed
 Real execution: DEFERRED
 Real hardware: NOT CONNECTED
 Evidence: NOT AVAILABLE
-Verification status: UNVERIFIED
+Verification scope: repository consistency + software build/test only
 ```
 
-The record must not be changed to `PASS` or `VERIFIED` solely because the documentation exists. The status is updated only from an actual check result on the corresponding commit.
+The verified status does not constitute operational authorization, HIL evidence, flight-test evidence or certification evidence.
 
 ## 6. Failure handling
 
@@ -87,4 +95,4 @@ If the failure exposes a genuine architectural ambiguity, stop only for the spec
 
 Real hardware, HIL and flight-test results remain deferred. When such testing occurs, this record is reconciled with the actual configuration, execution result and evidence references.
 
-**Status: CONTROLLED WORKING DRAFT — REPOSITORY CONSISTENCY CHECK RECORD ESTABLISHED; CURRENT AUTOMATED VERIFICATION PENDING.**
+**Status: CONTROLLED VERIFIED REPOSITORY CONSISTENCY — CI run 34702928130 passed validation, configuration, build and test for commit c6d5b9322d8ed0b9b539b4790697c7b7c2efd831.**
