@@ -23,6 +23,11 @@ public:
         return {bluesky::planning::command::CommandState::Acknowledged, 30, ""};
     }
 
+    bluesky::planning::command::CommandTransition execute(
+        const bluesky::planning::command::CommandRequest&) override {
+        return {bluesky::planning::command::CommandState::Executing, 35, ""};
+    }
+
     bluesky::planning::command::CommandTransition complete(
         const bluesky::planning::command::CommandRequest&) override {
         return {bluesky::planning::command::CommandState::Completed, 40, ""};
@@ -61,6 +66,7 @@ int main() {
     assert(lifecycle.validate(request).state == bluesky::planning::command::CommandState::Validating);
     assert(lifecycle.dispatch(request).state == bluesky::planning::command::CommandState::Dispatched);
     assert(lifecycle.acknowledge(request).state == bluesky::planning::command::CommandState::Acknowledged);
+    assert(lifecycle.execute(request).state == bluesky::planning::command::CommandState::Executing);
     assert(lifecycle.complete(request).state == bluesky::planning::command::CommandState::Completed);
     assert(lifecycle.fail(request, "test failure").reason == "test failure");
     assert(lifecycle.cancel(request, "test cancellation").reason == "test cancellation");
