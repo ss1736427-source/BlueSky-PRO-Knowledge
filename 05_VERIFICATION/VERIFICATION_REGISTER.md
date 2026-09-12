@@ -261,6 +261,13 @@ The pass links `C2-V01..C2-V08` to existing requirement, safety,
 architecture/interface and configuration records. It identifies no proven
 requirement gap or conflict; the cases remain `DEFINED / NOT VERIFIED`.
 
+The controlled execution-result record is:
+
+`05_VERIFICATION/C2/C2_VERIFICATION_EXECUTION_RESULT_001.md`
+
+The result record is `C2-VER-EXEC-001`. It is a controlled working draft only;
+execution has not been performed and no evidence or verification claim is implied.
+
 ## 14. Audit findings — initial pass
 
 ```text
