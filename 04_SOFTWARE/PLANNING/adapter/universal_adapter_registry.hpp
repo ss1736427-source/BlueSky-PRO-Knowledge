@@ -16,6 +16,7 @@ public:
     UniversalAdapter* findById(const std::string& adapter_id) const;
     UniversalAdapter* findForVehicleProfile(const std::string& vehicle_profile) const;
     UniversalAdapter* findForEquipmentProfile(const std::string& equipment_profile) const;
+    UniversalAdapter* findForCapability(const std::string& capability) const;
 
     std::vector<std::string> adapterIds() const;
 
