@@ -22,6 +22,8 @@ CORE SERVICE
     ↓
 AdapterId / VehicleProfileId / EquipmentProfileId
     ↓
+SERVICE-FACING ADAPTER RESOLVER
+    ↓
 ADAPTER REGISTRY
     ↓
 Universal Adapter Contract
@@ -31,7 +33,7 @@ CONCRETE ADAPTER
 EXTERNAL PROTOCOL
 ```
 
-Core services shall resolve adapters through the registry boundary. They shall not instantiate or reference vendor-specific adapters directly.
+Core services shall resolve adapters through the service-facing resolver and registry boundary. They shall not instantiate or reference vendor-specific adapters directly.
 
 ## 3. Minimal registry record
 
@@ -74,8 +76,12 @@ AMBIGUOUS
 
 ## 5. Service-layer rule
 
+The service-facing resolver is a thin technology-neutral façade. It delegates adapter resolution to the registry and introduces no vendor-specific selection or execution authority.
+
 ```text
 Service
+  ↓
+AdapterServiceResolver.resolve()
   ↓
 Registry.resolve()
   ↓
@@ -132,10 +138,12 @@ The registry boundary remains stable while concrete adapters are added.
 
 ```text
 Registry boundary: DEFINED
+Service-facing resolver: IMPLEMENTED
+Service-facing resolver test: PASS in CI for the corresponding main commit
 Concrete vendor adapter: NOT SELECTED
 Synthetic fixture: DEFINED
 Real hardware: NOT CONNECTED
 Evidence: NOT AVAILABLE
 ```
 
-**Status: CONTROLLED WORKING DRAFT — REGISTRY RESULT VOCABULARY ALIGNED WITH CURRENT TECHNOLOGY-NEUTRAL IMPLEMENTATION.**
+**Status: CONTROLLED WORKING DRAFT — REGISTRY AND SERVICE-FACING RESOLUTION BOUNDARIES ALIGNED WITH CURRENT TECHNOLOGY-NEUTRAL IMPLEMENTATION.**
