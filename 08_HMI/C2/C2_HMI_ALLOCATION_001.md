@@ -3,7 +3,7 @@ id: C2-HMI-ALLOCATION-001
 type: c2_hmi_allocation_record
 status: controlled_working_draft
 system: BlueSky PRO
-basis: C2-VERIFICATION-RECONCILIATION-001 / C2-ICD-BASELINE-001
+basis: C2-REQUIREMENTS-RECONCILIATION-001 / C2-ICD-BASELINE-001
 ---
 
 # BLUE SKY PRO — C2 HMI ALLOCATION 001
@@ -25,7 +25,7 @@ RESTORED
 
 и требует, чтобы переходы состояний были allocated to system/safety requirements; восстановленное состояние не должно считаться валидным до выполнения recovery criteria.
 
-`C2-VERIFICATION-RECONCILIATION-001` определяет `C2-REQ-010` как candidate gap pending exact wording review. Controlled wording `SYS-C2-006` и clause mapping `C2-142-020` подтверждают операторские предупреждения и данные при потере C2.
+`C2-REQUIREMENTS-RECONCILIATION-001` определяет `C2-REQ-010` как derived/coverage-confirmed allocation pending any later controlled wording change. Controlled wording `SYS-C2-006` и clause mapping `C2-142-020` подтверждают операторские предупреждения и данные при потере C2.
 
 ## 3. Allocation decision
 
