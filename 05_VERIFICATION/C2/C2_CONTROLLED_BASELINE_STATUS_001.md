@@ -30,14 +30,14 @@ system: BlueSky PRO
 
 | Candidate | Disposition | Action |
 |---|---|---|
-| C2-CAND-001 | DERIVED | сохранить как derived allocation до exact reconciliation |
-| C2-CAND-002 | DERIVED | связать с существующим C2/Safety контуром; не дублировать |
-| C2-CAND-003 | PARTIAL / CONTROLLED BASIS IDENTIFIED | использовать SYS-C2-003, C2-142-004/011/013/014, IF-C2-001 и IV-C2-004; количественные значения не назначать без утверждённой operational/certification basis |
-| C2-CAND-004 | DERIVED | сохранить как interface/system allocation |
-| C2-CAND-005 | DERIVED | использовать существующий logging/evidence контур |
-| C2-CAND-006 | MERGE/SCOPE REVIEW | не создавать новый SYS-REQ; проверить operational responsibility |
-| C2-CAND-007 | DERIVED / COVERED | использовать controlled cause/status distinction и существующую diagnostics/safety allocation |
-| C2-CAND-008 | DERIVED / COVERED | использовать controlled common time reference и существующий IF-C2-001 |
+| C2-CAND-001 | DERIVED / COVERED | сохранён как derived allocation; exact SYS-REQ reconciliation выполнена |
+| C2-CAND-002 | MERGE / COVERED | связан с SYS-REQ-086 и SYS-REQ-093; новый SYS-REQ не создаётся |
+| C2-CAND-003 | PARTIAL / CONTROLLED BASIS IDENTIFIED | используется SYS-REQ-091 where applicable, C2-142-004/011/013/014, IF-C2 и IV-C2; количественные значения не назначаются без утверждённой operational/certification basis |
+| C2-CAND-004 | DERIVED | сохранён как interface/system allocation; provider-side obligations остаются внешними |
+| C2-CAND-005 | DERIVED / COVERED | используется существующий logging/evidence контур |
+| C2-CAND-006 | MERGE / COVERED | связан с SYS-REQ-081, SYS-REQ-082, SYS-REQ-086 и SYS-REQ-093; новый SYS-REQ не создаётся |
+| C2-CAND-007 | DERIVED / COVERED | используется controlled cause/status distinction и существующая diagnostics/safety allocation |
+| C2-CAND-008 | DERIVED / COVERED | используется controlled common time reference и IF-C2 |
 
 ## 3. Baseline decision
 
@@ -45,8 +45,12 @@ system: BlueSky PRO
 NEW SYS-REQ: 0
 NEW SAF-REQ: 0
 RENUMBERING: 0
-MASTER REGISTER: no change
+MASTER REGISTER: no new requirement identities
 ```
+
+Existing authoritative requirement identities are preserved. The completed exact reconciliation is recorded in:
+
+`01_REQUIREMENTS/SYSTEM/C2/MASTER_REQUIREMENTS_REGISTER_C2_ALLOCATION_001.md`
 
 Ни один кандидат не переводится в baseline без доказанного functional gap и полного набора:
 
@@ -91,15 +95,35 @@ source
 ## 8. Current controlled chain
 
 ```text
-C2-VERIFICATION-CASES-001
+C2-CLAUSE-LEVEL-MAPPING-001
+→ C2-REQUIREMENTS-RECONCILIATION-001
+→ C2-SAFETY-ALLOCATION-001
+→ IF-C2
+→ C2-VERIFICATION-CASES-001
 → C2-VER-CFG-001
 → C2-VER-EXEC-001
 → C2-EVIDENCE-INDEX-001
-→ C2 execution evidence
+→ real execution evidence
 ```
 
-`C2-VER-EXEC-001` и `C2-EVIDENCE-INDEX-001` являются подготовленными controlled records; фактическое execution/evidence остаётся незавершённым.
+The clause, requirement, safety and interface pre-execution allocations are controlled. `C2-VER-EXEC-001` and `C2-EVIDENCE-INDEX-001` remain prepared controlled records; factual execution/evidence is not present.
 
-## 9. Status
+## 9. Checkpoint
 
-**CONTROLLED WORKING RECORD — C2 DEFINITION/CONFIGURATION/RECORD CONTROL CLOSED; QUANTITATIVE BASIS IDENTIFIED AS EXPLICIT DEFERRED DEPENDENCY; REAL TEST EXECUTION AND EVIDENCE DEFERRED UNTIL TEST STAGE.**
+```text
+CHECKPOINT C2-PREEXEC-001
+
+CLAUSE MAPPING              CLOSED FOR CURRENT WORKING SET
+REQUIREMENT RECONCILIATION  CLOSED FOR IDENTIFIED C2 SET
+SAFETY ALLOCATION           CLOSED FOR PRE-EXECUTION ALLOCATION
+INTERFACE ALLOCATION        CLOSED FOR CURRENT IF-C2 SCOPE
+VERIFICATION CASES          DEFINED
+CONFIGURATION               CONTROLLED STUB
+EXECUTION                   DEFERRED
+EVIDENCE                    EMPTY STUB
+QUANTITATIVE CRITERIA       DEFERRED
+```
+
+## 10. Status
+
+**CONTROLLED WORKING RECORD — C2 PRE-EXECUTION ALLOCATION CLOSED; REAL TEST EXECUTION, QUANTITATIVE CRITERIA AND EVIDENCE REMAIN DEFERRED TO TEST STAGE.**
