@@ -1,5 +1,5 @@
 {
-  "last_main_sha": "668e913017e5edd34b8ac389fd1220fc4a95b17e",
+  "last_main_sha": "e3f7621c27e15e8c3fe859cd4bc3c1d126d6cfa9",
   "verified_sha": "668e913017e5edd34b8ac389fd1220fc4a95b17e",
   "decision_required": false,
   "ci_required": true,
@@ -7,6 +7,6 @@
   "checkpoint": "PH4-INT-001",
   "real_execution": "DEFERRED",
   "quantitative_c2_basis": "DEFERRED",
-  "current_ci_status": "PASS",
-  "next_deterministic_action": "Restart the algorithm from verified main and close the next unresolved Interface / Service integration dependency exposed by the controlled command lifecycle safety boundary, without granting execution authority"
+  "current_ci_status": "UNVERIFIED",
+  "next_deterministic_action": "Verify CI for e3f7621c27e15e8c3fe859cd4bc3c1d126d6cfa9, then restart the algorithm and update verified state only after the corresponding main CI passes"
 }
