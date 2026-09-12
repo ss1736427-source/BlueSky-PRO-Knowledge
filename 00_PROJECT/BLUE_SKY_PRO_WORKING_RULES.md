@@ -17,6 +17,7 @@ READ CURRENT STATE
 → VERIFY CHANGE
 → COMMIT TO GITHUB
 → VERIFY NEW COMMIT / DIFF / TESTS / CI AS APPLICABLE
+→ RESTART THIS ALGORITHM FROM THE BEGINNING
 → DETERMINE NEXT STEP
 → IF DETERMINISTIC: CONTINUE AUTOMATICALLY
 → IF USER DECISION REQUIRED: STOP AND STATE EXACT DECISION
@@ -33,6 +34,7 @@ READ CURRENT STATE
 7. **При отсутствии данных реальных испытаний создавать controlled stub**, продолжать доступную работу и не выдавать stub за evidence.
 8. **После реальных испытаний заменить stub фактическими данными** и обновить связанную документацию, traceability и verification status только при наличии подтверждающего evidence.
 9. **После каждого изменения переходить к следующей детерминированной проверке/работе**, а не возвращать управление пользователю без необходимости.
+10. **После каждого commit в GitHub обязательно перезапускать алгоритм с самого начала.** Новый commit считается новым фактическим состоянием репозитория и не должен обрабатываться как продолжение старого состояния без повторного чтения алгоритма, governing protocol, текущего work package, checkpoints, requirements и relevant history.
 
 ### Правило изменения алгоритма
 
