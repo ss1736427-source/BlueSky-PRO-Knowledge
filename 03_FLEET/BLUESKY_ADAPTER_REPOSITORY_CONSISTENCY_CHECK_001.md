@@ -25,9 +25,20 @@ Record the deterministic repository-level consistency check required before conc
 | Concrete Adapter Contract Implementation Stub | BLUESKY-ADAPTER-CONTRACT-IMPLEMENTATION-STUB-001 | RESOLVED | Technology-neutral contract implementation surface |
 | Adapter Conformance Checklist | BLUESKY-ADAPTER-CONFORMANCE-CHECKLIST-001 | RESOLVED | Implementation gates |
 | Adapter Registry Boundary | BLUESKY-ADAPTER-REGISTRY-BOUNDARY-001 | RESOLVED | Service-layer lookup boundary |
-| Adapter Registry Contract Fixture | BLUESKY-ADAPTER-REGISTRY-FIXTURE-001 | RESOLVED | Deterministic contract fixture |
+| Adapter Registry Fixture | BLUESKY-ADAPTER-REGISTRY-FIXTURE-001 | RESOLVED | Ten-vector deterministic registry fixture |
+| Adapter Registry Contract Fixture | BLUESKY-ADAPTER-REGISTRY-CONTRACT-FIXTURE-001 | RESOLVED | Contract-level resolution fixture |
 | Vehicle / Equipment Integration Framework | VEHICLE_EQUIPMENT_INTEGRATION_FRAMEWORK | RESOLVED | Service-layer integration |
 | Equipment Interface | IF-EQUIPMENT | RESOLVED | Equipment integration boundary |
+
+The two Registry fixtures have distinct controlled roles and are not interchangeable:
+
+```text
+REGISTRY-CONTRACT-FIXTURE
+→ contract-level resolution cases
+
+REGISTRY-FIXTURE
+→ broader ten-vector deterministic repository fixture
+```
 
 ## 3. Consistency results
 
@@ -44,6 +55,7 @@ Concrete Implementation Stub → Matrix              PASS
 Checklist → Matrix / Test Stub / Baseline          PASS
 Registry Boundary → Contract / Schema              PASS
 Registry Fixture → Registry Boundary / Contract    PASS
+Registry Contract Fixture → Registry Boundary       PASS
 Vehicle/Equipment Framework → Registry              PASS
 IF-EQUIPMENT → Registry / Canonical Schema         PASS
 ```
@@ -98,6 +110,7 @@ Contract execution remains `NOT EXECUTED` and real-test evidence remains unavail
 REPOSITORY CONSISTENCY: PASS
 SERVICE-LAYER REGISTRY BINDING: PASS
 REGISTRY FIXTURE: DEFINED
+REGISTRY CONTRACT FIXTURE: DEFINED
 CONCRETE ADAPTER CONTRACT STUB: DEFINED
 CAPABILITY RESOLUTION BINDING: DEFINED
 CONCRETE ADAPTER CONFORMANCE: NOT VERIFIED
@@ -117,4 +130,4 @@ REPOSITORY CONSISTENCY RECONCILIATION
 → RESTART ALGORITHM
 ```
 
-**Status: CONTROLLED WORKING RECORD — ADAPTER IMPLEMENTATION STUB, CONFORMANCE MATRIX AND REGISTRY CAPABILITY RESOLUTION RECONCILED; REAL IMPLEMENTATION/TESTING PENDING.**
+**Status: CONTROLLED WORKING RECORD — ADAPTER IMPLEMENTATION STUB, CONFORMANCE MATRIX, REGISTRY BOUNDARY AND REGISTRY FIXTURES RECONCILED; REAL IMPLEMENTATION/TESTING PENDING.**
