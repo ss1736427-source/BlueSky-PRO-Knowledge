@@ -24,7 +24,9 @@ class EvidenceSession:
         test_method_revision: str | None = None,
         test_case_id: str | None = None,
         test_case_revision: str | None = None,
+        configuration_id: str | None = None,
         configuration: Mapping[str, Any] | None = None,
+        flight_record_id: str | None = None,
         data_class: str = "DEMONSTRATION",
     ) -> None:
         if not test_run_id.strip():
@@ -41,6 +43,8 @@ class EvidenceSession:
             "test_method_revision": test_method_revision,
             "test_case_id": test_case_id,
             "test_case_revision": test_case_revision,
+            "configuration_id": configuration_id,
+            "flight_record_id": flight_record_id,
             "configuration": dict(configuration or {}),
             "started_at_ms": None,
             "ended_at_ms": None,
