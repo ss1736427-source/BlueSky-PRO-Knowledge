@@ -65,7 +65,7 @@ Where applicable it identifies:
 - dataset
 - mission
 - UAV and configuration
-- payload/camera
+- Equipment/camera
 - acquisition date/time
 - coordinate reference system
 - altitude reference
