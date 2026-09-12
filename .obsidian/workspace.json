@@ -11,10 +11,14 @@
             "id": "058fcba7e26ecc4b",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Граф"
+              "type": "markdown",
+              "state": {
+                "file": "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/FLIGHT_EVIDENCE_SESSION_CONTRACT.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "FLIGHT_EVIDENCE_SESSION_CONTRACT"
             }
           }
         ]
@@ -187,9 +191,12 @@
   },
   "active": "058fcba7e26ecc4b",
   "lastOpenFiles": [
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/evidence_source_registry.py",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/test_flight_evidence_bridge.py",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/flight_evidence_bridge.py",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/EVIDENCE_SOURCE_CHANNEL_REGISTRY.md",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/EVIDENCE_CHAIN_CATALOG.md",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/BLUESKY_AUTOPILOT_ADAPTER_IMPLEMENTATION_BASELINE.md",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/evidence_source_registry.py",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/test_evidence_session.py",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/test_evidence_adapter.py",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/evidence_session.py",
@@ -205,8 +212,6 @@
     "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/test_evidence_recorder.py",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/evidence_recorder.py",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/evidence_record.schema.json",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/verification",
-    "04_SOFTWARE/PLANNING/command_authority_gate_contract_stub.hpp",
     "03_FLEET/BLUESKY-COMMAND-AUTHORITY-GATE-CONTRACT-001.md",
     "03_FLEET/BLUESKY-ADAPTER-REPOSITORY-CONSISTENCY-CHECK-001.md",
     "03_FLEET/BLUESKY-COMMAND-LIFECYCLE-CONTRACT-001.md",
@@ -221,7 +226,6 @@
     "03_FLEET/BLUESKY_ADAPTER_REGISTRY_BOUNDARY_001.md",
     "03_FLEET/BLUESKY_ADAPTER_REPOSITORY_CONSISTENCY_CHECK_001.md",
     "03_FLEET/BLUESKY_ADAPTER_IMPLEMENTATION_STUB_001.md",
-    "03_FLEET/BLUESKY_ADAPTER_CONFORMANCE_CHECKLIST_001.md",
-    "03_FLEET/BLUESKY_ADAPTER_CONTRACT_TEST_STUB_001.md"
+    "03_FLEET/BLUESKY_ADAPTER_CONFORMANCE_CHECKLIST_001.md"
   ]
 }
