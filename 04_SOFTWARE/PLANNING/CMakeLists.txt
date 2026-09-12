@@ -79,6 +79,12 @@ add_executable(universal_adapter_registry_test
 
 target_link_libraries(universal_adapter_registry_test PRIVATE bluesky_planning)
 
+add_executable(command_lifecycle_contract_stub_test
+    command_lifecycle_contract_stub_test.cpp
+)
+
+target_link_libraries(command_lifecycle_contract_stub_test PRIVATE bluesky_planning)
+
 enable_testing()
 add_test(NAME astar_dijkstra_benchmark COMMAND astar_dijkstra_benchmark)
 add_test(NAME orchestrator_integration_test COMMAND orchestrator_integration_test)
@@ -90,3 +96,4 @@ add_test(NAME mission_model_contract_test COMMAND mission_model_contract_test)
 add_test(NAME vehicle_equipment_capability_contract_test COMMAND vehicle_equipment_capability_contract_test)
 add_test(NAME universal_adapter_contract_test COMMAND universal_adapter_contract_test)
 add_test(NAME universal_adapter_registry_test COMMAND universal_adapter_registry_test)
+add_test(NAME command_lifecycle_contract_stub_test COMMAND command_lifecycle_contract_stub_test)
