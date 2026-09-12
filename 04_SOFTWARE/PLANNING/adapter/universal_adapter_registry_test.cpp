@@ -14,7 +14,7 @@ public:
         : id_(std::move(id)), vehicle_(std::move(vehicle)), equipment_(std::move(equipment)) {}
 
     AdapterMetadata metadata() const override {
-        return {id_, "1.0.0", "TEST", "MOCK-1", {vehicle_}, {equipment_}, {}, "1"};
+        return {id_, "1.0.0", "TEST", "MOCK-1", {vehicle_}, {equipment_}, {"CAPABILITY-A"}, "1"};
     }
 
     std::vector<std::string> discover() override { return {}; }
@@ -57,6 +57,7 @@ int main() {
     assert(!registry.registerAdapter(nullptr));
     assert(!registry.unregisterAdapter(""));
     assert(registry.findById("missing") == nullptr);
+    assert(registry.findForCapability("CAPABILITY-A") == nullptr);
 
     assert(registry.registerAdapter(
         std::make_unique<TestAdapter>("ADAPTER-A", "VEHICLE-A", "EQUIPMENT-A")));
@@ -66,8 +67,11 @@ int main() {
     assert(registry.findById("ADAPTER-A") != nullptr);
     assert(registry.findForVehicleProfile("VEHICLE-A") == registry.findById("ADAPTER-A"));
     assert(registry.findForEquipmentProfile("EQUIPMENT-A") == registry.findById("ADAPTER-A"));
+    assert(registry.findForCapability("CAPABILITY-A") == registry.findById("ADAPTER-A"));
     assert(registry.findForVehicleProfile("VEHICLE-X") == nullptr);
     assert(registry.findForEquipmentProfile("EQUIPMENT-X") == nullptr);
+    assert(registry.findForCapability("CAPABILITY-X") == nullptr);
+    assert(registry.findForCapability("") == nullptr);
 
     const auto ids = registry.adapterIds();
     assert(ids.size() == 1);
@@ -75,6 +79,7 @@ int main() {
 
     assert(registry.unregisterAdapter("ADAPTER-A"));
     assert(registry.findById("ADAPTER-A") == nullptr);
+    assert(registry.findForCapability("CAPABILITY-A") == nullptr);
     assert(registry.adapterIds().empty());
     assert(!registry.unregisterAdapter("ADAPTER-A"));
 
