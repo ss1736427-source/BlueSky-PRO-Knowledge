@@ -92,6 +92,9 @@ The lifecycle contract does not grant command authority.
 Command request
 → authority/safety validation
 → adapter dispatch
+→ Vehicle acknowledgement
+→ execution state
+→ execution confirmation
 ```
 
 An adapter or lifecycle implementation shall not bypass the applicable safety/authority gate.
@@ -102,7 +105,25 @@ An adapter or lifecycle implementation shall not bypass the applicable safety/au
 
 Failures shall remain explicit. A timeout shall not be converted to successful completion. `UNKNOWN` shall be used when the system cannot establish the external execution state and shall require the higher-level recovery logic to determine the safe response.
 
-## 8. Verification boundary
+## 8. Implementation mapping
+
+The controlled software stub exposes the canonical lifecycle operations required by this contract:
+
+```text
+validate()      → VALIDATING
+ dispatch()      → DISPATCHED
+ acknowledge()   → ACKNOWLEDGED
+ execute()       → EXECUTING
+ complete()      → COMPLETED
+ fail()          → FAILED
+ cancel()        → CANCELLED
+ timeout()       → TIMEOUT
+ unknown()       → UNKNOWN
+```
+
+The `execute()` transition is explicit so that `ACKNOWLEDGED` cannot be implicitly treated as execution confirmation.
+
+## 9. Verification boundary
 
 The current implementation is a stub:
 
@@ -116,13 +137,13 @@ verification = UNVERIFIED
 
 The contract test `command_lifecycle_contract_stub_test` is the deterministic software-level verification fixture for the currently defined interface surface. Its execution result shall be recorded separately from real integration evidence.
 
-## 9. Integration handoff
+## 10. Integration handoff
 
 The concrete adapter implementation shall consume this contract through the existing Adapter Registry boundary and canonical Vehicle/Equipment model.
 
 No vendor-specific protocol is selected by this document.
 
-## 10. Change rule
+## 11. Change rule
 
 If an actual integration gap requires a change to the canonical lifecycle, the change shall follow:
 
