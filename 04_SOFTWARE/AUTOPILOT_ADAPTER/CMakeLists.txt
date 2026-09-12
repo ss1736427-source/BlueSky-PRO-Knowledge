@@ -26,3 +26,16 @@ add_test(
     NAME universal_autopilot_adapter_contract_test
     COMMAND universal_autopilot_adapter_contract_test
 )
+
+add_executable(universal_equipment_adapter_contract_test
+    core/universal_equipment_adapter_contract_test.cpp
+)
+
+target_link_libraries(universal_equipment_adapter_contract_test PRIVATE
+    bluesky_autopilot_contract
+)
+
+add_test(
+    NAME universal_equipment_adapter_contract_test
+    COMMAND universal_equipment_adapter_contract_test
+)
