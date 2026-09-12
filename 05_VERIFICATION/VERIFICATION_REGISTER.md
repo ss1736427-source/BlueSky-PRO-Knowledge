@@ -268,6 +268,14 @@ The controlled execution-result record is:
 The result record is `C2-VER-EXEC-001`. It is a controlled working draft only;
 execution has not been performed and no evidence or verification claim is implied.
 
+The pre-execution gate record is:
+
+`05_VERIFICATION/C2/C2_EXECUTION_PREREQUISITE_CHECK_001.md`
+
+It records the current execution gate and confirms that C2 execution remains
+blocked until the approved configuration and required execution environment are
+established. It does not assign a verification result or create evidence.
+
 ## 14. Audit findings — initial pass
 
 ```text
