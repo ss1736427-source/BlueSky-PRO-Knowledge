@@ -3,7 +3,7 @@ id: C2-VERIFICATION-CASES-001
 type: c2_verification_case_definitions
 status: controlled_working_draft
 system: BlueSky PRO
-basis: C2-ICD-BASELINE-001; C2-SAFETY-ALLOCATION-001; VERIFICATION-PLAN-001; C2-RECONCILIATION-PASS-003
+basis: C2-ICD-BASELINE-001; C2-SAFETY-ALLOCATION-001; VERIFICATION-PLAN-001; C2-RECONCILIATION-PASS-003; C2-QUANTITATIVE-PARAMETERS-BASIS-001
 authority: MASTER-REQUIREMENTS-REGISTER-001
 ---
 
@@ -103,20 +103,19 @@ The exact requirement linkage remains subordinate to the authoritative master re
 
 ```text
 CASE DEFINITION: controlled by this record
-EXECUTION RESULT: not created
-EVIDENCE: not created
+EXECUTION RESULT: prepared as controlled stub
+EVIDENCE: prepared as empty controlled stub
 VERIFICATION STATUS: ALLOCATED / NOT VERIFIED
 ```
 
 No `PASSED`, `VERIFIED` or certification claim is made by this document.
 
-## 8. Remaining controlled actions
+## 8. Controlled actions before real execution
 
-1. Establish the controlled test configuration and environment for each case
-   using `C2-VERIFICATION-CONFIGURATION-001` / `C2-VER-CFG-001`.
-2. Carry the reconciled requirement/design basis from
-   `C2-RECONCILIATION-PASS-003` into each execution result.
-3. Execute the cases and create separate result/evidence records.
-4. Update the verification register and evidence index from the resulting records.
+1. Maintain `C2-VER-CFG-001` as the controlled execution-configuration stub.
+2. Maintain `C2-VER-EXEC-001` as the controlled execution-result stub.
+3. Maintain `C2-EVIDENCE-INDEX-001` as the empty evidence stub.
+4. Maintain `C2-QUANTITATIVE-PARAMETERS-BASIS-001` as the explicit quantitative-basis dependency until an authoritative/approved basis is available.
+5. At real test stage, replace the applicable stubs with actual configuration, results and evidence; do not infer `PASS` / `VERIFIED` from preparation records.
 
-**Status: CONTROLLED WORKING DRAFT — CASE DEFINITIONS COMPLETE; EXECUTION OPEN.**
+**Status: CONTROLLED WORKING DRAFT — CASE DEFINITIONS COMPLETE; PRE-EXECUTION PACKAGE STRUCTURED; REAL EXECUTION OPEN.**

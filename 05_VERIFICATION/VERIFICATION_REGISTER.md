@@ -261,6 +261,13 @@ The pass links `C2-V01..C2-V08` to existing requirement, safety,
 architecture/interface and configuration records. It identifies no proven
 requirement gap or conflict; the cases remain `DEFINED / NOT VERIFIED`.
 
+The quantitative C2 basis dependency is controlled in:
+
+`05_VERIFICATION/C2/C2_QUANTITATIVE_PARAMETERS_BASIS_001.md`
+
+It is an explicit **STUB / OPEN** dependency. No numerical C2 quality/QoS
+values are baselined until an authoritative or approved basis is available.
+
 The controlled execution-result record is:
 
 `05_VERIFICATION/C2/C2_VERIFICATION_EXECUTION_RESULT_001.md`
@@ -268,14 +275,21 @@ The controlled execution-result record is:
 The result record is `C2-VER-EXEC-001`. It is a controlled working **STUB** only;
 real execution has not been performed and no evidence or verification claim is implied.
 
+The evidence index is:
+
+`05_VERIFICATION/C2/C2_EVIDENCE_INDEX_001.md`
+
+It is a controlled **EMPTY STUB** linked to `C2-VER-EXEC-001`; no execution
+evidence exists.
+
 The pre-execution gate record is:
 
 `05_VERIFICATION/C2/C2_EXECUTION_PREREQUISITE_CHECK_001.md`
 
-It records the current execution gate. The configuration/result stubs establish
-the controlled documentation structure, while the real test environment,
-actual build, procedure, inputs and observed results remain deferred to the
-real test stage. The gate does not assign a verification result or create evidence.
+It records the current execution gate. The configuration/result/evidence stubs
+establish the controlled documentation structure, while the real test environment,
+actual build, procedure, inputs and observed results remain deferred to the real
+test stage. The gate does not assign a verification result or create evidence.
 
 ## 14. Audit findings — initial pass
 
@@ -289,6 +303,8 @@ V-REG-006  Navigation requirement allocation is maintained as a separate working
 V-REG-007  C2-VER-GAP-001 is closed for definition/configuration control; execution and evidence remain open.
 V-REG-008  C2 pre-execution basis review and exact content/scope reconciliation are complete; execution remains deferred pending real configuration, execution results and evidence.
 V-REG-009  C2 configuration and execution-result stubs are controlled placeholders; they shall be replaced by actual test records after real execution.
+V-REG-010  C2 quantitative basis dependency is explicitly controlled as a deferred stub; no numerical requirement or acceptance value is inferred.
+V-REG-011  C2 execution-result and evidence-index stubs are prepared; they do not constitute execution evidence.
 ```
 
 ## 15. Completion gate
