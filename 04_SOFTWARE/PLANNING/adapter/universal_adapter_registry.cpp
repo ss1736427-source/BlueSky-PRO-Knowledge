@@ -77,30 +77,34 @@ UniversalAdapter* UniversalAdapterRegistry::findForVehicleProfile(
     const std::string& vehicle_profile) const {
     if (vehicle_profile.empty()) return nullptr;
 
-    const auto it = std::find_if(
-        adapters_.begin(), adapters_.end(),
-        [&](const std::unique_ptr<UniversalAdapter>& adapter) {
-            if (!adapter) return false;
-            const auto& profiles = adapter->metadata().supported_vehicle_profiles;
-            return std::find(profiles.begin(), profiles.end(), vehicle_profile) != profiles.end();
-        });
+    UniversalAdapter* match = nullptr;
+    std::size_t match_count = 0;
+    for (const auto& adapter : adapters_) {
+        if (!adapter) continue;
+        const auto& profiles = adapter->metadata().supported_vehicle_profiles;
+        if (std::find(profiles.begin(), profiles.end(), vehicle_profile) == profiles.end()) continue;
+        match = adapter.get();
+        ++match_count;
+    }
 
-    return it == adapters_.end() ? nullptr : it->get();
+    return match_count == 1 ? match : nullptr;
 }
 
 UniversalAdapter* UniversalAdapterRegistry::findForEquipmentProfile(
     const std::string& equipment_profile) const {
     if (equipment_profile.empty()) return nullptr;
 
-    const auto it = std::find_if(
-        adapters_.begin(), adapters_.end(),
-        [&](const std::unique_ptr<UniversalAdapter>& adapter) {
-            if (!adapter) return false;
-            const auto& profiles = adapter->metadata().supported_equipment_profiles;
-            return std::find(profiles.begin(), profiles.end(), equipment_profile) != profiles.end();
-        });
+    UniversalAdapter* match = nullptr;
+    std::size_t match_count = 0;
+    for (const auto& adapter : adapters_) {
+        if (!adapter) continue;
+        const auto& profiles = adapter->metadata().supported_equipment_profiles;
+        if (std::find(profiles.begin(), profiles.end(), equipment_profile) == profiles.end()) continue;
+        match = adapter.get();
+        ++match_count;
+    }
 
-    return it == adapters_.end() ? nullptr : it->get();
+    return match_count == 1 ? match : nullptr;
 }
 
 UniversalAdapter* UniversalAdapterRegistry::findForCapability(
