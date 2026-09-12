@@ -28,33 +28,34 @@ REGULATORY CLAUSE
 
 The following are **candidate derived records**, not new authoritative SYS-REQ identities. Existing SYS-REQ records have priority and must be reconciled before any baseline change.
 
-| Candidate | Source | Requirement implication | Allocation | Verification | Disposition |
-|---|---|---|---|---|---|
-| C2-CAND-001 | №142 | explicit C2 operational mode/state | FLIGHT / C2 | analysis + test | DERIVED / compare existing |
-| C2-CAND-002 | №142 | monitor C2 path and distinguish normal/degraded/lost | C2 / INTEGRATION | analysis + test | MERGE candidate |
-| C2-CAND-003 | №142 | apply approved C2 QoS parameters | C2 / CONFIGURATION | inspection + test | GAP only if existing coverage is absent |
-| C2-CAND-004 | №142 | enforce defined PROVIDER-C2 service/interface boundary | INTEGRATION / ICD | inspection + integration test | DERIVED |
-| C2-CAND-005 | №142 | record C2 state transitions and relevant events | HUB / JOURNAL | test + log inspection | DERIVED / compare existing |
-| C2-CAND-006 | №142 | invoke approved contingency behaviour on C2 loss/degradation | FLIGHT / SAFETY | scenario test | MERGE candidate |
-| C2-CAND-007 | №142 | preserve cause/status distinction for C2 failures | HUB / SAFETY | test + evidence review | DERIVED / compare existing |
-| C2-CAND-008 | №142 | use common controlled time reference | SYSTEM / HUB | analysis + test | DERIVED / compare existing |
+| Candidate | Source | Requirement implication | Existing authoritative coverage | Allocation | Verification | Disposition |
+|---|---|---|---|---|---|---|
+| C2-CAND-001 | №142 | explicit C2 operational mode/state | SYS-REQ-083 + existing C2 architecture records | FLIGHT / C2 | analysis + test | DERIVED / existing coverage |
+| C2-CAND-002 | №142 | monitor C2 path and distinguish normal/degraded/lost | SYS-REQ-086, SYS-REQ-093 | C2 / INTEGRATION | analysis + test | MERGE / existing coverage |
+| C2-CAND-003 | №142 | apply approved C2 QoS parameters | SYS-REQ-091 where applicable; quantitative values remain TBD | C2 / CONFIGURATION | inspection + test | DERIVED / GAP only if coverage absent |
+| C2-CAND-004 | №142 | enforce defined PROVIDER-C2 service/interface boundary | existing provider/interface allocation; no provider-side requirement assigned to BlueSky | INTEGRATION / ICD | inspection + integration test | DERIVED |
+| C2-CAND-005 | №142 | record C2 state transitions and relevant events | existing event/logging records | HUB / JOURNAL | test + log inspection | DERIVED / existing coverage |
+| C2-CAND-006 | №142 | invoke approved contingency behaviour on C2 loss/degradation | SYS-REQ-081, SYS-REQ-082, SYS-REQ-086, SYS-REQ-093 | FLIGHT / SAFETY | scenario test | MERGE / existing coverage |
+| C2-CAND-007 | №142 | preserve cause/status distinction for C2 failures | SYS-REQ-086, SYS-REQ-093 + diagnostics/safety allocation | HUB / SAFETY | test + evidence review | DERIVED / existing coverage |
+| C2-CAND-008 | №142 | use common controlled time reference | existing common time/reference allocation | SYSTEM / HUB | analysis + test | DERIVED / existing coverage |
 
-## 4. Existing requirement priority
+## 4. Exact existing SYS-REQ reconciliation
 
-Before creating or changing a `SYS-REQ-*`, compare the candidate against the existing authoritative records, including where relevant:
+The exact requirement records listed by the current C2 reconciliation have been inspected before allocation. Their identities are preserved; no replacement or renumbering is introduced.
 
 ```text
-SYS-REQ-080
-SYS-REQ-081
-SYS-REQ-082
-SYS-REQ-085
-SYS-REQ-086
-SYS-REQ-091
-SYS-REQ-092
-SYS-REQ-093
+SYS-REQ-080  Dynamic Task Reallocation       KEEP
+SYS-REQ-081  UAV Failure Tolerance            KEEP
+SYS-REQ-082  Safe Mission Completion           KEEP
+SYS-REQ-083  Platform Independence             KEEP
+SYS-REQ-085  Safety-Critical Priority          KEEP
+SYS-REQ-086  Graceful Degradation              KEEP
+SYS-REQ-091  Critical Latency                  KEEP
+SYS-REQ-092  Redundant HUB Resource Recovery   KEEP
+SYS-REQ-093  Controlled Resource Recovery       KEEP
 ```
 
-Candidate records do not override these identities.
+The reconciliation confirms that C2 degradation/loss/recovery does not justify a duplicate authoritative SYS-REQ on the evidence currently available.
 
 ## 5. Boundary rule
 
@@ -72,6 +73,8 @@ Provider infrastructure and provider internal implementation are not BlueSky SYS
 - Final ICD parameter set: OPEN.
 - Verification acceptance criteria: OPEN pending approved requirements baseline.
 
+These open items do not block the completed identity/overlap reconciliation above.
+
 ## 7. Consolidation rule
 
 ```text
@@ -87,11 +90,21 @@ CANDIDATE
 
 Only a proven `GAP` may justify creation of a new authoritative requirement.
 
-## 8. Next controlled work
+## 8. Current result
+
+```text
+EXACT SYS-REQ CONTENT REVIEW        COMPLETE FOR IDENTIFIED C2 SET
+DUPLICATE AUTHORITATIVE SYS-REQ     NONE IDENTIFIED
+C2 CANDIDATE ALLOCATION             RECORDED
+C2 NUMERICAL CRITERIA               TBD / OPEN
+CERTIFICATION APPLICABILITY         OPEN
+REAL VERIFICATION / EVIDENCE        DEFERRED TO TEST STAGE
+```
+
+## 9. Next controlled work
 
 ```text
 C2 allocation
-→ exact existing SYS-REQ reconciliation
 → SAFETY allocation
 → ICD parameter baseline
 → VERIFICATION acceptance criteria
