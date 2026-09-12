@@ -96,6 +96,7 @@ int main() {
     assert(registry.resolve(resolved_request).status == ResolutionStatus::Ambiguous);
     assert(registry.findForVehicleProfile("VEHICLE-A") == nullptr);
     assert(registry.findForEquipmentProfile("EQUIPMENT-B") == registry.findById("ADAPTER-B"));
+    assert(registry.findForCapability("CAPABILITY-A") == nullptr);
 
     const auto ids = registry.adapterIds();
     assert(ids.size() == 2);
