@@ -3,7 +3,7 @@ id: C2-VERIFICATION-CASES-001
 type: c2_verification_case_definitions
 status: controlled_working_draft
 system: BlueSky PRO
-basis: C2-ICD-BASELINE-001; C2-SAFETY-ALLOCATION-001; VERIFICATION-PLAN-001; C2-RECONCILIATION-PASS-003; C2-QUANTITATIVE-PARAMETERS-BASIS-001
+basis: C2-ICD-BASELINE-001; C2-SAFETY-ALLOCATION-001; VERIFICATION-PLAN-001; C2-RECONCILIATION-PASS-003; C2-QUANTITATIVE-PARAMETERS-BASIS-001; C2-CLAUSE-LEVEL-MAPPING-001
 authority: MASTER-REQUIREMENTS-REGISTER-001
 ---
 
@@ -34,7 +34,24 @@ Quantitative acceptance values remain `TBD` until the applicable operational/cer
 | C2-V07 | IV-C2-007 | Verify DIRECT-C2 and PROVIDER-C2 responsibilities are distinguished at the controlled interface boundary. | Inspection + integration test | DEFINED |
 | C2-V08 | IV-C2-008 | Verify incompatible or unexpected interface versions are detected and handled under configuration control. | Inspection + integration test | DEFINED |
 
-## 4. Current basis and qualitative acceptance criteria
+## 4. Regulatory clause allocation
+
+The case set is directly linked to the clause-level C2 mapping. This linkage identifies the regulatory basis for verification; it does not constitute regulatory compliance evidence.
+
+| Case | Regulatory clause mapping | Verification relevance |
+|---|---|---|
+| C2-V01 | `C2-142-001`, `C2-142-003`, `C2-142-005`, `C2-142-007..009` | C2 organization, interface/data exchange and operating-mode representation |
+| C2-V02 | `C2-142-005`, `C2-142-009` | Explicit data composition, units and semantics |
+| C2-V03 | `C2-142-005`, `C2-142-011`, `C2-142-013..014`, `C2-142-021` | Time, freshness, service quality and event ordering |
+| C2-V04 | `C2-142-004`, `C2-142-011`, `C2-142-013..014` | Quality/validity gating and service-state acceptance |
+| C2-V05 | `C2-142-018`, `C2-142-024`, `C2-142-025` | C2 state monitoring, loss/degradation classification and timing |
+| C2-V06 | `C2-142-018`, `C2-142-023..025` | Fault detection, classification and allocated safe response |
+| C2-V07 | `C2-142-001`, `C2-142-003`, `C2-142-008`, `C2-142-016..017` | DIRECT-C2 / PROVIDER-C2 responsibility boundary |
+| C2-V08 | `C2-142-005`, `C2-142-009`, `C2-142-021` | Controlled interface/data version and record integrity handling |
+
+The authoritative regulatory interpretation remains `C2_CLAUSE_LEVEL_MAPPING_001.md`; this table is a verification allocation, not an independent regulatory interpretation.
+
+## 5. Current basis and qualitative acceptance criteria
 
 The following allocation completes the current traceability pass without promoting
 candidate requirements to the authoritative master register. `C2-REQ-*` and
@@ -57,12 +74,13 @@ integrity, loss-detection, recovery, or coverage value is inferred by this
 record; such values remain `TBD` pending the applicable approved
 operational/certification basis.
 
-## 5. Common case controls
+## 6. Common case controls
 
 Each case shall identify before execution:
 
 ```text
 Requirement/design basis
+Regulatory clause mapping
 Configuration ID
 System/software version
 Interface version
@@ -84,22 +102,23 @@ Review record
 
 Unknown values remain `TBD`; they are not treated as passing defaults.
 
-## 6. Traceability
+## 7. Traceability
 
 ```text
-C2-V01 → IF-C2-001 / DEC-012 → C2 mode/interface allocation
-C2-V02 → SAF-REQ-001..003 / IF-C2-001 → units and semantic validity
-C2-V03 → SAF-REQ-003, SAF-REQ-013 / SYS-REQ-091 / IF-C2-001 → time and freshness
-C2-V04 → SAF-REQ-001..004, SAF-REQ-013..014 / IF-C2-001 → validity and quality gating
-C2-V05 → SAF-REQ-013 / SYS-REQ-081, 086, 093 / C2-F-001..003 → degradation and recovery
-C2-V06 → SAF-REQ-001..004, SAF-REQ-013..015 / SYS-REQ-086, 093 / IF-C2-001 → abnormal-input response
-C2-V07 → SYS-REQ-083 / DEC-012 / IF-C2-001 → DIRECT-C2 / PROVIDER-C2 boundary
-C2-V08 → SAF-REQ-017 / IF-C2-001 / CONFIGURATION-BASELINE.md → compatibility control
+C2 regulatory clause
+→ requirement / responsibility allocation
+→ C2-V01..C2-V08
+→ IV-C2-001..IV-C2-008
+→ C2-VER-CFG-001
+→ C2-VER-EXEC-001
+→ C2-EVIDENCE-INDEX-001
+→ real execution
+→ evidence
 ```
 
-The exact requirement linkage remains subordinate to the authoritative master register and the applicable approved baseline.
+Case-level requirement/design linkage remains subordinate to the authoritative master register and the applicable approved baseline.
 
-## 7. Evidence gate
+## 8. Evidence gate
 
 ```text
 CASE DEFINITION: controlled by this record
@@ -110,7 +129,7 @@ VERIFICATION STATUS: ALLOCATED / NOT VERIFIED
 
 No `PASSED`, `VERIFIED` or certification claim is made by this document.
 
-## 8. Controlled actions before real execution
+## 9. Controlled actions before real execution
 
 1. Maintain `C2-VER-CFG-001` as the controlled execution-configuration stub.
 2. Maintain `C2-VER-EXEC-001` as the controlled execution-result stub.
@@ -118,4 +137,4 @@ No `PASSED`, `VERIFIED` or certification claim is made by this document.
 4. Maintain `C2-QUANTITATIVE-PARAMETERS-BASIS-001` as the explicit quantitative-basis dependency until an authoritative/approved basis is available.
 5. At real test stage, replace the applicable stubs with actual configuration, results and evidence; do not infer `PASS` / `VERIFIED` from preparation records.
 
-**Status: CONTROLLED WORKING DRAFT — CASE DEFINITIONS COMPLETE; PRE-EXECUTION PACKAGE STRUCTURED; REAL EXECUTION OPEN.**
+**Status: CONTROLLED WORKING DRAFT — CASE DEFINITIONS COMPLETE; REGULATORY CLAUSE ALLOCATION INTEGRATED; PRE-EXECUTION PACKAGE STRUCTURED; REAL EXECUTION OPEN.**
