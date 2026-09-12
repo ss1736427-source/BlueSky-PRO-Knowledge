@@ -3,7 +3,7 @@ id: C2-EVIDENCE-INDEX-001
 type: c2_verification_evidence_index
 status: controlled_working_draft
 system: BlueSky PRO
-basis: C2-VERIFICATION-CASES-001; C2-VERIFICATION-CONFIGURATION-001; C2-VER-EXEC-001
+basis: C2-VERIFICATION-CASES-001; C2-VERIFICATION-CONFIGURATION-001; C2-VER-EXEC-001; C2-EXECUTION-PREREQUISITE-CHECK-001
 ---
 
 # BLUE SKY PRO — C2 EVIDENCE INDEX 001
@@ -52,18 +52,21 @@ Unknown values remain `TBD`.
 
 ## 5. Current disposition
 
-C2 execution configuration remains `PLANNED`. Execution has not been
-performed and no execution evidence exists. Therefore no `PASSED` status is
-assigned to any C2 case.
+The current C2 pre-execution gate is recorded in
+`C2-EXECUTION-PREREQUISITE-CHECK-001` and remains open. C2 execution
+configuration remains `PLANNED`. Execution has not been performed and no
+execution evidence exists. Therefore no `PASSED` status is assigned to any
+C2 case.
 
 ## 6. Traceability
 
 ```text
 C2-V01..C2-V08
 → C2-VER-CFG-001
+→ C2-EXECUTION-PREREQUISITE-CHECK-001
 → C2-VER-EXEC-001
 → C2-EVIDENCE-INDEX-001
 → evidence artifacts
 ```
 
-**Status: CONTROLLED WORKING DRAFT — NO EXECUTION EVIDENCE PRESENT.**
+**Status: CONTROLLED WORKING DRAFT — PRE-EXECUTION GATE OPEN; NO EXECUTION EVIDENCE PRESENT.**
