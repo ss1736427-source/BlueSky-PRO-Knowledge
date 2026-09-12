@@ -3,6 +3,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[3]
 FLEET = ROOT / "03_FLEET"
+ADAPTER_CONTRACT = ROOT / "04_SOFTWARE/AUTOPILOT_ADAPTER/contract"
 
 REQUIRED = {
     "BLUESKY-UNIVERSAL-ADAPTER-CONTRACT-001": FLEET / "BLUESKY_UNIVERSAL_ADAPTER_CONTRACT_001.md",
@@ -62,6 +63,20 @@ EXPECTED_LINKS = {
     ],
 }
 
+CANONICAL_COMMAND_STATES = (
+    "REQUESTED",
+    "VALIDATING",
+    "REJECTED",
+    "DISPATCHED",
+    "ACKNOWLEDGED",
+    "EXECUTING",
+    "COMPLETED",
+    "FAILED",
+    "CANCELLED",
+    "TIMEOUT",
+    "UNKNOWN",
+)
+
 FORBIDDEN_INTERNAL_TERMS = (
     "getPayload",
     "payloadFeatures",
@@ -84,6 +99,17 @@ for artifact_id, path in REQUIRED.items():
         if linked_id not in text:
             errors.append(f"missing reference: {artifact_id} -> {linked_id}")
 
+api_path = ADAPTER_CONTRACT / "universal_autopilot_api.yaml"
+if not api_path.is_file():
+    errors.append(f"missing adapter API contract: {api_path}")
+else:
+    api_text = api_path.read_text(encoding="utf-8")
+    for state in CANONICAL_COMMAND_STATES:
+        if f"      - {state}" not in api_text:
+            errors.append(f"command lifecycle state missing from adapter API: {state}")
+    if "      - SENT" in api_text or "      - EXECUTED" in api_text:
+        errors.append("legacy command lifecycle states remain in adapter API")
+
 for path in (ROOT / "04_SOFTWARE/AUTOPILOT_ADAPTER").rglob("*"):
     if path.resolve() == Path(__file__).resolve():
         continue
@@ -102,5 +128,6 @@ if errors:
 
 print("ADAPTER_CHAIN_CONSISTENCY: PASS")
 print(f"validated_artifacts={len(REQUIRED)}")
+print("command_lifecycle_states=11")
 print("real_test_evidence=NOT_CHECKED")
 print("verification_status=NOT_GRANTED")
