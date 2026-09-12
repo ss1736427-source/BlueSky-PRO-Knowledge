@@ -38,7 +38,7 @@ Existing requirement IDs имеют приоритет. Candidate IDs не яв�
 
 | C2-кандидат | Existing coverage | Архитектурная основа | Решение |
 |---|---|---|---|
-| C2-REQ-001 | SYS-REQ-083 + существующие C2 architecture records | Platform Independence / adapter boundary | DERIVED |
+| C2-REQ-001 | SYS-REQ-083 + existing C2 architecture records | Platform Independence / adapter boundary | DERIVED |
 | C2-REQ-002 | SYS-REQ-086, SYS-REQ-093 | Graceful Degradation / Controlled Resource Recovery | MERGE candidate |
 | C2-REQ-003 | SYS-REQ-081, SYS-REQ-086, SYS-REQ-093 | Failure Tolerance / Graceful Degradation / Controlled Recovery | MERGE candidate |
 | C2-REQ-004 | existing C2 provider/interface allocation | IF-C2-001 | DERIVED / interface allocation |
@@ -101,7 +101,9 @@ MISSION
 
 ## 8. Verification reconciliation
 
-Регуляторные C2-клаузы теперь имеют прямую allocation в verification cases `C2-V01..C2-V08` через `C2_VERIFICATION_CASES_001.md`.
+Регуляторные C2-клаузы имеют прямую allocation в verification cases `C2-V01..C2-V08` через `C2_VERIFICATION_CASES_001.md`.
+
+Working requirement allocation теперь дополнительно отражена в `C2_SYSTEM_REQUIREMENTS_BASELINE_001.md` с привязкой C2-REQ-001..010 к clause-level records `C2-142-*` и существующим authoritative coverage.
 
 Правило покрытия:
 
