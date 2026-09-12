@@ -21,6 +21,8 @@ BlueSky Mission / Safety / Runtime
               ↓
       Universal Vehicle API
               ↓
+       ADAPTER REGISTRY
+              ↓
        Autopilot Adapter
               ↓
  MAVLink / OEM protocol / SDK
@@ -31,6 +33,8 @@ BlueSky Mission / Safety / Runtime
 ```
 
 The canonical BlueSky model is authoritative for mission semantics. The autopilot remains authoritative for aircraft-level flight-control state and onboard safety behavior.
+
+The registry resolves the appropriate adapter by controlled adapter/vehicle/equipment compatibility data; it does not authorize execution.
 
 ## 4. Connection lifecycle
 
@@ -213,6 +217,7 @@ The detailed canonical Equipment model and adapter obligations are defined in:
 03_FLEET/BLUESKY_CANONICAL_VEHICLE_EQUIPMENT_SCHEMA_001.md
 03_FLEET/BLUESKY-UNIVERSAL-ADAPTER-CONTRACT-001.md
 03_FLEET/BLUESKY-ADAPTER-CONFORMANCE-MATRIX-001.md
+03_FLEET/BLUESKY-ADAPTER-REGISTRY-BOUNDARY-001.md
 ```
 
 If an external protocol uses legacy terminology such as `payload`, it is treated only as an external protocol term and normalized to `Equipment` at the BlueSky boundary.
