@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <memory>
+#include <utility>
 
 using namespace bluesky::planning::adapter;
 
