@@ -42,6 +42,15 @@ BLUESKY-CANONICAL-VEHICLE-EQUIPMENT-SCHEMA-001
 
 Vendor-specific command representations remain outside the BlueSky canonical domain model.
 
+Implementation conformance is controlled by:
+
+```text
+BLUESKY-ADAPTER-CONFORMANCE-MATRIX-001
+BLUESKY-ADAPTER-CONTRACT-TEST-STUB-001
+BLUESKY-ADAPTER-CONFIGURATION-BASELINE-001
+BLUESKY-ADAPTER-CONFORMANCE-CHECKLIST-001
+```
+
 ## Required command identity
 
 Every command shall have:
