@@ -43,13 +43,13 @@ A requirement affecting an external interface or safety-critical behavior must b
 | SYS-C2-002 | Multiple C2 paths | C2 Manager | Radio/cellular/IP/etc. | Multi-link manager | Link switching test | IN PROGRESS |
 | SYS-C2-003 | Connected/degraded/lost/recovering states | C2 Manager | Link telemetry | State machine | Fault injection | IN PROGRESS |
 | SYS-C2-004 | Primary/backup failover | C2 Manager | Multiple links | Failover policy engine | Loss/recovery scenarios | NOT DONE |
-| SYS-C2-005 | Distinguish C2/telemetry/video/payload loss | C2/Data | Separate streams | Independent link states | Failure isolation test | NOT DONE |
+| SYS-C2-005 | Distinguish C2/telemetry/video/equipment loss | C2/Data | Separate streams | Independent link states | Failure isolation test | NOT DONE |
 | SYS-C2-006 | Record link events | Flight Record | C2 events | Event logging | Replay/audit test | NOT DONE |
 | SYS-VP-001 | Versioned vehicle profile | Fleet | Vehicle metadata | Fleet database/profile schema | Profile validation | IN PROGRESS |
-| SYS-VP-002 | Versioned payload profile | Payload | Device API | Payload registry | Device compatibility test | IN PROGRESS |
-| SYS-VP-003 | Normalized payload commands/status/data | Payload Adapter | Camera/gimbal/etc. | Payload API | End-to-end payload test | NOT DONE |
-| SYS-VP-004 | Vehicle/payload compatibility | Planning / Readiness | Profiles | Capability/compatibility engine | Blocking tests | NOT DONE |
-| SYS-VP-005 | Associate payload data | HUB / Flight Record | Video/data/telemetry | Metadata correlation | Data association test | NOT DONE |
+| SYS-VP-002 | Versioned equipment profile | Fleet / Equipment | Device API | Equipment registry | Device compatibility test | IN PROGRESS |
+| SYS-VP-003 | Normalized equipment commands/status/data | Equipment Adapter | Camera/gimbal/etc. | Equipment API | End-to-end equipment test | NOT DONE |
+| SYS-VP-004 | Vehicle/equipment compatibility | Planning / Readiness | Profiles | Capability/compatibility engine | Blocking tests | NOT DONE |
+| SYS-VP-005 | Associate equipment data | HUB / Flight Record | Video/data/telemetry | Metadata correlation | Data association test | NOT DONE |
 | EXT-AIR-001 | Airspace/restriction ingestion | Airspace | External source | Airspace adapter | Fresh/stale/unavailable tests | IN PROGRESS |
 | EXT-AIR-002 | NOTAM/aeronautical information | Airspace | External source | Aeronautical data adapter | Data validity tests | NOT DONE |
 | EXT-WX-001 | Weather/wind ingestion | Weather | Weather provider | Weather adapter | Freshness/quality tests | IN PROGRESS |
@@ -62,17 +62,17 @@ A requirement affecting an external interface or safety-critical behavior must b
 | EXT-ATM-004 | Multi-UAV regulatory relationship | ATM / Fleet | ATM/FPL | Group-to-individual plan model | Scenario test | IN PROGRESS |
 | MIS-001 | Mission model independent of autopilot | Mission | Mission Adapter | Canonical mission schema | Cross-autopilot conversion | IN PROGRESS |
 | MIS-002 | Mission templates | Mission Planning | Internal | Template engine | Template acceptance tests | IN PROGRESS |
-| MIS-003 | Feasibility against vehicle/payload | Planning | Fleet profiles | Constraint engine | Boundary tests | NOT DONE |
+| MIS-003 | Feasibility against vehicle/equipment | Planning | Fleet profiles | Constraint engine | Boundary tests | NOT DONE |
 | MIS-004 | Wind/energy/aerodynamic optimization | Planning / AI | Weather + vehicle model | Optimization engine | Simulation + flight comparison | IN PROGRESS |
 | MIS-005 | Multi-UAV decomposition | Fleet Mission | Multiple adapters | Task allocation/mission compiler | Multi-UAV simulation | IN PROGRESS |
 | AI-001 | AI recommendations/corrections | AI | Internal data | Agent + controlled interface | Scenario/regression tests | IN PROGRESS |
 | AI-002 | Deterministic safety boundary | Safety | AI ↔ Safety | Safety gate outside AI | Fault/unsafe recommendation tests | NOT DONE |
 | AI-003 | Offline/online synchronization | AI / Sync | Network | Versioned sync | Offline/online replay | NOT DONE |
 | AI-004 | Explainable correction record | AI / Flight Record | Internal | Input/reason/version/result record | Audit test | NOT DONE |
-| RDY-001 | Automatic pre-flight readiness | Readiness | Fleet/C2/Nav/Payload/ATM/WX | Readiness engine | Full checklist simulation | IN PROGRESS |
+| RDY-001 | Automatic pre-flight readiness | Readiness | Fleet/C2/Nav/Equipment/ATM/WX | Readiness engine | Full checklist simulation | IN PROGRESS |
 | RDY-002 | READY/NOT READY with reasons | HMI / Readiness | Internal | Gate aggregation | UI + logic tests | IN PROGRESS |
 | RDY-003 | Human checks only where required | Operations | Pilot/Technician | Responsibility matrix | Procedure validation | IN PROGRESS |
-| FLT-001 | Supervisory flight monitoring | Flight | Autopilot/C2/Payload | Flight state service + UI | Real UAV test | IN PROGRESS |
+| FLT-001 | Supervisory flight monitoring | Flight | Autopilot/C2/Equipment | Flight state service + UI | Real UAV test | IN PROGRESS |
 | FLT-002 | Multi-UAV coordinated operation | Fleet / Flight | Multiple vehicles | Fleet coordinator | SIL/HIL/flight tests | IN PROGRESS |
 | FLT-003 | Data aggregation from multiple UAVs | HUB | Video/photo/log streams | Correlation/merge pipeline | Multi-UAV data test | IN PROGRESS |
 | CNT-001 | Defined contingency state machine | Safety / Flight | Autopilot/C2/WX/Traffic | Trigger-action-recovery engine | Fault injection | IN PROGRESS |
@@ -111,7 +111,7 @@ REFERENCE ADAPTERS
    ↓
 MISSION / SAFETY / READINESS ENGINES
    ↓
-C2 / PAYLOAD / EXTERNAL DATA
+C2 / EQUIPMENT / EXTERNAL DATA
    ↓
 UI / OPERATOR WORKFLOW
    ↓
