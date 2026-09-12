@@ -74,12 +74,39 @@ public:
 } // namespace
 
 int main() {
-    static_assert(std::is_abstract_v<bluesky::autopilot::UniversalAutopilotAdapter>);
+    using bluesky::autopilot::ConnectionState;
+    using bluesky::autopilot::ExecutionState;
+    using bluesky::autopilot::UniversalAutopilotAdapter;
+
+    static_assert(std::is_abstract_v<UniversalAutopilotAdapter>);
+
+    // Contract coverage: every execution state defined by the adapter contract
+    // must remain a valid, distinct enum member after interface changes.
+    const ExecutionState executionStates[] = {
+        ExecutionState::Requested,
+        ExecutionState::Validating,
+        ExecutionState::Rejected,
+        ExecutionState::Dispatched,
+        ExecutionState::Acknowledged,
+        ExecutionState::Executing,
+        ExecutionState::Completed,
+        ExecutionState::Failed,
+        ExecutionState::Cancelled,
+        ExecutionState::Timeout,
+        ExecutionState::Unknown,
+    };
+
+    for (std::size_t i = 0; i < std::size(executionStates); ++i) {
+        for (std::size_t j = i + 1; j < std::size(executionStates); ++j) {
+            assert(executionStates[i] != executionStates[j]);
+        }
+    }
+
     ContractAdapter adapter;
     const bluesky::planning::Mission mission{};
     const bluesky::planning::VehicleEquipmentCapabilityProfile capabilities{};
 
-    assert(adapter.getConnectionState() == bluesky::autopilot::ConnectionState::Connected);
+    assert(adapter.getConnectionState() == ConnectionState::Connected);
     assert(adapter.getAutopilotIdentity().empty());
     assert(adapter.compileMission(mission, capabilities).has_value());
     assert(adapter.readBackMission().has_value());
