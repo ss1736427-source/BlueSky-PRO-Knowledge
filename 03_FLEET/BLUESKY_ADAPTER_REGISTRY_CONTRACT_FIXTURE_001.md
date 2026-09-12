@@ -16,27 +16,27 @@ Provide a deterministic technology-neutral fixture for verifying Adapter Registr
 
 ```text
 REG-TEST-001
-  adapter_id       = TEST-ADAPTER-001
-  adapter_version  = 1.0.0
-  domain           = VEHICLE
+  adapter_id      = TEST-ADAPTER-001
+  adapter_version = 1.0.0
+  domain          = VEHICLE
   protocol        = MOCK-C2-EQUIPMENT-1
   schema_version  = 1.0
   capabilities    = STATE,TELEMETRY,COMMAND
   status          = AVAILABLE
 
 REG-TEST-002
-  adapter_id       = TEST-EQUIPMENT-001
-  adapter_version  = 1.0.0
-  domain           = EQUIPMENT
+  adapter_id      = TEST-EQUIPMENT-001
+  adapter_version = 1.0.0
+  domain          = EQUIPMENT
   protocol        = MOCK-C2-EQUIPMENT-1
   schema_version  = 1.0
   capabilities    = STATUS,CAPTURE
   status          = AVAILABLE
 
 REG-TEST-003
-  adapter_id       = TEST-ADAPTER-INCOMPATIBLE-001
-  adapter_version  = 0.9.0
-  domain           = VEHICLE
+  adapter_id      = TEST-ADAPTER-INCOMPATIBLE-001
+  adapter_version = 0.9.0
+  domain          = VEHICLE
   protocol        = MOCK-C2-EQUIPMENT-1
   schema_version  = 0.8
   capabilities    = STATE,TELEMETRY
@@ -49,10 +49,12 @@ REG-TEST-003
 
 ```text
 query:
-  domain = VEHICLE
+  vehicle_profile = VEH-TEST-001
+  equipment_profile = EQ-TEST-001
   protocol = MOCK-C2-EQUIPMENT-1
+  contract_version = 1.0
   schema_version = 1.0
-  required = STATE,TELEMETRY
+  required_capability = STATE
 
 expected:
   result = REG-TEST-001
@@ -63,24 +65,26 @@ expected:
 
 ```text
 query:
-  domain = EQUIPMENT
+  equipment_profile = EQUIPMENT-PROFILE-TEST-001
   protocol = MOCK-C2-EQUIPMENT-1
+  contract_version = 1.0
   schema_version = 1.0
-  required = STATUS,CAPTURE
+  required_capability = CAPTURE
 
 expected:
   result = REG-TEST-002
   status = RESOLVED
 ```
 
-### ARF-003 — incompatible schema
+### ARF-003 — incompatible protocol/version
 
 ```text
 query:
-  domain = VEHICLE
-  protocol = MOCK-C2-EQUIPMENT-1
-  schema_version = 0.8
-  required = STATE
+  vehicle_profile = VEH-TEST-001
+  protocol = OTHER-PROTOCOL
+  contract_version = 1.0
+  schema_version = 1.0
+  required_capability = STATE
 
 expected:
   result = NONE
@@ -91,10 +95,11 @@ expected:
 
 ```text
 query:
-  domain = VEHICLE
+  vehicle_profile = VEH-TEST-001
   protocol = MOCK-C2-EQUIPMENT-1
+  contract_version = 1.0
   schema_version = 1.0
-  required = VIDEO
+  required_capability = VIDEO
 
 expected:
   result = NONE
@@ -103,7 +108,7 @@ expected:
 
 ### ARF-005 — ambiguous match
 
-Input a registry containing two otherwise equivalent available adapters.
+Input a registry containing two otherwise equivalent compatible adapters.
 
 Expected:
 
@@ -113,15 +118,15 @@ status = AMBIGUOUS
 resolution = NO_AUTOMATIC_APPROVAL
 ```
 
-### ARF-006 — unavailable adapter
+### ARF-006 — no matching target
 
-Input an exact match whose registry status is `UNAVAILABLE`.
+Input criteria for a Vehicle / Equipment profile for which no registered adapter exists.
 
 Expected:
 
 ```text
 result = NONE
-status = UNAVAILABLE
+status = NOT_FOUND
 ```
 
 ## 4. Safety rule
@@ -166,4 +171,4 @@ BLUESKY-ADAPTER-REGISTRY-BOUNDARY-001
 → BLUESKY-ADAPTER-REGISTRY-CONTRACT-FIXTURE-001
 ```
 
-**Status: CONTROLLED WORKING DRAFT — DETERMINISTIC REGISTRY RESOLUTION FIXTURE DEFINED; NOT EXECUTED.**
+**Status: CONTROLLED WORKING DRAFT — REGISTRY RESOLUTION FIXTURE ALIGNED WITH CURRENT IMPLEMENTATION SEMANTICS; NOT EXECUTED.**
