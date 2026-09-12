@@ -1,5 +1,5 @@
 {
-  "last_main_sha": "1c296bcd5f5b8755375341b8119dd1a476cfc893",
+  "last_main_sha": "4d5c908b4be895b72e0b72b86f9abe1a22269794",
   "verified_sha": "76a2c51d70c8404d62e76530fdc4dc42ce1de227",
   "decision_required": false,
   "ci_required": true,
@@ -8,5 +8,5 @@
   "real_execution": "DEFERRED",
   "quantitative_c2_basis": "DEFERRED",
   "current_ci_status": "UNVERIFIED",
-  "next_deterministic_action": "Identify the next unresolved Interface / Service implementation dependency for the concrete adapter contract, using the existing registry, Vehicle / Equipment interfaces, and technology-neutral stub boundary"
+  "next_deterministic_action": "Verify the planning CI gate against the current adapter registry implementation, then close the next unresolved Interface / Service integration dependency without vendor-specific selection"
 }
