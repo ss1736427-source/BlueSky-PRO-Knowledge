@@ -157,7 +157,31 @@ represent synthetic output as operational evidence
 | deterministic normalization | ACT-010 |
 | readDataOutputs | ACT-001, ACT-002 |
 
-## 9. Production transition
+## 9. Executable service boundary
+
+The first executable service-layer slice now uses the existing universal adapter contract without modifying its semantics:
+
+```text
+UniversalAdapter
+      ↓
+UniversalAdapterRegistry
+      ↓
+resolve by adapter ID / vehicle profile / equipment profile
+      ↓
+Core BlueSky services
+```
+
+Controlled implementation:
+
+```text
+04_SOFTWARE/PLANNING/adapter/universal_adapter_registry.hpp
+04_SOFTWARE/PLANNING/adapter/universal_adapter_registry.cpp
+04_SOFTWARE/PLANNING/adapter/universal_adapter_registry_test.cpp
+```
+
+The registry only owns and resolves adapter instances. It does not authorize missions, bypass safety logic, alter canonical data, or select a vendor/protocol. Its test fixture uses synthetic adapter metadata only.
+
+## 10. Production transition
 
 ```text
 STUB
@@ -172,10 +196,11 @@ STUB
 
 The contract and canonical schema remain stable unless an actual integration gap demonstrates that a controlled change is required.
 
-## 10. Current status
+## 11. Current status
 
 ```text
 Implementation: STUB
+Service boundary: EXECUTABLE STUB
 Synthetic fixture: DEFINED
 Contract tests: DEFINED
 Execution: NOT EXECUTED
@@ -184,8 +209,8 @@ Evidence: NOT AVAILABLE
 Approval: NOT GRANTED
 ```
 
-## 11. Next deterministic step
+## 12. Next deterministic step
 
-The repository consistency check is complete. The next deterministic step is to reconcile the checklist's implementation-to-contract mapping with this contract-complete stub surface, without selecting a vendor or requiring real hardware.
+The registry boundary is implemented and connected to the planning build/test graph. The next deterministic step is to review the remaining service-layer dependency for adapter lifecycle/selection and add only the smallest missing contract surface.
 
-**Status: CONTROLLED WORKING DRAFT — CONTRACT-COMPLETE ADAPTER IMPLEMENTATION STUB DEFINED; NO REAL INTEGRATION CLAIMED.**
+**Status: CONTROLLED WORKING DRAFT — CONTRACT-COMPLETE ADAPTER IMPLEMENTATION STUB WITH MINIMAL EXECUTABLE SERVICE BOUNDARY; NO REAL INTEGRATION CLAIMED.**
