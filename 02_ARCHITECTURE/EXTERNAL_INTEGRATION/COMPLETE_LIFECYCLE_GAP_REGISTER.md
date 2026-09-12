@@ -11,7 +11,7 @@ This register closes the practical lifecycle gap between the existing BlueSky PR
 ```text
 ORGANIZATION / AIRCRAFT CONFIGURATION
         ↓
-AIRCRAFT / PAYLOAD REGISTRATION
+AIRCRAFT / EQUIPMENT REGISTRATION
         ↓
 TECHNICAL READINESS
         ↓
@@ -47,7 +47,7 @@ ARM / TAKEOFF
         ↓
 FLIGHT EXECUTION
         ↓
-TELEMETRY + C2 + PAYLOAD + VIDEO + TRAFFIC
+TELEMETRY + C2 + EQUIPMENT + VIDEO + TRAFFIC
         ↓
 EXCEPTION / CONTINGENCY / REPLANNING
         ↓
@@ -87,7 +87,7 @@ NEXT MISSION
 
 | ID | Contour | Current BlueSky position | Gap to close | Priority |
 |---|---|---|---|---|
-| G1-01 | Payload | Payload State exists | Command/state/data adapter | P1 |
+| G1-01 | Equipment | Equipment State exists | Equipment command/state/data adapter | P1 |
 | G1-02 | Video | Video identified | Stream transport, recording, loss/recovery, mission association | P1 |
 | G1-03 | Companion computer | Identified conceptually | Onboard data/command interface | P1 |
 | G1-04 | GNSS/RTK | Navigation concepts exist | RTCM/NTRIP/correction source and quality lifecycle | P1 |
@@ -113,7 +113,7 @@ NEXT MISSION
 | G2-06 | Diagnostics | Engineering diagnostics without exposing complexity to normal pilot UI |
 | G2-07 | Offline operation | Cached mission/environment data and deterministic degraded-mode behavior |
 | G2-08 | Replay | Reproduce vehicle telemetry, commands, mission state and external data state |
-| G2-09 | Geotag/data association | Associate payload files with UAV position/time/mission/waypoint |
+| G2-09 | Geotag/data association | Associate equipment files with UAV position/time/mission/waypoint |
 | G2-10 | Fleet addressing | Multi-UAV system/component addressing, routing and collision prevention |
 | G2-11 | Data export/API | Controlled exchange with processing, GIS and enterprise systems |
 | G2-12 | Maintenance feedback | Flight/resource data updates aircraft, battery, engine and component records |
@@ -158,7 +158,7 @@ BlueSky must not become a copy of Mission Planner. Missing capability is impleme
         ┌────────────────┴────────────────┐
         │         INTEGRATION LAYER       │
         │                                 │
-        │ Autopilot  C2  Payload  Video   │
+        │ Autopilot  C2  Equipment Video  │
         │ Mission    Params  RTK  Traffic │
         │ Airspace   Weather GIS  Logs    │
         └────────────────┬────────────────┘
@@ -176,10 +176,5 @@ BlueSky is operationally complete only when one real supported UAV can be:
 4. supplied with a validated mission;
 5. commanded and monitored through the complete flight;
 6. safely handled through link loss, contingency and termination states;
-7. operated with required payload/video/data interfaces;
+7. operated with required Equipment/video/data interfaces;
 8. reconciled with airspace, weather and authorization data;
-9. recorded with synchronized ground and onboard evidence;
-10. closed into a Flight Record and maintenance state;
-11. replayed in simulation/analysis using the same interface contracts.
-
-Only after this P0/P1 closure should additional UI refinement be treated as product-completion work.
