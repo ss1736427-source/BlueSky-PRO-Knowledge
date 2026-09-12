@@ -9,9 +9,15 @@ The framework covers collection, storage, integrity protection, analysis inputs,
 
 No physical test result is created by the prototype. Until an actual test is performed, the verification result remains `PENDING` or `NOT_PERFORMED`.
 
+The framework is not limited to the C2 communication channel. Every function, interface, source, operational condition or technical characteristic that may require objective verification evidence shall be assigned an evidence chain.
+
+The complete domain coverage is maintained in `EVIDENCE_CHAIN_CATALOG.md`.
+
 ## 2. Controlled chain
 
-`Requirement → Test Method → Test Case → Configuration → Execution → Raw Data → Processed Data → Result → Evidence Package → Certification Reference`
+`Requirement → Test Method → Test Case → Configuration → Execution → Source Data → Raw Data → Processed Data → Result → Evidence Package → Certification Reference`
+
+This chain is common to all evidence domains. Domain-specific source adapters and parameters plug into the same controlled storage and export mechanism.
 
 ## 3. Test identity
 
@@ -28,7 +34,8 @@ Every execution receives a unique `test_run_id`. The record shall retain:
 - operator/organization fields required by the approved procedure;
 - start/end time;
 - location and environmental conditions, when applicable;
-- execution status.
+- execution status;
+- evidence domain identifier(s).
 
 ## 4. Data layers
 
@@ -77,15 +84,32 @@ Each event contains:
 
 The model is intentionally extensible so new telemetry or measurement parameters do not require a redesign of the evidence container.
 
-## 7. Source integration
+## 7. Evidence domains and source integration
 
-The recorder is deliberately source-neutral. A source adapter shall translate incoming data into the common event model without changing the evidence storage contract.
+The evidence layer shall provide chains for all domains listed in the catalog, not only communication:
 
-The first integration boundary is:
+- `EC-01` — C2 Communication Channel;
+- `EC-02` — Autopilot Interface;
+- `EC-03` — Navigation / GNSS / RTK / NTRIP;
+- `EC-04` — Flight Control / Flight State;
+- `EC-05` — Mission / Route Execution;
+- `EC-06` — Installed Equipment;
+- `EC-07` — Energy / Battery / Power;
+- `EC-08` — Propulsion;
+- `EC-09` — Aerodynamic / Performance Model;
+- `EC-10` — Weather / Environmental Conditions;
+- `EC-11` — Safety / Failsafe / Loss of Link;
+- `EC-12` — Geographical Restrictions / Airspace / Geofence;
+- `EC-13` — Time / Synchronisation;
+- `EC-14` — Data Recording / Replay;
+- `EC-15` — BlueSky Internal Functions / HMI;
+- `EC-16` — External Interfaces / Integrations;
+- `EC-17` — Communications Other Than C2;
+- `EC-18` — Software Configuration / Version Control;
+- `EC-19` — Security / Access Control;
+- `EC-20` — Faults / Anomalies / Recovery.
 
-`BlueSky / Autopilot / C2 / Equipment / External Instrument → Source Adapter → Evidence Recorder`
-
-Supported source categories are:
+**Source Adapter (адаптер источника)** translates each source into the common event model. The current supported source categories include:
 
 - `AUTOPILOT_TELEMETRY` — telemetry from the autopilot;
 - `C2_LINK` — command-and-control channel measurements;
@@ -95,6 +119,8 @@ Supported source categories are:
 - `MEASUREMENT_INSTRUMENT` — external calibrated instruments;
 - `BLUESKY_EVENT` — internal BlueSky events;
 - `OPERATOR_EVENT` — operator-entered factual events.
+
+Additional source categories may be added without changing the common evidence storage contract.
 
 The source adapter must preserve source identity and original timestamp. It must not silently transform a measured value into a different parameter or unit.
 
@@ -109,20 +135,50 @@ A physical or simulated flight used for verification shall carry:
 - system/build version;
 - vehicle identity;
 - equipment configuration;
-- relevant C2/autopilot log references.
+- relevant C2/autopilot log references;
+- applicable evidence domain identifiers.
 
 The verification record may reference a Flight Record, but must not overwrite it. This permits operational flight history and certification evidence to remain independently controlled.
 
-## 9. C2 and Equipment evidence
+## 9. Evidence by domain
 
-For communication testing, the evidence package shall be able to preserve both:
+Every domain follows the same storage, integrity and export mechanism. Only its source data and approved parameters differ.
+
+Examples:
+
+- C2: signal quality, latency, packet loss, command delivery, acknowledgement, loss/recovery;
+- navigation: position, altitude, velocity, fix/quality, corrections and loss/recovery;
+- flight control: modes, attitude, trajectory, command-versus-state and transitions;
+- mission: approved/uploaded/read-back mission, route, waypoints, deviations and mission state;
+- equipment: identity, version, status, health, operating parameters, failures and logs;
+- energy: voltage, current, power, battery state, temperature, energy consumption and reserve;
+- propulsion: engine/motor state, RPM, commands, temperatures and abnormal conditions;
+- performance: speed, altitude, wind, energy consumption, endurance/range and model comparison;
+- environment: wind, temperature, pressure, humidity and other approved conditions;
+- safety/failsafe: trigger, detection, response, timing, state transition and recovery;
+- geographical constraints: position, restriction source/version, boundaries, route intersection and system response;
+- timing: source clocks, receipt time, synchronization state and offsets;
+- recording/replay: completeness, sequence, timestamps, replay and integrity;
+- HMI: operator action, command acceptance, warning, indication and screen evidence;
+- integrations: interface identity/version, exchanged data, acknowledgement, error and recovery;
+- software configuration: build, source revision, configuration and dependency versions;
+- security: authentication, authorization, rejected access and security audit events;
+- faults: fault condition, detection, response, recovery and resulting state.
+
+The catalog is the coverage register. A listed domain is not considered implemented until the corresponding source, record, method/case reference, integrity and export linkage exist.
+
+## 10. C2 and Equipment evidence
+
+For communication testing, the evidence package shall preserve both:
 
 1. BlueSky-observed C2 events and derived statistics;
 2. original C2/radio/modem/equipment logs supplied by the equipment source.
 
 For equipment testing, the same principle applies: the recorder stores the observed parameter stream and references the original equipment record where available.
 
-## 10. Configuration Record — запись конфигурации
+The same source-preservation principle applies to every evidence domain in the catalog.
+
+## 11. Configuration Record — запись конфигурации
 
 Before execution, the test record shall capture the configuration identity needed to reproduce the test context. The record shall support at least:
 
@@ -136,7 +192,7 @@ Before execution, the test record shall capture the configuration identity neede
 
 Configuration is evidence context, not a substitute for an approved configuration-control process.
 
-## 11. Prototype storage and export
+## 12. Prototype storage and export
 
 The prototype provides:
 
@@ -150,7 +206,7 @@ The prototype provides:
 
 Later certification-document generation shall consume these controlled records rather than manually re-entering measured values.
 
-## 12. Evidence package lifecycle
+## 13. Evidence package lifecycle
 
 `INIT → COLLECT → FINALIZE → VERIFY → EXPORT → ARCHIVE`
 
@@ -163,13 +219,13 @@ Later certification-document generation shall consume these controlled records r
 
 No step changes a physical test result without an explicit controlled action.
 
-## 13. Integrity
+## 14. Integrity
 
 At finalization the framework calculates SHA-256 hashes (криптографическая контрольная сумма) for controlled files and writes them to `manifest.json` together with file size and relative path.
 
 A separate `manifest.sha256` file records the SHA-256 of the completed manifest. The manifest is therefore the integrity index for the package, while the sidecar hash provides a simple external integrity check.
 
-## 14. Traceability
+## 15. Traceability
 
 The framework is linked to the existing requirement matrix, especially:
 
@@ -182,18 +238,18 @@ The framework is linked to the existing requirement matrix, especially:
 - `VAL-002..005` — staged verification through real UAV;
 - `VAL-006` — regression after interface changes.
 
-The implementation shall preserve a direct reference from each verification record to the applicable requirement and test method/case revision.
+The implementation shall preserve a direct reference from each verification record to the applicable requirement, evidence domain and test method/case revision.
 
-## 15. Separation of responsibilities
+## 16. Separation of responsibilities
 
 The collection mechanism records facts. The approved test procedure defines acceptance criteria. The certification package uses approved results and evidence. The logger must not invent, alter or silently downgrade results.
 
-## 16. Future physical-test integration
+## 17. Future physical-test integration
 
 Source adapters may later feed the same recorder from autopilot telemetry, C2 link statistics, equipment logs, GNSS/RTK/NTRIP data, weather measurements, external measurement instruments, operator events and BlueSky internal events.
 
-The storage and export contract remains unchanged.
+The storage and export contract remains unchanged for all evidence domains.
 
-## 17. Certification preparation rule
+## 18. Certification preparation rule
 
 The framework prepares evidence; it does not declare regulatory compliance by itself. Applicable requirements, approved test methods, acceptance limits and final certification conclusions remain under the project verification/certification process.
