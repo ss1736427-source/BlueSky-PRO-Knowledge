@@ -80,6 +80,20 @@ source
 
 Контролируемая qualitative basis подтверждена через clause mapping, `SYS-C2-003`, `IF-C2-001` и `IV-C2-004`. До утверждения source-specific quantitative values `MASTER_REQUIREMENTS_REGISTER.md` не изменяется.
 
+После подготовки execution/evidence records ссылки на них должны быть добавлены в verification chain; сами records не являются доказательством фактического выполнения.
+
 ## 7. Authoritative rule
 
 `MASTER_REQUIREMENTS_REGISTER.md` остаётся единственным authoritative register идентификаторов требований. Рабочие C2 documents не создают вторую независимую базу требований.
+
+## 8. Current controlled chain
+
+```text
+C2-VERIFICATION-CASES-001
+→ C2-VER-CFG-001
+→ C2-VER-EXEC-001
+→ C2-EVIDENCE-INDEX-001
+→ C2 execution evidence
+```
+
+`C2-VER-EXEC-001` и `C2-EVIDENCE-INDEX-001` являются подготовленными controlled records; фактическое execution/evidence остаётся незавершённым.
