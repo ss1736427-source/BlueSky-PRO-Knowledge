@@ -187,6 +187,7 @@
   },
   "active": "058fcba7e26ecc4b",
   "lastOpenFiles": [
+    "04_SOFTWARE/PLANNING/command_authority_gate_contract_stub.hpp",
     "04_SOFTWARE/PLANNING/command_authority_gate_contract_stub_test.cpp",
     "03_FLEET/BLUESKY-COMMAND-AUTHORITY-GATE-CONTRACT-001.md",
     "04_SOFTWARE/PLANNING/adapter/adapter_service_resolver_test.cpp",
@@ -209,7 +210,6 @@
     "04_SOFTWARE/PLANNING/adapter/universal_adapter_registry.cpp",
     "04_SOFTWARE/PLANNING/adapter/universal_adapter_contract_test.cpp",
     "04_SOFTWARE/PLANNING/adapter/universal_adapter.hpp",
-    "04_SOFTWARE/PLANNING/adapter",
     "03_FLEET/BLUESKY_ADAPTER_REPOSITORY_CONSISTENCY_CHECK_001.md",
     "03_FLEET/BLUESKY_ADAPTER_IMPLEMENTATION_STUB_001.md",
     "03_FLEET/BLUESKY_ADAPTER_CONFORMANCE_CHECKLIST_001.md",
