@@ -244,7 +244,7 @@ The execution configuration is controlled in:
 `05_VERIFICATION/C2/C2_VERIFICATION_CONFIGURATION_001.md`
 
 The configuration record is `C2-VER-CFG-001`, linked to `CI-007` and `BL-VER`.
-It is `PLANNED`; no execution result or evidence is implied.
+It is currently a controlled **STUB / PLANNED** record; no execution result or evidence is implied.
 
 The definition/configuration control closure is recorded in:
 
@@ -265,16 +265,17 @@ The controlled execution-result record is:
 
 `05_VERIFICATION/C2/C2_VERIFICATION_EXECUTION_RESULT_001.md`
 
-The result record is `C2-VER-EXEC-001`. It is a controlled working draft only;
-execution has not been performed and no evidence or verification claim is implied.
+The result record is `C2-VER-EXEC-001`. It is a controlled working **STUB** only;
+real execution has not been performed and no evidence or verification claim is implied.
 
 The pre-execution gate record is:
 
 `05_VERIFICATION/C2/C2_EXECUTION_PREREQUISITE_CHECK_001.md`
 
-It records the current execution gate and confirms that C2 execution remains
-blocked until the approved configuration and required execution environment are
-established. It does not assign a verification result or create evidence.
+It records the current execution gate. The configuration/result stubs establish
+the controlled documentation structure, while the real test environment,
+actual build, procedure, inputs and observed results remain deferred to the
+real test stage. The gate does not assign a verification result or create evidence.
 
 ## 14. Audit findings — initial pass
 
@@ -286,7 +287,8 @@ V-REG-004  Execution evidence is not implied by DEFINED / READY status.
 V-REG-005  Exact requirement allocation for Navigation cases remains pending reconciliation with MASTER-REQUIREMENTS-REGISTER.
 V-REG-006  Navigation requirement allocation is maintained as a separate working record and does not create requirement authority.
 V-REG-007  C2-VER-GAP-001 is closed for definition/configuration control; execution and evidence remain open.
-V-REG-008  C2 pre-execution basis review and exact content/scope reconciliation are complete; execution remains blocked pending established configuration, execution results and evidence.
+V-REG-008  C2 pre-execution basis review and exact content/scope reconciliation are complete; execution remains deferred pending real configuration, execution results and evidence.
+V-REG-009  C2 configuration and execution-result stubs are controlled placeholders; they shall be replaced by actual test records after real execution.
 ```
 
 ## 15. Completion gate
