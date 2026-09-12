@@ -165,6 +165,6 @@ Approval: NOT GRANTED
 
 ## 11. Next deterministic step
 
-Create the concrete adapter conformance checklist binding each implementation function to `ACM-001..015`, while keeping transport/vendor selection outside the canonical contract.
+The implementation stub is now linked to the existing conformance checklist `BLUESKY-ADAPTER-CONFORMANCE-CHECKLIST-001`. The next deterministic step is to establish the repository-level contract/configuration consistency check, without selecting a vendor or requiring real hardware.
 
 **Status: CONTROLLED WORKING DRAFT — MINIMAL ADAPTER IMPLEMENTATION BOUNDARY DEFINED; NO REAL INTEGRATION CLAIMED.**
