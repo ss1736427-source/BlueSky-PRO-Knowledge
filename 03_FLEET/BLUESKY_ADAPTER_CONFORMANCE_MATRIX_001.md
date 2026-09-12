@@ -121,8 +121,19 @@ ACM-001..015
 → evidence
 ```
 
-## 9. Next deterministic step
+## 9. Current work-package transition
 
-Create the technology-neutral adapter contract-test stub with deterministic test vectors derived from this matrix. The stub shall be executable against a mock adapter without requiring real hardware.
+The contract-test stub, configuration baseline and implementation checklist are already defined. The repository consistency gate is therefore the current pre-implementation control step.
 
-**Status: CONTROLLED WORKING DRAFT — CONFORMANCE OBLIGATIONS DEFINED; NO REAL-HARDWARE RESULT CLAIMED.**
+After consistency is confirmed, the next unresolved integration gap shall be taken from the existing software adapter/service layer without selecting a vendor-specific implementation unless that choice is required by the repository's governing work package.
+
+```text
+CONFORMANCE MATRIX
+→ CONTRACT TEST STUB
+→ CONFIGURATION BASELINE
+→ IMPLEMENTATION CHECKLIST
+→ REPOSITORY CONSISTENCY CHECK
+→ NEXT UNRESOLVED INTEGRATION GAP
+```
+
+**Status: CONTROLLED WORKING DRAFT — CONFORMANCE OBLIGATIONS DEFINED; CONSISTENCY GATE ACTIVE; NO REAL-HARDWARE RESULT CLAIMED.**
