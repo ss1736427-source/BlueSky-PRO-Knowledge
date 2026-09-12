@@ -1,4 +1,4 @@
-﻿---
+---
 id: PROJECT-WORK-ORDER-001
 type: project_work_order
 status: controlled_working_order
