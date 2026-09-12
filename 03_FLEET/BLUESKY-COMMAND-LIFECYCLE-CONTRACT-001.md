@@ -5,6 +5,7 @@ status: controlled_working_draft
 system: BlueSky PRO
 implementation_stub: 04_SOFTWARE/PLANNING/command_lifecycle_contract_stub.hpp
 test_stub: 04_SOFTWARE/PLANNING/command_lifecycle_contract_stub_test.cpp
+authority_gate_contract: BLUESKY-COMMAND-AUTHORITY-GATE-CONTRACT-001
 ---
 
 # BlueSky PRO — Command Lifecycle Contract 001
@@ -42,12 +43,13 @@ The implementation shall preserve the distinction between:
 
 ```text
 command accepted by BlueSky
+command validated for dispatch authority
 command dispatched to adapter
 command acknowledged by Vehicle
 command execution confirmed
 ```
 
-Acceptance, dispatch, acknowledgement and execution confirmation are separate states/events and shall not be collapsed into a single success indication.
+Acceptance, authorization, dispatch, acknowledgement and execution confirmation are separate states/events and shall not be collapsed into a single success indication.
 
 ## 4. Command request identity
 
@@ -71,7 +73,7 @@ Identifiers shall remain stable through the lifecycle and must be sufficient for
 | Current | Allowed next state(s) | Rule |
 |---|---|---|
 | REQUESTED | VALIDATING | validation begins |
-| VALIDATING | REJECTED, DISPATCHED | reject or pass validation |
+| VALIDATING | REJECTED, DISPATCHED | reject or pass validation and applicable authority gate |
 | DISPATCHED | ACKNOWLEDGED, TIMEOUT, UNKNOWN | external acknowledgement or unresolved outcome |
 | ACKNOWLEDGED | EXECUTING, FAILED, CANCELLED, TIMEOUT | execution phase or terminal/timeout outcome |
 | EXECUTING | COMPLETED, FAILED, CANCELLED, TIMEOUT, UNKNOWN | execution outcome |
@@ -84,26 +86,31 @@ Identifiers shall remain stable through the lifecycle and must be sufficient for
 
 The concrete adapter may implement additional protocol-specific intermediate events, but those events shall be mapped to the canonical lifecycle without changing the canonical meaning.
 
-## 6. Safety boundary
+## 6. Safety and authority boundary
 
 The lifecycle contract does not grant command authority.
 
 ```text
 Command request
-→ authority/safety validation
+→ lifecycle validation
+→ authority / safety gate
 → adapter dispatch
 → Vehicle acknowledgement
 → execution state
 → execution confirmation
 ```
 
-An adapter or lifecycle implementation shall not bypass the applicable safety/authority gate.
+The controlled authority boundary is defined by `BLUESKY-COMMAND-AUTHORITY-GATE-CONTRACT-001`.
 
-`ACKNOWLEDGED` is not equivalent to `EXECUTING` and neither is equivalent to `COMPLETED`.
+An adapter, Registry or lifecycle implementation shall not bypass the applicable authority/safety gate.
+
+`ACKNOWLEDGED` is not equivalent to `EXECUTING` and neither is equivalent to `COMPLETED`. None of these states substitutes for an `ALLOWED` authority decision.
 
 ## 7. Error and timeout semantics
 
 Failures shall remain explicit. A timeout shall not be converted to successful completion. `UNKNOWN` shall be used when the system cannot establish the external execution state and shall require the higher-level recovery logic to determine the safe response.
+
+Authority gate `REJECTED` and `DEFERRED` decisions shall not be interpreted as dispatch permission.
 
 ## 8. Implementation mapping
 
@@ -145,10 +152,11 @@ The concrete adapter implementation shall consume this contract through the cont
 BLUESKY-ADAPTER-REGISTRY-BOUNDARY-001
 → BLUESKY-CANONICAL-VEHICLE-EQUIPMENT-SCHEMA-001
 → Command Lifecycle Contract
+→ Command Authority Gate Contract
 → concrete adapter
 ```
 
-The registry resolves the compatible adapter boundary; the canonical Vehicle/Equipment schema supplies the domain semantics. Neither registration nor lifecycle acknowledgement grants safety or execution authority.
+The registry resolves the compatible adapter boundary; the canonical Vehicle/Equipment schema supplies the domain semantics; the authority/safety gate decides whether the specific command may proceed to dispatch. Neither registration nor lifecycle acknowledgement grants safety or execution authority.
 
 No vendor-specific protocol is selected by this document.
 
@@ -165,4 +173,4 @@ GAP
 → TRACEABILITY UPDATE
 ```
 
-**Status: CONTROLLED WORKING DRAFT — CANONICAL COMMAND LIFECYCLE BOUNDARY DEFINED; REAL INTEGRATION AND TEST EVIDENCE PENDING.**
+**Status: CONTROLLED WORKING DRAFT — CANONICAL COMMAND LIFECYCLE AND AUTHORITY GATE BOUNDARIES DEFINED; PRODUCT SAFETY POLICY, REAL INTEGRATION AND TEST EVIDENCE PENDING.**
