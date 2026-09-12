@@ -14,6 +14,7 @@ class TestEvidenceSession(unittest.TestCase):
             session = EvidenceSession(
                 run_dir,
                 "COM-TEST-001",
+                evidence_domain_ids=["EC-01", "EC-14"],
                 requirement_ids=["SYS-C2-006"],
                 test_method_id="METHOD-COM-001",
                 test_method_revision="A",
@@ -39,6 +40,7 @@ class TestEvidenceSession(unittest.TestCase):
             record = json.loads((run_dir / "record.json").read_text(encoding="utf-8"))
             self.assertEqual(record["test_run_id"], "COM-TEST-001")
             self.assertEqual(record["data_class"], "DEMONSTRATION")
+            self.assertEqual(record["evidence_domain_ids"], ["EC-01", "EC-14"])
             self.assertEqual(record["configuration_id"], "CFG-DEMO-001")
             self.assertEqual(record["flight_record_id"], "FLIGHT-DEMO-001")
             self.assertEqual(record["test_case_id"], "CASE-COM-001")
