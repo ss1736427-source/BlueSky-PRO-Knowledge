@@ -5,6 +5,7 @@ status: controlled_working_draft
 system: BlueSky PRO
 parent: BLUESKY-UNIVERSAL-ADAPTER-CONTRACT-001
 schema: BLUESKY-CANONICAL-VEHICLE-EQUIPMENT-SCHEMA-001
+implementation: BLUESKY-ADAPTER-CONTRACT-IMPLEMENTATION-STUB-001
 ---
 
 # BlueSky PRO — Adapter Conformance Matrix 001
@@ -21,6 +22,7 @@ The matrix is directly controlled by:
 BLUESKY-UNIVERSAL-ADAPTER-CONTRACT-001
 BLUESKY-CANONICAL-VEHICLE-EQUIPMENT-SCHEMA-001
 BLUESKY-ADAPTER-CONTRACT-TEST-STUB-001
+BLUESKY-ADAPTER-CONTRACT-IMPLEMENTATION-STUB-001
 ```
 
 The implementation checklist and configuration baseline consume this matrix; this relationship is validated by the repository consistency check.
@@ -119,12 +121,14 @@ The stub shall contain:
 
 ## 9. Current work-package transition
 
-The Adapter documentation chain is internally consistent and the implementation stub exposes the operations required by the contract.
+The Adapter documentation chain is internally consistent and the implementation stub exposes the operations required by the contract. The technology-neutral concrete adapter contract implementation stub is now explicitly bound to this matrix.
 
-The next deterministic step is to identify and close the next unresolved integration gap in the existing Interface / Service layer, reusing existing interfaces and creating only a minimal stub where the real implementation or test environment is not yet available.
+The next deterministic step is to reconcile the repository consistency record with this implementation binding, then identify the next unresolved integration gap in the existing Interface / Service layer.
 
 ```text
-REPOSITORY CONSISTENCY: PASS
+IMPLEMENTATION STUB
+→ CONFORMANCE MATRIX BINDING
+→ REPOSITORY CONSISTENCY RECONCILIATION
 → INTERFACE / SERVICE GAP ANALYSIS
 → MINIMAL GAP CLOSURE
 → VERIFICATION HOOK
@@ -132,4 +136,4 @@ REPOSITORY CONSISTENCY: PASS
 → RESTART ALGORITHM
 ```
 
-**Status: CONTROLLED WORKING DRAFT — ADAPTER CHECKLIST RECONCILED WITH CONTRACT-COMPLETE STUB; REAL IMPLEMENTATION/TESTING PENDING.**
+**Status: CONTROLLED WORKING DRAFT — ADAPTER IMPLEMENTATION STUB BOUND TO CONFORMANCE MATRIX; REAL IMPLEMENTATION/TESTING PENDING.**
