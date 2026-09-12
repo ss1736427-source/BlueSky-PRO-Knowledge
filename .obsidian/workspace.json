@@ -187,6 +187,7 @@
   },
   "active": "058fcba7e26ecc4b",
   "lastOpenFiles": [
+    "03_FLEET/BLUESKY_ADAPTER_REPOSITORY_CONSISTENCY_CHECK_001.md",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/core/universal_equipment_adapter_contract_test.cpp",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/core/universal_equipment_adapter.hpp",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/contract/validate_adapter_chain.py",
@@ -221,7 +222,6 @@
     "04_SOFTWARE/AUTOPILOT_ADAPTER/core/universal_autopilot_adapter_contract_test.cpp",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/CMakeLists.txt",
     "04_SOFTWARE/PLANNING/model/vehicle_equipment_capability_contract_test.cpp",
-    "04_SOFTWARE/PLANNING/model/vehicle_equipment_capability.hpp",
-    "04_SOFTWARE/PLANNING/model/mission_model_contract_test.cpp"
+    "04_SOFTWARE/PLANNING/model/vehicle_equipment_capability.hpp"
   ]
 }
