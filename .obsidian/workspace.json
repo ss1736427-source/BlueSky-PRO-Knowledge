@@ -187,6 +187,9 @@
   },
   "active": "058fcba7e26ecc4b",
   "lastOpenFiles": [
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/universal_equipment_adapter_contract_test.cpp",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/universal_equipment_adapter.hpp",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/contract/validate_adapter_chain.py",
     "03_FLEET/BLUESKY_ADAPTER_IMPLEMENTATION_STUB_001.md",
     "03_FLEET/BLUESKY_ADAPTER_CONFORMANCE_CHECKLIST_001.md",
     "03_FLEET/BLUESKY_ADAPTER_CONTRACT_TEST_STUB_001.md",
@@ -214,14 +217,11 @@
     "05_VERIFICATION/C2/C2_VERIFICATION_EXECUTION_RESULT_001.md",
     "05_VERIFICATION/C2/C2_EXECUTION_PREREQUISITE_CHECK_001.md",
     "00_PROJECT/GOVERNANCE/PROJECT_WORK_ORDER.md",
-    "00_PROJECT/CHANGE_AND_PROBLEM_PROCESS.md",
     "00_PROJECT/EXTERNAL_ORCHESTRATOR/codex_preflight.ps1",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/core/universal_autopilot_adapter_contract_test.cpp",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/CMakeLists.txt",
     "04_SOFTWARE/PLANNING/model/vehicle_equipment_capability_contract_test.cpp",
     "04_SOFTWARE/PLANNING/model/vehicle_equipment_capability.hpp",
-    "04_SOFTWARE/PLANNING/model/mission_model_contract_test.cpp",
-    "04_SOFTWARE/PLANNING/model/mission_model.hpp",
-    "00_PROJECT/EXTERNAL_ORCHESTRATOR/__pycache__/bluesky_orchestrator.cpython-314.pyc"
+    "04_SOFTWARE/PLANNING/model/mission_model_contract_test.cpp"
   ]
 }
