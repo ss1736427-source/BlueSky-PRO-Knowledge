@@ -48,6 +48,17 @@ Vehicle/Equipment Framework → Registry              PASS
 IF-EQUIPMENT → Registry / Canonical Schema         PASS
 ```
 
+### Service-layer implementation consistency
+
+```text
+Registry → Vehicle profile lookup                 PASS
+Registry → Equipment profile lookup               PASS
+Registry → Capability lookup                       PASS
+Registry → deterministic no-match                 PASS
+Registry → duplicate identity rejection            PASS
+Registry → resolution-only safety boundary         PASS
+```
+
 ### Semantic consistency
 
 ```text
@@ -88,6 +99,7 @@ REPOSITORY CONSISTENCY: PASS
 SERVICE-LAYER REGISTRY BINDING: PASS
 REGISTRY FIXTURE: DEFINED
 CONCRETE ADAPTER CONTRACT STUB: DEFINED
+CAPABILITY RESOLUTION BINDING: DEFINED
 CONCRETE ADAPTER CONFORMANCE: NOT VERIFIED
 REAL TESTING: DEFERRED
 ```
@@ -105,4 +117,4 @@ REPOSITORY CONSISTENCY RECONCILIATION
 → RESTART ALGORITHM
 ```
 
-**Status: CONTROLLED WORKING RECORD — ADAPTER IMPLEMENTATION STUB AND CONFORMANCE MATRIX RECONCILED; REAL IMPLEMENTATION/TESTING PENDING.**
+**Status: CONTROLLED WORKING RECORD — ADAPTER IMPLEMENTATION STUB, CONFORMANCE MATRIX AND REGISTRY CAPABILITY RESOLUTION RECONCILED; REAL IMPLEMENTATION/TESTING PENDING.**

@@ -14,7 +14,7 @@ public:
         : id_(std::move(id)), vehicle_(std::move(vehicle)), equipment_(std::move(equipment)) {}
 
     AdapterMetadata metadata() const override {
-        return {id_, "1.0.0", "TEST", "MOCK-1", {vehicle_}, {equipment_}, {}, "1"};
+        return {id_, "1.0.0", "TEST", "MOCK-1", "1", "1", {vehicle_}, {equipment_}, {"CAPABILITY-A"}, "1"};
     }
 
     std::vector<std::string> discover() override { return {}; }
@@ -57,6 +57,7 @@ int main() {
     assert(!registry.registerAdapter(nullptr));
     assert(!registry.unregisterAdapter(""));
     assert(registry.findById("missing") == nullptr);
+    assert(registry.findForCapability("CAPABILITY-A") == nullptr);
 
     assert(registry.registerAdapter(
         std::make_unique<TestAdapter>("ADAPTER-A", "VEHICLE-A", "EQUIPMENT-A")));
@@ -66,16 +67,43 @@ int main() {
     assert(registry.findById("ADAPTER-A") != nullptr);
     assert(registry.findForVehicleProfile("VEHICLE-A") == registry.findById("ADAPTER-A"));
     assert(registry.findForEquipmentProfile("EQUIPMENT-A") == registry.findById("ADAPTER-A"));
+    assert(registry.findForCapability("CAPABILITY-A") == registry.findById("ADAPTER-A"));
     assert(registry.findForVehicleProfile("VEHICLE-X") == nullptr);
     assert(registry.findForEquipmentProfile("EQUIPMENT-X") == nullptr);
+    assert(registry.findForCapability("CAPABILITY-X") == nullptr);
+    assert(registry.findForCapability("") == nullptr);
+
+    const AdapterResolutionRequest resolved_request{
+        "VEHICLE-A", "EQUIPMENT-A", "MOCK-1", "1", "1", "CAPABILITY-A"};
+    const auto resolved = registry.resolve(resolved_request);
+    assert(resolved.status == ResolutionStatus::Resolved);
+    assert(resolved.adapter == registry.findById("ADAPTER-A"));
+
+    const AdapterResolutionRequest not_found_request{
+        "VEHICLE-X", "", "MOCK-1", "1", "1", ""};
+    assert(registry.resolve(not_found_request).status == ResolutionStatus::NotFound);
+
+    const AdapterResolutionRequest incompatible_request{
+        "VEHICLE-A", "", "OTHER-PROTOCOL", "1", "1", ""};
+    assert(registry.resolve(incompatible_request).status == ResolutionStatus::Incompatible);
+
+    const AdapterResolutionRequest capability_request{
+        "VEHICLE-A", "", "MOCK-1", "1", "1", "CAPABILITY-B"};
+    assert(registry.resolve(capability_request).status == ResolutionStatus::CapabilityUnsupported);
+
+    assert(registry.registerAdapter(
+        std::make_unique<TestAdapter>("ADAPTER-B", "VEHICLE-A", "EQUIPMENT-B")));
+    assert(registry.resolve(resolved_request).status == ResolutionStatus::Ambiguous);
 
     const auto ids = registry.adapterIds();
-    assert(ids.size() == 1);
+    assert(ids.size() == 2);
     assert(ids.front() == "ADAPTER-A");
+    assert(ids.back() == "ADAPTER-B");
 
     assert(registry.unregisterAdapter("ADAPTER-A"));
     assert(registry.findById("ADAPTER-A") == nullptr);
-    assert(registry.adapterIds().empty());
+    assert(registry.findForCapability("CAPABILITY-A") == registry.findById("ADAPTER-B"));
+    assert(registry.adapterIds().size() == 1);
     assert(!registry.unregisterAdapter("ADAPTER-A"));
 
     return 0;

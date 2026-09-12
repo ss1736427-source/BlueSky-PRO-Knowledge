@@ -4,6 +4,39 @@
 
 namespace bluesky::planning::adapter {
 
+namespace {
+
+bool contains(const std::vector<std::string>& values, const std::string& value) {
+    return std::find(values.begin(), values.end(), value) != values.end();
+}
+
+bool matchesTarget(const AdapterMetadata& metadata, const AdapterResolutionRequest& request) {
+    if (!request.vehicle_profile.empty() &&
+        !contains(metadata.supported_vehicle_profiles, request.vehicle_profile)) {
+        return false;
+    }
+
+    if (!request.equipment_profile.empty() &&
+        !contains(metadata.supported_equipment_profiles, request.equipment_profile)) {
+        return false;
+    }
+
+    return true;
+}
+
+bool matchesCompatibility(const AdapterMetadata& metadata, const AdapterResolutionRequest& request) {
+    if (!request.protocol.empty() && metadata.protocol != request.protocol) return false;
+    if (!request.contract_version.empty() && metadata.contract_version != request.contract_version) return false;
+    if (!request.schema_version.empty() && metadata.schema_version != request.schema_version) return false;
+    return true;
+}
+
+bool matchesCapability(const AdapterMetadata& metadata, const AdapterResolutionRequest& request) {
+    return request.required_capability.empty() || contains(metadata.capabilities, request.required_capability);
+}
+
+} // namespace
+
 bool UniversalAdapterRegistry::registerAdapter(std::unique_ptr<UniversalAdapter> adapter) {
     if (!adapter) return false;
 
@@ -68,6 +101,65 @@ UniversalAdapter* UniversalAdapterRegistry::findForEquipmentProfile(
         });
 
     return it == adapters_.end() ? nullptr : it->get();
+}
+
+UniversalAdapter* UniversalAdapterRegistry::findForCapability(
+    const std::string& capability) const {
+    if (capability.empty()) return nullptr;
+
+    const auto it = std::find_if(
+        adapters_.begin(), adapters_.end(),
+        [&](const std::unique_ptr<UniversalAdapter>& adapter) {
+            if (!adapter) return false;
+            const auto& capabilities = adapter->metadata().capabilities;
+            return std::find(capabilities.begin(), capabilities.end(), capability) != capabilities.end();
+        });
+
+    return it == adapters_.end() ? nullptr : it->get();
+}
+
+AdapterResolutionResult UniversalAdapterRegistry::resolve(
+    const AdapterResolutionRequest& request) const {
+    const UniversalAdapter* first_compatible = nullptr;
+    std::size_t compatible_count = 0;
+    bool target_found = false;
+    bool capability_mismatch = false;
+
+    for (const auto& adapter : adapters_) {
+        if (!adapter) continue;
+
+        const auto metadata = adapter->metadata();
+        if (!matchesTarget(metadata, request)) continue;
+
+        target_found = true;
+        if (!matchesCompatibility(metadata, request)) continue;
+
+        if (!matchesCapability(metadata, request)) {
+            capability_mismatch = true;
+            continue;
+        }
+
+        first_compatible = adapter.get();
+        ++compatible_count;
+    }
+
+    if (compatible_count == 1) {
+        return {ResolutionStatus::Resolved, const_cast<UniversalAdapter*>(first_compatible)};
+    }
+
+    if (compatible_count > 1) {
+        return {ResolutionStatus::Ambiguous, nullptr};
+    }
+
+    if (!target_found) {
+        return {ResolutionStatus::NotFound, nullptr};
+    }
+
+    if (capability_mismatch) {
+        return {ResolutionStatus::CapabilityUnsupported, nullptr};
+    }
+
+    return {ResolutionStatus::Incompatible, nullptr};
 }
 
 std::vector<std::string> UniversalAdapterRegistry::adapterIds() const {

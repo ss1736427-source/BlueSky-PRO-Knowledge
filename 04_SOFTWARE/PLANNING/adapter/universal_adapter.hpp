@@ -41,6 +41,8 @@ struct AdapterMetadata {
     std::string adapter_version;
     std::string vendor;
     std::string protocol;
+    std::string contract_version;
+    std::string schema_version;
     std::vector<std::string> supported_vehicle_profiles;
     std::vector<std::string> supported_equipment_profiles;
     std::vector<std::string> capabilities;
