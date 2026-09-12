@@ -13,7 +13,19 @@ schema: BLUESKY-CANONICAL-VEHICLE-EQUIPMENT-SCHEMA-001
 
 Define the minimum conformance checks for every Vehicle / Equipment adapter before it can be considered for integration into the controlled BlueSky configuration.
 
-## 2. Conformance rule
+## 2. Controlled dependencies
+
+The matrix is directly controlled by:
+
+```text
+BLUESKY-UNIVERSAL-ADAPTER-CONTRACT-001
+BLUESKY-CANONICAL-VEHICLE-EQUIPMENT-SCHEMA-001
+BLUESKY-ADAPTER-CONTRACT-TEST-STUB-001
+```
+
+The implementation checklist and configuration baseline consume this matrix; this relationship is validated by the repository consistency check.
+
+## 3. Conformance rule
 
 ```text
 ADAPTER
@@ -27,7 +39,7 @@ ADAPTER
 
 Passing a document review does not mean that the adapter is verified. Verification requires controlled evidence.
 
-## 3. Matrix
+## 4. Matrix
 
 | ID | Contract area | Conformance criterion | Verification method | Evidence required | Status |
 |---|---|---|---|---|---|
@@ -47,7 +59,7 @@ Passing a document review does not mean that the adapter is verified. Verificati
 | ACM-014 | Traceability | Requirement/interface/verification references can be resolved | Inspection | Traceability record | PLANNED |
 | ACM-015 | Determinism | Same controlled input/configuration produces equivalent canonical result | Test | Repeatability evidence | PLANNED |
 
-## 4. Acceptance states
+## 5. Acceptance states
 
 ```text
 PLANNED
@@ -60,7 +72,7 @@ NOT_APPLICABLE
 
 `CONFORMING` shall only be assigned when the applicable evidence is available and reviewed.
 
-## 5. Minimum integration gate
+## 6. Minimum integration gate
 
 An adapter shall not enter the approved integration configuration until all applicable rows are:
 
@@ -78,7 +90,7 @@ with controlled rationale.
 
 `BLOCKED` or `NON_CONFORMING` prevents approval.
 
-## 6. Relationship to real tests
+## 7. Relationship to real tests
 
 The matrix is a pre-test control artifact. It creates the test obligations but does not claim that tests have occurred.
 
@@ -93,47 +105,31 @@ PLANNED
 
 Successful real tests shall be recorded in the execution/evidence records and the affected documentation shall then be updated to reflect the actual result.
 
-## 7. Stub policy
+## 8. Stub policy
 
 Where a required test environment, hardware, protocol endpoint or measured parameter is unavailable before real testing, the corresponding implementation/test entry remains a controlled stub.
 
 The stub shall contain:
 
-```text
-what must be tested
-required input
-expected acceptance basis
-required evidence
-current blocker
-```
-
-No simulated result may be represented as real evidence.
-
-## 8. Traceability
-
-```text
-ACM-001..015
-→ BLUESKY-UNIVERSAL-ADAPTER-CONTRACT-001
-→ BLUESKY-CANONICAL-VEHICLE-EQUIPMENT-SCHEMA-001
-→ relevant SYS-REQ / interface / safety requirement
-→ verification case
-→ execution
-→ evidence
-```
+- explicit status;
+- unresolved prerequisites;
+- required future evidence;
+- configuration identity;
+- no false PASS/VERIFIED status.
 
 ## 9. Current work-package transition
 
-The contract-test stub, configuration baseline and implementation checklist are already defined. The repository consistency gate is therefore the current pre-implementation control step.
+The Adapter documentation chain is internally consistent and the implementation stub exposes the operations required by the contract.
 
-After consistency is confirmed, the next unresolved integration gap shall be taken from the existing software adapter/service layer without selecting a vendor-specific implementation unless that choice is required by the repository's governing work package.
+The next deterministic step is to identify and close the next unresolved integration gap in the existing Interface / Service layer, reusing existing interfaces and creating only a minimal stub where the real implementation or test environment is not yet available.
 
 ```text
-CONFORMANCE MATRIX
-→ CONTRACT TEST STUB
-→ CONFIGURATION BASELINE
-→ IMPLEMENTATION CHECKLIST
-→ REPOSITORY CONSISTENCY CHECK
-→ NEXT UNRESOLVED INTEGRATION GAP
+REPOSITORY CONSISTENCY: PASS
+→ INTERFACE / SERVICE GAP ANALYSIS
+→ MINIMAL GAP CLOSURE
+→ VERIFICATION HOOK
+→ COMMIT
+→ RESTART ALGORITHM
 ```
 
-**Status: CONTROLLED WORKING DRAFT — CONFORMANCE OBLIGATIONS DEFINED; CONSISTENCY GATE ACTIVE; NO REAL-HARDWARE RESULT CLAIMED.**
+**Status: CONTROLLED WORKING DRAFT — ADAPTER CHECKLIST RECONCILED WITH CONTRACT-COMPLETE STUB; REAL IMPLEMENTATION/TESTING PENDING.**
