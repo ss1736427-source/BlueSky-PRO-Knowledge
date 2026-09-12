@@ -5,6 +5,7 @@ status: controlled_working_draft
 system: BlueSky PRO
 matrix: BLUESKY-ADAPTER-CONFORMANCE-MATRIX-001
 schema: BLUESKY-CANONICAL-VEHICLE-EQUIPMENT-SCHEMA-001
+configuration_baseline: BLUESKY-ADAPTER-CONFIGURATION-BASELINE-001
 ---
 
 # BlueSky PRO — Adapter Contract Test Stub 001
@@ -32,7 +33,17 @@ MockEquipment
 
 Test identifiers are synthetic and shall never be treated as real operational configuration or certification evidence.
 
-## 3. Deterministic test vectors
+## 3. Configuration binding
+
+All deterministic contract tests shall identify the configuration baseline used for execution:
+
+```text
+BLUESKY-ADAPTER-CONFIGURATION-BASELINE-001
+```
+
+The baseline binds the adapter version, Vehicle profile, Equipment profile, protocol/schema version and test-vector set. Before real execution, all production-specific `TBD` fields in that baseline shall be resolved from controlled configuration sources.
+
+## 4. Deterministic test vectors
 
 ### ACT-001 — Identity normalization
 
@@ -154,7 +165,7 @@ Input: identical fixture + identical adapter configuration executed repeatedly.
 
 Expected: equivalent canonical output for all deterministic fields.
 
-## 4. Evidence placeholders
+## 5. Evidence placeholders
 
 ```text
 ACT-001 → EVIDENCE-TBD
@@ -171,7 +182,7 @@ ACT-010 → EVIDENCE-TBD
 
 These placeholders are not test results.
 
-## 5. Execution state
+## 6. Execution state
 
 ```text
 Execution environment: TBD
@@ -182,7 +193,7 @@ Operator/test authority: TBD
 Result: NOT EXECUTED
 ```
 
-## 6. Conformance mapping
+## 7. Conformance mapping
 
 | Test | Matrix | Contract / schema area |
 |---|---|---|
@@ -197,7 +208,7 @@ Result: NOT EXECUTED
 | ACT-009 | ACM-011 | Persistence |
 | ACT-010 | ACM-015 | Determinism |
 
-## 7. Verification rule
+## 8. Verification rule
 
 ```text
 Test vector defined
@@ -211,18 +222,8 @@ Certification evidence accepted
 
 A future real execution shall replace `EVIDENCE-TBD` only with controlled evidence references. If a real test passes, the corresponding result and evidence records shall be updated and the affected requirement/configuration traceability shall be reconciled.
 
-## 8. Next deterministic step
+## 9. Next deterministic step
 
-Define the adapter configuration baseline stub that binds:
-
-```text
-Adapter version
-+ Vehicle profile
-+ Equipment profile
-+ Protocol/schema version
-+ Test vector set
-```
-
-This will make later real testing reproducible without redesigning the contract.
+Create the technology-neutral adapter implementation stub that implements the contract boundary and can be exercised by `ACT-001..010` without real hardware.
 
 **Status: CONTROLLED WORKING DRAFT — DETERMINISTIC MOCK CONTRACT TESTS DEFINED; NOT EXECUTED.**
