@@ -1,7 +1,7 @@
 ---
 id: C2-SAFETY-ALLOCATION-001
 type: safety_requirements_allocation
-status: working_draft
+status: controlled_working_draft
 system: BlueSky PRO
 source: C2_CLAUSE_LEVEL_MAPPING_001.md
 ---
@@ -25,13 +25,13 @@ Each transition shall be observable, time-ordered and recorded where required by
 
 ## 3. Failure conditions
 
-| ID | Condition | Safety effect to analyse | Required response |
-|---|---|---|---|
-| C2-F-001 | degradation of C2 quality | loss of reliable command/monitoring | transition to DEGRADED and evaluate contingency criteria |
-| C2-F-002 | complete C2 loss | inability to receive/confirm commands | invoke approved lost-C2 behaviour |
-| C2-F-003 | intermittent C2 | unstable command/monitoring availability | prevent unsafe oscillation between states; apply hysteresis defined in requirements |
-| C2-F-004 | invalid/stale C2 status | incorrect system-state assessment | reject or quarantine invalid status and maintain safe state |
-| C2-F-005 | time-reference inconsistency | incorrect event ordering / stale-state decisions | use controlled common time reference |
+| ID | Condition | Safety effect to analyse | Required response | Verification allocation |
+|---|---|---|---|---|
+| C2-F-001 | degradation of C2 quality | loss of reliable command/monitoring | transition to DEGRADED and evaluate contingency criteria | C2-V05, C2-V06 |
+| C2-F-002 | complete C2 loss | inability to receive/confirm commands | invoke approved lost-C2 behaviour | C2-V05, C2-V06 |
+| C2-F-003 | intermittent C2 | unstable command/monitoring availability | prevent unsafe oscillation between states; apply hysteresis defined in requirements | C2-V05, C2-V06 |
+| C2-F-004 | invalid/stale C2 status | incorrect system-state assessment | reject or quarantine invalid status and maintain safe state | C2-V03, C2-V04, C2-V06 |
+| C2-F-005 | time-reference inconsistency | incorrect event ordering / stale-state decisions | use controlled common time reference | C2-V03 |
 
 ## 4. Allocation principle
 
@@ -47,8 +47,24 @@ Safety allocation shall be verified by:
 - lost-C2 scenario tests;
 - event-log evidence review.
 
-Quantitative acceptance criteria remain OPEN until derived from the approved requirements/certification baseline.
+The defined verification cases are `C2-V01..C2-V08`; the safety-specific failure conditions are explicitly allocated above to the applicable cases. Quantitative acceptance criteria remain OPEN until derived from the approved requirements/certification baseline.
 
-## 6. Next step
+## 6. Traceability chain
 
-Feed the allocation into the controlled ICD and verification baseline, then update the master traceability matrix.
+```text
+C2 regulatory clause
+→ C2 system/interface allocation
+→ C2-F-001..005
+→ safety response
+→ C2-V01..C2-V08
+→ execution result
+→ evidence
+```
+
+The allocation is not evidence of successful verification. No `VERIFIED` or `PASSED` status is assigned by this record.
+
+## 7. Next step
+
+Maintain the allocation links in the controlled ICD, verification cases, verification register and master traceability records. At real test stage, replace the applicable execution/evidence stubs with actual results and evidence.
+
+**Status: CONTROLLED WORKING DRAFT — SAFETY ALLOCATION INTEGRATED WITH C2 VERIFICATION CASES; REAL EXECUTION DEFERRED.**
