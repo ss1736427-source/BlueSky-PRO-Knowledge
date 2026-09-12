@@ -4,8 +4,8 @@ type: adapter_repository_consistency_check
 status: controlled_verified_repository_consistency
 system: BlueSky PRO
 work_package: Phase 4 Universal Integration Layer — Interface / Service integration gap
-verified_commit: c6d5b9322d8ed0b9b539b4790697c7b7c2efd831
-verified_workflow_run: 34702928130
+verified_commit: 051828211b3efcb470311573f9707de9ef96b233
+verified_workflow_run: 49
 ---
 
 # BlueSky PRO — Adapter Repository Consistency Check 001
@@ -61,14 +61,13 @@ The planning and autopilot-adapter CI workflows invoke this check before their d
 ## 5. Verified baseline
 
 ```text
-Baseline: main at commit c6d5b9322d8ed0b9b539b4790697c7b7c2efd831
+Baseline: main at commit 051828211b3efcb470311573f9707de9ef96b233
 Workflow: BlueSky Autopilot Adapter
-Run: 34702928130
+Run: 49
 Consistency validation: PASS
 Configure: PASS
 Build: PASS
 Test: PASS
-Tests: 2/2 passed
 Real execution: DEFERRED
 Real hardware: NOT CONNECTED
 Evidence: NOT AVAILABLE
@@ -95,4 +94,4 @@ If the failure exposes a genuine architectural ambiguity, stop only for the spec
 
 Real hardware, HIL and flight-test results remain deferred. When such testing occurs, this record is reconciled with the actual configuration, execution result and evidence references.
 
-**Status: CONTROLLED VERIFIED REPOSITORY CONSISTENCY — CI run 34702928130 passed validation, configuration, build and test for commit c6d5b9322d8ed0b9b539b4790697c7b7c2efd831.**
+**Status: CONTROLLED VERIFIED REPOSITORY CONSISTENCY — BlueSky Autopilot Adapter run 49 passed validation, configuration, build and test for commit 051828211b3efcb470311573f9707de9ef96b233.**
