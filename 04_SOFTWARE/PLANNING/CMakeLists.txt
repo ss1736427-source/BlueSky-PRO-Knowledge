@@ -79,6 +79,12 @@ add_executable(universal_adapter_registry_test
 
 target_link_libraries(universal_adapter_registry_test PRIVATE bluesky_planning)
 
+add_executable(adapter_service_resolver_test
+    adapter/adapter_service_resolver_test.cpp
+)
+
+target_link_libraries(adapter_service_resolver_test PRIVATE bluesky_planning)
+
 add_executable(command_lifecycle_contract_stub_test
     command_lifecycle_contract_stub_test.cpp
 )
@@ -96,4 +102,5 @@ add_test(NAME mission_model_contract_test COMMAND mission_model_contract_test)
 add_test(NAME vehicle_equipment_capability_contract_test COMMAND vehicle_equipment_capability_contract_test)
 add_test(NAME universal_adapter_contract_test COMMAND universal_adapter_contract_test)
 add_test(NAME universal_adapter_registry_test COMMAND universal_adapter_registry_test)
+add_test(NAME adapter_service_resolver_test COMMAND adapter_service_resolver_test)
 add_test(NAME command_lifecycle_contract_stub_test COMMAND command_lifecycle_contract_stub_test)
