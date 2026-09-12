@@ -31,7 +31,7 @@ MISSION ENGINE / SAFETY / OPERATOR
         FLIGHT CONTROLLER
               │
               ▼
-        UAV / PAYLOAD
+        UAV / EQUIPMENT
 ```
 
 ## 3. Adapter lifecycle
@@ -88,7 +88,7 @@ CLOSE / ARCHIVE
 - `getCapabilities()`
 - `getSupportedCommands()`
 - `getSupportedMissionFeatures()`
-- `getSupportedPayloadFeatures()`
+- `getSupportedEquipmentFeatures()`
 
 ### Connection
 
@@ -105,7 +105,7 @@ CLOSE / ARCHIVE
 - `getFailsafeState()`
 - `getEnergyState()`
 - `getMissionState()`
-- `getPayloadState()`
+- `getEquipmentState()`
 
 ### Commands
 
@@ -245,7 +245,7 @@ supported_commands
 supported_mission_features
 supported_parameter_features
 telemetry_features
-payload_features
+equipment_features
 failsafe_features
 log_features
 security_features
