@@ -26,11 +26,13 @@ The framework shall support, subject to technical and legal interface availabili
                               │
                  Universal Vehicle Interface
                               │
+                       ADAPTER REGISTRY
+                              │
                 ┌─────────────┴─────────────┐
                 │     Integration Layer     │
                 ├────────────┬──────────────┤
                 │            │              │
-         Autopilot Adapter  C2 Adapter  Payload Adapter
+         Autopilot Adapter  C2 Adapter  Equipment Adapter
                 │            │              │
           Protocol Adapter  Transport    Device/API
                 │
@@ -40,6 +42,8 @@ The framework shall support, subject to technical and legal interface availabili
        │        │        │         │
      MAVLink  MAVLink  Native/API  ...
 ```
+
+The Adapter Registry is a resolution and compatibility boundary only. It does not grant execution authority and does not bypass safety controls.
 
 ## 4. BlueSky Universal Vehicle Interface
 
@@ -57,7 +61,7 @@ The internal contract shall expose normalized objects and operations independent
 - failsafe state;
 - mission state;
 - communication state;
-- payload state.
+- Equipment state.
 
 ### Operations
 
@@ -111,7 +115,7 @@ Discover capabilities
   ↓
 Load verified vehicle profile
   ↓
-Check mission + payload + safety requirements
+Check mission + Equipment + safety requirements
   ↓
 READY / NOT READY with explicit reasons
 ```
@@ -130,8 +134,6 @@ Minimum services for the reference adapter:
 - timesync where required;
 - log transfer where supported;
 - component/capability discovery.
-
-MAVLink Command Protocol uses acknowledgements (`COMMAND_ACK`) and retransmission when an acknowledgement is not received; the Parameter Protocol provides key/value configuration exchange and allows GCS software to work with previously unknown parameters. citeturn0search12turn0search13
 
 ## 8. Mission translation
 
@@ -159,52 +161,93 @@ A mission shall not be considered uploaded merely because a transport operation 
 
 ## 9. Parameter management
 
-Parameters shall be handled through a controlled configuration service:
-
-- discover;
-- snapshot;
-- compare;
-- validate;
-- write;
-- confirm/read-back;
-- baseline;
-- rollback where technically supported;
-- associate the configuration with aircraft, firmware and Flight Record.
-
-Mission Planner provides full parameter read/write, save, restore and compare functionality; BlueSky shall cover the operationally required subset through its normalized configuration service. citeturn0search9
-
-## 10. Configuration baseline
-
-A verified aircraft profile shall bind:
+Parameters shall be treated as controlled configuration, not as unrestricted implementation details.
 
 ```text
-Aircraft identity
-+ FCS type
-+ FCS version
-+ vehicle type
-+ parameter baseline
-+ sensors
-+ payload
-+ C2 configuration
-+ safety configuration
-+ approved capabilities
-+ verification status
+DISCOVER
+  ↓
+SNAPSHOT
+  ↓
+COMPARE
+  ↓
+VALIDATE
+  ↓
+APPLY
+  ↓
+READ-BACK
+  ↓
+VERIFY
+  ↓
+BASELINE
 ```
 
-Changing a safety-critical configuration shall invalidate the affected readiness/verification status until the applicable checks are repeated.
+Safety-critical configuration changes shall invalidate affected readiness/verification state until revalidated.
 
-## 11. Universal compatibility rule
+## 10. Equipment integration
 
-Compatibility shall be represented explicitly:
+Equipment is a first-class canonical BlueSky object and is resolved through the Adapter Registry and universal Vehicle/Equipment adapter boundary.
 
-`SUPPORTED → VERIFIED → OPERATIONAL`
+```text
+External Vehicle / Equipment
+          ↓
+Equipment Adapter
+          ↓
+Canonical Vehicle / Equipment Schema
+          ↓
+BlueSky Core Services
+```
 
-and separately:
+External legacy terminology such as `payload` remains an external protocol term only and is normalized to canonical `Equipment` at the adapter boundary.
 
-`UNSUPPORTED → INCOMPATIBLE → NOT VERIFIED → DEGRADED`
+## 11. Safety boundary
 
-BlueSky shall never advertise generic compatibility solely because a protocol connection can be established.
+The adapter and registry shall not grant execution authority.
 
-## 12. Exit criterion
+```text
+Operational Request
+        ↓
+Authority + Safety Gate
+        ↓
+Adapter Registry / Resolution
+        ↓
+Vehicle / Equipment Adapter
+        ↓
+External protocol
+```
 
-An adapter is product-ready only when a representative aircraft can complete the defined connect → identify → configure → health/pre-arm → mission upload/read-back/verify → command/control → telemetry → contingency → landing/RTL → log acquisition lifecycle in its supported operational configuration, with automated regression coverage and documented limitations.
+No adapter may bypass mandatory BlueSky safety or regulatory gates.
+
+## 12. Verification
+
+Adapter verification shall cover:
+
+- connect/disconnect;
+- identification;
+- capability discovery;
+- configuration synchronization;
+- pre-arm/health mapping;
+- command ACK/result/error handling;
+- mission upload/read-back/semantic verification;
+- telemetry normalization;
+- link loss/recovery;
+- safety reconciliation;
+- manual override/authority arbitration;
+- log acquisition;
+- version compatibility;
+- Equipment identification, capability and state normalization.
+
+## 13. Implementation status
+
+The reference architecture and integration boundary are defined. Concrete vendor implementation, hardware connectivity and real-flight verification remain pending.
+
+No real-test evidence or certification claim is made by this framework.
+
+## 14. Acceptance criterion
+
+A representative supported aircraft can complete:
+
+`CONNECT → IDENTIFY → CAPABILITY → CONFIG → HEALTH → MISSION UPLOAD → READ-BACK VERIFY → COMMAND/CONTROL → TELEMETRY → CONTINGENCY → LAND/RTL → LOG ACQUISITION`
+
+without BlueSky core depending on autopilot-specific data structures.
+
+Equipment integration shall preserve the same adapter/configuration/verification boundary without introducing vendor-specific objects into the BlueSky core model.
