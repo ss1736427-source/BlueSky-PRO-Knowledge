@@ -3,7 +3,7 @@ id: C2-VERIFICATION-CASES-001
 type: c2_verification_case_definitions
 status: controlled_working_draft
 system: BlueSky PRO
-basis: C2-ICD-BASELINE-001; C2-SAFETY-ALLOCATION-001; VERIFICATION-PLAN-001
+basis: C2-ICD-BASELINE-001; C2-SAFETY-ALLOCATION-001; VERIFICATION-PLAN-001; C2-RECONCILIATION-PASS-003
 authority: MASTER-REQUIREMENTS-REGISTER-001
 ---
 
@@ -43,14 +43,14 @@ below.
 
 | Case | Current requirement/design basis | Qualitative acceptance criterion |
 |---|---|---|
-| C2-V01 | `C2-REQ-001`; `SYS-C2-001`; `IF-C2-001`; `C2-142-001`, `C2-142-003` | The controlled message/state fields, direction and operating-mode distinction are identified, processed consistently, and rejected or reported when structurally invalid. |
-| C2-V02 | `C2-REQ-003`; `SYS-C2-003`; `IF-C2-001` data model and units; `C2-142-004`, `C2-142-011`, `C2-142-013`, `C2-142-014` | Each exercised parameter has an explicit unit and semantic meaning; incompatible or ambiguous interpretation is detected rather than accepted as valid input. |
-| C2-V03 | `C2-REQ-008`; `SYS-C2-008`; `C2-F-005`; `IF-C2-001` timestamp/freshness allocation | Events and state data can be ordered using the controlled time reference, and stale or temporally invalid data is not accepted as current. |
-| C2-V04 | `C2-REQ-002`, `C2-REQ-003`; `SYS-C2-002`, `SYS-C2-003`; `C2-F-001`, `C2-F-004`; `C2-142-018`, `C2-142-020` | Validity and quality are evaluated before safety-significant state use; invalid or stale status produces the allocated degraded, rejected, or quarantined handling. |
-| C2-V05 | `C2-REQ-002`, `C2-REQ-006`; `C2-F-001`, `C2-F-002`, `C2-F-003`; `C2-142-018`, `C2-142-024`, `C2-142-025` | NORMAL, DEGRADED, LOST and RESTORED transitions are distinguishable, observable, time-ordered, and follow the allocated transition and recovery logic. |
-| C2-V06 | `C2-REQ-005`, `C2-REQ-006`; `C2-F-001..005`; `IF-C2-001` failure handling | Each listed abnormal input produces a deterministic response covered by the allocated safety/interface behaviour, with no unsafe silent fallback to normal operation. |
-| C2-V07 | `C2-REQ-004`; `SYS-C2-004`; `IF-C2-001` DIRECT-C2/PROVIDER-C2 allocation; `C2-142-001`, `C2-142-003`, `C2-142-017` | The two operating profiles and their responsibility boundaries are distinguishable; provider-side obligations are not represented as BlueSky implementation evidence. |
-| C2-V08 | `C2-REQ-004`, `C2-REQ-005`; `IF-C2-001` version/configuration control | An incompatible or unexpected interface version is detected, prevented from unvalidated use, and handled through the controlled compatibility or safe-response path. |
+| C2-V01 | `IF-C2-001`; C2 mode/interface allocation; `DEC-012` | The controlled message/state fields, direction and operating-mode distinction are identified, processed consistently, and rejected or reported when structurally invalid. |
+| C2-V02 | `SAF-REQ-001`, `SAF-REQ-002`, `SAF-REQ-003`; `IF-C2-001` | Each exercised parameter has an explicit unit and semantic meaning; incompatible or ambiguous interpretation is detected rather than accepted as valid input. |
+| C2-V03 | `SAF-REQ-003`, `SAF-REQ-013`; `SYS-REQ-091`; `IF-C2-001` | Events and state data can be ordered using the controlled time reference, and stale or temporally invalid data is not accepted as current. |
+| C2-V04 | `SAF-REQ-001..004`, `SAF-REQ-013`, `SAF-REQ-014`; `IF-C2-001` | Validity and quality are evaluated before safety-significant state use; invalid or stale status produces the allocated degraded, rejected, or quarantined handling. |
+| C2-V05 | `SAF-REQ-013`; `SYS-REQ-081`, `SYS-REQ-086`, `SYS-REQ-093`; `C2-F-001..003` | NORMAL, DEGRADED, LOST and RESTORED transitions are distinguishable, observable, time-ordered, and follow the allocated transition and recovery logic. |
+| C2-V06 | `SAF-REQ-001..004`, `SAF-REQ-013..015`; `SYS-REQ-086`, `SYS-REQ-093`; `IF-C2-001` | Each listed abnormal input produces a deterministic response covered by the allocated safety/interface behaviour, with no unsafe silent fallback to normal operation. |
+| C2-V07 | `SYS-REQ-083`; `DEC-012`; `IF-C2-001` | The two operating profiles and their responsibility boundaries are distinguishable; provider-side obligations are not represented as BlueSky implementation evidence. |
+| C2-V08 | `SAF-REQ-017`; `IF-C2-001`; `CONFIGURATION-BASELINE.md` | An incompatible or unexpected interface version is detected, prevented from unvalidated use, and handled through the controlled compatibility or safe-response path. |
 
 The criteria above are qualitative. No latency, continuity, availability,
 integrity, loss-detection, recovery, or coverage value is inferred by this
@@ -87,14 +87,14 @@ Unknown values remain `TBD`; they are not treated as passing defaults.
 ## 6. Traceability
 
 ```text
-C2-V01 → IF-C2-001 → C2-142-004/011/013/014 (where applicable)
-C2-V02 → IF-C2-001 → controlled units/semantics allocation
-C2-V03 → IF-C2-001 → C2-F-005 / SYS-C2-008
-C2-V04 → IF-C2-001 → C2-F-001 / C2-F-004 / SYS-C2-003
-C2-V05 → IF-C2-001 → C2-F-001 / C2-F-002 / C2-F-003
-C2-V06 → IF-C2-001 → C2-F-001..005 and allocated safe response
-C2-V07 → IF-C2-001 → DIRECT-C2 / PROVIDER-C2 boundary
-C2-V08 → IF-C2-001 → controlled version/configuration allocation
+C2-V01 → IF-C2-001 / DEC-012 → C2 mode/interface allocation
+C2-V02 → SAF-REQ-001..003 / IF-C2-001 → units and semantic validity
+C2-V03 → SAF-REQ-003, SAF-REQ-013 / SYS-REQ-091 / IF-C2-001 → time and freshness
+C2-V04 → SAF-REQ-001..004, SAF-REQ-013..014 / IF-C2-001 → validity and quality gating
+C2-V05 → SAF-REQ-013 / SYS-REQ-081, 086, 093 / C2-F-001..003 → degradation and recovery
+C2-V06 → SAF-REQ-001..004, SAF-REQ-013..015 / SYS-REQ-086, 093 / IF-C2-001 → abnormal-input response
+C2-V07 → SYS-REQ-083 / DEC-012 / IF-C2-001 → DIRECT-C2 / PROVIDER-C2 boundary
+C2-V08 → SAF-REQ-017 / IF-C2-001 / CONFIGURATION-BASELINE.md → compatibility control
 ```
 
 The exact requirement linkage remains subordinate to the authoritative master register and the applicable approved baseline.
