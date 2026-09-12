@@ -11,14 +11,10 @@
             "id": "058fcba7e26ecc4b",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "USER.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "USER"
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Граф"
             }
           }
         ]
@@ -191,6 +187,10 @@
   },
   "active": "058fcba7e26ecc4b",
   "lastOpenFiles": [
+    "PACKAGE_MANIFEST.md",
+    "README.md",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/evidence_adapter.py",
+    "USER.md",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/VERIFICATION_EVIDENCE_INTEGRATION_CONTRACT.md",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/VERIFICATION_EVIDENCE_FRAMEWORK.md",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/TEST_METHOD_CERTIFICATION_EVIDENCE_RECORD.md",
@@ -207,7 +207,6 @@
     "03_FLEET/BLUESKY-COMMAND-LIFECYCLE-CONTRACT-001.md",
     "02_SYSTEM_DESIGN/ADMINISTRATOR/COMPATIBILITY_RULES_MACHINE_BASELINE_001.md",
     "04_SOFTWARE/PLANNING/command_lifecycle_contract_stub_test.cpp",
-    "04_SOFTWARE/PLANNING/command_lifecycle_contract_stub.hpp",
     "02_SYSTEM_DESIGN/ADMINISTRATOR/COMPATIBILITY_RULES_ENGINE_BASELINE_001.md",
     "02_SYSTEM_DESIGN/ADMINISTRATOR/ADMINISTRATOR_CONFIGURATION_STORAGE_SCHEMA_001.md",
     "03_FLEET/BLUESKY_ADAPTER_CONFIGURATION_BASELINE_001.md",
@@ -223,9 +222,6 @@
     "03_FLEET/BLUESKY_ADAPTER_CONFORMANCE_MATRIX_001.md",
     "03_FLEET/BLUESKY_CANONICAL_VEHICLE_EQUIPMENT_SCHEMA_001.md",
     "03_FLEET/BLUESKY_UNIVERSAL_ADAPTER_CONTRACT_001.md",
-    "03_FLEET/BLUESKY_FLEET_VEHICLE_EQUIPMENT_IMPLEMENTATION_SPEC.md",
-    "06_CERTIFICATION/BASIS/CERTIFICATION_BASIS_CLAUSE_REGISTER_001.md",
-    "03_FLEET/BLUESKY_FLEET_VEHICLE_EQUIPMENT_MODEL.md",
-    "02_ARCHITECTURE/EXTERNAL_INTEGRATION/VEHICLE_EQUIPMENT_INTEGRATION_FRAMEWORK.md"
+    "03_FLEET/BLUESKY_FLEET_VEHICLE_EQUIPMENT_IMPLEMENTATION_SPEC.md"
   ]
 }
