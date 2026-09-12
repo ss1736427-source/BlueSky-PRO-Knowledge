@@ -4,7 +4,7 @@ type: requirements_reconciliation
 status: controlled_working_draft
 system: BlueSky PRO
 authority: MASTER-REQUIREMENTS-REGISTER-001
-basis: C2-CLAUSE-LEVEL-MAPPING-001
+basis: C2-CLAUSE-LEVEL-MAPPING-001; C2_VERIFICATION_CASES_001; C2-ICD-BASELINE-001
 ---
 
 # BLUE SKY PRO — C2 REQUIREMENTS RECONCILIATION 001
@@ -32,6 +32,7 @@ Existing requirement IDs имеют приоритет. Candidate IDs не яв�
 | C2-REQ-001 | C2 mode/configuration | DERIVED; отдельный SYS-REQ не создаём |
 | C2-REQ-002 | C2 degradation | MERGE candidate |
 | C2-REQ-003 | C2 loss/recovery | MERGE candidate |
+| C2-REQ-004..010 | Дополнительные функции C2 из системного baseline | DERIVED / ALLOCATION REVIEW; не переводить в master register без доказанного gap |
 
 ## 4. Сопоставление с существующей базой
 
@@ -40,6 +41,13 @@ Existing requirement IDs имеют приоритет. Candidate IDs не яв�
 | C2-REQ-001 | SYS-REQ-083 + существующие C2 architecture records | Platform Independence / adapter boundary | DERIVED |
 | C2-REQ-002 | SYS-REQ-086, SYS-REQ-093 | Graceful Degradation / Controlled Resource Recovery | MERGE candidate |
 | C2-REQ-003 | SYS-REQ-081, SYS-REQ-086, SYS-REQ-093 | Failure Tolerance / Graceful Degradation / Controlled Recovery | MERGE candidate |
+| C2-REQ-004 | existing C2 provider/interface allocation | IF-C2-001 | DERIVED / interface allocation |
+| C2-REQ-005 | SYS-REQ-086, SYS-REQ-093 + diagnostics/safety allocation | C2 / HUB / SAFETY | DERIVED / covered |
+| C2-REQ-006 | SYS-REQ-081, SYS-REQ-082, SYS-REQ-086, SYS-REQ-093 | FLIGHT / SAFETY | DERIVED / covered |
+| C2-REQ-007 | existing event/logging records | HUB / DATA | DERIVED / covered |
+| C2-REQ-008 | existing common time/reference allocation | SYSTEM / HUB | DERIVED / covered |
+| C2-REQ-009 | existing safety authority chain | SAFETY / AI / FLIGHT | DERIVED / covered |
+| C2-REQ-010 | existing HMI/C2 allocation | HMI / C2 | DERIVED / covered |
 
 ## 5. Проверенный результат по degradation/recovery
 
@@ -91,22 +99,23 @@ MISSION
 
 Все значения остаются `TBD` до подтверждения применимого основания, system boundary и allocation responsibility.
 
-## 8. Verification
+## 8. Verification reconciliation
 
-Перед созданием нового TEST/VER необходимо использовать существующую базу:
+Регуляторные C2-клаузы теперь имеют прямую allocation в verification cases `C2-V01..C2-V08` через `C2_VERIFICATION_CASES_001.md`.
+
+Правило покрытия:
 
 ```text
-Equivalent existing TEST
-→ LINK
-
-No equivalent coverage
-→ NEW TEST CASE
-
-Changed requirement
-→ IMPACT + REGRESSION REVIEW
+Regulatory clause
+→ existing requirement / derived allocation
+→ interface allocation
+→ verification case
+→ evidence
 ```
 
-Наличие legacy C2 test/verification records само по себе не означает их достаточность; требуется exact coverage review.
+Equivalent existing TEST/VER records должны быть linked, а не дублированы. Если exact coverage не найдено, новый verification case создаётся только после подтверждения gap.
+
+На текущем проходе case identities `C2-V01..C2-V08` уже определены; реальное выполнение и evidence отложены до test stage.
 
 ## 9. Текущее решение
 
@@ -147,8 +156,16 @@ Regulation
 
 ## 11. Следующий controlled action
 
-Продолжить reconciliation по существующим C2 interface и verification records и определить только подтверждённые gaps. Изменение `MASTER_REQUIREMENTS_REGISTER.md` выполнять только после доказанного GAP или подтверждённого merge/derivation.
+До появления реальных испытательных данных продолжать только те действия, которые не требуют нового нормативного или архитектурного решения:
+
+1. сверять clause → requirement → interface → verification linkage;
+2. устранять orphan links и дубли;
+3. синхронизировать controlled indexes/registers;
+4. поддерживать execution/configuration/evidence stubs;
+5. не присваивать `BASELINED`, `VERIFIED` или `PASSED` на основании подготовительных записей.
+
+После завершения доступного pre-execution reconciliation основной C2 work package ожидает только test-stage inputs для перехода к execution/evidence.
 
 ## 12. Status
 
-**CONTROLLED WORKING DRAFT — NOT BASELINED**
+**CONTROLLED WORKING DRAFT — C2 REQUIREMENT/INTERFACE/VERIFICATION RECONCILIATION INTEGRATED; NO NEW SYSTEM REQUIREMENT; REAL EXECUTION DEFERRED.**
