@@ -403,6 +403,28 @@ TEST-*
 
 and existing traceability relationships.
 
+C2-specific verification is additionally controlled through:
+
+```text
+C2_VERIFICATION_CASES_001.md
+C2_VERIFICATION_EXECUTION_RESULT_001.md
+C2_EVIDENCE_INDEX_001.md
+```
+
+Current C2 traceability follows:
+
+```text
+REGULATORY CLAUSE
+→ C2-REQ / EXISTING SYS-REQ
+→ IF-C2-001
+→ C2-V01..C2-V08
+→ CONFIGURATION
+→ EXECUTION
+→ EVIDENCE
+```
+
+The C2 candidate IDs remain derived working allocations. Equivalent existing requirements/tests must be linked rather than duplicated. A new authoritative requirement or test case is created only when a real coverage gap is demonstrated.
+
 Rule:
 
 ```text
@@ -518,120 +540,20 @@ Requirement
 → Certification Matrix
 ```
 
-Only affected records are updated.
+## 19. Current C2 reconciliation gate
 
-## 19. Conflict resolution
-
-When two requirements conflict:
+The C2 regulatory-to-verification chain is now represented in the controlled requirement register without creating duplicate authoritative IDs.
 
 ```text
-1. Preserve both records.
-2. Identify source and authority.
-3. Compare scope.
-4. Determine whether conflict is real.
-5. Record decision.
-6. Change authoritative record through CHG.
-7. Update derived documents.
-8. Re-check verification.
+C2 CLAUSE
+→ EXISTING / DERIVED REQUIREMENT
+→ C2 INTERFACE
+→ C2 SAFETY ALLOCATION
+→ C2 VERIFICATION CASE
+→ EXECUTION STUB
+→ EVIDENCE STUB
 ```
 
-No silent overwrite.
+No real test result is implied by this linkage. Execution and evidence remain pending until the real test stage.
 
-## 20. Orphan rules
-
-Flag:
-
-```text
-Requirement without basis
-Requirement without owner
-Requirement without allocation
-Requirement without verification method
-Certification requirement without source clause
-Safety requirement without hazard/objective
-Verified requirement without evidence
-```
-
-## 21. Consolidation state
-
-```text
-EXISTING SYS-REQ: PRESERVED
-EXISTING ARCH-DEC: PRESERVED
-EXISTING TEST-* : PRESERVED
-
-NEW CANDIDATE REQUIREMENTS: NOT YET BASELINED
-
-DUPLICATE REVIEW: PARTIAL
-GAP REVIEW: PENDING
-FULL TRACEABILITY RECONCILIATION: PENDING
-CERTIFICATION CLAUSE MAPPING: PENDING
-```
-
-## 22. Next controlled operation
-
-The next operation is now **content reconciliation**, not creation of another requirements database:
-
-```text
-1. Extract exact existing SYS-REQ text.
-2. Extract exact existing SAF-REQ text.
-3. Extract linked ARCH-DEC text.
-4. Extract linked TEST-* references.
-5. Compare candidate SRS requirements.
-6. Mark KEEP / DERIVED / MERGE / GAP / CONFLICT.
-7. Update this register.
-8. Synchronize SRS.
-9. Synchronize traceability.
-10. Baseline only after review.
-```
-
-## 23. Audit result — Requirements Register
-
-Дата: 2026-09-04.
-
-### Проверено
-
-- `MASTER-REQUIREMENTS-REGISTER-001` является единственным authoritative register идентичности системных требований.
-- Существующие `SYS-REQ-*` и `SAF-REQ-*` должны сохранять идентичность при консолидации.
-- Диапазоны `SYS-REQ-*` в разделе 7 являются inventory, а не доказательством существования каждого номера внутри диапазона.
-- Семейства `NAV-REQ-*` и другие семейства из нового SRS имеют статус candidate до overlap/source analysis.
-- Требования не должны получать статус `VERIFIED` без результата и evidence.
-
-### Выявлено
-
-```text
-REQ-AUD-001  полный текст всех SYS-REQ/SAF-REQ ещё требует построчного inventory;
-REQ-AUD-002  candidate families нельзя считать baseline requirements;
-REQ-AUD-003  verification linkage должен использовать отдельный Verification Register;
-REQ-AUD-004  regulatory source/clause должен быть подтверждён до compliance claim;
-REQ-AUD-005  требования без фактической allocation/verification/evidence остаются незакрытыми.
-```
-
-### Решение
-
-```text
-KEEP existing requirement identities
-DO NOT renumber
-DO NOT duplicate
-DO NOT promote candidate IDs automatically
-USE VERIFICATION-REGISTER-001 for verification identity
-CONTINUE exact content reconciliation
-```
-
-## 24. Status
-
-**DRAFT_FOR_AGREEMENT**
-
-
-## C2 №142 — CONTROLLED INTEGRATION
-Source: Приказ Минтранса России от 24.04.2025 №142.
-Integration record: C2-WP142-CLAUSE-RECON-001.
-Status: WORKING / NOT BASELINED.
-
-Existing SYS-REQ identities are preserved. C2 allocation:
-SYS-REQ-080, SYS-REQ-081, SYS-REQ-082, SYS-REQ-085, SYS-REQ-086, SYS-REQ-091, SYS-REQ-092, SYS-REQ-093.
-
-Derived SRS records: SRS-C2-001..007.
-
-Baseline gate:
-authority → applicability → safety → architecture → verification → evidence → configuration.
-
-No certification claim is made by this integration.
+**Status: CONTROLLED WORKING DRAFT — C2 TRACEABILITY SYNCHRONIZED.**
