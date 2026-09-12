@@ -66,16 +66,46 @@ $promptFile = Join-Path $env:TEMP ("bluesky-codex-prompt-{0}.txt" -f [guid]::New
 try {
     [System.IO.File]::WriteAllText($promptFile, $prompt, [System.Text.UTF8Encoding]::new($false))
 
-    # Invoke the CLI from PowerShell itself. PowerShell correctly handles a
-    # quoted .cmd path containing spaces and its native-command redirection
-    # supplies a real EOF to `codex exec -` without an extra cmd.exe process.
-    & $AgentExecutable @codexArgs < $promptFile
-    $agentExitCode = $LASTEXITCODE
-
-    if ($null -eq $agentExitCode) {
-        $agentExitCode = 0
+    $psi = [System.Diagnostics.ProcessStartInfo]::new()
+    $psi.UseShellExecute = $false
+    $psi.CreateNoWindow = $true
+    $psi.RedirectStandardInput = $true
+    $psi.RedirectStandardOutput = $true
+    $psi.RedirectStandardError = $true
+    $psi.FileName = $AgentExecutable
+    if ($codexArgs.Count -gt 0) {
+        $psi.Arguments = ($codexArgs | ForEach-Object {
+            if ($_ -match '[\s"]') {
+                '"' + ($_ -replace '(\\*)"', '$1$1\"' -replace '(\\+)$', '$1$1') + '"'
+            } else {
+                $_
+            }
+        }) -join ' '
     }
-    exit $agentExitCode
+
+    $process = [System.Diagnostics.Process]::new()
+    $process.StartInfo = $psi
+    try {
+        if (-not $process.Start()) {
+            Write-Error "Failed to start agent: $AgentExecutable"
+            exit 1
+        }
+
+        $stdoutTask = $process.StandardOutput.ReadToEndAsync()
+        $stderrTask = $process.StandardError.ReadToEndAsync()
+        $process.StandardInput.Write($prompt)
+        $process.StandardInput.Close()
+        $process.WaitForExit()
+
+        $stdout = $stdoutTask.GetAwaiter().GetResult()
+        $stderr = $stderrTask.GetAwaiter().GetResult()
+        if ($stdout) { [Console]::Out.Write($stdout) }
+        if ($stderr) { [Console]::Error.Write($stderr) }
+
+        exit $process.ExitCode
+    } finally {
+        $process.Dispose()
+    }
 } finally {
     Remove-Item -LiteralPath $promptFile -Force -ErrorAction SilentlyContinue
 }
