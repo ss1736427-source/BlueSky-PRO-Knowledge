@@ -187,6 +187,9 @@
   },
   "active": "058fcba7e26ecc4b",
   "lastOpenFiles": [
+    "04_SOFTWARE/PLANNING/adapter/universal_adapter_contract_test.cpp",
+    "04_SOFTWARE/PLANNING/adapter/universal_adapter.hpp",
+    "04_SOFTWARE/PLANNING/adapter",
     "03_FLEET/BLUESKY_ADAPTER_REPOSITORY_CONSISTENCY_CHECK_001.md",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/core/universal_equipment_adapter_contract_test.cpp",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/core/universal_equipment_adapter.hpp",
@@ -217,11 +220,8 @@
     "05_VERIFICATION/C2/C2_EVIDENCE_INDEX_001.md",
     "05_VERIFICATION/C2/C2_VERIFICATION_EXECUTION_RESULT_001.md",
     "05_VERIFICATION/C2/C2_EXECUTION_PREREQUISITE_CHECK_001.md",
-    "00_PROJECT/GOVERNANCE/PROJECT_WORK_ORDER.md",
     "00_PROJECT/EXTERNAL_ORCHESTRATOR/codex_preflight.ps1",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/core/universal_autopilot_adapter_contract_test.cpp",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/CMakeLists.txt",
-    "04_SOFTWARE/PLANNING/model/vehicle_equipment_capability_contract_test.cpp",
-    "04_SOFTWARE/PLANNING/model/vehicle_equipment_capability.hpp"
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/CMakeLists.txt"
   ]
 }
