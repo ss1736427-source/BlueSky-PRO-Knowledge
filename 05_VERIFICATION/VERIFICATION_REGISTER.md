@@ -2,9 +2,9 @@
 id: VERIFICATION-REGISTER-001
 type: verification_register
 status: draft_for_agreement
-version: 0.2
+version: 0.3
 parent: VERIFICATION
-authority: NAVIGATION_VERIFICATION_MODEL-001; NAVIGATION_TEST_VECTORS-001
+authority: NAVIGATION_VERIFICATION_MODEL-001; NAVIGATION_TEST_VECTORS-001; C2-VERIFICATION-CASES-001
 ---
 
 # BlueSky PRO — Verification Register
@@ -50,7 +50,13 @@ NAV-V01 … NAV-V20
 NAV-TV-001 … NAV-TV-010
 ```
 
-`NAV-V*` и `NAV-TV-*` не объединяются в один набор ID.
+C2 cases имеют отдельную устойчивую идентичность:
+
+```text
+C2-V01 … C2-V08
+```
+
+`NAV-V*`, `NAV-TV-*` и `C2-V*` не объединяются в один набор ID.
 
 ## 4. Verification hierarchy
 
@@ -132,15 +138,13 @@ No duplicate case is created merely because a new module specification appears.
 
 ## 8. Requirement traceability
 
-Each case must eventually identify its actual requirement/design basis.
+Each case must identify its actual requirement/design basis as soon as reconciliation is complete.
 
 The current Navigation requirement allocation is maintained in:
 
 `05_VERIFICATION/NAVIGATION/NAVIGATION_REQUIREMENT_ALLOCATION_001.md`
 
 That allocation is a working reconciliation record and does not promote candidate requirements to authoritative status.
-
-Until reconciliation is complete, no unconfirmed `NAV-REQ-*` or other candidate ID is promoted to authoritative requirement linkage.
 
 Required fields:
 
@@ -237,74 +241,60 @@ The stable case identities are:
 C2-V01 … C2-V08
 ```
 
-They map to the existing interface allocations `IV-C2-001..IV-C2-008`. The cases are `DEFINED`; no execution result, evidence or verification claim exists yet.
+The current case-to-design/interface allocation is:
 
-The execution configuration is controlled in:
+| Case | Requirement / design basis | Interface | Execution configuration | Execution result | Evidence |
+|---|---|---|---|---|---|
+| C2-V01 | `C2-REQ-001`; `IF-C2-001`; `DEC-012`; `SYS-REQ-083` | `IV-C2-001` | `C2-VER-CFG-001` | `C2-VER-EXEC-001` | `C2-EVIDENCE-INDEX-001` |
+| C2-V02 | `C2-REQ-003`; `SAF-REQ-001..003`; `IF-C2-001` | `IV-C2-002` | `C2-VER-CFG-001` | `C2-VER-EXEC-001` | `C2-EVIDENCE-INDEX-001` |
+| C2-V03 | `C2-REQ-003`, `C2-REQ-008`; `SAF-REQ-003`, `SAF-REQ-013`; `SYS-REQ-091`; `IF-C2-001` | `IV-C2-003` | `C2-VER-CFG-001` | `C2-VER-EXEC-001` | `C2-EVIDENCE-INDEX-001` |
+| C2-V04 | `C2-REQ-002`, `C2-REQ-003`, `C2-REQ-005`; `SAF-REQ-001..004`, `SAF-REQ-013..014`; `IF-C2-001` | `IV-C2-004` | `C2-VER-CFG-001` | `C2-VER-EXEC-001` | `C2-EVIDENCE-INDEX-001` |
+| C2-V05 | `C2-REQ-002`, `C2-REQ-005`, `C2-REQ-006`; `SAF-REQ-013`; `SYS-REQ-081`, `SYS-REQ-086`, `SYS-REQ-093`; `C2-F-001..003` | `IV-C2-005` | `C2-VER-CFG-001` | `C2-VER-EXEC-001` | `C2-EVIDENCE-INDEX-001` |
+| C2-V06 | `C2-REQ-005`, `C2-REQ-006`, `C2-REQ-009`; `SAF-REQ-001..004`, `SAF-REQ-013..015`; `SYS-REQ-086`, `SYS-REQ-093`; `IF-C2-001` | `IV-C2-006` | `C2-VER-CFG-001` | `C2-VER-EXEC-001` | `C2-EVIDENCE-INDEX-001` |
+| C2-V07 | `C2-REQ-001`, `C2-REQ-004`; `SYS-REQ-083`; `DEC-012`; `IF-C2-001` | `IV-C2-007` | `C2-VER-CFG-001` | `C2-VER-EXEC-001` | `C2-EVIDENCE-INDEX-001` |
+| C2-V08 | `C2-REQ-008`; `SAF-REQ-017`; `IF-C2-001`; `CONFIGURATION-BASELINE.md` | `IV-C2-008` | `C2-VER-CFG-001` | `C2-VER-EXEC-001` | `C2-EVIDENCE-INDEX-001` |
 
-`05_VERIFICATION/C2/C2_VERIFICATION_CONFIGURATION_001.md`
+The case definitions are `DEFINED`; the configuration is `STUB / PLANNED`, the execution result is `NOT EXECUTED — STUB`, and the evidence index is empty. These states are controlled documentation states and do not constitute verification evidence.
 
-The configuration record is `C2-VER-CFG-001`, linked to `CI-007` and `BL-VER`.
-It is currently a controlled **STUB / PLANNED** record; no execution result or evidence is implied.
-
-The definition/configuration control closure is recorded in:
+The C2 definition/configuration control closure is recorded in:
 
 `05_VERIFICATION/C2/C2_VERIFICATION_CONTROL_CLOSURE_001.md`
-
-`C2-VER-GAP-001` is closed for definition/configuration control. Execution,
-results and evidence remain open.
 
 The exact pre-execution content/scope reconciliation is recorded in:
 
 `05_VERIFICATION/C2/C2_RECONCILIATION_PASS_003.md`
 
-The pass links `C2-V01..C2-V08` to existing requirement, safety,
-architecture/interface and configuration records. It identifies no proven
-requirement gap or conflict; the cases remain `DEFINED / NOT VERIFIED`.
-
 The quantitative C2 basis dependency is controlled in:
 
 `05_VERIFICATION/C2/C2_QUANTITATIVE_PARAMETERS_BASIS_001.md`
 
-It is an explicit **STUB / OPEN** dependency. No numerical C2 quality/QoS
-values are baselined until an authoritative or approved basis is available.
+It remains an explicit **STUB / OPEN** dependency. No numerical C2 quality/QoS values are baselined until an authoritative or approved basis is available.
 
 The controlled execution-result record is:
 
 `05_VERIFICATION/C2/C2_VERIFICATION_EXECUTION_RESULT_001.md`
 
-The result record is `C2-VER-EXEC-001`. It is a controlled working **STUB** only;
-real execution has not been performed and no evidence or verification claim is implied.
-
 The evidence index is:
 
 `05_VERIFICATION/C2/C2_EVIDENCE_INDEX_001.md`
 
-It is a controlled **EMPTY STUB** linked to `C2-VER-EXEC-001`; no execution
-evidence exists.
-
-The pre-execution gate record is:
+The pre-execution gate is:
 
 `05_VERIFICATION/C2/C2_EXECUTION_PREREQUISITE_CHECK_001.md`
 
-It records the current execution gate. The configuration/result/evidence stubs
-establish the controlled documentation structure, while the real test environment,
-actual build, procedure, inputs and observed results remain deferred to the real
-test stage. The gate does not assign a verification result or create evidence.
-
-## 14. Audit findings — initial pass
+## 14. Audit findings — current pass
 
 ```text
-V-REG-001  Verification Register was not previously present as a dedicated controlled identity register.
+V-REG-001  Verification Register is the single identity register for controlled verification cases.
 V-REG-002  NAV-V01..NAV-V20 exist as case definitions in NAVIGATION_VERIFICATION_MODEL.
 V-REG-003  NAV-TV-001..NAV-TV-010 exist as mathematical vectors in NAVIGATION_TEST_VECTORS_001.
 V-REG-004  Execution evidence is not implied by DEFINED / READY status.
-V-REG-005  Exact requirement allocation for Navigation cases remains pending reconciliation with MASTER-REQUIREMENTS-REGISTER.
-V-REG-006  Navigation requirement allocation is maintained as a separate working record and does not create requirement authority.
-V-REG-007  C2-VER-GAP-001 is closed for definition/configuration control; execution and evidence remain open.
-V-REG-008  C2 pre-execution basis review and exact content/scope reconciliation are complete; execution remains deferred pending real configuration, execution results and evidence.
-V-REG-009  C2 configuration and execution-result stubs are controlled placeholders; they shall be replaced by actual test records after real execution.
-V-REG-010  C2 quantitative basis dependency is explicitly controlled as a deferred stub; no numerical requirement or acceptance value is inferred.
-V-REG-011  C2 execution-result and evidence-index stubs are prepared; they do not constitute execution evidence.
+V-REG-005  Navigation requirement allocation remains a controlled working reconciliation record.
+V-REG-006  C2-VER-GAP-001 is closed for definition/configuration control; execution and evidence remain open.
+V-REG-007  C2 pre-execution content/scope reconciliation is complete; no proven requirement gap or conflict was identified.
+V-REG-008  C2 configuration, execution-result and evidence records are controlled stubs and shall be replaced with actual records at test stage.
+V-REG-009  C2 quantitative basis dependency remains explicitly open; no numerical acceptance value is inferred.
+V-REG-010  The C2 case-to-requirement/design-to-interface-to-execution-to-evidence chain is now explicitly registered.
 ```
 
 ## 15. Completion gate
@@ -316,15 +306,20 @@ V-REG-011  C2 execution-result and evidence-index stubs are prepared; they do no
 [ ] verification method assigned
 [ ] test vectors/datasets linked
 [ ] acceptance criteria controlled
-[ ] execution status controlled
-[ ] evidence linked after execution
+[x] C2 case identities controlled
+[x] C2 requirement/design allocation controlled
+[x] C2 interface allocation controlled
+[x] C2 execution configuration linked
+[x] C2 execution-result record linked
+[x] C2 evidence index linked
+[ ] execution evidence linked after real testing
 [ ] regression impact linked to change control
 [ ] certification-relevant verification identified
 [ ] master index updated
 ```
 
-## 15. Status
+## 16. Status
 
-**DRAFT_FOR_AGREEMENT**
+**DRAFT_FOR_AGREEMENT — C2 PRE-EXECUTION TRACEABILITY INTEGRATED; REAL EXECUTION AND EVIDENCE REMAIN DEFERRED.**
 
 This register establishes verification identity and traceability control. It does not declare any requirement or verification as completed merely by registration.
