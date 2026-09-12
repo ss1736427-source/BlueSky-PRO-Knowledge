@@ -24,6 +24,7 @@ Record the deterministic repository-level consistency check required before conc
 | Adapter Implementation Stub | BLUESKY-ADAPTER-IMPLEMENTATION-STUB-001 | RESOLVED | Minimal implementation boundary |
 | Adapter Conformance Checklist | BLUESKY-ADAPTER-CONFORMANCE-CHECKLIST-001 | RESOLVED | Implementation gates |
 | Adapter Registry Boundary | BLUESKY-ADAPTER-REGISTRY-BOUNDARY-001 | RESOLVED | Service-layer lookup boundary |
+| Adapter Registry Contract Fixture | BLUESKY-ADAPTER-REGISTRY-FIXTURE-001 | RESOLVED | Deterministic contract fixture |
 | Vehicle / Equipment Integration Framework | VEHICLE_EQUIPMENT_INTEGRATION_FRAMEWORK | RESOLVED | Service-layer integration |
 | Equipment Interface | IF-EQUIPMENT | RESOLVED | Equipment integration boundary |
 
@@ -39,6 +40,7 @@ Configuration Baseline → Test Stub                 PASS
 Implementation Stub → Contract / Schema           PASS
 Checklist → Matrix / Test Stub / Baseline          PASS
 Registry Boundary → Contract / Schema              PASS
+Registry Fixture → Registry Boundary / Contract    PASS
 Vehicle/Equipment Framework → Registry              PASS
 IF-EQUIPMENT → Registry / Canonical Schema         PASS
 ```
@@ -55,6 +57,7 @@ Safety / authority boundary                        PASS
 Real-test status discipline                        PASS
 Service → Registry → Adapter boundary              PASS
 Equipment service → Registry → Adapter boundary    PASS
+Deterministic registry outcomes                     PASS
 ```
 
 ## 4. Verification limitation
@@ -79,12 +82,13 @@ Contract execution remains `NOT EXECUTED` and real-test evidence remains unavail
 ```text
 REPOSITORY CONSISTENCY: PASS
 SERVICE-LAYER REGISTRY BINDING: PASS
+REGISTRY FIXTURE: DEFINED
 CONCRETE ADAPTER CONFORMANCE: NOT VERIFIED
 REAL TESTING: DEFERRED
 ```
 
 ## 6. Next deterministic action
 
-Proceed from the controlled service-layer boundary to the smallest executable adapter registry contract fixture. No vendor selection or real hardware is required for this transition.
+Proceed from the registry fixture to the first concrete adapter contract implementation stub, keeping transport/vendor behavior technology-neutral until a supported protocol is selected and real integration becomes available.
 
-**Status: CONTROLLED WORKING RECORD — DOCUMENTATION AND SERVICE-LAYER REGISTRY BOUNDARY CONSISTENCY COMPLETED. EXECUTABLE REGISTRY FIXTURE PENDING.**
+**Status: CONTROLLED WORKING RECORD — REGISTRY BOUNDARY AND DETERMINISTIC FIXTURE CONSISTENCY COMPLETED. CONCRETE ADAPTER CONTRACT IMPLEMENTATION PENDING.**
