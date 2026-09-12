@@ -64,10 +64,14 @@ commands:
       - adapter_timestamp
     execution_states:
       - REQUESTED
-      - SENT
-      - ACKNOWLEDGED
-      - EXECUTED
+      - VALIDATING
       - REJECTED
+      - DISPATCHED
+      - ACKNOWLEDGED
+      - EXECUTING
+      - COMPLETED
+      - FAILED
+      - CANCELLED
       - TIMEOUT
       - UNKNOWN
 
@@ -119,6 +123,9 @@ authority:
     - RETURN_RECOVERY
     - EMERGENCY_ABORT
     - COMMUNICATION_LOST
+
+authentication:
+  rule: command execution requires applicable authority and safety validation
 
 errors:
   - NOT_CONNECTED
