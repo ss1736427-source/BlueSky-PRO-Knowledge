@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <type_traits>
+#include <utility>
 
 using namespace bluesky::planning::adapter;
 
