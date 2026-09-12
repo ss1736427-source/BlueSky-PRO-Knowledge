@@ -41,7 +41,8 @@ The registry shall:
 - expose supported capabilities;
 - validate compatibility against the controlled canonical contract/schema versions;
 - return an explicit `NOT_FOUND` or `INCOMPATIBLE` result when resolution fails;
-- provide deterministic resolution for the same registry/configuration state.
+- provide deterministic resolution for the same registry/configuration state;
+- reject ambiguous profile lookups rather than silently selecting a candidate.
 
 ## 4. Non-responsibilities
 
@@ -92,6 +93,8 @@ RETURN adapter reference + compatibility metadata
 
 If more than one candidate remains equally valid, the registry shall return `AMBIGUOUS` rather than silently selecting one.
 
+Profile lookup helpers follow the same rule: exactly one matching adapter is returned; zero or multiple matches return no adapter. They do not perform implicit arbitration.
+
 ## 7. Safety and authority boundary
 
 ```text
@@ -141,7 +144,9 @@ The registry shall be testable for:
 - missing capability;
 - ambiguous candidates;
 - stable repeated resolution;
-- registration/version metadata integrity.
+- registration/version metadata integrity;
+- ambiguous vehicle-profile lookup;
+- ambiguous equipment-profile lookup.
 
 Real hardware or flight testing is not required to define this boundary.
 
