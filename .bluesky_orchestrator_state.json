@@ -1,12 +1,12 @@
 {
-  "last_main_sha": "e7d50961274b21248b61f9dd9650a4ef4f62517f",
+  "last_main_sha": "3146138e42bb467c10bc3b400bc1aa8d7fec6993",
   "verified_sha": "e7d50961274b21248b61f9dd9650a4ef4f62517f",
   "decision_required": false,
   "ci_required": true,
-  "agent_error_sha": null,
-  "agent_error_code": null,
   "current_work_package": "C2 pre-execution regulatory/requirements/interface reconciliation",
   "checkpoint": "C2-PREEXEC-001",
   "real_execution": "DEFERRED",
-  "quantitative_c2_basis": "DEFERRED"
+  "quantitative_c2_basis": "DEFERRED",
+  "current_ci_status": "UNVERIFIED",
+  "next_deterministic_action": "Proceed to the next unresolved integration gap in the existing Interface / Service layer"
 }
