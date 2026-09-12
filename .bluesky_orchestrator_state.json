@@ -1,5 +1,5 @@
 {
-  "last_main_sha": "9bbf442cbc20bd31ffbe536adae507ca314de843",
+  "last_main_sha": "ab95ca6901725d212b33f95e90866675ce6bdd63",
   "verified_sha": "76a2c51d70c8404d62e76530fdc4dc42ce1de227",
   "decision_required": false,
   "ci_required": true,
@@ -8,5 +8,5 @@
   "real_execution": "DEFERRED",
   "quantitative_c2_basis": "DEFERRED",
   "current_ci_status": "UNVERIFIED",
-  "next_deterministic_action": "Verify the command lifecycle contract test and the planning CI gate against the current main, then close the next unresolved Interface / Service integration dependency without vendor-specific selection"
+  "next_deterministic_action": "Verify the command lifecycle contract fixture against the current main and close the next unresolved Interface / Service integration dependency without vendor-specific selection"
 }
