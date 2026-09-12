@@ -1,5 +1,5 @@
 {
-  "last_main_sha": "54429548dca3fddd35cd978280276ac0f34c34fb",
+  "last_main_sha": "f01c2b34cc46330353a7b629c639e4a0ffded324",
   "verified_sha": "54429548dca3fddd35cd978280276ac0f34c34fb",
   "decision_required": false,
   "ci_required": true,
@@ -7,6 +7,6 @@
   "checkpoint": "PH4-INT-001",
   "real_execution": "DEFERRED",
   "quantitative_c2_basis": "DEFERRED",
-  "current_ci_status": "PASS",
-  "next_deterministic_action": "Restart the algorithm from the verified main state and close the next unresolved Interface / Service integration dependency without vendor-specific selection"
+  "current_ci_status": "UNVERIFIED",
+  "next_deterministic_action": "Verify CI for f01c2b34cc46330353a7b629c639e4a0ffded324, then restart the algorithm and close the next unresolved Interface / Service integration dependency without vendor-specific selection"
 }
