@@ -66,7 +66,7 @@ Loss of a link shall not automatically mean loss of the mission. BlueSky shall d
 1. loss of primary C2;
 2. loss of telemetry only;
 3. loss of video only;
-4. loss of payload control;
+4. loss of Equipment control;
 5. loss of all external communication.
 
 The aircraft/autopilot contingency behavior remains authoritative for onboard autonomous safety actions. BlueSky supervises and coordinates according to the approved contingency policy.
