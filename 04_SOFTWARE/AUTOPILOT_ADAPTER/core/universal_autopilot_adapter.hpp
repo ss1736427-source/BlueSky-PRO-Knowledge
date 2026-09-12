@@ -61,7 +61,7 @@ struct Identity {
 struct Capabilities {
     std::vector<std::string> commands;
     std::vector<std::string> missionFeatures;
-    std::vector<std::string> payloadFeatures;
+    std::vector<std::string> equipmentFeatures;
 };
 
 struct LinkMetrics {
@@ -102,7 +102,7 @@ public:
     virtual Capabilities getCapabilities() const = 0;
     virtual std::vector<std::string> getSupportedCommands() const = 0;
     virtual std::vector<std::string> getSupportedMissionFeatures() const = 0;
-    virtual std::vector<std::string> getSupportedPayloadFeatures() const = 0;
+    virtual std::vector<std::string> getSupportedEquipmentFeatures() const = 0;
 
     virtual bool connect() = 0;
     virtual void disconnect() = 0;
@@ -115,7 +115,7 @@ public:
     virtual NormalizedState getFailsafeState() const = 0;
     virtual NormalizedState getEnergyState() const = 0;
     virtual NormalizedState getMissionState() const = 0;
-    virtual NormalizedState getPayloadState() const = 0;
+    virtual NormalizedState getEquipmentState() const = 0;
 
     virtual CommandResult arm() = 0;
     virtual CommandResult disarm() = 0;
