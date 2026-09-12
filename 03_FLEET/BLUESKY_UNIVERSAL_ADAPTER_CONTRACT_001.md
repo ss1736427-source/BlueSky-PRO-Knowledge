@@ -290,16 +290,23 @@ Hardware-in-the-loop and real-flight tests may be added later as evidence-produc
 7. Existing requirement IDs remain authoritative.
 8. Verification status is evidence-controlled.
 
-## 17. Next deterministic step
+## 17. Current work-package transition
+
+The canonical schema, conformance matrix, contract-test stub, configuration baseline and implementation checklist are already defined. The contract is therefore no longer awaiting creation of the canonical schema.
+
+The next deterministic repository action is the **repository-level consistency check** across the Adapter chain. It shall verify that all controlled references resolve and that the chain remains internally consistent before concrete adapter implementation begins.
 
 ```text
 UNIVERSAL ADAPTER CONTRACT
-→ canonical schemas
-→ adapter conformance matrix
-→ verification hooks
-→ first implementation stub
+→ CANONICAL SCHEMA
+→ CONFORMANCE MATRIX
+→ CONTRACT TEST STUB
+→ CONFIGURATION BASELINE
+→ IMPLEMENTATION CHECKLIST
+→ REPOSITORY CONSISTENCY CHECK
+→ NEXT UNRESOLVED INTEGRATION GAP
 ```
 
-The next implementation artifact is the **canonical Vehicle/Equipment schema contract**. No user decision is required before creating it.
+No real vehicle or Equipment test is implied by this contract.
 
-**Status: CONTROLLED WORKING DRAFT — UNIVERSAL ADAPTER BOUNDARY DEFINED; NO REAL-HARDWARE VERIFICATION CLAIMED.**
+**Status: CONTROLLED WORKING DRAFT — UNIVERSAL ADAPTER BOUNDARY DEFINED; CURRENT DOCUMENTATION CHAIN READY FOR REPOSITORY CONSISTENCY CHECK.**
