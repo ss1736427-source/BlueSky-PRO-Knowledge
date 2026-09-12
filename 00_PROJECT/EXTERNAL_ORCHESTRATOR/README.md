@@ -24,6 +24,7 @@ set BS_BRANCH=main
 set BS_POLL_SECONDS=5
 set BS_CI_GRACE_SECONDS=5
 set BS_AGENT_ADAPTER=E:\Flight Planning\agent_adapter.ps1
+set BS_AGENT_EXECUTABLE=<approved-agent-executable>
 ```
 
 Запуск:
@@ -52,5 +53,7 @@ Agent должен вернуть:
 ## Windows PATH
 
 Путь к локальной папке с оркестратором может быть любым. В переменной `BS_AGENT_ADAPTER` указывается фактический путь к `agent_adapter.ps1`.
+
+`BS_AGENT_EXECUTABLE` должен явно указывать на одобренный внешний агент, совместимый с интерфейсом stdin/stdout, используемым адаптером. Автоматический выбор конкретного агента не выполняется.
 
 Этот компонент является внешним управляющим циклом и не принимает архитектурных или продуктовых решений самостоятельно.
