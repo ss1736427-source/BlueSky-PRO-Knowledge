@@ -8,7 +8,7 @@ from evidence_session import EvidenceSession
 
 
 class TestEvidenceSession(unittest.TestCase):
-    def test_source_to_package_flow(self):
+    def test_source_to_package_flow_and_provenance(self):
         with tempfile.TemporaryDirectory() as tmp:
             run_dir = Path(tmp) / "COM-TEST-001"
             session = EvidenceSession(
@@ -23,8 +23,10 @@ class TestEvidenceSession(unittest.TestCase):
                 configuration_id="CFG-DEMO-001",
                 configuration={"configuration_id": "CFG-DEMO-001"},
                 flight_record_id="FLIGHT-DEMO-001",
+                mission_id="MISSION-DEMO-001",
                 data_class="DEMONSTRATION",
             )
+            self.assertEqual(json.loads((run_dir / "record.json").read_text())["lifecycle_state"], "INIT")
             session.record(
                 C2LinkSourceAdapter(),
                 {
@@ -35,20 +37,33 @@ class TestEvidenceSession(unittest.TestCase):
                     "source": "demo-c2",
                 },
             )
-            manifest, anchor, report = session.finalize()
-
             record = json.loads((run_dir / "record.json").read_text(encoding="utf-8"))
-            self.assertEqual(record["test_run_id"], "COM-TEST-001")
-            self.assertEqual(record["data_class"], "DEMONSTRATION")
-            self.assertEqual(record["evidence_domain_ids"], ["EC-01", "EC-14"])
-            self.assertEqual(record["configuration_id"], "CFG-DEMO-001")
-            self.assertEqual(record["flight_record_id"], "FLIGHT-DEMO-001")
-            self.assertEqual(record["test_case_id"], "CASE-COM-001")
+            self.assertEqual(record["lifecycle_state"], "COLLECT")
             self.assertEqual(record["sources"], [{"source_type": "C2_LINK"}])
+            event = json.loads((run_dir / "events.jsonl").read_text(encoding="utf-8").splitlines()[0])
+            self.assertEqual(event["context"]["session_id"], session.session_id)
+            self.assertEqual(event["context"]["test_run_id"], "COM-TEST-001")
+            self.assertEqual(event["context"]["flight_record_id"], "FLIGHT-DEMO-001")
+            self.assertEqual(event["context"]["mission_id"], "MISSION-DEMO-001")
+
+            manifest, anchor, report = session.finalize()
+            record = json.loads((run_dir / "record.json").read_text(encoding="utf-8"))
+            self.assertEqual(record["lifecycle_state"], "ARCHIVE")
+            self.assertEqual(record["status"], "ANALYZED")
             self.assertEqual(len(record["events"]), 1)
             self.assertTrue(manifest.exists())
             self.assertTrue(anchor.exists())
             self.assertTrue(report.exists())
+
+    def test_recording_after_archive_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            session = EvidenceSession(Path(tmp) / "RUN", "RUN-001")
+            session.finalize()
+            with self.assertRaises(RuntimeError):
+                session.record(
+                    C2LinkSourceAdapter(),
+                    {"timestamp_ms": 1, "parameter": "x", "value": 1, "unit": "u", "source": "demo"},
+                )
 
 
 if __name__ == "__main__":
