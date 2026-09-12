@@ -1,4 +1,4 @@
-# BlueSky PRO — Vehicle / Payload Integration Framework
+# BlueSky PRO — Vehicle / Equipment Integration Framework
 
 **Status:** WORKING BASELINE
 
@@ -16,7 +16,7 @@ Each aircraft profile shall contain:
 - navigation sensors;
 - propulsion/energy characteristics relevant to planning;
 - C2 interfaces;
-- payload interfaces;
+- equipment interfaces;
 - supported commands;
 - supported mission primitives;
 - geofence/failsafe capabilities;
@@ -25,9 +25,9 @@ Each aircraft profile shall contain:
 - configuration baseline;
 - verification status and version.
 
-## Payload profile
+## Equipment profile
 
-Payload profiles shall describe:
+Equipment profiles shall describe:
 
 - device identity/model;
 - interface/protocol;
@@ -54,7 +54,7 @@ Aircraft Profile
       ├── C2 Profile
       ├── Navigation/Sensor Profile
       ├── Energy/Propulsion Profile
-      └── Payload Profile(s)
+      └── Equipment Profile(s)
                  │
                  ▼
           BlueSky Capability Model
@@ -67,31 +67,31 @@ Aircraft Profile
 
 ## Capability-driven planning
 
-Mission planning shall evaluate whether the selected aircraft/payload combination can perform the requested mission before authorization and flight.
+Mission planning shall evaluate whether the selected aircraft/equipment combination can perform the requested mission before authorization and flight.
 
 Examples:
 
 - required sensor absent → NOT CAPABLE;
 - required camera action unsupported → mission correction required;
 - required altitude/speed outside aircraft limits → mission correction required;
-- payload weight incompatible → NOT READY;
+- equipment weight incompatible → NOT READY;
 - required navigation performance unavailable → degraded/blocked according to safety policy.
 
-## Payload abstraction
+## Equipment abstraction
 
 BlueSky mission actions shall use semantic operations such as:
 
 `START_RECORDING`, `STOP_RECORDING`, `CAPTURE`, `SET_GIMBAL`, `SET_CAMERA_MODE`, `SET_SENSOR_MODE`.
 
-The payload adapter translates them into the device-specific protocol/API.
+The equipment adapter translates them into the device-specific protocol/API.
 
 ## Data association
 
-Payload data shall retain association with:
+Equipment data shall retain association with:
 
 - mission;
 - vehicle;
-- payload;
+- equipment;
 - timestamp;
 - position/attitude where available;
 - mission action/event;
@@ -99,4 +99,4 @@ Payload data shall retain association with:
 
 ## OEM principle
 
-A vendor-specific payload or aircraft shall not require changes to the BlueSky mission domain model. Integration-specific behavior belongs in adapters, profiles and compatibility metadata.
+A vendor-specific equipment or aircraft shall not require changes to the BlueSky mission domain model. Integration-specific behavior belongs in adapters, profiles and compatibility metadata.

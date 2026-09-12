@@ -1,4 +1,4 @@
-# BlueSky PRO — Fleet / Vehicle / Payload Model
+# BlueSky PRO — Fleet / Vehicle / Equipment Model
 
 **Status:** WORKING BASELINE
 **Purpose:** Freeze the product-level model before implementing universal adapters.
@@ -20,7 +20,7 @@ Vehicle
        ├── C2 interfaces
        ├── Sensors
        ├── Energy / propulsion
-       ├── Payload(s)
+       ├── Equipment
        └── Safety configuration
 ```
 
@@ -34,7 +34,7 @@ A Fleet groups vehicles under a common operational owner and configuration polic
 - approved vehicle profiles;
 - common operational policies;
 - communication resources;
-- payload catalogue;
+- equipment catalogue;
 - authorization/airspace context;
 - maintenance/resource records;
 - software/configuration baselines.
@@ -57,7 +57,7 @@ Required identity:
 - capability set;
 - health/readiness state;
 - C2 state;
-- installed payloads;
+- installed equipment;
 - maintenance/resource state;
 - verification/approval status.
 
@@ -117,16 +117,16 @@ Is it permitted to perform it now?
 
 These states must never be collapsed into one boolean.
 
-## 8. Payload model
+## 8. Equipment model
 
-A Payload is an equipment instance installed on or associated with a vehicle.
+An Equipment item is an equipment instance installed on or associated with a vehicle.
 
 Required information:
 
-- payload ID;
+- equipment ID;
 - manufacturer/model;
 - serial/identity;
-- payload class;
+- equipment class;
 - interface/protocol;
 - capabilities;
 - configuration/calibration;
@@ -137,20 +137,20 @@ Required information:
 - vehicle compatibility;
 - verification status.
 
-## 9. Payload semantic interface
+## 9. Equipment semantic interface
 
 BlueSky mission logic shall use normalized semantic actions:
 
-`CAPTURE`, `START_RECORDING`, `STOP_RECORDING`, `SET_CAMERA_MODE`, `SET_SENSOR_MODE`, `SET_GIMBAL`, `TRIGGER_PAYLOAD`.
+`CAPTURE`, `START_RECORDING`, `STOP_RECORDING`, `SET_CAMERA_MODE`, `SET_SENSOR_MODE`, `SET_GIMBAL`, `TRIGGER_EQUIPMENT`.
 
-The payload adapter translates these into the concrete device protocol.
+The equipment adapter translates these into the concrete device protocol.
 
 ## 10. Performance model
 
 Vehicle profiles shall provide the parameters required by flight planning and energy calculations, including where applicable:
 
 - mass;
-- payload mass;
+- equipment mass;
 - airspeed limits;
 - climb/descent limits;
 - endurance/energy model;
@@ -166,7 +166,7 @@ Operational calculations shall use the verified profile/instance values and reco
 
 A baseline binds the actual vehicle to:
 
-`Vehicle + FCS + Firmware + Parameters + Sensors + Payload + C2 + Safety + Software compatibility`.
+`Vehicle + FCS + Firmware + Parameters + Sensors + Equipment + C2 + Safety + Software compatibility`.
 
 Any change capable of affecting mission execution or safety shall create a new configuration version and invalidate affected verification status until revalidated.
 
@@ -183,7 +183,7 @@ CHECK FIRMWARE
         ↓
 READ CONFIGURATION
         ↓
-DETECT PAYLOAD / COMPONENTS
+DETECT EQUIPMENT / COMPONENTS
         ↓
 CAPABILITY DISCOVERY
         ↓
@@ -200,7 +200,7 @@ The fleet model shall support heterogeneous fleets and coordinated missions. A m
 
 ## 14. Adapter independence
 
-Vehicle profiles and instances shall not contain protocol-specific mission logic. Protocol translation belongs to integration adapters. This allows new autopilots, aircraft and payloads to be added without redesigning the BlueSky operational model.
+Vehicle profiles and instances shall not contain protocol-specific mission logic. Protocol translation belongs to integration adapters. This allows new autopilots, aircraft and equipment to be added without redesigning the BlueSky operational model.
 
 ## 15. Gate
 
