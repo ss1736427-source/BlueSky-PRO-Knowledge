@@ -224,15 +224,16 @@ A future real execution shall replace `EVIDENCE-TBD` only with controlled eviden
 
 ## 9. Current work-package transition
 
-The deterministic test vectors are defined and the implementation stub exists. The remaining pre-hardware step is repository consistency validation across the contract, schema, matrix, test stub, configuration baseline, implementation checklist and executable adapter contract.
+The repository consistency gate and service-layer Registry binding are now defined. The next pre-hardware deterministic step is to establish the smallest executable Registry contract fixture against the existing adapter boundary.
 
-After that gate passes, implementation work proceeds against the existing adapter/service layer; no vendor selection is required for the consistency step.
+No vendor selection or real hardware is required for this step.
 
 ```text
 CONTRACT TEST STUB
 → CONFIGURATION BASELINE
 → IMPLEMENTATION CHECKLIST
 → REPOSITORY CONSISTENCY CHECK
+→ REGISTRY CONTRACT FIXTURE
 → NEXT UNRESOLVED INTEGRATION GAP
 ```
 
