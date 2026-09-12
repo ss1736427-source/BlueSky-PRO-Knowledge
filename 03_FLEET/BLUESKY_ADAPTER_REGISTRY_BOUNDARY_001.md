@@ -52,19 +52,25 @@ lifecycle_state
 
 ## 4. Resolution result
 
-Registry resolution shall return one of:
+The current technology-neutral implementation exposes the following deterministic result vocabulary:
 
 ```text
 RESOLVED
-UNSUPPORTED_VEHICLE
-UNSUPPORTED_EQUIPMENT
-VERSION_MISMATCH
-CONFIGURATION_INVALID
-NOT_VERIFIED
-NOT_AVAILABLE
+NOT_FOUND
+INCOMPATIBLE
+CAPABILITY_UNSUPPORTED
+AMBIGUOUS
 ```
 
-`RESOLVED` means only that a compatible registry entry was found. It does not mean the concrete adapter has passed operational verification.
+`RESOLVED` means only that exactly one compatible registry entry was found. It does not mean the concrete adapter has passed operational verification.
+
+`NOT_FOUND` means no registered adapter matches the requested target profile.
+
+`INCOMPATIBLE` means a target adapter exists but the requested protocol, contract version or schema version is incompatible.
+
+`CAPABILITY_UNSUPPORTED` means target/profile compatibility exists but the requested capability is not provided by the available candidate set.
+
+`AMBIGUOUS` means more than one otherwise compatible adapter remains; the registry shall not select one arbitrarily.
 
 ## 5. Service-layer rule
 
@@ -132,4 +138,4 @@ Real hardware: NOT CONNECTED
 Evidence: NOT AVAILABLE
 ```
 
-**Status: CONTROLLED WORKING DRAFT — MINIMAL ADAPTER REGISTRY BOUNDARY DEFINED.**
+**Status: CONTROLLED WORKING DRAFT — REGISTRY RESULT VOCABULARY ALIGNED WITH CURRENT TECHNOLOGY-NEUTRAL IMPLEMENTATION.**
