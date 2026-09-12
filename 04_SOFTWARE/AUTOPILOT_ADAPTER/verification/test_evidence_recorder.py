@@ -30,11 +30,13 @@ class EvidenceRecorderTest(unittest.TestCase):
             append_event(run_dir, {"timestamp_ms": 1100, "parameter": "link_latency_ms", "value": 42.5, "unit": "ms", "source": "demo-c2"})
             append_event(run_dir, {"timestamp_ms": 1200, "parameter": "packet_loss", "value": 0.1, "unit": "%", "source": "demo-c2", "quality": "valid"})
 
-            manifest, report = finalize(run_dir)
+            manifest, anchor, report = finalize(run_dir)
             data = json.loads(manifest.read_text(encoding="utf-8"))
             self.assertEqual(data["format"], "BlueSky-Evidence-1")
             self.assertEqual(len(data["files"]), 4)
             self.assertTrue((run_dir / "processed.csv").exists())
+            self.assertTrue(anchor.exists())
+            self.assertEqual(anchor.read_text(encoding="utf-8").split()[1], "manifest.json")
             self.assertTrue(report.exists())
             self.assertEqual(len((run_dir / "events.jsonl").read_text(encoding="utf-8").splitlines()), 2)
 
