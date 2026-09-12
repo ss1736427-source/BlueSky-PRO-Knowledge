@@ -26,6 +26,9 @@ jobs:
       - name: Validate adapter repository consistency
         run: python 04_SOFTWARE/AUTOPILOT_ADAPTER/contract/validate_adapter_chain.py
 
+      - name: Test verification evidence recorder
+        run: python -m unittest discover -s 04_SOFTWARE/AUTOPILOT_ADAPTER/verification -p 'test_*.py'
+
       - name: Configure
         run: cmake -S 04_SOFTWARE/AUTOPILOT_ADAPTER -B build/autopilot-adapter -DCMAKE_BUILD_TYPE=Release
 

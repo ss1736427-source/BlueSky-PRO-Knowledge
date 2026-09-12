@@ -44,7 +44,7 @@ A requirement affecting an external interface or safety-critical behavior must b
 | SYS-C2-003 | Connected/degraded/lost/recovering states | C2 Manager | Link telemetry | State machine | Fault injection | IN PROGRESS |
 | SYS-C2-004 | Primary/backup failover | C2 Manager | Multiple links | Failover policy engine | Loss/recovery scenarios | NOT DONE |
 | SYS-C2-005 | Distinguish C2/telemetry/video/equipment loss | C2/Data | Separate streams | Independent link states | Failure isolation test | NOT DONE |
-| SYS-C2-006 | Record link events | Flight Record | C2 events | Event logging | Replay/audit test | NOT DONE |
+| SYS-C2-006 | Record link events | Flight Record | C2 events | Event logging | Replay/audit test | IN PROGRESS |
 | SYS-VP-001 | Versioned vehicle profile | Fleet | Vehicle metadata | Fleet database/profile schema | Profile validation | IN PROGRESS |
 | SYS-VP-002 | Versioned equipment profile | Fleet / Equipment | Device API | Equipment registry | Device compatibility test | IN PROGRESS |
 | SYS-VP-003 | Normalized equipment commands/status/data | Equipment Adapter | Camera/gimbal/etc. | Equipment API | End-to-end equipment test | NOT DONE |
@@ -80,8 +80,8 @@ A requirement affecting an external interface or safety-critical behavior must b
 | CNT-003 | GNSS degradation/loss | Navigation / Safety | FCS/Nav | Detection + policy | Simulation + HIL | NOT DONE |
 | CNT-004 | Energy/battery emergency | Safety | Vehicle telemetry | Energy prediction + gate | SIL/flight test | IN PROGRESS |
 | CNT-005 | Weather/airspace conflict | Safety / Planning | Weather/ATM | Replan/abort policy | Scenario test | NOT DONE |
-| LOG-001 | Acquire autopilot/telemetry logs | HUB | FCS log protocol | Log adapters | Real vehicle test | NOT DONE |
-| LOG-002 | Replay operational data | Analysis | Flight Record | Replay engine | Deterministic replay | NOT DONE |
+| LOG-001 | Acquire autopilot/telemetry logs | HUB | FCS log protocol | Log adapters | Real vehicle test | IN PROGRESS |
+| LOG-002 | Replay operational data | Analysis | Flight Record | Replay engine | Deterministic replay | IN PROGRESS |
 | LOG-003 | Complete Flight Record | Flight Record | All critical systems | Immutable/versioned record | Audit reconstruction | IN PROGRESS |
 | VAL-001 | Unit/integration verification | V&V | Internal | Automated test suite | CI/regression | IN PROGRESS |
 | VAL-002 | SIL/SITL | V&V | Autopilot simulator | Simulation harness | Scenario suite | NOT DONE |
@@ -140,6 +140,27 @@ Phase 1 can close only when all architecture-affecting requirements have:
 - acceptance criterion;
 - certification/regulatory trace where applicable.
 
-## 6. Next controlled action
+## 6. Verification & Evidence linkage
 
-After this matrix is accepted, the project proceeds to the **System Architecture/Data Model gate**, where the canonical models and interface contracts are frozen before detailed adapter and UI implementation.
+The verification evidence framework is implemented under `04_SOFTWARE/AUTOPILOT_ADAPTER/verification/` as a reusable prototype mechanism. It provides a stable path for future physical-test data without changing the requirement model:
+
+`Requirement → Test Method → Test Case → Configuration → Execution → Raw Data → Processed Data → Result → Evidence Package → Certification Reference`
+
+Current prepared evidence mappings:
+
+| Requirement | Evidence mechanism | Present state |
+|---|---|---|
+| `SYS-005` | Event stream + immutable/versioned record contract | IN PROGRESS |
+| `SYS-C2-006` | C2/link events captured as timestamped records | IN PROGRESS |
+| `LOG-001` | Source-log ingestion point reserved | IN PROGRESS |
+| `LOG-002` | Raw event stream retained for deterministic replay | IN PROGRESS |
+| `LOG-003` | Test record + manifest + report | IN PROGRESS |
+| `VAL-001` | Automated recorder regression test in CI | IN PROGRESS |
+| `VAL-002..005` | Same record structure reserved for staged tests | NOT DONE — future test execution |
+| `VAL-006` | CI remains the software regression gate | IN PROGRESS |
+
+The framework records preparation capability now; it does not claim physical verification results.
+
+## 7. Next controlled action
+
+With the evidence mechanism established, continue implementation in dependency order toward the demonstrable prototype while preserving the same requirement/verification/evidence chain.
