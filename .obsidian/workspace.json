@@ -187,6 +187,8 @@
   },
   "active": "058fcba7e26ecc4b",
   "lastOpenFiles": [
+    "tools/mirror_to_backup.ps1",
+    "tools/install_backup_mirror.ps1",
     "TRACEABILITY/REPOSITORY_REQUIREMENTS_AUDIT_REPORT_001.md",
     "tools/mirror_to_obsidian.ps1",
     "tools/install_obsidian_mirror.ps1",
@@ -203,7 +205,6 @@
     "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/test_evidence_session.py",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/test_evidence_adapter.py",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/evidence_session.py",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/demo_evidence_pipeline.py",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/PHYSICAL_TEST_READINESS.md",
     "PACKAGE_MANIFEST.md",
     "README.md",
@@ -221,7 +222,6 @@
     "03_FLEET/BLUESKY_ADAPTER_REGISTRY_FIXTURE_001.md",
     "03_FLEET/BLUESKY_ADAPTER_REGISTRY_CONTRACT_FIXTURE_001.md",
     "03_FLEET/BLUESKY-ADAPTER-REGISTRY-BOUNDARY-001.md",
-    "03_FLEET/BLUESKY_ADAPTER_REGISTRY_BOUNDARY_001.md",
-    "03_FLEET/BLUESKY_ADAPTER_REPOSITORY_CONSISTENCY_CHECK_001.md"
+    "03_FLEET/BLUESKY_ADAPTER_REGISTRY_BOUNDARY_001.md"
   ]
 }
