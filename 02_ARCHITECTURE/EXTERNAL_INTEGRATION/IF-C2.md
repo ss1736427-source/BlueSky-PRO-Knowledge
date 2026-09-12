@@ -17,11 +17,36 @@ Define the boundary between BlueSky and the communications/C2 layer used to exch
 BlueSky → C2 Adapter → Transport/Radio/IP → Vehicle Adapter → Autopilot
 Autopilot → Vehicle Adapter → Transport → C2 Adapter → BlueSky
 
+The Vehicle Adapter is the controlled normalization boundary defined by the BlueSky Universal Adapter Contract. C2 transport data shall not introduce vendor-specific Vehicle/Equipment objects into BlueSky core services.
+
 ## Mandatory states
 CONNECTED, DEGRADED, LOST, RECOVERING, AUTHENTICATION_FAILED.
 
 ## Key requirement
 C2 transport must remain replaceable; BlueSky operational logic must not depend directly on a particular radio, modem or network technology.
+
+## Adapter boundary
+
+```text
+External C2 / Transport
+          ↓
+       C2 Adapter
+          ↓
+Canonical C2 state/data
+          ↓
+Universal Vehicle / Equipment Adapter
+          ↓
+Canonical Vehicle / Equipment Schema
+          ↓
+BlueSky core services
+```
+
+The canonical Vehicle / Equipment integration is defined by:
+
+```text
+BLUESKY-UNIVERSAL-ADAPTER-CONTRACT-001
+BLUESKY-CANONICAL-VEHICLE-EQUIPMENT-SCHEMA-001
+```
 
 ## Regulatory allocation
 
@@ -66,6 +91,8 @@ REG-013
 → C2_SYSTEM_REQUIREMENTS_BASELINE_001
 → C2_REQUIREMENTS_RECONCILIATION_001
 → IF-C2
+→ BLUESKY-UNIVERSAL-ADAPTER-CONTRACT-001
+→ BLUESKY-CANONICAL-VEHICLE-EQUIPMENT-SCHEMA-001
 → C2 verification cases
 → evidence
 ```
