@@ -18,14 +18,13 @@ Provide a deterministic implementation checklist that maps the Adapter implement
 
 | Function / boundary | Matrix | Contract test | Implementation status |
 |---|---|---|---|
-| Adapter identity | ACM-001 | ACT-001 | STUB |
-| Vehicle identification/profile | ACM-002 | ACT-001 | STUB |
-| Equipment identification/profile | ACM-003 | ACT-001 | STUB |
+| Adapter identity / discovery / identification | ACM-001 | ACT-001 | STUB |
+| Vehicle profile / configuration | ACM-002, ACM-005 | ACT-001, ACT-009 | STUB |
+| Equipment profile / configuration | ACM-003, ACM-005 | ACT-001, ACT-009 | STUB |
 | Capability normalization | ACM-004 | ACT-002 | STUB |
-| Configuration normalization | ACM-005 | ACT-009 | STUB |
-| Readiness/C2/operational state | ACM-006 | ACT-003 | STUB |
-| Telemetry normalization | ACM-007 | ACT-004, ACT-005 | STUB |
-| Command translation | ACM-008 | ACT-006 | STUB |
+| Readiness/C2/operational state / health | ACM-006 | ACT-003 | STUB |
+| Telemetry subscription / normalization | ACM-007 | ACT-004, ACT-005 | STUB |
+| Vehicle command / Equipment action translation | ACM-008 | ACT-006 | STUB |
 | Failure mapping | ACM-009 | ACT-007 | STUB |
 | Version compatibility | ACM-010 | ACT-008 | STUB |
 | Persistence/reload | ACM-011 | ACT-009 | STUB |
@@ -33,6 +32,7 @@ Provide a deterministic implementation checklist that maps the Adapter implement
 | Safety/authority boundary | ACM-013 | ACT-006 | STUB |
 | Traceability resolution | ACM-014 | ACT-001..010 | STUB |
 | Deterministic repeatability | ACM-015 | ACT-010 | STUB |
+| Equipment data outputs | ACM-003, ACM-004 | ACT-001, ACT-002 | STUB |
 
 ## 3. Implementation gates
 
@@ -92,7 +92,13 @@ Provide a deterministic implementation checklist that maps the Adapter implement
 
 ## 4. Repository consistency gate
 
-Before a concrete adapter implementation is introduced, the following references shall resolve to controlled repository artifacts:
+The repository consistency check is recorded in:
+
+```text
+BLUESKY-ADAPTER-REPOSITORY-CONSISTENCY-CHECK-001
+```
+
+The check confirms that the following references resolve and that the dependency chain is internally consistent:
 
 ```text
 BLUESKY-UNIVERSAL-ADAPTER-CONTRACT-001
@@ -100,19 +106,17 @@ BLUESKY-CANONICAL-VEHICLE-EQUIPMENT-SCHEMA-001
 BLUESKY-ADAPTER-CONFORMANCE-MATRIX-001
 BLUESKY-ADAPTER-CONTRACT-TEST-STUB-001
 BLUESKY-ADAPTER-CONFIGURATION-BASELINE-001
+BLUESKY-ADAPTER-IMPLEMENTATION-STUB-001
 BLUESKY-ADAPTER-CONFORMANCE-CHECKLIST-001
 ```
 
-The consistency check shall also confirm:
+Result:
 
 ```text
-adapter → canonical Vehicle / Equipment
-contract tests → conformance matrix
-configuration baseline → test vector set
-implementation checklist → all applicable ACM rows
+REPOSITORY CONSISTENCY: PASS
 ```
 
-A missing or stale reference is a consistency failure and shall be corrected before the next dependent implementation step.
+This result applies only to repository consistency; it does not establish implementation conformance or verification.
 
 ## 5. Completion rule
 
@@ -163,4 +167,19 @@ actual execution
 
 A successful test is recorded as successful only when the evidence supports that conclusion.
 
-**Status: CONTROLLED WORKING DRAFT — IMPLEMENTATION CONFORMANCE CHECKLIST ESTABLISHED; REAL IMPLEMENTATION/TESTING PENDING.**
+## 8. Current work-package transition
+
+The Adapter documentation chain is internally consistent and the implementation stub exposes the operations required by the contract.
+
+The next deterministic step is to identify and close the next unresolved integration gap in the existing Interface / Service layer, reusing existing interfaces and creating only a minimal stub where the real implementation or test environment is not yet available.
+
+```text
+REPOSITORY CONSISTENCY: PASS
+→ INTERFACE / SERVICE GAP ANALYSIS
+→ MINIMAL GAP CLOSURE
+→ VERIFICATION HOOK
+→ COMMIT
+→ RESTART ALGORITHM
+```
+
+**Status: CONTROLLED WORKING DRAFT — ADAPTER CHECKLIST RECONCILED WITH CONTRACT-COMPLETE STUB; REAL IMPLEMENTATION/TESTING PENDING.**
