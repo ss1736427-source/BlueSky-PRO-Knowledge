@@ -16,12 +16,20 @@ if (-not (Test-Path -LiteralPath $ObsidianMirror -PathType Container)) {
     New-Item -ItemType Directory -Path $ObsidianMirror -Force | Out-Null
 }
 
-# Mirror the working tree, but keep Obsidian's own workspace and Git metadata out of the mirror.
-robocopy $SourceRoot $ObsidianMirror /MIR /FFT /R:2 /W:2 /XJ /XD "$SourceRoot\.git" "$SourceRoot\.github" "$SourceRoot\.obsidian" "$ObsidianMirror\.git" "$ObsidianMirror\.obsidian" | Out-Host
+# Exact mirror of repository content into a dedicated Obsidian mirror folder.
+# Git metadata is excluded; all tracked repository content, including .github, is mirrored.
+# The destination must be a separate folder from SourceRoot.
+$sourceFull = [System.IO.Path]::GetFullPath($SourceRoot).TrimEnd('\\')
+$destFull   = [System.IO.Path]::GetFullPath($ObsidianMirror).TrimEnd('\\')
+if ($sourceFull -eq $destFull) {
+    throw "SourceRoot and ObsidianMirror must be different folders."
+}
+
+robocopy $SourceRoot $ObsidianMirror /MIR /FFT /R:2 /W:2 /XJ /XD "$SourceRoot\.git" "$ObsidianMirror\.git" | Out-Host
 
 $code = $LASTEXITCODE
 if ($code -ge 8) {
     throw "robocopy failed with exit code $code"
 }
 
-Write-Host "BlueSky PRO mirror completed: $SourceRoot -> $ObsidianMirror"
+Write-Host "BlueSky PRO exact mirror completed: $SourceRoot -> $ObsidianMirror"
