@@ -50,6 +50,7 @@ public:
     virtual CommandTransition validate(const CommandRequest& request) = 0;
     virtual CommandTransition dispatch(const CommandRequest& request) = 0;
     virtual CommandTransition acknowledge(const CommandRequest& request) = 0;
+    virtual CommandTransition execute(const CommandRequest& request) = 0;
     virtual CommandTransition complete(const CommandRequest& request) = 0;
     virtual CommandTransition fail(const CommandRequest& request, std::string reason) = 0;
     virtual CommandTransition cancel(const CommandRequest& request, std::string reason) = 0;
