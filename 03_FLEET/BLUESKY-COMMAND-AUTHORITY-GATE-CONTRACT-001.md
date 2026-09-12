@@ -4,6 +4,7 @@ type: command_authority_gate_contract
 status: controlled_working_draft
 system: BlueSky PRO
 lifecycle_contract: BLUESKY-COMMAND-LIFECYCLE-CONTRACT-001
+registry_boundary: BLUESKY-ADAPTER-REGISTRY-BOUNDARY-001
 implementation_stub: 04_SOFTWARE/PLANNING/command_authority_gate_contract_stub.hpp
 test_stub: 04_SOFTWARE/PLANNING/command_authority_gate_contract_stub_test.cpp
 ---
@@ -28,7 +29,7 @@ AdapterServiceResolver / Adapter
 External Vehicle / Equipment
 ```
 
-The authority/safety gate is upstream of adapter dispatch. Registry lookup and lifecycle processing shall not grant command execution authority.
+The authority/safety gate is upstream of adapter dispatch. Registry lookup and lifecycle processing shall not grant command execution authority. The Registry boundary remains a separate compatibility/lookup boundary defined by `BLUESKY-ADAPTER-REGISTRY-BOUNDARY-001`.
 
 ## 3. Decision vocabulary
 

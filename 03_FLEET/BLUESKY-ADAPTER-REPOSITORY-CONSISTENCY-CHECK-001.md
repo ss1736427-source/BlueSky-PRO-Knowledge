@@ -29,6 +29,7 @@ BLUESKY-ADAPTER-CONFORMANCE-CHECKLIST-001
 BLUESKY-ADAPTER-REGISTRY-BOUNDARY-001
 BLUESKY-ADAPTER-REGISTRY-CONTRACT-FIXTURE-001
 BLUESKY-COMMAND-LIFECYCLE-CONTRACT-001
+BLUESKY-COMMAND-AUTHORITY-GATE-CONTRACT-001
 ```
 
 ## 3. Consistency criteria
@@ -40,6 +41,7 @@ required dependency references resolve
 canonical Vehicle / Equipment terminology is preserved
 command lifecycle uses the canonical state model
 Registry remains a lookup/compatibility boundary
+Authority / Safety Gate remains upstream of adapter dispatch
 Safety / authority is not delegated to the adapter or Registry
 real-test evidence is not inferred from stubs
 ```
