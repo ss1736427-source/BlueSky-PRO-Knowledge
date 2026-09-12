@@ -7,6 +7,11 @@
     "test_run_id": {"type": "string", "minLength": 1},
     "status": {"enum": ["PENDING", "NOT_PERFORMED", "IN_PROGRESS", "ANALYZED", "PASS", "FAIL", "INVALID"]},
     "data_class": {"type": "string"},
+    "evidence_domain_ids": {
+      "type": "array",
+      "items": {"type": "string", "pattern": "^EC-[0-9]{2}$"},
+      "uniqueItems": true
+    },
     "requirement_ids": {"type": "array", "items": {"type": "string"}},
     "test_method_id": {"type": ["string", "null"]},
     "test_method_revision": {"type": ["string", "null"]},
