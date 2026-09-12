@@ -66,6 +66,12 @@ add_executable(vehicle_equipment_capability_contract_test
 
 target_link_libraries(vehicle_equipment_capability_contract_test PRIVATE bluesky_planning)
 
+add_executable(universal_adapter_contract_test
+    adapter/universal_adapter_contract_test.cpp
+)
+
+target_link_libraries(universal_adapter_contract_test PRIVATE bluesky_planning)
+
 enable_testing()
 add_test(NAME astar_dijkstra_benchmark COMMAND astar_dijkstra_benchmark)
 add_test(NAME orchestrator_integration_test COMMAND orchestrator_integration_test)
@@ -75,3 +81,4 @@ add_test(NAME orchestrator_objective_test COMMAND orchestrator_objective_test)
 add_test(NAME orchestrator_rejection_reason_test COMMAND orchestrator_rejection_reason_test)
 add_test(NAME mission_model_contract_test COMMAND mission_model_contract_test)
 add_test(NAME vehicle_equipment_capability_contract_test COMMAND vehicle_equipment_capability_contract_test)
+add_test(NAME universal_adapter_contract_test COMMAND universal_adapter_contract_test)
