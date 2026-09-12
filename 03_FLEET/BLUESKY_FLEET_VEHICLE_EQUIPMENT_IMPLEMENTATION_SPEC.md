@@ -10,7 +10,7 @@ parent: BLUESKY_FLEET_VEHICLE_EQUIPMENT_MODEL.md
 
 ## 1. Purpose
 
-Define the smallest implementation-ready contract for Fleet, Vehicle and Equipment domain objects before adapter and UI implementation.
+Define the smallest implementation-ready contract for Fleet, Vehicle and Equipment domain objects and their integration boundary.
 
 This specification derives from the approved working data model and does not introduce vendor-specific mission logic.
 
@@ -23,7 +23,9 @@ FLEET / VEHICLE / EQUIPMENT SERVICES
     ↓
 PERSISTENCE + VERSIONING
     ↓
-ADAPTER CONTRACTS
+UNIVERSAL ADAPTER CONTRACT
+    ↓
+EXTERNAL PROTOCOL / VEHICLE / EQUIPMENT
 ```
 
 The domain layer shall not depend directly on MAVLink, ArduPilot, PX4, OEM APIs, camera protocols, C2 transports or provider-specific formats.
@@ -242,35 +244,47 @@ Historical versions shall remain addressable for Flight Record and regulatory tr
 
 ## 13. Adapter contract boundary
 
-Adapters shall translate external representations into canonical BlueSky objects.
+The universal adapter contract is the controlled integration boundary between the canonical BlueSky domain model and external Vehicle / Equipment representations.
 
 ```text
 External Vehicle / Equipment API
             ↓
-       Adapter
+Universal Adapter Contract
             ↓
-Canonical Vehicle / Equipment Model
+Canonical Vehicle / Equipment Schema
             ↓
 Core services
 ```
 
-No adapter may alter the meaning of a canonical mission requirement to accommodate a vendor protocol. Unsupported functions shall be represented explicitly through capability state.
-
-## 14. Verification hooks
-
-The implementation shall expose deterministic verification points for:
+The detailed contract is defined in:
 
 ```text
-identity resolution
-profile matching
-capability normalization
-configuration versioning
-equipment detection
-compatibility evaluation
-state transition handling
-persistence/reload consistency
-adapter translation
+BLUESKY-UNIVERSAL-ADAPTER-CONTRACT-001
 ```
+
+The canonical schema is defined in:
+
+```text
+BLUESKY-CANONICAL-VEHICLE-EQUIPMENT-SCHEMA-001
+```
+
+No adapter may alter the meaning of a canonical mission requirement to accommodate a vendor protocol. Unsupported functions shall be represented explicitly through capability state.
+
+## 14. Adapter conformance and verification hooks
+
+Adapter implementation shall be controlled through:
+
+```text
+BLUESKY-ADAPTER-CONFORMANCE-MATRIX-001
+        ↓
+BLUESKY-ADAPTER-CONTRACT-TEST-STUB-001
+        ↓
+BLUESKY-ADAPTER-CONFIGURATION-BASELINE-001
+        ↓
+BLUESKY-ADAPTER-CONFORMANCE-CHECKLIST-001
+```
+
+The controlled matrix defines conformance obligations. The contract-test stub defines deterministic mock vectors. The configuration baseline makes later execution reproducible. The checklist controls implementation readiness.
 
 Real hardware and flight evidence are not required to define these hooks. Execution results remain deferred to the V&V stage.
 
@@ -292,10 +306,10 @@ The canonical Fleet/Vehicle/Equipment objects shall not be redesigned independen
 
 ## 16. Phase 3 gate
 
-This implementation specification is sufficient to begin detailed service/schema work when the corresponding canonical interface contracts are available.
+The implementation specification, universal adapter contract, canonical schema, conformance matrix, contract-test stub, configuration baseline and implementation checklist together define the current pre-hardware implementation boundary.
 
-The next deterministic implementation artifact is the **universal adapter contract** for Vehicle and Equipment integration.
+The next deterministic implementation step is to bind these artifacts to the existing repository interface/service layer, reusing existing interfaces where present and creating only a stub where a genuine gap exists.
 
 No real-test status is assigned by this document.
 
-**Status: CONTROLLED WORKING DRAFT — IMPLEMENTATION CONTRACT PREPARATION COMPLETE.**
+**Status: CONTROLLED WORKING DRAFT — FLEET/VEHICLE/EQUIPMENT IMPLEMENTATION CHAIN SYNCHRONIZED.**
