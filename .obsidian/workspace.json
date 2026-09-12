@@ -11,10 +11,14 @@
             "id": "058fcba7e26ecc4b",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Граф"
+              "type": "markdown",
+              "state": {
+                "file": "USER.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "USER"
             }
           }
         ]
@@ -187,6 +191,7 @@
   },
   "active": "058fcba7e26ecc4b",
   "lastOpenFiles": [
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/VERIFICATION_EVIDENCE_INTEGRATION_CONTRACT.md",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/VERIFICATION_EVIDENCE_FRAMEWORK.md",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/TEST_METHOD_CERTIFICATION_EVIDENCE_RECORD.md",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/test_evidence_recorder.py",
@@ -221,7 +226,6 @@
     "03_FLEET/BLUESKY_FLEET_VEHICLE_EQUIPMENT_IMPLEMENTATION_SPEC.md",
     "06_CERTIFICATION/BASIS/CERTIFICATION_BASIS_CLAUSE_REGISTER_001.md",
     "03_FLEET/BLUESKY_FLEET_VEHICLE_EQUIPMENT_MODEL.md",
-    "02_ARCHITECTURE/EXTERNAL_INTEGRATION/VEHICLE_EQUIPMENT_INTEGRATION_FRAMEWORK.md",
-    "06_EQUIPMENT/BLUESKY_EQUIPMENT_INTEGRATION_SPEC.md"
+    "02_ARCHITECTURE/EXTERNAL_INTEGRATION/VEHICLE_EQUIPMENT_INTEGRATION_FRAMEWORK.md"
   ]
 }
