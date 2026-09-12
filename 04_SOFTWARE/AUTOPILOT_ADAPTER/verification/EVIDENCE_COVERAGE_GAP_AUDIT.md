@@ -101,6 +101,14 @@ This order is for prototype integration. It does not define the future certifica
 
 A catalog entry, synthetic demonstration, replay, or bench fixture does not by itself establish physical compliance. Status shall advance only when the corresponding implementation and approved verification evidence exist.
 
-## 8. Extension rule
+## 8. Evidence data lifecycle
+
+The common lifecycle is defined in `VERIFICATION_DATA_LIFECYCLE.md`. All domains use the same sequence from requirement and verification method through source capture, raw-data preservation, analysis, result, evidence package and certification reference.
+
+## 9. Certification export
+
+The controlled export structure is defined in `CERTIFICATION_EVIDENCE_EXPORT_SPECIFICATION.md`. Export must preserve provenance, evidence class, configuration identity and integrity information. It is a preparation mechanism for certification documentation, not a substitute for formal acceptance.
+
+## 10. Extension rule
 
 If requirements, safety analysis, engineering analysis, external interfaces, equipment, or certification planning introduce a new evidence-bearing source not represented by EC-01…EC-20, a new evidence domain and source channel shall be added before implementation is considered complete. The common evidence contract remains unchanged.
