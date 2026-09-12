@@ -12,7 +12,7 @@ basis: EXTERNAL-REGULATORY-INTERFACE-ALLOCATION-001; REGULATORY-SOURCE-REGISTER-
 
 Prepare verification coverage for BlueSky-owned functions at the boundary with external operational, infrastructure, maintenance and C2-provider systems that are within the system-management scope.
 
-Landing-site management is outside the BlueSky system-management scope and is not included in this verification package.
+This package excludes landing-site management; it is outside the BlueSky system-management scope.
 
 This is a **test-stage preparation stub**. It contains no execution result and no evidence.
 
@@ -67,8 +67,7 @@ EXECUTION EVIDENCE                → real test stage
 ## 6. Traceability
 
 ```text
-REG-017..020
-→ EXTERNAL-REGULATORY-INTERFACE-ALLOCATION-001
+EXTERNAL REGULATORY INTERFACE ALLOCATION
 → EXT-V01..EXT-V07
 → execution
 → evidence
@@ -77,4 +76,4 @@ REG-017..020
 
 ## 7. Status
 
-**CONTROLLED WORKING DRAFT — VERIFICATION COVERAGE PREPARED; LANDING-SITE SCOPE EXCLUDED; REAL EXECUTION DEFERRED.**
+**CONTROLLED WORKING DRAFT — BLUE SKY SYSTEM-MANAGEMENT INTERFACES ONLY; LANDING-SITE MANAGEMENT EXCLUDED; REAL EXECUTION DEFERRED.**
