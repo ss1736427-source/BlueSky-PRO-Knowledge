@@ -192,6 +192,7 @@
   },
   "active": "058fcba7e26ecc4b",
   "lastOpenFiles": [
+    "00_PROJECT/CHANGE_AND_PROBLEM_PROCESS.md",
     "00_PROJECT/EXTERNAL_ORCHESTRATOR/codex_preflight.ps1",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/core/universal_autopilot_adapter_contract_test.cpp",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/CMakeLists.txt",
@@ -207,7 +208,6 @@
     "00_PROJECT/EXTERNAL_ORCHESTRATOR/__pycache__/bluesky_orchestrator.cpython-314.pyc.1930952732592",
     "00_PROJECT/EXTERNAL_ORCHESTRATOR/__pycache__",
     "05_VERIFICATION/C2/C2_VERIFICATION_CASES_001.md",
-    "00_PROJECT/EXTERNAL_ORCHESTRATOR/__pycache__/bluesky_orchestrator.cpython-314.pyc.2377818402736",
     "00_PROJECT/EXTERNAL_ORCHESTRATOR/README.md",
     "00_PROJECT/GOVERNANCE/CHANGE_AND_PROBLEM_PROCESS.md",
     "00_PROJECT/BLUE_SKY_PRO_WORKING_RULES.md",
