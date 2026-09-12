@@ -11,7 +11,7 @@ namespace {
 class MockAdapter final : public UniversalAdapter {
 public:
     AdapterMetadata metadata() const override {
-        return {"TEST-ADAPTER-001", "1.0.0", "TEST", "MOCK-C2-EQUIPMENT-1", {}, {}, {}, "1"};
+        return {"TEST-ADAPTER-001", "1.0.0", "TEST", "MOCK-C2-EQUIPMENT-1", "1", "1", {}, {}, {}, "1"};
     }
 
     std::vector<std::string> discover() override { return {"VEH-TEST-001"}; }
@@ -62,6 +62,8 @@ int main() {
     const auto meta = adapter.metadata();
     assert(meta.adapter_id == "TEST-ADAPTER-001");
     assert(meta.adapter_version == "1.0.0");
+    assert(meta.contract_version == "1");
+    assert(meta.schema_version == "1");
     assert(adapter.identify() == "VEH-TEST-001");
     assert(adapter.identifyEquipment() == "EQ-TEST-001");
 
