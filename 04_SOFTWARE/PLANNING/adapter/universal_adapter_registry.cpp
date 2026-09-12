@@ -26,8 +26,8 @@ bool matchesTarget(const AdapterMetadata& metadata, const AdapterResolutionReque
 
 bool matchesCompatibility(const AdapterMetadata& metadata, const AdapterResolutionRequest& request) {
     if (!request.protocol.empty() && metadata.protocol != request.protocol) return false;
-    if (!request.contract_version.empty() && metadata.configuration_schema_version != request.contract_version) return false;
-    if (!request.schema_version.empty() && metadata.configuration_schema_version != request.schema_version) return false;
+    if (!request.contract_version.empty() && metadata.contract_version != request.contract_version) return false;
+    if (!request.schema_version.empty() && metadata.schema_version != request.schema_version) return false;
     return true;
 }
 
@@ -120,7 +120,6 @@ UniversalAdapter* UniversalAdapterRegistry::findForCapability(
 
 AdapterResolutionResult UniversalAdapterRegistry::resolve(
     const AdapterResolutionRequest& request) const {
-    const UniversalAdapter* first_target = nullptr;
     const UniversalAdapter* first_compatible = nullptr;
     std::size_t compatible_count = 0;
     bool target_found = false;
@@ -133,8 +132,6 @@ AdapterResolutionResult UniversalAdapterRegistry::resolve(
         if (!matchesTarget(metadata, request)) continue;
 
         target_found = true;
-        if (!first_target) first_target = adapter.get();
-
         if (!matchesCompatibility(metadata, request)) continue;
 
         if (!matchesCapability(metadata, request)) {
@@ -162,7 +159,6 @@ AdapterResolutionResult UniversalAdapterRegistry::resolve(
         return {ResolutionStatus::CapabilityUnsupported, nullptr};
     }
 
-    (void)first_target;
     return {ResolutionStatus::Incompatible, nullptr};
 }
 
