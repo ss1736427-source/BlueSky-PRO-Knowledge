@@ -4,7 +4,6 @@ type: c2_verification_case_definitions
 status: controlled_working_draft
 system: BlueSky PRO
 basis: C2-ICD-BASELINE-001; C2_SAFETY_ALLOCATION_001; VERIFICATION-PLAN-001; C2-RECONCILIATION-PASS-003; C2-QUANTITATIVE-PARAMETERS-BASIS-001; C2-CLAUSE-LEVEL-MAPPING-001; C2-REQUIREMENTS-RECONCILIATION-001
-authority: MASTER-REQUIREMENTS-REGISTER-001
 ---
 
 # BLUE SKY PRO — C2 VERIFICATION CASE DEFINITIONS 001
@@ -51,12 +50,24 @@ The case set is directly linked to the clause-level C2 mapping. This linkage ide
 
 The authoritative regulatory interpretation remains `C2_CLAUSE_LEVEL_MAPPING_001.md`; this table is a verification allocation, not an independent regulatory interpretation.
 
-## 5. Current basis and qualitative acceptance criteria
+## 5. Requirement/design allocation
 
-The following allocation completes the current traceability pass without promoting
-candidate requirements to the authoritative master register. `C2-REQ-*` and
-`SYS-C2-*` references remain subordinate to the controlled records identified
-below.
+The following table makes the current pre-execution trace explicit. `C2-REQ-*` are subordinate working allocations; the authoritative requirement identity remains in the Master Requirements Register.
+
+| Case | Working requirement allocation | Existing authoritative/design basis | Allocation status |
+|---|---|---|---|
+| C2-V01 | `C2-REQ-001` | `IF-C2-001`, `DEC-012`, `SYS-REQ-083` | DERIVED |
+| C2-V02 | `C2-REQ-003` | `SAF-REQ-001..003`, `IF-C2-001` | DERIVED |
+| C2-V03 | `C2-REQ-003`, `C2-REQ-008` | `SAF-REQ-003`, `SAF-REQ-013`, `SYS-REQ-091`, `IF-C2-001` | DERIVED |
+| C2-V04 | `C2-REQ-002`, `C2-REQ-003`, `C2-REQ-005` | `SAF-REQ-001..004`, `SAF-REQ-013..014`, `IF-C2-001` | MERGE / DERIVED |
+| C2-V05 | `C2-REQ-002`, `C2-REQ-005`, `C2-REQ-006` | `SAF-REQ-013`, `SYS-REQ-081`, `SYS-REQ-086`, `SYS-REQ-093`, `C2-F-001..003` | MERGE |
+| C2-V06 | `C2-REQ-005`, `C2-REQ-006`, `C2-REQ-009` | `SAF-REQ-001..004`, `SAF-REQ-013..015`, `SYS-REQ-086`, `SYS-REQ-093` | MERGE / DERIVED |
+| C2-V07 | `C2-REQ-001`, `C2-REQ-004` | `SYS-REQ-083`, `DEC-012`, `IF-C2-001` | DERIVED |
+| C2-V08 | `C2-REQ-008` | `SAF-REQ-017`, `IF-C2-001`, `CONFIGURATION-BASELINE.md` | DERIVED |
+
+No candidate requirement is promoted to `BASELINED` by this document.
+
+## 6. Current basis and qualitative acceptance criteria
 
 | Case | Current requirement/design basis | Qualitative acceptance criterion |
 |---|---|---|
@@ -69,12 +80,9 @@ below.
 | C2-V07 | `SYS-REQ-083`; `DEC-012`; `IF-C2-001` | The two operating profiles and their responsibility boundaries are distinguishable; provider-side obligations are not represented as BlueSky implementation evidence. |
 | C2-V08 | `SAF-REQ-017`; `IF-C2-001`; `CONFIGURATION-BASELINE.md` | An incompatible or unexpected interface version is detected, prevented from unvalidated use, and handled through the controlled compatibility or safe-response path. |
 
-The criteria above are qualitative. No latency, continuity, availability,
-integrity, loss-detection, recovery, or coverage value is inferred by this
-record; such values remain `TBD` pending the applicable approved
-operational/certification basis.
+The criteria above are qualitative. No latency, continuity, availability, integrity, loss-detection, recovery, or coverage value is inferred by this record; such values remain `TBD` pending the applicable approved operational/certification basis.
 
-## 6. Common case controls
+## 7. Common case controls
 
 Each case shall identify before execution:
 
@@ -102,7 +110,7 @@ Review record
 
 Unknown values remain `TBD`; they are not treated as passing defaults.
 
-## 7. Traceability
+## 8. Traceability
 
 ```text
 C2 regulatory clause
@@ -118,7 +126,7 @@ C2 regulatory clause
 
 Case-level requirement/design linkage remains subordinate to the authoritative master register and the applicable approved baseline.
 
-## 8. Evidence gate
+## 9. Evidence gate
 
 ```text
 CASE DEFINITION: controlled by this record
@@ -129,7 +137,7 @@ VERIFICATION STATUS: ALLOCATED / NOT VERIFIED
 
 No `PASSED`, `VERIFIED` or certification claim is made by this document.
 
-## 9. Controlled actions before real execution
+## 10. Controlled actions before real execution
 
 1. Maintain `C2-VER-CFG-001` as the controlled execution-configuration stub.
 2. Maintain `C2-VER-EXEC-001` as the controlled execution-result stub.
@@ -137,4 +145,4 @@ No `PASSED`, `VERIFIED` or certification claim is made by this document.
 4. Maintain `C2-QUANTITATIVE-PARAMETERS-BASIS-001` as the explicit quantitative-basis dependency until an authoritative/approved basis is available.
 5. At real test stage, replace the applicable stubs with actual configuration, results and evidence; do not infer `PASS` / `VERIFIED` from preparation records.
 
-**Status: CONTROLLED WORKING DRAFT — CASE DEFINITIONS COMPLETE; REGULATORY CLAUSE ALLOCATION INTEGRATED; PRE-EXECUTION PACKAGE STRUCTURED; REAL EXECUTION OPEN.**
+**Status: CONTROLLED WORKING DRAFT — CASE DEFINITIONS COMPLETE; REQUIREMENT/DESIGN AND REGULATORY CLAUSE ALLOCATION INTEGRATED; PRE-EXECUTION PACKAGE STRUCTURED; REAL EXECUTION OPEN.**
