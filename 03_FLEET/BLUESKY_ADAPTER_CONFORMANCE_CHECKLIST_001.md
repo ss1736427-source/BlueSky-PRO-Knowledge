@@ -5,13 +5,14 @@ status: controlled_working_draft
 system: BlueSky PRO
 matrix: BLUESKY-ADAPTER-CONFORMANCE-MATRIX-001
 implementation: BLUESKY-ADAPTER-IMPLEMENTATION-STUB-001
+configuration_baseline: BLUESKY-ADAPTER-CONFIGURATION-BASELINE-001
 ---
 
 # BlueSky PRO — Adapter Implementation Conformance Checklist 001
 
 ## 1. Purpose
 
-Provide a deterministic implementation checklist that maps the Adapter implementation boundary to the controlled conformance matrix and contract-test set.
+Provide a deterministic implementation checklist that maps the Adapter implementation boundary to the controlled conformance matrix, contract-test set and reproducible configuration baseline.
 
 ## 2. Implementation-to-conformance mapping
 
@@ -89,7 +90,31 @@ Provide a deterministic implementation checklist that maps the Adapter implement
 [ ] HIL/real-test transition defined
 ```
 
-## 4. Completion rule
+## 4. Repository consistency gate
+
+Before a concrete adapter implementation is introduced, the following references shall resolve to controlled repository artifacts:
+
+```text
+BLUESKY-UNIVERSAL-ADAPTER-CONTRACT-001
+BLUESKY-CANONICAL-VEHICLE-EQUIPMENT-SCHEMA-001
+BLUESKY-ADAPTER-CONFORMANCE-MATRIX-001
+BLUESKY-ADAPTER-CONTRACT-TEST-STUB-001
+BLUESKY-ADAPTER-CONFIGURATION-BASELINE-001
+BLUESKY-ADAPTER-CONFORMANCE-CHECKLIST-001
+```
+
+The consistency check shall also confirm:
+
+```text
+adapter → canonical Vehicle / Equipment
+contract tests → conformance matrix
+configuration baseline → test vector set
+implementation checklist → all applicable ACM rows
+```
+
+A missing or stale reference is a consistency failure and shall be corrected before the next dependent implementation step.
+
+## 5. Completion rule
 
 An item is complete only when its implementation exists and the applicable conformance/verification evidence is available.
 
@@ -104,7 +129,7 @@ STUB
 
 No implementation checklist item may be marked `VERIFIED` merely because code or documentation exists.
 
-## 5. Future implementation handoff
+## 6. Future implementation handoff
 
 The first concrete adapter implementation shall instantiate this checklist without changing the canonical domain schema unless a genuine interface gap is demonstrated.
 
@@ -122,7 +147,7 @@ GAP
 
 This prevents premature implementation-specific redesign.
 
-## 6. Real-test transition
+## 7. Real-test transition
 
 Before real Vehicle/Equipment testing, replace only the applicable `STUB`/`TBD` fields with controlled implementation and configuration data.
 
