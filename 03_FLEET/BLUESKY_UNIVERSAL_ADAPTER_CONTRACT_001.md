@@ -28,7 +28,21 @@ CORE SERVICES
 
 Core services shall depend on canonical semantics, not vendor-specific protocol objects.
 
-## 3. Adapter identity
+## 3. Controlled dependencies
+
+The contract is reconciled with the controlled adapter chain:
+
+```text
+BLUESKY-CANONICAL-VEHICLE-EQUIPMENT-SCHEMA-001
+BLUESKY-ADAPTER-CONFORMANCE-MATRIX-001
+BLUESKY-ADAPTER-CONTRACT-TEST-STUB-001
+BLUESKY-ADAPTER-CONFIGURATION-BASELINE-001
+BLUESKY-ADAPTER-CONFORMANCE-CHECKLIST-001
+```
+
+These references establish traceability only; they do not imply implementation conformance or verification.
+
+## 4. Adapter identity
 
 Every adapter implementation shall expose:
 
@@ -45,7 +59,7 @@ configuration_schema_version
 
 Adapter identity and version are configuration-controlled.
 
-## 4. Vehicle adapter contract
+## 5. Vehicle adapter contract
 
 ### Required operations
 
@@ -76,7 +90,7 @@ Timeout-bounded
 Failure-explicit
 ```
 
-## 5. Equipment adapter contract
+## 6. Equipment adapter contract
 
 ### Required operations
 
@@ -105,7 +119,7 @@ TRIGGER_EQUIPMENT
 
 The adapter translates the semantic operation into the concrete equipment protocol.
 
-## 6. Canonical response envelope
+## 7. Canonical response envelope
 
 Adapter responses shall provide enough metadata to determine whether returned information is usable:
 
@@ -125,7 +139,7 @@ error
 
 `data` shall never be treated as valid merely because transport succeeded.
 
-## 7. Failure model
+## 8. Failure model
 
 The adapter shall distinguish at minimum:
 
@@ -145,7 +159,7 @@ CONFIGURATION_ERROR
 
 Failures shall not be converted into normal values or silently discarded.
 
-## 8. Capability mapping
+## 9. Capability mapping
 
 External capabilities shall be normalized to BlueSky `CapabilityId` values.
 
@@ -165,7 +179,7 @@ VERIFIED / NOT_VERIFIED / DEGRADED
 
 An adapter must not report `VERIFIED` solely because a vendor protocol exposes the function. Verification status comes from the controlled BlueSky verification/configuration record.
 
-## 9. Equipment terminology
+## 10. Equipment terminology
 
 The canonical term is **Equipment**.
 
@@ -173,7 +187,7 @@ The adapter contract shall not introduce `Payload` as a domain object, capabilit
 
 If an external protocol uses the term `payload`, the adapter may retain that spelling only inside the external-protocol mapping and shall normalize it to the BlueSky `Equipment` model at the boundary.
 
-## 10. Configuration and versioning
+## 11. Configuration and versioning
 
 The adapter shall report the versions necessary to reproduce an integration decision:
 
@@ -188,7 +202,7 @@ protocol/schema version
 
 A material compatibility change invalidates the affected verification state until revalidated.
 
-## 11. Command boundary
+## 12. Command boundary
 
 ```text
 MISSION / FLIGHT LOGIC
@@ -204,7 +218,7 @@ EXTERNAL PROTOCOL
 
 The adapter is not an authorization layer and shall not bypass BlueSky safety or execution authority.
 
-## 12. Telemetry boundary
+## 13. Telemetry boundary
 
 ```text
 EXTERNAL TELEMETRY
@@ -217,96 +231,3 @@ CANONICAL TELEMETRY
         ↓
 STATE / SAFETY / HMI / LOGGING
 ```
-
-Freshness, validity and quality metadata shall be retained where relevant to operational decisions.
-
-## 13. Deterministic compatibility contract
-
-Compatibility shall be evaluated from declared inputs:
-
-```text
-VehicleProfile
-+ EquipmentProfile
-+ Interface
-+ Capabilities
-+ Mass / balance
-+ Power
-+ Operating limits
-+ Verification state
-```
-
-Output:
-
-```text
-COMPATIBLE
-NOT_COMPATIBLE
-NEEDS_REVIEW
-```
-
-The adapter may report facts; it shall not override the compatibility engine's decision.
-
-## 14. Safety boundary
-
-Adapter failure is an input to the existing BlueSky degradation/recovery logic.
-
-```text
-Adapter failure
-→ detected
-→ classified
-→ mission feasibility assessed
-→ approved response
-→ revalidation / safety gate
-```
-
-The adapter shall not independently command a safety-critical recovery unless that function is explicitly allocated to it by the controlled architecture.
-
-## 15. Verification hooks
-
-Each adapter implementation shall be verifiable without requiring a real flight:
-
-```text
-VA-001 identity translation
-VA-002 profile translation
-VA-003 configuration translation
-VA-004 capability translation
-VA-005 equipment discovery translation
-VA-006 telemetry normalization
-VA-007 command translation
-VA-008 error/failure mapping
-VA-009 version compatibility
-VA-010 persistence/reload consistency
-```
-
-Hardware-in-the-loop and real-flight tests may be added later as evidence-producing activities. They are not represented as completed by this contract.
-
-## 16. Contract invariants
-
-1. Vendor protocol objects do not enter the core domain model.
-2. Unsupported capabilities are explicit.
-3. Invalid/stale data is never silently accepted.
-4. Adapter version is part of the reproducible configuration.
-5. Safety and authorization cannot be bypassed through an adapter.
-6. Equipment is the canonical BlueSky term.
-7. Existing requirement IDs remain authoritative.
-8. Verification status is evidence-controlled.
-
-## 17. Current work-package transition
-
-The canonical schema, conformance matrix, contract-test stub, configuration baseline and implementation checklist are already defined. The contract is therefore no longer awaiting creation of the canonical schema.
-
-The next deterministic repository action is the **repository-level consistency check** across the Adapter chain. It shall verify that all controlled references resolve and that the chain remains internally consistent before concrete adapter implementation begins.
-
-```text
-UNIVERSAL ADAPTER CONTRACT
-→ CANONICAL SCHEMA
-→ CONFORMANCE MATRIX
-→ CONTRACT TEST STUB
-→ CONFIGURATION BASELINE
-→ IMPLEMENTATION CHECKLIST
-→ REPOSITORY CONSISTENCY CHECK
-→ NEXT UNRESOLVED INTEGRATION GAP
-```
-
-No real vehicle or Equipment test is implied by this contract.
-
-**Status: CONTROLLED WORKING DRAFT — UNIVERSAL ADAPTER BOUNDARY DEFINED; CURRENT DOCUMENTATION CHAIN READY FOR REPOSITORY CONSISTENCY CHECK.**
