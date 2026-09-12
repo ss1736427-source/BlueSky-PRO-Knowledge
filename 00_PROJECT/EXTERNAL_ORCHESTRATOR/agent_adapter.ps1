@@ -4,23 +4,8 @@ $AgentExecutable = $env:BS_AGENT_EXECUTABLE
 $AgentArguments = $env:BS_AGENT_ARGUMENTS
 
 if (-not $AgentExecutable) {
-    $codexCommand = Get-Command codex.cmd -ErrorAction SilentlyContinue
-    if ($codexCommand) {
-        $AgentExecutable = $codexCommand.Source
-    } else {
-        $codexCommand = Get-Command codex.exe -ErrorAction SilentlyContinue
-        if ($codexCommand) {
-            $AgentExecutable = $codexCommand.Source
-        } else {
-            $defaultCodex = Join-Path $env:ProgramData "BlueSkyPro\codex.cmd"
-            if (Test-Path -LiteralPath $defaultCodex -PathType Leaf) {
-                $AgentExecutable = $defaultCodex
-            } else {
-                Write-Error "BS_AGENT_EXECUTABLE is not set and Codex CLI was not found in PATH. Set BS_AGENT_EXECUTABLE to the Codex executable."
-                exit 1
-            }
-        }
-    }
+    Write-Error "BS_AGENT_EXECUTABLE is not set. Set it to the approved external agent executable."
+    exit 1
 }
 
 if (-not (Test-Path -LiteralPath $AgentExecutable -PathType Leaf)) {
@@ -33,8 +18,7 @@ if (-not (Test-Path -LiteralPath $AgentExecutable -PathType Leaf)) {
     }
 }
 
-$defaultArguments = @("--dangerously-bypass-approvals-and-sandbox", "exec", "-")
-$codexArgs = if ($AgentArguments) { $AgentArguments -split '\s+' | Where-Object { $_ } } else { $defaultArguments }
+$agentArgs = if ($AgentArguments) { $AgentArguments -split '\s+' | Where-Object { $_ } } else { @() }
 
 $prompt = @"
 BlueSky PRO development continuation.
@@ -66,7 +50,7 @@ function Quote-CmdArgument([string]$Value) {
     return '"' + ($Value -replace '(\\*)"', '$1$1\"' -replace '(\\+)$', '$1$1') + '"'
 }
 
-$promptFile = Join-Path $env:TEMP ("bluesky-codex-prompt-{0}.txt" -f [guid]::NewGuid().ToString("N"))
+$promptFile = Join-Path $env:TEMP ("bluesky-agent-prompt-{0}.txt" -f [guid]::NewGuid().ToString("N"))
 
 try {
     [System.IO.File]::WriteAllText($promptFile, $prompt, [System.Text.UTF8Encoding]::new($false))
@@ -81,12 +65,12 @@ try {
     $isCmdScript = [System.IO.Path]::GetExtension($AgentExecutable).ToLowerInvariant() -eq ".cmd"
     if ($isCmdScript) {
         $quotedAgent = Quote-CmdArgument $AgentExecutable
-        $quotedArgs = ($codexArgs | ForEach-Object { Quote-CmdArgument $_ }) -join ' '
+        $quotedArgs = ($agentArgs | ForEach-Object { Quote-CmdArgument $_ }) -join ' '
         $psi.FileName = $env:ComSpec
         $psi.Arguments = "/d /c call $quotedAgent $quotedArgs"
     } else {
         $psi.FileName = $AgentExecutable
-        $psi.Arguments = ($codexArgs | ForEach-Object { Quote-CmdArgument $_ }) -join ' '
+        $psi.Arguments = ($agentArgs | ForEach-Object { Quote-CmdArgument $_ }) -join ' '
     }
 
     $process = [System.Diagnostics.Process]::new()
