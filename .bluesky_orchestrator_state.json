@@ -1,5 +1,5 @@
 {
-  "last_main_sha": "e3f7621c27e15e8c3fe859cd4bc3c1d126d6cfa9",
+  "last_main_sha": "40b9b050f50a7afbb5be9f9d48721ab139d6c750",
   "verified_sha": "668e913017e5edd34b8ac389fd1220fc4a95b17e",
   "decision_required": false,
   "ci_required": true,
@@ -8,5 +8,5 @@
   "real_execution": "DEFERRED",
   "quantitative_c2_basis": "DEFERRED",
   "current_ci_status": "UNVERIFIED",
-  "next_deterministic_action": "Verify CI for e3f7621c27e15e8c3fe859cd4bc3c1d126d6cfa9, then restart the algorithm and update verified state only after the corresponding main CI passes"
+  "next_deterministic_action": "Verify CI for 40b9b050f50a7afbb5be9f9d48721ab139d6c750, then restart the algorithm and update verified state only after the corresponding main CI passes"
 }
