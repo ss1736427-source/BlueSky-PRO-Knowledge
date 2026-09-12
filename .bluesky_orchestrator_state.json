@@ -2,5 +2,7 @@
   "last_main_sha": "6011a46ca9a4ca67d014c007707d7ef9f0b0ad09",
   "verified_sha": "6011a46ca9a4ca67d014c007707d7ef9f0b0ad09",
   "decision_required": false,
-  "ci_required": false
+  "ci_required": false,
+  "agent_error_sha": "6011a46ca9a4ca67d014c007707d7ef9f0b0ad09",
+  "agent_error_code": 1
 }
