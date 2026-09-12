@@ -18,9 +18,9 @@ Operator / Mission Engine / Automation
                  ↓
           C2 / Vehicle API
                  ↓
-        Autopilot Adapter
+        Universal Vehicle Adapter
                  ↓
-       MAV_CMD / OEM API
+       External Vehicle API
                  ↓
              AUTOPILOT
                  ↓
@@ -32,6 +32,15 @@ Operator / Mission Engine / Automation
                  ↓
               AUDIT
 ```
+
+The adapter boundary is defined by:
+
+```text
+BLUESKY-UNIVERSAL-ADAPTER-CONTRACT-001
+BLUESKY-CANONICAL-VEHICLE-EQUIPMENT-SCHEMA-001
+```
+
+Vendor-specific command representations remain outside the BlueSky canonical domain model.
 
 ## Required command identity
 
@@ -93,6 +102,8 @@ No command may bypass mandatory safety or regulatory gates. BlueSky shall distin
 
 These are separate states.
 
+The Universal Vehicle Adapter is an execution translation boundary only; it does not grant authority and shall not bypass the Authority + Safety Gate.
+
 ## Initial command classes
 
 ARM, DISARM, TAKEOFF, LAND, RTL, HOLD, GUIDED/GOTO, mission start, pause, resume, abort and other vehicle-specific supported actions.
@@ -107,6 +118,22 @@ If communication is lost:
 - BlueSky shall not blindly repeat a non-idempotent command;
 - onboard autopilot contingency behavior remains authoritative;
 - after recovery, state reconciliation/read-back determines the actual vehicle state.
+
+## Equipment command boundary
+
+Equipment commands shall follow the same authorization and safety chain:
+
+```text
+Canonical Equipment Action
+        ↓
+Authority + Safety Gate
+        ↓
+Equipment Adapter
+        ↓
+External Equipment Protocol
+```
+
+External terminology, including `payload` where present in a vendor protocol, shall be normalized to the canonical BlueSky `Equipment` model at the adapter boundary.
 
 ## Acceptance criterion
 
