@@ -222,8 +222,18 @@ Certification evidence accepted
 
 A future real execution shall replace `EVIDENCE-TBD` only with controlled evidence references. If a real test passes, the corresponding result and evidence records shall be updated and the affected requirement/configuration traceability shall be reconciled.
 
-## 9. Next deterministic step
+## 9. Current work-package transition
 
-Create the technology-neutral adapter implementation stub that implements the contract boundary and can be exercised by `ACT-001..010` without real hardware.
+The deterministic test vectors are defined and the implementation stub exists. The remaining pre-hardware step is repository consistency validation across the contract, schema, matrix, test stub, configuration baseline, implementation checklist and executable adapter contract.
+
+After that gate passes, implementation work proceeds against the existing adapter/service layer; no vendor selection is required for the consistency step.
+
+```text
+CONTRACT TEST STUB
+→ CONFIGURATION BASELINE
+→ IMPLEMENTATION CHECKLIST
+→ REPOSITORY CONSISTENCY CHECK
+→ NEXT UNRESOLVED INTEGRATION GAP
+```
 
 **Status: CONTROLLED WORKING DRAFT — DETERMINISTIC MOCK CONTRACT TESTS DEFINED; NOT EXECUTED.**
