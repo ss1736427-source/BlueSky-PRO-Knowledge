@@ -6,11 +6,13 @@ on:
     paths:
       - '04_SOFTWARE/AUTOPILOT_ADAPTER/**'
       - '04_SOFTWARE/PLANNING/model/**'
+      - '03_FLEET/BLUESKY_*ADAPTER*'
       - '.github/workflows/autopilot-adapter.yml'
   pull_request:
     paths:
       - '04_SOFTWARE/AUTOPILOT_ADAPTER/**'
       - '04_SOFTWARE/PLANNING/model/**'
+      - '03_FLEET/BLUESKY_*ADAPTER*'
       - '.github/workflows/autopilot-adapter.yml'
 
 jobs:
@@ -20,6 +22,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Validate adapter repository consistency
+        run: python 04_SOFTWARE/AUTOPILOT_ADAPTER/contract/validate_adapter_chain.py
 
       - name: Configure
         run: cmake -S 04_SOFTWARE/AUTOPILOT_ADAPTER -B build/autopilot-adapter -DCMAKE_BUILD_TYPE=Release
