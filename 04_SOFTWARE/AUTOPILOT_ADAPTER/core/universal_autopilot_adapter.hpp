@@ -23,10 +23,14 @@ enum class ConnectionState {
 
 enum class ExecutionState {
     Requested,
-    Sent,
-    Acknowledged,
-    Executed,
+    Validating,
     Rejected,
+    Dispatched,
+    Acknowledged,
+    Executing,
+    Completed,
+    Failed,
+    Cancelled,
     Timeout,
     Unknown
 };
