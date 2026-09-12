@@ -2,9 +2,13 @@ import unittest
 
 from evidence_adapter import (
     AutopilotTelemetrySourceAdapter,
+    BlueSkyEventSourceAdapter,
     C2LinkSourceAdapter,
     EquipmentSourceAdapter,
+    GnssRtkNtripSourceAdapter,
     MeasurementInstrumentSourceAdapter,
+    OperatorEventSourceAdapter,
+    WeatherSourceAdapter,
 )
 
 
@@ -15,9 +19,9 @@ class TestSourceAdapters(unittest.TestCase):
             "parameter": "link_latency_ms",
             "value": 42.5,
             "unit": "ms",
-            "source": "demo-c2",
+            "source": "demo-source",
             "quality": "valid",
-            "context": {"test_run_id": "COM-TEST-001", "flight_record_id": "FLIGHT-001"},
+            "context": {"test_run_id": "TEST-001", "flight_record_id": "FLIGHT-001"},
         }
 
     def test_c2_adapter_preserves_source_fact(self):
@@ -25,11 +29,16 @@ class TestSourceAdapters(unittest.TestCase):
         self.assertEqual(event.as_dict(), self.record)
         self.assertEqual(C2LinkSourceAdapter().source_metadata()["source_type"], "C2_LINK")
 
-    def test_other_source_categories_have_stable_boundaries(self):
+    def test_all_source_categories_have_stable_boundaries(self):
         adapters = [
+            (C2LinkSourceAdapter(), "C2_LINK"),
             (AutopilotTelemetrySourceAdapter(), "AUTOPILOT_TELEMETRY"),
             (EquipmentSourceAdapter(), "EQUIPMENT"),
+            (GnssRtkNtripSourceAdapter(), "GNSS_RTK_NTRIP"),
+            (WeatherSourceAdapter(), "WEATHER"),
             (MeasurementInstrumentSourceAdapter(), "MEASUREMENT_INSTRUMENT"),
+            (BlueSkyEventSourceAdapter(), "BLUESKY_EVENT"),
+            (OperatorEventSourceAdapter(), "OPERATOR_EVENT"),
         ]
         for adapter, expected_type in adapters:
             self.assertEqual(adapter.source_type, expected_type)

@@ -81,7 +81,31 @@ class EquipmentSourceAdapter(SourceAdapter):
     source_type = "EQUIPMENT"
 
 
+class GnssRtkNtripSourceAdapter(SourceAdapter):
+    """Adapter for GNSS/RTK/NTRIP navigation and reference facts."""
+
+    source_type = "GNSS_RTK_NTRIP"
+
+
+class WeatherSourceAdapter(SourceAdapter):
+    """Adapter for weather and environmental observations."""
+
+    source_type = "WEATHER"
+
+
 class MeasurementInstrumentSourceAdapter(SourceAdapter):
     """Adapter for independent measurement-instrument facts."""
 
     source_type = "MEASUREMENT_INSTRUMENT"
+
+
+class BlueSkyEventSourceAdapter(SourceAdapter):
+    """Adapter for factual internal BlueSky events."""
+
+    source_type = "BLUESKY_EVENT"
+
+
+class OperatorEventSourceAdapter(SourceAdapter):
+    """Adapter for factual operator observations/events."""
+
+    source_type = "OPERATOR_EVENT"
