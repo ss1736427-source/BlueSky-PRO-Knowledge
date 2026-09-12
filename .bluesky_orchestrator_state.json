@@ -1,5 +1,5 @@
 {
-  "last_main_sha": "be82a0beaa01d5175fa5c930391321034d28c246",
+  "last_main_sha": "0f3479d9bb6e87a9cd54f8e48a7584a3e3062404",
   "verified_sha": "76a2c51d70c8404d62e76530fdc4dc42ce1de227",
   "decision_required": false,
   "ci_required": true,
@@ -8,5 +8,5 @@
   "real_execution": "DEFERRED",
   "quantitative_c2_basis": "DEFERRED",
   "current_ci_status": "UNVERIFIED",
-  "next_deterministic_action": "Run repository-level consistency and command lifecycle verification against the latest main, then close the next unresolved Interface / Service integration dependency without vendor-specific selection"
+  "next_deterministic_action": "Verify adapter repository consistency and canonical command lifecycle on the latest main, then close the next unresolved Interface / Service integration dependency without vendor-specific selection"
 }
