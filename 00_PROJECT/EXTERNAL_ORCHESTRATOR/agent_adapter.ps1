@@ -61,6 +61,11 @@ When no user decision is required, continue automatically. When a user decision 
 Reason for this continuation: $($env:BS_CI_REASON)
 "@
 
+function Quote-CmdArgument([string]$Value) {
+    if ($Value -notmatch '[\s"]') { return $Value }
+    return '"' + ($Value -replace '(\\*)"', '$1$1\"' -replace '(\\+)$', '$1$1') + '"'
+}
+
 $promptFile = Join-Path $env:TEMP ("bluesky-codex-prompt-{0}.txt" -f [guid]::NewGuid().ToString("N"))
 
 try {
@@ -72,15 +77,16 @@ try {
     $psi.RedirectStandardInput = $true
     $psi.RedirectStandardOutput = $true
     $psi.RedirectStandardError = $true
-    $psi.FileName = $AgentExecutable
-    if ($codexArgs.Count -gt 0) {
-        $psi.Arguments = ($codexArgs | ForEach-Object {
-            if ($_ -match '[\s"]') {
-                '"' + ($_ -replace '(\\*)"', '$1$1\"' -replace '(\\+)$', '$1$1') + '"'
-            } else {
-                $_
-            }
-        }) -join ' '
+
+    $isCmdScript = [System.IO.Path]::GetExtension($AgentExecutable).ToLowerInvariant() -eq ".cmd"
+    if ($isCmdScript) {
+        $quotedAgent = Quote-CmdArgument $AgentExecutable
+        $quotedArgs = ($codexArgs | ForEach-Object { Quote-CmdArgument $_ }) -join ' '
+        $psi.FileName = $env:ComSpec
+        $psi.Arguments = "/d /c call $quotedAgent $quotedArgs"
+    } else {
+        $psi.FileName = $AgentExecutable
+        $psi.Arguments = ($codexArgs | ForEach-Object { Quote-CmdArgument $_ }) -join ' '
     }
 
     $process = [System.Diagnostics.Process]::new()
