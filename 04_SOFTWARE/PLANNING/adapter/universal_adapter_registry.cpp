@@ -111,15 +111,17 @@ UniversalAdapter* UniversalAdapterRegistry::findForCapability(
     const std::string& capability) const {
     if (capability.empty()) return nullptr;
 
-    const auto it = std::find_if(
-        adapters_.begin(), adapters_.end(),
-        [&](const std::unique_ptr<UniversalAdapter>& adapter) {
-            if (!adapter) return false;
-            const auto& capabilities = adapter->metadata().capabilities;
-            return std::find(capabilities.begin(), capabilities.end(), capability) != capabilities.end();
-        });
+    UniversalAdapter* match = nullptr;
+    std::size_t match_count = 0;
+    for (const auto& adapter : adapters_) {
+        if (!adapter) continue;
+        const auto& capabilities = adapter->metadata().capabilities;
+        if (std::find(capabilities.begin(), capabilities.end(), capability) == capabilities.end()) continue;
+        match = adapter.get();
+        ++match_count;
+    }
 
-    return it == adapters_.end() ? nullptr : it->get();
+    return match_count == 1 ? match : nullptr;
 }
 
 AdapterResolutionResult UniversalAdapterRegistry::resolve(
