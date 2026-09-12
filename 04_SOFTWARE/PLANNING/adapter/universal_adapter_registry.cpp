@@ -70,6 +70,21 @@ UniversalAdapter* UniversalAdapterRegistry::findForEquipmentProfile(
     return it == adapters_.end() ? nullptr : it->get();
 }
 
+UniversalAdapter* UniversalAdapterRegistry::findForCapability(
+    const std::string& capability) const {
+    if (capability.empty()) return nullptr;
+
+    const auto it = std::find_if(
+        adapters_.begin(), adapters_.end(),
+        [&](const std::unique_ptr<UniversalAdapter>& adapter) {
+            if (!adapter) return false;
+            const auto& capabilities = adapter->metadata().capabilities;
+            return std::find(capabilities.begin(), capabilities.end(), capability) != capabilities.end();
+        });
+
+    return it == adapters_.end() ? nullptr : it->get();
+}
+
 std::vector<std::string> UniversalAdapterRegistry::adapterIds() const {
     std::vector<std::string> result;
     result.reserve(adapters_.size());
