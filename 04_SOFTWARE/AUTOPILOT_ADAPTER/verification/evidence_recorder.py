@@ -53,7 +53,7 @@ def export_csv(run_dir: Path, events: list[dict[str, Any]]) -> Path:
     return output
 
 
-def finalize(run_dir: Path) -> tuple[Path, Path]:
+def finalize(run_dir: Path) -> tuple[Path, Path, Path]:
     record_path = run_dir / "record.json"
     events = load_events(run_dir)
     record = json.loads(record_path.read_text(encoding="utf-8"))
@@ -78,9 +78,11 @@ def finalize(run_dir: Path) -> tuple[Path, Path]:
         "",
         "## Export",
         "",
-        f"- Raw event stream: `events.jsonl`",
+        "- Raw event stream: `events.jsonl`",
         f"- Tabular export: `{csv_path.name}`",
         "- Integrity manifest: `manifest.json`",
+        "- Manifest integrity anchor: `manifest.sha256`",
+        "- Supporting originals: `evidence/`",
         "",
         "> This report is a generated evidence index. Regulatory acceptance is determined by the approved test procedure and competent verification/certification process.",
         "",
@@ -95,7 +97,10 @@ def finalize(run_dir: Path) -> tuple[Path, Path]:
     manifest = {"format": "BlueSky-Evidence-1", "test_run_id": record["test_run_id"], "files": manifest_entries}
     manifest_path = run_dir / "manifest.json"
     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    return manifest_path, report_path
+
+    anchor_path = run_dir / "manifest.sha256"
+    anchor_path.write_text(f"{sha256(manifest_path)}  manifest.json\n", encoding="utf-8")
+    return manifest_path, anchor_path, report_path
 
 
 def main() -> int:
@@ -124,8 +129,9 @@ def main() -> int:
     if args.command == "event":
         append_event(args.run_dir, json.loads(args.json_event))
         return 0
-    manifest, report = finalize(args.run_dir)
+    manifest, anchor, report = finalize(args.run_dir)
     print(f"manifest={manifest}")
+    print(f"manifest_sha256={anchor}")
     print(f"report={report}")
     return 0
 
