@@ -7,7 +7,7 @@
 
 ## 1. Governing principle
 
-> **UNIVERSALITY FOR MARKET EXPANSION:** BlueSky PRO shall be delivered as a ready-to-operate product for the customer's existing UAV fleet and shall integrate with heterogeneous UAVs, autopilots, C2 links, payloads and external aviation systems through a universal integration architecture.
+> **UNIVERSALITY FOR MARKET EXPANSION:** BlueSky PRO shall be delivered as a ready-to-operate product for the customer's existing UAV fleet and shall integrate with heterogeneous UAVs, autopilots, C2 links, equipment and external aviation systems through a universal integration architecture.
 
 The customer shall not be required to develop the integrations personally.
 
@@ -48,7 +48,7 @@ AIRCRAFT & FLEET MODEL
           ↓
 EXTERNAL INTEGRATION ARCHITECTURE
           ↓
-UAV / AUTOPILOT / C2 / PAYLOAD ADAPTERS
+UAV / AUTOPILOT / C2 / EQUIPMENT ADAPTERS
           ↓
 MISSION & FLIGHT PLANNING
           ↓
@@ -68,7 +68,7 @@ CONTINGENCY / REPLANNING
           ↓
 LAND / RTL / MISSION COMPLETE
           ↓
-LOGS / PAYLOAD DATA / FLIGHT RECORD
+LOGS / EQUIPMENT DATA / FLIGHT RECORD
           ↓
 POST-FLIGHT / MAINTENANCE / ANALYSIS
           ↓
@@ -161,7 +161,7 @@ ADMINISTRATOR
              │
  ┌───────────┼───────────────┐
  ▼           ▼               ▼
-Autopilot   C2             Payload
+Autopilot   C2             Equipment
  ▼           ▼               ▼
 UAV/FCS    Links          Equipment
 ```
@@ -187,7 +187,6 @@ Make a user's heterogeneous fleet a first-class BlueSky object.
 - sensors/navigation;
 - propulsion/energy/performance data;
 - C2 links;
-- payloads;
 - equipment;
 - limits;
 - safety configuration;
@@ -196,7 +195,7 @@ Make a user's heterogeneous fleet a first-class BlueSky object.
 - maintenance/resource state.
 
 ### Status
-**IN PROGRESS.** Vehicle/payload integration framework defined; full executable profile model and product database still required.
+**IN PROGRESS.** Vehicle/equipment integration framework defined; full executable profile model and product database still required.
 
 ### Gate
 A real fleet member can be represented completely enough for planning, compatibility, readiness, flight and post-flight record.
@@ -217,7 +216,7 @@ Provide one stable internal BlueSky interface and adapters for heterogeneous ext
                               │
        ┌──────────────┬───────┼────────┬─────────────┐
        ▼              ▼       ▼        ▼             ▼
-   AUTOPILOT          C2    PAYLOAD   VIDEO       EXTERNAL
+   AUTOPILOT          C2    EQUIPMENT VIDEO       EXTERNAL
    ADAPTERS         ADAPTER ADAPTER   ADAPTER      ADAPTERS
        │              │       │        │             │
  ArduPilot/PX4/OEM  RF/IP  Cameras   Streams   ATM/Weather/GIS/
@@ -240,7 +239,7 @@ Provide one stable internal BlueSky interface and adapters for heterogeneous ext
 - ATM/airspace/FPL/authorization.
 
 **P1**
-- payload;
+- equipment;
 - video;
 - companion computer;
 - GNSS/RTK;
@@ -265,7 +264,7 @@ At least one representative heterogeneous UAV integration completes the entire c
 Detailed documents:
 - `AUTOPILOT_INTEGRATION_FRAMEWORK.md`
 - `C2_CONNECTIVITY_FRAMEWORK.md`
-- `VEHICLE_PAYLOAD_INTEGRATION_FRAMEWORK.md`
+- `VEHICLE_EQUIPMENT_INTEGRATION_FRAMEWORK.md`
 - `ATM_REGULATORY_INTEGRATION_FRAMEWORK.md`
 - `OPERATIONAL_VALIDATION_FRAMEWORK.md`
 - `INTEGRATION_GAP_TRACEABILITY_MATRIX.md`
@@ -367,13 +366,13 @@ Defined link-loss scenarios behave deterministically in simulation and real hard
 
 ---
 
-## PHASE 7 — Payload / sensor / video integration
+## PHASE 7 — Equipment / sensor / video integration
 
 ### Objective
 Treat mission equipment as an integrated operational subsystem rather than an external camera attached to the UAV.
 
 ### Required
-- payload profiles;
+- equipment profiles;
 - camera/EO/IR/thermal/LiDAR/gimbal abstractions;
 - commands;
 - status/telemetry;
@@ -388,7 +387,7 @@ Treat mission equipment as an integrated operational subsystem rather than an ex
 **IN PROGRESS — framework documented; concrete device adapters and end-to-end validation remain.**
 
 ### Gate
-Mission actions can command the selected payload and resulting data is associated with the correct UAV, mission, time and Flight Record.
+Mission actions can command the selected equipment and resulting data is associated with the correct UAV, mission, time and Flight Record.
 
 ---
 
@@ -430,12 +429,12 @@ Convert an operational task into a validated executable mission.
 - terrain/obstacle constraints;
 - airspace restrictions;
 - vehicle capability constraints;
-- payload constraints;
+- equipment constraints;
 - wind;
 - battery degradation;
 - aerodynamic configuration;
 - engine/resource constraints;
-- mission objectives: endurance, speed, punctuality, payload, etc.;
+- mission objectives: endurance, speed, punctuality, equipment, etc.;
 - multi-UAV decomposition;
 - collision/separation logic;
 - staggered starts;
@@ -519,7 +518,7 @@ GNSS / NAVIGATION
   ↓
 BATTERY / ENERGY
   ↓
-PAYLOAD
+EQUIPMENT
   ↓
 MISSION
   ↓
@@ -580,7 +579,7 @@ Operate one or many UAVs with minimum operator workload and clear supervisory co
 - mission progress;
 - route/profile;
 - alerts;
-- payload/video;
+- equipment/video;
 - operator commands;
 - multi-UAV coordination;
 - data aggregation;
@@ -608,7 +607,7 @@ Handle abnormal conditions without ambiguous responsibility between BlueSky and 
 - aircraft health degradation;
 - battery/energy limit;
 - route/airspace conflict;
-- payload failure;
+- equipment failure;
 - operator intervention;
 - communication recovery;
 - return-to-home / alternate return policy;
@@ -632,7 +631,7 @@ Close the operational mission safely and unambiguously.
 - mission completion detection;
 - aircraft state confirmation;
 - C2 confirmation;
-- payload recording closure;
+- equipment recording closure;
 - data integrity check;
 - log availability;
 - Flight Record closure trigger.
@@ -658,7 +657,7 @@ Create the authoritative digital record of the flight.
 - commands/ACKs;
 - alerts/events;
 - C2 events;
-- payload/video references;
+- equipment/video references;
 - regulatory references;
 - configuration snapshot;
 - software/adapter versions;
@@ -733,7 +732,7 @@ RELEASE
 - real UAV tests;
 - C2 loss/recovery tests;
 - mission upload/read-back tests;
-- payload tests;
+- equipment tests;
 - regulatory workflow tests;
 - log replay;
 - regression suite;
@@ -761,7 +760,7 @@ Operational release only after defined requirements and integration tests pass w
 | OEM integration | IN PROGRESS | generic adapter contract + first OEM |
 | C2 multi-link | IN PROGRESS | state machine + failover implementation |
 | Vehicle profiles | IN PROGRESS | executable profile/configuration model |
-| Payload integration | IN PROGRESS | first payload adapters |
+| Equipment integration | IN PROGRESS | first equipment adapters |
 | Video | IN PROGRESS | transport/recording integration |
 | GNSS/RTK | IN PROGRESS | source adapters + fallback |
 | GIS/terrain | IN PROGRESS | source/version/freshness model |
@@ -790,7 +789,7 @@ Operational release only after defined requirements and integration tests pass w
 2. Do not make the customer responsible for integration work.
 3. Do not declare compatibility because a connection succeeds.
 4. Do not release a mission based only on successful upload; perform read-back and semantic verification.
-5. Do not treat C2, payload, ATM, weather, traffic or logs as optional add-ons to the lifecycle.
+5. Do not treat C2, equipment, ATM, weather, traffic or logs as optional add-ons to the lifecycle.
 6. Do not allow AI to bypass deterministic safety gates.
 7. Do not move to certification evidence while the operational lifecycle has unresolved interface ownership.
 8. Do not create separate parallel architectures for different autopilots; use one universal internal contract and adapters.
@@ -806,17 +805,3 @@ BlueSky PRO reaches the complete-product gate when a customer's representative f
 and the same critical interfaces are covered by repeatable verification in simulation, HIL where applicable, and real aircraft testing.
 
 The final product shall hide protocol complexity from the operator while retaining full technical traceability underneath.
-
----
-
-# 8. Working rule for future development
-
-All future BlueSky work shall be attached to a phase in this document.
-
-Before starting a new feature, identify:
-
-`PHASE → REQUIREMENT → INTERFACE → IMPLEMENTATION → TEST → EVIDENCE → GATE`
-
-If a proposed feature does not fit this chain, its architectural place must be defined before implementation.
-
-This document is the **single master sequence**. Detailed interface documents are subordinate implementation specifications and must remain consistent with this plan.
