@@ -21,7 +21,7 @@ capabilities:
     - getCapabilities
     - getSupportedCommands
     - getSupportedMissionFeatures
-    - getSupportedPayloadFeatures
+    - getSupportedEquipmentFeatures
 
 connection:
   methods:
@@ -38,7 +38,7 @@ state:
     - getFailsafeState
     - getEnergyState
     - getMissionState
-    - getPayloadState
+    - getEquipmentState
 
 commands:
   methods:
@@ -88,6 +88,17 @@ mission:
     - read_back_after_upload_when_supported
     - semantic_compare_before_release
     - safety_critical_mismatch_blocks_execution
+
+equipment:
+  methods:
+    - identify
+    - read_profile
+    - read_configuration
+    - read_capabilities
+    - read_state
+    - read_telemetry
+    - translate_action
+    - read_data_outputs
 
 configuration:
   methods:
