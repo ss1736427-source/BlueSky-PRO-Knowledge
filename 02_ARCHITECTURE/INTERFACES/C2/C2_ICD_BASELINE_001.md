@@ -114,20 +114,52 @@ BlueSky shall distinguish provider-side service state from its own system state 
 
 ## 8. Requirement allocation
 
-| Requirement | Interface | Allocation |
+| Requirement | Interface | Regulatory mapping | Allocation |
+|---|---|---|---|
+| SYS-REQ-080 | IF-C2-001 | C2-142-006 | KEEP / existing requirement linkage |
+| SYS-REQ-081 | IF-C2-001 | C2-142-023, C2-142-024 | KEEP / safety-related failure handling |
+| SYS-REQ-082 | IF-C2-001 | C2-142-023, C2-142-024 | KEEP / safe mission completion |
+| SYS-REQ-085 | IF-C2-001 | C2-142-023, C2-142-024 | KEEP / safety authority priority |
+| SYS-REQ-086 | IF-C2-001 | C2-142-018, C2-142-024 | KEEP / graceful degradation |
+| SYS-REQ-091 | IF-C2-001 | C2-142-004, C2-142-011, C2-142-013, C2-142-014, C2-142-025 | KEEP / critical latency and controlled C2 parameters |
+| SYS-REQ-092 | IF-C2-001 | C2-142-024 | KEEP / recovery |
+| SYS-REQ-093 | IF-C2-001 | C2-142-018, C2-142-024 | KEEP / controlled recovery |
+
+The C2 candidate requirements `C2-REQ-001..010` are mapped through `C2_SYSTEM_REQUIREMENTS_BASELINE_001.md` and `C2_REQUIREMENTS_RECONCILIATION_001.md`. They remain derived/allocation records and do not create duplicate authoritative requirement identities.
+
+## 9. Regulatory-to-interface allocation
+
+| Regulatory mapping | Interface consequence | Verification allocation |
 |---|---|---|
-| SYS-REQ-080 | IF-C2-001 | KEEP / existing requirement linkage |
-| SYS-REQ-081 | IF-C2-001 | KEEP / safety-related failure handling |
-| SYS-REQ-082 | IF-C2-001 | KEEP / safe mission completion |
-| SYS-REQ-085 | IF-C2-001 | KEEP / safety authority priority |
-| SYS-REQ-086 | IF-C2-001 | KEEP / graceful degradation |
-| SYS-REQ-091 | IF-C2-001 | KEEP / critical latency |
-| SYS-REQ-092 | IF-C2-001 | KEEP / recovery |
-| SYS-REQ-093 | IF-C2-001 | KEEP / controlled recovery |
+| C2-142-001 | Explicit DIRECT-C2 / PROVIDER-C2 mode and interface path | IV-C2-007 |
+| C2-142-002 | Direct-channel coverage/operating constraint as an input | IV-C2-004 + operational analysis |
+| C2-142-003 | Provider network boundary | IV-C2-007 |
+| C2-142-004 | Required C2 characteristics represented as controlled parameters | IV-C2-002 + IV-C2-003 |
+| C2-142-005 | Controlled information composition and update characteristics | IV-C2-001..IV-C2-003 |
+| C2-142-006 | Pre-flight C2 mode selection | IV-C2-007 |
+| C2-142-007 | Support for applicable ground/onboard/satellite C2 paths | IV-C2-007 + configuration review |
+| C2-142-008 | Provider connection path | IV-C2-007 |
+| C2-142-009 | Provider service request data set | IV-C2-001 + IV-C2-002 |
+| C2-142-010 | Provider service coverage validation | IV-C2-004 |
+| C2-142-011 | Provider QoS input/monitoring boundary | IV-C2-003 + IV-C2-004 |
+| C2-142-012 | Provider coverage/status change input | IV-C2-001 + IV-C2-004 |
+| C2-142-013 | C2 quality characteristics | IV-C2-004 |
+| C2-142-014 | Continuous service-state monitoring | IV-C2-004 + IV-C2-005 |
+| C2-142-015 | Real-time C2 quality information to operator | IV-C2-001 + HMI verification |
+| C2-142-016 | Direct-C2 security boundary | IV-C2-007 + security verification |
+| C2-142-017 | Provider-side security responsibility boundary | IV-C2-007 + responsibility review |
+| C2-142-018 | C2 state/failure detection | IV-C2-005 + IV-C2-006 |
+| C2-142-019 | Provider control-message transaction handling | IV-C2-001 + IV-C2-003 |
+| C2-142-020 | Operator-facing C2 assessment | IV-C2-001 + HMI verification |
+| C2-142-021 | C2 event record content | IV-C2-003 + log inspection |
+| C2-142-022 | External provider failure documentation boundary | Document/interface review |
+| C2-142-023 | Operational support for loss-of-C2 notification workflow | IV-C2-006 |
+| C2-142-024 | C2 failure cause/status diagnostics | IV-C2-005 + IV-C2-006 |
+| C2-142-025 | Provider timing input | IV-C2-003 |
 
-Derived interface records remain subordinate to the existing SYS-REQ identities and do not create duplicate requirement identities.
+This table is an allocation aid. It does not independently establish certification applicability or acceptance criteria.
 
-## 9. Verification allocation
+## 10. Verification allocation
 
 ```text
 IV-C2-001  Data format and schema
@@ -142,11 +174,11 @@ IV-C2-008  Version compatibility
 
 Acceptance values remain TBD until the applicable requirement, certification basis, architecture allocation and safety analysis establish them.
 
-## 10. Configuration control
+## 11. Configuration control
 
 The C2 interface is a controlled configuration item. Changes to protocol, semantics, units, timing, state transitions, failure handling or security properties require impact assessment and re-verification.
 
-## 11. Status and next gate
+## 12. Status and next gate
 
 **Status: CONTROLLED WORKING DRAFT — NOT BASELINED.**
 
