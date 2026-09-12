@@ -10,7 +10,9 @@ basis: EXTERNAL-REGULATORY-INTERFACE-ALLOCATION-001; REGULATORY-SOURCE-REGISTER-
 
 ## 1. Purpose
 
-Prepare verification coverage for BlueSky-owned functions at the boundary with external landing-site, infrastructure, maintenance and C2-provider systems.
+Prepare verification coverage for BlueSky-owned functions at the boundary with external operational, infrastructure, maintenance and C2-provider systems that are within the system-management scope.
+
+Landing-site management is outside the BlueSky system-management scope and is not included in this verification package.
 
 This is a **test-stage preparation stub**. It contains no execution result and no evidence.
 
@@ -18,14 +20,13 @@ This is a **test-stage preparation stub**. It contains no execution result and n
 
 | ID | Interface domain | BlueSky function under test | Preconditions | Test input / environment | Acceptance basis | Result | Evidence | Status |
 |---|---|---|---|---|---|---|---|---|
-| EXT-V01 | Landing-site data | accept and validate approved landing-site data | external data contract defined | TBD at integration | data accepted only when valid/applicable | NOT EXECUTED | TBD | STUB |
-| EXT-V02 | Operational restriction | apply externally supplied operational constraint | approved source and constraint model | TBD at integration | applicable restriction reaches planning/flight layer correctly | NOT EXECUTED | TBD | STUB |
-| EXT-V03 | Maintenance status | consume authorized technical-readiness status | maintenance interface defined | TBD at integration | invalid/stale/unavailable status is not treated as positive readiness | NOT EXECUTED | TBD | STUB |
-| EXT-V04 | C2 provider | consume C2 service availability/state | C2 provider interface defined | TBD at integration | provider state is represented correctly in BlueSky | NOT EXECUTED | TBD | STUB |
-| EXT-V05 | C2 degradation | process loss/degradation indication | C2 state model defined | TBD at integration | required safe response and event recording occur | NOT EXECUTED | TBD | STUB |
-| EXT-V06 | Boundary integrity | reject external obligations outside BlueSky scope | interface boundary defined | TBD | external responsibility is not represented as BlueSky compliance/evidence | NOT EXECUTED | TBD | STUB |
-| EXT-V07 | Data freshness | detect stale external data | freshness rule defined | TBD | stale data is detected and handled according to approved rule | NOT EXECUTED | TBD | STUB |
-| EXT-V08 | Audit trail | record relevant external state transitions | event model defined | TBD | required event identity/source/time/state is recorded | NOT EXECUTED | TBD | STUB |
+| EXT-V01 | Operational restriction | apply externally supplied operational constraint | approved source and constraint model | TBD at integration | applicable restriction reaches planning/flight layer correctly | NOT EXECUTED | TBD | STUB |
+| EXT-V02 | Maintenance status | consume authorized technical-readiness status | maintenance interface defined | TBD at integration | invalid/stale/unavailable status is not treated as positive readiness | NOT EXECUTED | TBD | STUB |
+| EXT-V03 | C2 provider | consume C2 service availability/state | C2 provider interface defined | TBD at integration | provider state is represented correctly in BlueSky | NOT EXECUTED | TBD | STUB |
+| EXT-V04 | C2 degradation | process loss/degradation indication | C2 state model defined | TBD at integration | required safe response and event recording occur | NOT EXECUTED | TBD | STUB |
+| EXT-V05 | Boundary integrity | reject external obligations outside BlueSky scope | interface boundary defined | TBD | external responsibility is not represented as BlueSky compliance/evidence | NOT EXECUTED | TBD | STUB |
+| EXT-V06 | Data freshness | detect stale external data | freshness rule defined | TBD | stale data is detected and handled according to approved rule | NOT EXECUTED | TBD | STUB |
+| EXT-V07 | Audit trail | record relevant external state transitions | event model defined | TBD | required event identity/source/time/state is recorded | NOT EXECUTED | TBD | STUB |
 
 ## 3. Evidence rule
 
@@ -58,7 +59,6 @@ Verification shall demonstrate only the BlueSky-owned function. External provide
 ```text
 EXTERNAL INTERFACE SCHEMAS       → integration stage
 ACTUAL PROVIDER DATA             → integration/test stage
-ACTUAL LANDING-SITE DATA         → operational integration stage
 ACTUAL MAINTENANCE STATUS        → integration stage
 QUANTITATIVE ACCEPTANCE VALUES   → approved verification basis
 EXECUTION EVIDENCE                → real test stage
@@ -69,7 +69,7 @@ EXECUTION EVIDENCE                → real test stage
 ```text
 REG-017..020
 → EXTERNAL-REGULATORY-INTERFACE-ALLOCATION-001
-→ EXT-V01..EXT-V08
+→ EXT-V01..EXT-V07
 → execution
 → evidence
 → verification register
@@ -77,4 +77,4 @@ REG-017..020
 
 ## 7. Status
 
-**CONTROLLED WORKING DRAFT — VERIFICATION COVERAGE PREPARED; REAL EXECUTION DEFERRED.**
+**CONTROLLED WORKING DRAFT — VERIFICATION COVERAGE PREPARED; LANDING-SITE SCOPE EXCLUDED; REAL EXECUTION DEFERRED.**
