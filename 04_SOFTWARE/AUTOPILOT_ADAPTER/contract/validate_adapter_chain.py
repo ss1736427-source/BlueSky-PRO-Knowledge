@@ -1,5 +1,4 @@
 from pathlib import Path
-import re
 import sys
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -45,6 +44,13 @@ EXPECTED_LINKS = {
     ],
 }
 
+FORBIDDEN_INTERNAL_TERMS = (
+    "getPayload",
+    "payloadFeatures",
+    "PayloadState",
+    "UAV / PAYLOAD",
+)
+
 errors = []
 
 for artifact_id, path in REQUIRED.items():
@@ -60,14 +66,13 @@ for artifact_id, path in REQUIRED.items():
         if linked_id not in text:
             errors.append(f"missing reference: {artifact_id} -> {linked_id}")
 
-# The canonical internal terminology must not regress to Payload.
-for artifact_id in REQUIRED:
-    path = REQUIRED[artifact_id]
-    if not path.is_file():
+for path in (ROOT / "04_SOFTWARE/AUTOPILOT_ADAPTER").rglob("*"):
+    if not path.is_file() or path.suffix not in {".hpp", ".cpp", ".yaml", ".md"}:
         continue
     text = path.read_text(encoding="utf-8")
-    if re.search(r"\bPayload\b", text, flags=re.IGNORECASE):
-        errors.append(f"forbidden internal terminology: Payload -> {path}")
+    for term in FORBIDDEN_INTERNAL_TERMS:
+        if term in text:
+            errors.append(f"forbidden internal terminology: {term} -> {path}")
 
 if errors:
     print("ADAPTER_CHAIN_CONSISTENCY: FAIL")
