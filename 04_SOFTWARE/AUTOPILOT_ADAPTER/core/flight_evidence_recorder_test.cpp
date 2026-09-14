@@ -19,8 +19,11 @@ int main() {
     assert(std::filesystem::exists(root / "record.json"));
     assert(std::filesystem::exists(root / "events.jsonl"));
 
-    std::ifstream raw(root / "events.jsonl", std::ios::binary);
-    const std::string original((std::istreambuf_iterator<char>(raw)), {});
+    std::string original;
+    {
+        std::ifstream raw(root / "events.jsonl", std::ios::binary);
+        original.assign(std::istreambuf_iterator<char>(raw), {});
+    }
 
     bluesky::verification::FlightEvidenceReplay replay(root);
     const auto events = replay.readAll();
@@ -28,8 +31,11 @@ int main() {
     assert(events[0].find("RAW-001") != std::string::npos);
     assert(events[1].find("RAW-002") != std::string::npos);
 
-    std::ifstream raw_after(root / "events.jsonl", std::ios::binary);
-    const std::string unchanged((std::istreambuf_iterator<char>(raw_after)), {});
+    std::string unchanged;
+    {
+        std::ifstream raw_after(root / "events.jsonl", std::ios::binary);
+        unchanged.assign(std::istreambuf_iterator<char>(raw_after), {});
+    }
     assert(original == unchanged);
 
     std::filesystem::remove_all(root);
