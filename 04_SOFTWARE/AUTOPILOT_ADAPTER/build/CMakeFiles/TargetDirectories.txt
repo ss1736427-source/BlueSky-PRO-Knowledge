@@ -1,0 +1,6 @@
+E:/Flight Planning/PROJECT_KNOWLEDGE/BlueSkyPro/04_SOFTWARE/AUTOPILOT_ADAPTER/build/CMakeFiles/universal_autopilot_adapter_contract_test.dir
+E:/Flight Planning/PROJECT_KNOWLEDGE/BlueSkyPro/04_SOFTWARE/AUTOPILOT_ADAPTER/build/CMakeFiles/universal_equipment_adapter_contract_test.dir
+E:/Flight Planning/PROJECT_KNOWLEDGE/BlueSkyPro/04_SOFTWARE/AUTOPILOT_ADAPTER/build/CMakeFiles/flight_evidence_recorder_test.dir
+E:/Flight Planning/PROJECT_KNOWLEDGE/BlueSkyPro/04_SOFTWARE/AUTOPILOT_ADAPTER/build/CMakeFiles/RUN_TESTS.dir
+E:/Flight Planning/PROJECT_KNOWLEDGE/BlueSkyPro/04_SOFTWARE/AUTOPILOT_ADAPTER/build/CMakeFiles/ALL_BUILD.dir
+E:/Flight Planning/PROJECT_KNOWLEDGE/BlueSkyPro/04_SOFTWARE/AUTOPILOT_ADAPTER/build/CMakeFiles/ZERO_CHECK.dir
