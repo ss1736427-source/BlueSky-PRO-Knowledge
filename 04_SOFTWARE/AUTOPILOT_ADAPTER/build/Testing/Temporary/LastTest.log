@@ -1,0 +1,25 @@
+Start testing: Sep 14 20:24 RTZ 2 (çèìà)
+----------------------------------------------------------
+5/5 Testing: bluesky_event_hmi_contract_test
+5/5 Test: bluesky_event_hmi_contract_test
+Command: "E:/Flight Planning/PROJECT_KNOWLEDGE/BlueSkyPro/04_SOFTWARE/AUTOPILOT_ADAPTER/build/Release/bluesky_event_hmi_contract_test.exe"
+Directory: E:/Flight Planning/PROJECT_KNOWLEDGE/BlueSkyPro/04_SOFTWARE/AUTOPILOT_ADAPTER/build
+"bluesky_event_hmi_contract_test" start time: Sep 14 20:24 RTZ 2 (çèìà)
+Output:
+----------------------------------------------------------
+PASS: event_id
+PASS: timestamp
+PASS: source_id
+PASS: parameter
+PASS: severity
+PASS: state
+PASS: final
+<end of output>
+Test time =   0.04 sec
+----------------------------------------------------------
+Test Passed.
+"bluesky_event_hmi_contract_test" end time: Sep 14 20:24 RTZ 2 (çèìà)
+"bluesky_event_hmi_contract_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Sep 14 20:24 RTZ 2 (çèìà)

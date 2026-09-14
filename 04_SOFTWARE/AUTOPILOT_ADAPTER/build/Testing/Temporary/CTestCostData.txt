@@ -1,0 +1,6 @@
+universal_autopilot_adapter_contract_test 4 0.00533343
+universal_equipment_adapter_contract_test 4 0.0109504
+flight_evidence_recorder_test 0 0
+evidence_source_adapter_test 0 0
+bluesky_event_hmi_contract_test 1 0.0351852
+---

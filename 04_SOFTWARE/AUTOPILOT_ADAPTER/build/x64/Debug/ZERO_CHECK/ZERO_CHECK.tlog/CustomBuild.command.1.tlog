@@ -1,0 +1,10 @@
+^E:\FLIGHT PLANNING\PROJECT_KNOWLEDGE\BLUESKYPRO\04_SOFTWARE\AUTOPILOT_ADAPTER\BUILD\CMAKEFILES\5A83F2C25D7096B1412ECFF99AB92A51\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\Microsoft Visual Studio\18\Insiders\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" "-SE:/Flight Planning/PROJECT_KNOWLEDGE/BlueSkyPro/04_SOFTWARE/AUTOPILOT_ADAPTER" "-BE:/Flight Planning/PROJECT_KNOWLEDGE/BlueSkyPro/04_SOFTWARE/AUTOPILOT_ADAPTER/build" --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "E:/Flight Planning/PROJECT_KNOWLEDGE/BlueSkyPro/04_SOFTWARE/AUTOPILOT_ADAPTER/build/BlueSkyAutopilotAdapter.slnx"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

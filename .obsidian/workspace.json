@@ -16,19 +16,8 @@
               "icon": "lucide-git-fork",
               "title": "Граф"
             }
-          },
-          {
-            "id": "b867fe0036016a12",
-            "type": "leaf",
-            "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Граф"
-            }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -196,19 +185,27 @@
       "bases:Создать новую базу": false
     }
   },
-  "active": "b867fe0036016a12",
+  "active": "058fcba7e26ecc4b",
   "lastOpenFiles": [
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/build/x64/Release/ALL_BUILD/ALL_BUILD.tlog/unsuccessfulbuild",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/build/universal_equipment_adapter_contract_test.dir/Release/universa.6967999F.tlog/unsuccessfulbuild",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/build/universal_autopilot_adapter_contract_test.dir/Release/universa.D9895409.tlog/unsuccessfulbuild",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/build/flight_evidence_recorder_test.dir/Release/flight_e.3DB34F6A.tlog/unsuccessfulbuild",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/build/x64/Release/ZERO_CHECK/ZERO_CHECK.tlog/unsuccessfulbuild",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/build/x64/Release/ALL_BUILD/ALL_BUILD.recipe",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/build/x64/Release/ALL_BUILD/ALL_BUILD.tlog/CustomBuild.write.1.tlog",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/build/x64/Release/ALL_BUILD/ALL_BUILD.tlog/CustomBuild.read.1.tlog",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/build/x64/Release/ALL_BUILD/ALL_BUILD.tlog/CustomBuild.command.1.tlog",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/build/x64/Release/ALL_BUILD/ALL_BUILD.tlog/ALL_BUILD.lastbuildstate",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/build/x64/Release/ALL_BUILD/ALL_BUILD.tlog",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/build/bluesky_event_hmi_contract_test.dir/Debug/bluesky_.D3B07DB3.tlog/Cl.items.tlog",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/build/bluesky_event_hmi_contract_test.dir/Debug/bluesky_event_hmi_contract_test.exe.recipe",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/build/bluesky_event_hmi_contract_test.dir/Debug/bluesky_.D3B07DB3.tlog/link.command.1.tlog",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/build/bluesky_event_hmi_contract_test.dir/Debug/bluesky_.D3B07DB3.tlog/link.secondary.1.tlog",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/build/bluesky_event_hmi_contract_test.dir/Debug/bluesky_.D3B07DB3.tlog/link.write.1.tlog",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/build/bluesky_event_hmi_contract_test.dir/Debug/bluesky_.D3B07DB3.tlog/link.read.1.tlog",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/build/bluesky_event_hmi_contract_test.dir/Debug/bluesky_.D3B07DB3.tlog/link.read.2.tlog",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/build/bluesky_event_hmi_contract_test.dir/Debug/bluesky_.D3B07DB3.tlog/link-cvtres.write.1.tlog",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/build/bluesky_event_hmi_contract_test.dir/Debug/bluesky_.D3B07DB3.tlog/link-cvtres.read.1.tlog",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/build/bluesky_event_hmi_contract_test.dir/Debug/bluesky_.D3B07DB3.tlog/link-rc.write.1.tlog",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/build/bluesky_event_hmi_contract_test.dir/Debug/bluesky_.D3B07DB3.tlog/link-rc.read.1.tlog",
+    "04_SOFTWARE/PLANNING/compiler/README.md",
+    "04_SOFTWARE/PLANNING/compiler/EC05_STATUS.md",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/EC02_IMPLEMENTATION_RECONCILIATION.md",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/EC01_IMPLEMENTATION_RECONCILIATION.md",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/EC01_CI_GATE.md",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/EC06_STATUS.md",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/EC01_STATUS.md",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/BLUESKY_C2_COMMUNICATION_BASELINE.md",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/EC14_CONFLICT_RESOLUTION.md",
     "conflict-files-obsidian-git.md",
     "BlueSky_Project/BlueSky_Project from DeepSeek/_LEGACY/frontend/node_modules/kdbush/README.md",
@@ -225,14 +222,6 @@
     "BlueSky_Project/BlueSky_Project from DeepSeek/_LEGACY/frontend/node_modules/is-extendable/README.md",
     "BlueSky_Project/BlueSky_Project from DeepSeek/_LEGACY/frontend/node_modules/ini/README.md",
     "BlueSky_Project/BlueSky_Project from DeepSeek/_LEGACY/frontend/node_modules/ieee754/README.md",
-    "BlueSky_Project/BlueSky_Project from DeepSeek/_LEGACY/frontend/node_modules/https-proxy-agent/README.md",
-    "BlueSky_Project/BlueSky_Project from DeepSeek/_LEGACY/frontend/node_modules/hasown/README.md",
-    "BlueSky_Project/BlueSky_Project from DeepSeek/_LEGACY/frontend/node_modules/hasown/CHANGELOG.md",
-    "BlueSky_Project/BlueSky_Project from DeepSeek/_LEGACY/frontend/node_modules/has-tostringtag/README.md",
-    "BlueSky_Project/BlueSky_Project from DeepSeek/_LEGACY/frontend/node_modules/has-tostringtag/CHANGELOG.md",
-    "BlueSky_Project/BlueSky_Project from DeepSeek/_LEGACY/frontend/node_modules/has-symbols/README.md",
-    "BlueSky_Project/BlueSky_Project from DeepSeek/_LEGACY/frontend/node_modules/has-symbols/CHANGELOG.md",
-    "BlueSky_Project/BlueSky_Project from DeepSeek/_LEGACY/frontend/node_modules/gopd/README.md",
-    "BlueSky_Project/BlueSky_Project from DeepSeek/_LEGACY/frontend/node_modules/gopd/CHANGELOG.md"
+    "BlueSky_Project/BlueSky_Project from DeepSeek/_LEGACY/frontend/node_modules/https-proxy-agent/README.md"
   ]
 }

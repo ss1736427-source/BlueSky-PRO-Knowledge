@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ProjectOutputs>
+    <ProjectOutput>
+      <FullPath>E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\x64\Release\ZERO_CHECK</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\Release\bluesky_event_hmi_contract_test.exe</FullPath>
+    </ProjectOutput>
+  </ProjectOutputs>
+  <ContentFiles />
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
+</Project>

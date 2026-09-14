@@ -1,0 +1,19 @@
+Start testing: Sep 14 19:47 RTZ 2 (зима)
+----------------------------------------------------------
+Unable to find executable: E:/Flight Planning/PROJECT_KNOWLEDGE/BlueSkyPro/04_SOFTWARE/AUTOPILOT_ADAPTER/build_clean/Release/evidence_source_adapter_test.exe
+4/4 Testing: evidence_source_adapter_test
+4/4 Test: evidence_source_adapter_test
+Command: ""
+Directory: E:/Flight Planning/PROJECT_KNOWLEDGE/BlueSkyPro/04_SOFTWARE/AUTOPILOT_ADAPTER/build_clean
+"evidence_source_adapter_test" start time: 
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"evidence_source_adapter_test" end time: Sep 14 19:47 RTZ 2 (зима)
+"evidence_source_adapter_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Sep 14 19:47 RTZ 2 (зима)

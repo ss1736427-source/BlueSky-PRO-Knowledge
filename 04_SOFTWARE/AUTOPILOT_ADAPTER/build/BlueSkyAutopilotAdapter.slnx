@@ -9,6 +9,14 @@
 	</Configurations>
 	<Project Path="ALL_BUILD.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="afde2de9-67f4-357a-bcd5-58a715c0f870" DefaultStartup="true">
 		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		<BuildDependency Project="autopilot_adapter_baseline_test.vcxproj"/>
+		<BuildDependency Project="bluesky_autopilot_baseline.vcxproj"/>
+		<BuildDependency Project="bluesky_c2_baseline.vcxproj"/>
+		<BuildDependency Project="bluesky_equipment_baseline.vcxproj"/>
+		<BuildDependency Project="bluesky_event_hmi_contract_test.vcxproj"/>
+		<BuildDependency Project="c2_interface_baseline_test.vcxproj"/>
+		<BuildDependency Project="equipment_adapter_baseline_test.vcxproj"/>
+		<BuildDependency Project="evidence_source_adapter_test.vcxproj"/>
 		<BuildDependency Project="flight_evidence_recorder_test.vcxproj"/>
 		<BuildDependency Project="universal_autopilot_adapter_contract_test.vcxproj"/>
 		<BuildDependency Project="universal_equipment_adapter_contract_test.vcxproj"/>
@@ -25,6 +33,33 @@
 		<Build Solution="RelWithDebInfo|*" Project="false"/>
 	</Project>
 	<Project Path="ZERO_CHECK.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="452de326-e262-3e4e-87df-0f51b318a946"/>
+	<Project Path="autopilot_adapter_baseline_test.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="40d9d5b2-4dfe-3f7e-93ac-46114178c2da">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		<BuildDependency Project="bluesky_autopilot_baseline.vcxproj"/>
+	</Project>
+	<Project Path="bluesky_autopilot_baseline.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="797360be-2489-3990-b9bb-58c4bf001bd6">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+	</Project>
+	<Project Path="bluesky_c2_baseline.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="262b8794-31b1-3e07-9846-09398cfa69b3">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+	</Project>
+	<Project Path="bluesky_equipment_baseline.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="f1eff3bb-46fc-3b9d-a9dc-1e17f01fe568">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+	</Project>
+	<Project Path="bluesky_event_hmi_contract_test.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="d3b07db3-1c17-3602-b5da-84dee5f81a5b">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+	</Project>
+	<Project Path="c2_interface_baseline_test.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="d2b8216b-a5ce-3c79-b1e0-4246b6674ab4">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		<BuildDependency Project="bluesky_c2_baseline.vcxproj"/>
+	</Project>
+	<Project Path="equipment_adapter_baseline_test.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="9fdaf07c-21c3-39ab-a100-a27d587e5be6">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		<BuildDependency Project="bluesky_equipment_baseline.vcxproj"/>
+	</Project>
+	<Project Path="evidence_source_adapter_test.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="226e9b78-d1bc-3c57-8fc8-fc3c8026ca87">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+	</Project>
 	<Project Path="flight_evidence_recorder_test.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="3db34f6a-bb09-3e5c-8f7e-27606d4e8d10">
 		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
 	</Project>
