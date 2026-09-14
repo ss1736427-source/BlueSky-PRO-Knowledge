@@ -12,7 +12,7 @@ target_include_directories(bluesky_autopilot_contract INTERFACE
     ${CMAKE_CURRENT_SOURCE_DIR}/core
     ${CMAKE_CURRENT_SOURCE_DIR}/../PLANNING
 )
-target_compile_features(bluesky_autopilot_contract INTERFACE cxx_std_20)
+target_compile_features(bluesky_autilot_contract INTERFACE cxx_std_20)
 
 add_executable(universal_autopilot_adapter_contract_test core/universal_autopilot_adapter_contract_test.cpp)
 target_link_libraries(universal_autopilot_adapter_contract_test PRIVATE bluesky_autopilot_contract)
@@ -49,7 +49,7 @@ target_link_libraries(autopilot_adapter_baseline_test PRIVATE bluesky_autopilot_
 add_test(NAME autopilot_adapter_baseline_test COMMAND autopilot_adapter_baseline_test)
 
 add_library(bluesky_c2_baseline STATIC core/c2_interface_baseline.cpp)
-target_link_libraries(bluesky_c2_baseline PUBLIC bluesky_autopilot_contract)
+target_link_libraries(bluesky_c2_baseline PRIVATE bluesky_autopilot_contract)
 
 add_executable(c2_interface_baseline_test core/c2_interface_baseline_test.cpp)
 target_link_libraries(c2_interface_baseline_test PRIVATE bluesky_c2_baseline)
@@ -70,8 +70,10 @@ target_link_libraries(energy_power_adapter_baseline_test PRIVATE bluesky_energy_
 add_test(NAME energy_power_adapter_baseline_test COMMAND energy_power_adapter_baseline_test)
 
 add_library(bluesky_safety_failsafe_baseline STATIC core/safety_failsafe_adapter_baseline.cpp)
-target_link_libraries(bluesky_safety_failsafe_adapter_baseline_test PRIVATE bluesky_safety_failsafe_baseline)
+target_link_libraries(bluesky_safety_failsafe_baseline PUBLIC bluesky_autopilot_contract)
+
 add_executable(safety_failsafe_adapter_baseline_test core/safety_failsafe_adapter_baseline_test.cpp)
+target_link_libraries(safety_failsafe_adapter_baseline_test PRIVATE bluesky_safety_failsafe_baseline)
 add_test(NAME safety_failsafe_adapter_baseline_test COMMAND safety_failsafe_adapter_baseline_test)
 
 add_library(bluesky_propulsion_baseline STATIC core/propulsion_adapter_baseline.cpp)
