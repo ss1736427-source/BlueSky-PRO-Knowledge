@@ -20,24 +20,7 @@ class EvidenceSession:
 
     STATES = ("INIT", "COLLECT", "FINALIZE", "VERIFY", "EXPORT", "ARCHIVE")
 
-    def __init__(
-        self,
-        run_dir: Path,
-        test_run_id: str,
-        *,
-        evidence_domain_ids: list[str] | None = None,
-        requirement_ids: list[str] | None = None,
-        test_method_id: str | None = None,
-        test_method_revision: str | None = None,
-        test_case_id: str | None = None,
-        test_case_revision: str | None = None,
-        configuration_id: str | None = None,
-        configuration: Mapping[str, Any] | None = None,
-        flight_record_id: str | None = None,
-        mission_id: str | None = None,
-        session_id: str | None = None,
-        data_class: str = "DEMONSTRATION",
-    ) -> None:
+    def __init__(self, run_dir: Path, test_run_id: str, *, evidence_domain_ids: list[str] | None = None, requirement_ids: list[str] | None = None, test_method_id: str | None = None, test_method_revision: str | None = None, test_case_id: str | None = None, test_case_revision: str | None = None, configuration_id: str | None = None, configuration: Mapping[str, Any] | None = None, flight_record_id: str | None = None, mission_id: str | None = None, session_id: str | None = None, data_class: str = "DEMONSTRATION") -> None:
         if not test_run_id.strip():
             raise ValueError("test_run_id must not be empty")
         self.run_dir = Path(run_dir)
@@ -46,25 +29,10 @@ class EvidenceSession:
         now = int(time.time() * 1000)
         self.session_id = session_id or f"SES-{uuid.uuid4().hex[:12].upper()}"
         record = {
-            "session_id": self.session_id,
-            "test_run_id": test_run_id,
-            "status": "IN_PROGRESS",
-            "lifecycle_state": "INIT",
-            "data_class": data_class,
-            "evidence_domain_ids": evidence_domain_ids or [],
-            "requirement_ids": requirement_ids or [],
-            "test_method_id": test_method_id,
-            "test_method_revision": test_method_revision,
-            "test_case_id": test_case_id,
-            "test_case_revision": test_case_revision,
-            "configuration_id": configuration_id,
-            "flight_record_id": flight_record_id,
-            "mission_id": mission_id,
-            "configuration": dict(configuration or {}),
-            "started_at_ms": now,
-            "ended_at_ms": None,
-            "events": [],
-            "sources": [],
+            "session_id": self.session_id, "test_run_id": test_run_id, "status": "IN_PROGRESS", "lifecycle_state": "INIT", "data_class": data_class,
+            "evidence_domain_ids": evidence_domain_ids or [], "requirement_ids": requirement_ids or [], "test_method_id": test_method_id, "test_method_revision": test_method_revision,
+            "test_case_id": test_case_id, "test_case_revision": test_case_revision, "configuration_id": configuration_id, "flight_record_id": flight_record_id, "mission_id": mission_id,
+            "configuration": dict(configuration or {}), "started_at_ms": now, "ended_at_ms": None, "events": [], "sources": [],
         }
         self.record_path.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         (self.run_dir / "events.jsonl").touch()
@@ -78,14 +46,7 @@ class EvidenceSession:
     def _transition(self, target: str) -> None:
         record = self._load()
         current = record["lifecycle_state"]
-        allowed = {
-            "INIT": {"COLLECT"},
-            "COLLECT": {"FINALIZE"},
-            "FINALIZE": {"VERIFY"},
-            "VERIFY": {"EXPORT"},
-            "EXPORT": {"ARCHIVE"},
-            "ARCHIVE": set(),
-        }
+        allowed = {"INIT": {"COLLECT"}, "COLLECT": {"FINALIZE"}, "FINALIZE": {"VERIFY"}, "VERIFY": {"EXPORT"}, "EXPORT": {"ARCHIVE"}, "ARCHIVE": set()}
         if target not in allowed[current]:
             raise RuntimeError(f"invalid evidence session transition: {current} -> {target}")
         record["lifecycle_state"] = target
@@ -104,13 +65,7 @@ class EvidenceSession:
             raise RuntimeError("evidence session is not accepting records")
         event_dict = adapter.normalize(source_record).as_dict()
         context = dict(event_dict.get("context", {}))
-        context.update({
-            "session_id": self.session_id,
-            "test_run_id": record["test_run_id"],
-            "configuration_id": record.get("configuration_id"),
-            "flight_record_id": record.get("flight_record_id"),
-            "mission_id": record.get("mission_id"),
-        })
+        context.update({"session_id": self.session_id, "test_run_id": record["test_run_id"], "configuration_id": record.get("configuration_id"), "flight_record_id": record.get("flight_record_id"), "mission_id": record.get("mission_id")})
         if "evidence_domain_id" not in context and len(record.get("evidence_domain_ids", [])) == 1:
             context["evidence_domain_id"] = record["evidence_domain_ids"][0]
         event_dict["context"] = context
@@ -127,9 +82,6 @@ class EvidenceSession:
             self.start_collection()
             record = self._load()
         self._transition("FINALIZE")
-
-        # Final record metadata must be present before the recorder creates its
-        # integrity manifest; otherwise manifest.json would contain a stale hash.
         record = self._load()
         record["ended_at_ms"] = int(time.time() * 1000)
         record["status"] = "ANALYZED"
@@ -140,8 +92,16 @@ class EvidenceSession:
         if errors:
             raise ValueError("Evidence package verification failed: " + "; ".join(errors))
         self._transition("VERIFY")
-
         export_certification_index(self.run_dir)
         self._transition("EXPORT")
         self._transition("ARCHIVE")
+
+        # The final lifecycle state is stored in record.json and therefore changes
+        # its integrity hash. Rebuild both the package manifest and certification
+        # index after ARCHIVE so the exported package remains self-consistent.
+        result = finalize(self.run_dir)
+        export_certification_index(self.run_dir)
+        errors = validate_package(self.run_dir)
+        if errors:
+            raise ValueError("Final evidence package verification failed: " + "; ".join(errors))
         return result
