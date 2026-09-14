@@ -12,7 +12,7 @@ This document defines the common lifecycle for verification data and certificati
 
 The lifecycle applies to all evidence-bearing domains identified in the Evidence Coverage Gap Audit and to any future evidence-bearing source introduced into the system.
 
-The lifecycle defines how information progresses from a controlled requirement and verification method to an integrity-controlled evidence package and its certification reference.
+The lifecycle defines how information progresses from a controlled requirement and test method to an integrity-controlled evidence package and its certification reference.
 
 The lifecycle itself does not define regulatory acceptance criteria. Applicable requirements, approved verification methods and acceptance criteria remain controlled by the applicable certification and verification process.
 
@@ -22,7 +22,7 @@ The lifecycle itself does not define regulatory acceptance criteria. Applicable 
 
 The common BlueSky PRO evidence lifecycle is:
 
-**Requirement → Verification Method → Test Case → Configuration → Execution → Source Data → Raw Record → Analysis → Result → Evidence Package → Certification Reference**
+**Requirement → Test Method → Test Case → Configuration → Execution → Source Data → Raw Data → Processed Data → Result → Evidence Package → Certification Reference**
 
 Every evidence-bearing domain shall use this common lifecycle.
 
@@ -48,9 +48,9 @@ Required controls include:
 
 ---
 
-## 4. Verification Method
+## 4. Test Method
 
-The Verification Method defines how compliance or conformance is to be established.
+The Test Method defines how compliance or conformance is to be established.
 
 The method shall identify, as applicable:
 
@@ -73,7 +73,7 @@ The Test Case provides the executable verification definition derived from the a
 A Test Case shall have a stable identity and shall identify:
 
 * applicable requirement;
-* verification method;
+* test method;
 * configuration;
 * execution conditions;
 * required source data;
@@ -147,34 +147,36 @@ The source identity shall allow the recorded information to be traced to its ori
 
 ---
 
-## 9. Raw Record
+## 9. Raw Data
 
-Raw Record is the preserved representation of source information before domain-specific analytical transformation.
+Raw Data is the preserved representation of source information before domain-specific analytical transformation.
 
-Raw records shall be retained unchanged.
+Raw data shall be retained unchanged and independently from processed representations.
 
-The raw record shall provide the basis for reconstruction of subsequent processing and analysis.
+The raw data shall provide the basis for reconstruction of subsequent processing and analysis.
+
+The controlled storage representation may be a Raw Record within the evidence package. Raw Record is therefore a record/container representation, not an additional lifecycle stage.
 
 Prototype, replay, development and bench data shall be explicitly classified and shall not be represented as physical verification evidence.
 
 ---
 
-## 10. Analysis
+## 10. Processed Data and Analysis
 
-Analysis transforms or evaluates recorded data according to the applicable verification method.
+Processed Data contains values derived from Raw Data according to the applicable Test Method, such as approved calculations, statistics or transformations.
 
 Domain-specific analysis shall be identifiable and reproducible.
 
-Analysis shall preserve traceability to:
+Processing and analysis shall preserve traceability to:
 
 * source data;
-* raw records;
+* raw data/raw record;
 * configuration;
 * execution;
-* verification method;
+* test method;
 * applicable test case.
 
-Analytical processing shall not obscure the original source record.
+Analytical processing shall not obscure or replace the original source record.
 
 ---
 
@@ -187,7 +189,7 @@ The result shall be traceable to:
 * the executed Test Case;
 * the configuration;
 * the source records;
-* the analysis;
+* the processed data and analysis;
 * the applicable acceptance criteria.
 
 The system may record factual measurements and calculated outcomes.
@@ -203,12 +205,12 @@ The Evidence Package is the controlled collection of records required to demonst
 The package shall preserve, as applicable:
 
 * requirement reference;
-* verification method;
+* test method;
 * test case;
 * configuration identity;
 * execution identity;
 * source identity;
-* raw records;
+* raw data/raw records;
 * processed data;
 * analysis;
 * result;
@@ -226,9 +228,9 @@ Certification Reference connects the controlled evidence package to the applicab
 
 The reference shall identify the controlled evidence package rather than requiring measured values to be manually re-entered wherever controlled referencing is possible.
 
-Certification export is an evidence preparation mechanism.
+The controlled certification export mechanism is implemented by the project evidence export tooling, including `certification_export.py`, and is governed by the verification/evidence integration contract.
 
-Export itself does not constitute formal certification acceptance.
+Certification export is an evidence preparation mechanism. Export itself does not constitute formal certification acceptance.
 
 ---
 
@@ -299,6 +301,8 @@ A domain-specific implementation shall identify:
 * evidence package allocation;
 * certification reference.
 
+A Source Channel identifies the registered evidence-bearing source/channel. A Source Adapter is the software mechanism that acquires or translates source-specific data into the common evidence event/data model. They are distinct controls.
+
 The common evidence contract shall remain unchanged when a new domain is introduced.
 
 ---
@@ -307,11 +311,12 @@ The common evidence contract shall remain unchanged when a new domain is introdu
 
 An evidence-bearing domain is considered fully implemented only when the required links of the evidence chain are demonstrable:
 
-**Requirement → Verification Method → Test Case → Configuration → Execution → Source Data → Raw Record → Analysis → Result → Evidence Package → Certification Reference**
+**Requirement → Test Method → Test Case → Configuration → Execution → Source Data → Raw Data → Processed Data → Result → Evidence Package → Certification Reference**
 
 The following controls shall be present where applicable:
 
 * stable source ID;
+* Source Channel allocation;
 * Source Adapter;
 * timestamp and provenance;
 * parameter/value/unit/quality;
@@ -340,7 +345,7 @@ The common evidence lifecycle shall not be changed merely because a new source i
 
 New domains shall follow the same chain:
 
-**Requirement → Verification Method → Test Case → Configuration → Execution → Source Data → Raw Record → Analysis → Result → Evidence Package → Certification Reference**
+**Requirement → Test Method → Test Case → Configuration → Execution → Source Data → Raw Data → Processed Data → Result → Evidence Package → Certification Reference**
 
 Any extension shall preserve backward traceability to the existing evidence architecture.
 
@@ -360,7 +365,7 @@ manifest.sha256
 report.md
 ```
 
-The exact content of these records is controlled by the applicable evidence export specification and implementation baseline.
+The exact content of these records is controlled by the applicable evidence integration contract and implementation baseline.
 
 ---
 
