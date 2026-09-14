@@ -87,18 +87,26 @@ class EvidenceSession:
         record["status"] = "ANALYZED"
         self._save(record)
 
+        # Build the package for the FINALIZE state before entering VERIFY.
         result = finalize(self.run_dir)
         errors = validate_package(self.run_dir)
         if errors:
             raise ValueError("Evidence package verification failed: " + "; ".join(errors))
+
+        # Lifecycle state is part of record.json and therefore part of its
+        # manifest hash. Rebuild after each transition before verification.
         self._transition("VERIFY")
+        result = finalize(self.run_dir)
+        errors = validate_package(self.run_dir)
+        if errors:
+            raise ValueError("Evidence package verification failed: " + "; ".join(errors))
+
         export_certification_index(self.run_dir)
         self._transition("EXPORT")
         self._transition("ARCHIVE")
 
-        # The final lifecycle state is stored in record.json and therefore changes
-        # its integrity hash. Rebuild both the package manifest and certification
-        # index after ARCHIVE so the exported package remains self-consistent.
+        # ARCHIVE is the final immutable lifecycle state. Rebuild the package
+        # and certification index from that final self-consistent record.
         result = finalize(self.run_dir)
         export_certification_index(self.run_dir)
         errors = validate_package(self.run_dir)
