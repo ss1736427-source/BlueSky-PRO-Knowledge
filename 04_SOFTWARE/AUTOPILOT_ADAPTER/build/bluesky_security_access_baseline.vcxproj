@@ -3,9 +3,6 @@
   <PropertyGroup>
     <PreferredToolArchitecture>x64</PreferredToolArchitecture>
   </PropertyGroup>
-  <PropertyGroup>
-    <ResolveNugetPackages>false</ResolveNugetPackages>
-  </PropertyGroup>
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
@@ -25,31 +22,31 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{AFDE2DE9-67F4-357A-BCD5-58A715C0F870}</ProjectGuid>
+    <ProjectGuid>{DB3FD6B8-2F3C-3A70-85FB-91D52E21DEA8}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
     <Platform>x64</Platform>
-    <ProjectName>ALL_BUILD</ProjectName>
+    <ProjectName>bluesky_security_access_baseline</ProjectName>
     <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Utility</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v145</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Utility</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v145</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
-    <ConfigurationType>Utility</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v145</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
-    <ConfigurationType>Utility</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v145</PlatformToolset>
   </PropertyGroup>
@@ -62,50 +59,188 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">bluesky_security_access_baseline.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">bluesky_security_access_baseline</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">bluesky_security_access_baseline.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">bluesky_security_access_baseline</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\MinSizeRel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">bluesky_security_access_baseline.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">bluesky_security_access_baseline</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">bluesky_security_access_baseline.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">bluesky_security_access_baseline</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\core;E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\..\PLANNING;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\core;E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\..\PLANNING;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\core;E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\..\PLANNING;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
       <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\core;E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\..\PLANNING;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\core;E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\..\PLANNING;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\core;E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\..\PLANNING;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
       <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\core;E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\..\PLANNING;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="MinSizeRel"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\core;E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\..\PLANNING;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\core;E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\..\PLANNING;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
       <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\core;E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\..\PLANNING;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="RelWithDebInfo"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\core;E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\..\PLANNING;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\core;E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\..\PLANNING;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
       <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <CustomBuild Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\CMakeLists.txt">
@@ -165,6 +300,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\core\security_access_adapter_baseline.cpp" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -173,146 +309,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Name>ZERO_CHECK</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\airspace_geofence_adapter_baseline_test.vcxproj">
-      <Project>{77188925-9C66-32D6-A8E9-F52837CB0D4E}</Project>
-      <Name>airspace_geofence_adapter_baseline_test</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\autopilot_adapter_baseline_test.vcxproj">
-      <Project>{40D9D5B2-4DFE-3F7E-93AC-46114178C2DA}</Project>
-      <Name>autopilot_adapter_baseline_test</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\bluesky_airspace_geofence_baseline.vcxproj">
-      <Project>{0559A43F-04A8-345A-BC72-6A9756319F92}</Project>
-      <Name>bluesky_airspace_geofence_baseline</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\bluesky_autopilot_baseline.vcxproj">
-      <Project>{797360BE-2489-3990-B9BB-58C4BF001BD6}</Project>
-      <Name>bluesky_autopilot_baseline</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\bluesky_c2_baseline.vcxproj">
-      <Project>{262B8794-31B1-3E07-9846-09398CFA69B3}</Project>
-      <Name>bluesky_c2_baseline</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\bluesky_energy_power_baseline.vcxproj">
-      <Project>{E46EE499-D008-3CB7-BDCA-7ECF4E85F884}</Project>
-      <Name>bluesky_energy_power_baseline</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\bluesky_equipment_baseline.vcxproj">
-      <Project>{F1EFF3BB-46FC-3B9D-A9DC-1E17F01FE568}</Project>
-      <Name>bluesky_equipment_baseline</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\bluesky_event_hmi_contract_test.vcxproj">
-      <Project>{D3B07DB3-1C17-3602-B5DA-84DEE5F81A5B}</Project>
-      <Name>bluesky_event_hmi_contract_test</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\bluesky_external_integration_baseline.vcxproj">
-      <Project>{3AE99099-7996-3D97-B7C6-D9742BF99A75}</Project>
-      <Name>bluesky_external_integration_baseline</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\bluesky_fault_recovery_baseline.vcxproj">
-      <Project>{BA4DE5A2-87EB-3773-989D-75EC1B41DBD6}</Project>
-      <Name>bluesky_fault_recovery_baseline</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\bluesky_measurement_instrument_baseline.vcxproj">
-      <Project>{3447BC8A-2B2C-35D4-90A6-F16CE60C4EF1}</Project>
-      <Name>bluesky_measurement_instrument_baseline</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\bluesky_navigation_baseline.vcxproj">
-      <Project>{E93AC56F-BC2F-3F32-8C0C-384BB35D5283}</Project>
-      <Name>bluesky_navigation_baseline</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\bluesky_performance_model_baseline.vcxproj">
-      <Project>{EDD4DDDE-480A-345D-B32C-681D928BBD88}</Project>
-      <Name>bluesky_performance_model_baseline</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\bluesky_propulsion_baseline.vcxproj">
-      <Project>{0872F0FC-4AE5-3A21-9A3D-2DCE969094DA}</Project>
-      <Name>bluesky_propulsion_baseline</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\bluesky_safety_failsafe_baseline.vcxproj">
-      <Project>{C99DBB54-D2D3-3A77-9D2F-A4F69EA4E5CA}</Project>
-      <Name>bluesky_safety_failsafe_baseline</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\bluesky_security_access_baseline.vcxproj">
-      <Project>{DB3FD6B8-2F3C-3A70-85FB-91D52E21DEA8}</Project>
-      <Name>bluesky_security_access_baseline</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\bluesky_time_sync_baseline.vcxproj">
-      <Project>{B26B840F-C2AE-3BFE-ADFD-48F1F417E736}</Project>
-      <Name>bluesky_time_sync_baseline</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\bluesky_weather_baseline.vcxproj">
-      <Project>{ED6C221B-2BF6-34AE-ACF1-499C1F67AA31}</Project>
-      <Name>bluesky_weather_baseline</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\c2_interface_baseline_test.vcxproj">
-      <Project>{D2B8216B-A5CE-3C79-B1E0-4246B6674AB4}</Project>
-      <Name>c2_interface_baseline_test</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\energy_power_adapter_baseline_test.vcxproj">
-      <Project>{3446710F-674A-3ADB-AE24-BCFEAB4E1201}</Project>
-      <Name>energy_power_adapter_baseline_test</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\equipment_adapter_baseline_test.vcxproj">
-      <Project>{9FDAF07C-21C3-39AB-A100-A27D587E5BE6}</Project>
-      <Name>equipment_adapter_baseline_test</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\evidence_source_adapter_test.vcxproj">
-      <Project>{226E9B78-D1BC-3C57-8FC8-FC3C8026CA87}</Project>
-      <Name>evidence_source_adapter_test</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\external_integration_adapter_baseline_test.vcxproj">
-      <Project>{E24A1078-3CEE-32DC-A8BD-0F55C23F8ADF}</Project>
-      <Name>external_integration_adapter_baseline_test</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\fault_recovery_adapter_baseline_test.vcxproj">
-      <Project>{4D79E431-AEA0-3409-9F17-1D2E72FC3CFA}</Project>
-      <Name>fault_recovery_adapter_baseline_test</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\flight_evidence_recorder_test.vcxproj">
-      <Project>{3DB34F6A-BB09-3E5C-8F7E-27606D4E8D10}</Project>
-      <Name>flight_evidence_recorder_test</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\measurement_instrument_adapter_baseline_test.vcxproj">
-      <Project>{3C0D812D-C7FC-326C-880E-66305A6FB18E}</Project>
-      <Name>measurement_instrument_adapter_baseline_test</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\navigation_adapter_baseline_test.vcxproj">
-      <Project>{5D9D3EA7-CAD1-342C-B957-BD7EAC46F0D1}</Project>
-      <Name>navigation_adapter_baseline_test</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\performance_model_adapter_baseline_test.vcxproj">
-      <Project>{89816B63-E386-3FB1-9CEB-06E3F2E4D00F}</Project>
-      <Name>performance_model_adapter_baseline_test</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\propulsion_adapter_baseline_test.vcxproj">
-      <Project>{CCF949A7-01CB-39A7-9A6A-08C44D477735}</Project>
-      <Name>propulsion_adapter_baseline_test</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\safety_failsafe_adapter_baseline_test.vcxproj">
-      <Project>{E412A46C-E75E-39CD-85A2-38A4724AF6CE}</Project>
-      <Name>safety_failsafe_adapter_baseline_test</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\security_access_adapter_baseline_test.vcxproj">
-      <Project>{CCD4C341-3A5B-3050-BB05-3FE55FC24B3A}</Project>
-      <Name>security_access_adapter_baseline_test</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\time_synchronization_adapter_baseline_test.vcxproj">
-      <Project>{952CA7A6-BB19-30B1-AE22-AFAB77BD511A}</Project>
-      <Name>time_synchronization_adapter_baseline_test</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\universal_autopilot_adapter_contract_test.vcxproj">
-      <Project>{D9895409-D782-3B44-AB1F-5081617988BE}</Project>
-      <Name>universal_autopilot_adapter_contract_test</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\universal_equipment_adapter_contract_test.vcxproj">
-      <Project>{6967999F-1C0C-3ED3-96A1-9CCC083CCF85}</Project>
-      <Name>universal_equipment_adapter_contract_test</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\weather_adapter_baseline_test.vcxproj">
-      <Project>{8533A5FF-F361-3275-84F1-C5BCE8E1C117}</Project>
-      <Name>weather_adapter_baseline_test</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

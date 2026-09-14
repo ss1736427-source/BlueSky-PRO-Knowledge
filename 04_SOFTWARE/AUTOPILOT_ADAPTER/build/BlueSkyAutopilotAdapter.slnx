@@ -9,17 +9,41 @@
 	</Configurations>
 	<Project Path="ALL_BUILD.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="afde2de9-67f4-357a-bcd5-58a715c0f870" DefaultStartup="true">
 		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		<BuildDependency Project="airspace_geofence_adapter_baseline_test.vcxproj"/>
 		<BuildDependency Project="autopilot_adapter_baseline_test.vcxproj"/>
+		<BuildDependency Project="bluesky_airspace_geofence_baseline.vcxproj"/>
 		<BuildDependency Project="bluesky_autopilot_baseline.vcxproj"/>
 		<BuildDependency Project="bluesky_c2_baseline.vcxproj"/>
+		<BuildDependency Project="bluesky_energy_power_baseline.vcxproj"/>
 		<BuildDependency Project="bluesky_equipment_baseline.vcxproj"/>
 		<BuildDependency Project="bluesky_event_hmi_contract_test.vcxproj"/>
+		<BuildDependency Project="bluesky_external_integration_baseline.vcxproj"/>
+		<BuildDependency Project="bluesky_fault_recovery_baseline.vcxproj"/>
+		<BuildDependency Project="bluesky_measurement_instrument_baseline.vcxproj"/>
+		<BuildDependency Project="bluesky_navigation_baseline.vcxproj"/>
+		<BuildDependency Project="bluesky_performance_model_baseline.vcxproj"/>
+		<BuildDependency Project="bluesky_propulsion_baseline.vcxproj"/>
+		<BuildDependency Project="bluesky_safety_failsafe_baseline.vcxproj"/>
+		<BuildDependency Project="bluesky_security_access_baseline.vcxproj"/>
+		<BuildDependency Project="bluesky_time_sync_baseline.vcxproj"/>
+		<BuildDependency Project="bluesky_weather_baseline.vcxproj"/>
 		<BuildDependency Project="c2_interface_baseline_test.vcxproj"/>
+		<BuildDependency Project="energy_power_adapter_baseline_test.vcxproj"/>
 		<BuildDependency Project="equipment_adapter_baseline_test.vcxproj"/>
 		<BuildDependency Project="evidence_source_adapter_test.vcxproj"/>
+		<BuildDependency Project="external_integration_adapter_baseline_test.vcxproj"/>
+		<BuildDependency Project="fault_recovery_adapter_baseline_test.vcxproj"/>
 		<BuildDependency Project="flight_evidence_recorder_test.vcxproj"/>
+		<BuildDependency Project="measurement_instrument_adapter_baseline_test.vcxproj"/>
+		<BuildDependency Project="navigation_adapter_baseline_test.vcxproj"/>
+		<BuildDependency Project="performance_model_adapter_baseline_test.vcxproj"/>
+		<BuildDependency Project="propulsion_adapter_baseline_test.vcxproj"/>
+		<BuildDependency Project="safety_failsafe_adapter_baseline_test.vcxproj"/>
+		<BuildDependency Project="security_access_adapter_baseline_test.vcxproj"/>
+		<BuildDependency Project="time_synchronization_adapter_baseline_test.vcxproj"/>
 		<BuildDependency Project="universal_autopilot_adapter_contract_test.vcxproj"/>
 		<BuildDependency Project="universal_equipment_adapter_contract_test.vcxproj"/>
+		<BuildDependency Project="weather_adapter_baseline_test.vcxproj"/>
 		<Build Solution="Debug|*" Project="false"/>
 		<Build Solution="Release|*" Project="false"/>
 		<Build Solution="MinSizeRel|*" Project="false"/>
@@ -33,14 +57,24 @@
 		<Build Solution="RelWithDebInfo|*" Project="false"/>
 	</Project>
 	<Project Path="ZERO_CHECK.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="452de326-e262-3e4e-87df-0f51b318a946"/>
+	<Project Path="airspace_geofence_adapter_baseline_test.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="77188925-9c66-32d6-a8e9-f52837cb0d4e">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		<BuildDependency Project="bluesky_airspace_geofence_baseline.vcxproj"/>
+	</Project>
 	<Project Path="autopilot_adapter_baseline_test.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="40d9d5b2-4dfe-3f7e-93ac-46114178c2da">
 		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
 		<BuildDependency Project="bluesky_autopilot_baseline.vcxproj"/>
+	</Project>
+	<Project Path="bluesky_airspace_geofence_baseline.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="0559a43f-04a8-345a-bc72-6a9756319f92">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
 	</Project>
 	<Project Path="bluesky_autopilot_baseline.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="797360be-2489-3990-b9bb-58c4bf001bd6">
 		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
 	</Project>
 	<Project Path="bluesky_c2_baseline.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="262b8794-31b1-3e07-9846-09398cfa69b3">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+	</Project>
+	<Project Path="bluesky_energy_power_baseline.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="e46ee499-d008-3cb7-bdca-7ecf4e85f884">
 		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
 	</Project>
 	<Project Path="bluesky_equipment_baseline.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="f1eff3bb-46fc-3b9d-a9dc-1e17f01fe568">
@@ -49,9 +83,43 @@
 	<Project Path="bluesky_event_hmi_contract_test.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="d3b07db3-1c17-3602-b5da-84dee5f81a5b">
 		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
 	</Project>
+	<Project Path="bluesky_external_integration_baseline.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="3ae99099-7996-3d97-b7c6-d9742bf99a75">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+	</Project>
+	<Project Path="bluesky_fault_recovery_baseline.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="ba4de5a2-87eb-3773-989d-75ec1b41dbd6">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+	</Project>
+	<Project Path="bluesky_measurement_instrument_baseline.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="3447bc8a-2b2c-35d4-90a6-f16ce60c4ef1">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+	</Project>
+	<Project Path="bluesky_navigation_baseline.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="e93ac56f-bc2f-3f32-8c0c-384bb35d5283">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+	</Project>
+	<Project Path="bluesky_performance_model_baseline.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="edd4ddde-480a-345d-b32c-681d928bbd88">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+	</Project>
+	<Project Path="bluesky_propulsion_baseline.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="0872f0fc-4ae5-3a21-9a3d-2dce969094da">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+	</Project>
+	<Project Path="bluesky_safety_failsafe_baseline.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="c99dbb54-d2d3-3a77-9d2f-a4f69ea4e5ca">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+	</Project>
+	<Project Path="bluesky_security_access_baseline.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="db3fd6b8-2f3c-3a70-85fb-91d52e21dea8">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+	</Project>
+	<Project Path="bluesky_time_sync_baseline.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="b26b840f-c2ae-3bfe-adfd-48f1f417e736">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+	</Project>
+	<Project Path="bluesky_weather_baseline.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="ed6c221b-2bf6-34ae-acf1-499c1f67aa31">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+	</Project>
 	<Project Path="c2_interface_baseline_test.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="d2b8216b-a5ce-3c79-b1e0-4246b6674ab4">
 		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
 		<BuildDependency Project="bluesky_c2_baseline.vcxproj"/>
+	</Project>
+	<Project Path="energy_power_adapter_baseline_test.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="3446710f-674a-3adb-ae24-bcfeab4e1201">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		<BuildDependency Project="bluesky_energy_power_baseline.vcxproj"/>
 	</Project>
 	<Project Path="equipment_adapter_baseline_test.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="9fdaf07c-21c3-39ab-a100-a27d587e5be6">
 		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
@@ -60,13 +128,53 @@
 	<Project Path="evidence_source_adapter_test.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="226e9b78-d1bc-3c57-8fc8-fc3c8026ca87">
 		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
 	</Project>
+	<Project Path="external_integration_adapter_baseline_test.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="e24a1078-3cee-32dc-a8bd-0f55c23f8adf">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		<BuildDependency Project="bluesky_external_integration_baseline.vcxproj"/>
+	</Project>
+	<Project Path="fault_recovery_adapter_baseline_test.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="4d79e431-aea0-3409-9f17-1d2e72fc3cfa">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		<BuildDependency Project="bluesky_fault_recovery_baseline.vcxproj"/>
+	</Project>
 	<Project Path="flight_evidence_recorder_test.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="3db34f6a-bb09-3e5c-8f7e-27606d4e8d10">
 		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+	</Project>
+	<Project Path="measurement_instrument_adapter_baseline_test.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="3c0d812d-c7fc-326c-880e-66305a6fb18e">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		<BuildDependency Project="bluesky_measurement_instrument_baseline.vcxproj"/>
+	</Project>
+	<Project Path="navigation_adapter_baseline_test.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="5d9d3ea7-cad1-342c-b957-bd7eac46f0d1">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		<BuildDependency Project="bluesky_navigation_baseline.vcxproj"/>
+	</Project>
+	<Project Path="performance_model_adapter_baseline_test.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="89816b63-e386-3fb1-9ceb-06e3f2e4d00f">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		<BuildDependency Project="bluesky_performance_model_baseline.vcxproj"/>
+	</Project>
+	<Project Path="propulsion_adapter_baseline_test.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="ccf949a7-01cb-39a7-9a6a-08c44d477735">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		<BuildDependency Project="bluesky_propulsion_baseline.vcxproj"/>
+	</Project>
+	<Project Path="safety_failsafe_adapter_baseline_test.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="e412a46c-e75e-39cd-85a2-38a4724af6ce">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		<BuildDependency Project="bluesky_safety_failsafe_baseline.vcxproj"/>
+	</Project>
+	<Project Path="security_access_adapter_baseline_test.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="ccd4c341-3a5b-3050-bb05-3fe55fc24b3a">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		<BuildDependency Project="bluesky_security_access_baseline.vcxproj"/>
+	</Project>
+	<Project Path="time_synchronization_adapter_baseline_test.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="952ca7a6-bb19-30b1-ae22-afab77bd511a">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		<BuildDependency Project="bluesky_time_sync_baseline.vcxproj"/>
 	</Project>
 	<Project Path="universal_autopilot_adapter_contract_test.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="d9895409-d782-3b44-ab1f-5081617988be">
 		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
 	</Project>
 	<Project Path="universal_equipment_adapter_contract_test.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="6967999f-1c0c-3ed3-96a1-9ccc083ccf85">
 		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+	</Project>
+	<Project Path="weather_adapter_baseline_test.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="8533a5ff-f361-3275-84f1-c5bce8e1c117">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		<BuildDependency Project="bluesky_weather_baseline.vcxproj"/>
 	</Project>
 </Solution>
