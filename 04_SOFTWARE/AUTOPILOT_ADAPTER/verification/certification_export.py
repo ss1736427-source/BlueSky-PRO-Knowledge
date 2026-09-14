@@ -13,6 +13,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+from evidence_package_validator import validate_package
+
 
 PACKAGE_FILES = (
     "record.json",
@@ -33,18 +35,21 @@ def sha256_file(path: Path) -> str:
 
 
 def build_certification_index(run_dir: Path) -> dict[str, Any]:
-    """Create a certification-facing index without declaring certification."""
+    """Create a certification-facing index only from a valid evidence package."""
     run_dir = Path(run_dir)
+    errors = validate_package(run_dir)
+    if errors:
+        raise ValueError("Invalid evidence package: " + "; ".join(errors))
+
     record = json.loads((run_dir / "record.json").read_text(encoding="utf-8"))
     files: list[dict[str, Any]] = []
     for relative in PACKAGE_FILES:
         path = run_dir / relative
-        if path.exists() and path.is_file():
-            files.append({
-                "path": relative,
-                "sha256": sha256_file(path),
-                "size_bytes": path.stat().st_size,
-            })
+        files.append({
+            "path": relative,
+            "sha256": sha256_file(path),
+            "size_bytes": path.stat().st_size,
+        })
 
     evidence_dir = run_dir / "evidence"
     if evidence_dir.exists():
