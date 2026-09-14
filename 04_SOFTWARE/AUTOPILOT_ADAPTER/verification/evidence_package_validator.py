@@ -47,11 +47,13 @@ def validate_package(run_dir: Path) -> list[str]:
             if not lines: errors.append("events.jsonl:empty")
             for number,line in enumerate(lines,1):
                 event=json.loads(line)
-                aliases={"timestamp":("timestamp","timestamp_utc"),"source":("source","source_id"),"parameter":("parameter",),"value":("value",),"unit":("unit",)}
+                aliases={"timestamp":("timestamp","timestamp_utc","timestamp_ms"),"source":("source","source_id"),"parameter":("parameter",),"value":("value",),"unit":("unit",)}
                 for field,names in aliases.items():
                     if _event_value(event,*names) is None: errors.append(f"events.jsonl:{number}:missing:{field}")
-                if _event_value(event,"evidence_domain_id","domain") is None: errors.append(f"events.jsonl:{number}:missing:evidence_domain_id")
-        except (OSError,json.JSONDecodeError) as exc: errors.append(f"events.jsonl:{exc}")
+                domain=_event_value(event,"evidence_domain_id","domain")
+                if domain is None and isinstance(event.get("context"),dict): domain=event["context"].get("evidence_domain_id")
+                if domain is None: errors.append(f"events.jsonl:{number}:missing:evidence_domain_id")
+        except (OSError,json.JSONDecodeError,TypeError) as exc: errors.append(f"events.jsonl:{exc}")
     manifest_path=run_dir/"manifest.json"
     if manifest_path.is_file():
         try:
@@ -64,7 +66,7 @@ def validate_package(run_dir: Path) -> list[str]:
                     target=run_dir/relative
                     if not target.is_file(): errors.append(f"manifest.json:missing:{relative}")
                     elif sha256_file(target)!=expected: errors.append(f"manifest.json:hash-mismatch:{relative}")
-        except (OSError,json.JSONDecodeError) as exc: errors.append(f"manifest.json:{exc}")
+        except (OSError,json.JSONDecodeError,TypeError) as exc: errors.append(f"manifest.json:{exc}")
     manifest_sha_path=run_dir/"manifest.sha256"
     if manifest_sha_path.is_file() and manifest_path.is_file():
         try:
