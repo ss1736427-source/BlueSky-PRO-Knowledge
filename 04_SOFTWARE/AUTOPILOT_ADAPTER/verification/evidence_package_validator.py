@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -42,6 +43,13 @@ def sha256_file(path: Path) -> str:
 
 def _nonempty(value: Any) -> bool:
     return isinstance(value, str) and bool(value.strip())
+
+
+def _event_value(event: dict[str, Any], *names: str) -> Any:
+    for name in names:
+        if name in event:
+            return event[name]
+    return None
 
 
 def validate_package(run_dir: Path) -> list[str]:
@@ -90,9 +98,18 @@ def validate_package(run_dir: Path) -> list[str]:
                 errors.append("events.jsonl:empty")
             for number, line in enumerate(lines, 1):
                 event = json.loads(line)
-                for field in ("timestamp", "parameter", "value", "unit", "source"):
-                    if field not in event:
+                required_aliases = {
+                    "timestamp": ("timestamp", "timestamp_utc"),
+                    "source": ("source", "source_id"),
+                    "parameter": ("parameter",),
+                    "value": ("value",),
+                    "unit": ("unit",),
+                }
+                for field, aliases in required_aliases.items():
+                    if _event_value(event, *aliases) is None:
                         errors.append(f"events.jsonl:{number}:missing:{field}")
+                if _event_value(event, "evidence_domain_id", "domain") is None:
+                    errors.append(f"events.jsonl:{number}:missing:evidence_domain_id")
         except (OSError, json.JSONDecodeError) as exc:
             errors.append(f"events.jsonl:{exc}")
 
@@ -117,6 +134,19 @@ def validate_package(run_dir: Path) -> list[str]:
                         errors.append(f"manifest.json:hash-mismatch:{relative}")
         except (OSError, json.JSONDecodeError) as exc:
             errors.append(f"manifest.json:{exc}")
+
+    manifest_sha_path = run_dir / "manifest.sha256"
+    if manifest_sha_path.is_file() and manifest_path.is_file():
+        try:
+            text = manifest_sha_path.read_text(encoding="utf-8").strip()
+            expected_manifest_sha = sha256_file(manifest_path)
+            match = re.match(r"^([0-9a-fA-F]{64})\\s+manifest\\.json$", text)
+            if not match:
+                errors.append("manifest.sha256:format")
+            elif match.group(1).lower() != expected_manifest_sha:
+                errors.append("manifest.sha256:hash-mismatch:manifest.json")
+        except OSError as exc:
+            errors.append(f"manifest.sha256:{exc}")
 
     index_path = run_dir / "certification_evidence_index.json"
     if index_path.is_file():
