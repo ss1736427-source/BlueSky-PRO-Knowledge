@@ -115,48 +115,45 @@ If requirements, safety analysis, engineering analysis, external interfaces, equ
 
 ## 11. EC-14 implementation reconciliation
 
-The EC-14 implementation baseline now includes a concrete C++ recorder/replay mechanism, Source Adapter conversion, and automated contract tests:
-
-- `core/flight_evidence_recorder.hpp` — session recorder and replay reader;
-- `core/flight_evidence_recorder_test.cpp` — multi-source collection, replay and raw-data preservation test;
-- `core/evidence_source_adapter.hpp` — conversion from source-specific records to the common `EvidenceEvent` format without altering the source record;
-- `core/evidence_source_adapter_test.cpp` — adapter field-preservation and recorder persistence test;
-- `CMakeLists.txt` — CTest registration.
-
-The Source Adapter test has been executed from the normal Release build and passed all diagnostic checks (source fields preserved, adapted event persisted, and raw reference persisted). A diagnostic copy also executes successfully. This confirms the implementation path `Source Record → Source Adapter → Common EvidenceEvent → Recorder` for the current prototype test fixture.
-
-This closes the previously missing **implementation mechanism and prototype adapter integration** gap for EC-14. It does **not** close the domain as physical verification evidence: controlled build execution evidence, complete certification-package generation/integrity verification and physical/operational verification remain outstanding. The Release/CTest `0xC0000409` issue observed earlier is a separate test-runner/runtime condition and shall not be treated as evidence of functional failure of the Source Adapter without reproducing it after the diagnostic test revision.
+The EC-14 implementation baseline includes a concrete C++ recorder/replay mechanism, Source Adapter conversion, and automated contract tests. This confirms the prototype path `Source Record → Source Adapter → Common EvidenceEvent → Recorder`; physical verification remains outstanding.
 
 ## 12. EC-18 implementation reconciliation
 
-The EC-18 implementation baseline now includes a controlled software configuration record:
-
-- `SOFTWARE_CONFIGURATION_BASELINE.md` — controlled configuration identity and change-control rules;
-- `software_configuration_baseline.json` — machine-readable P0 configuration baseline;
-- baseline identifies repository, controlled branch, source revision, software release state, build system, C++ standard and primary build configuration.
-
-This establishes the prototype configuration-control mechanism and provides a stable configuration identifier for linkage into the common evidence lifecycle. EC-18 remains **PARTIAL** because execution-level artifact capture, toolchain identity capture where required, automated configuration verification, and complete verification/certification linkage have not yet been demonstrated.
+The EC-18 implementation baseline includes controlled software configuration documentation and a machine-readable P0 configuration baseline. EC-18 remains **PARTIAL** pending execution-level artifact capture, toolchain identity capture where required, automated configuration verification, and complete verification/certification linkage.
 
 ## 13. EC-15 implementation reconciliation
 
-The EC-15 baseline includes the BlueSky Event/HMI contract and automated contract test:
-
-- `core/bluesky_event_hmi_contract.hpp` — event severity/state model and required event fields;
-- `core/bluesky_event_hmi_contract_test.cpp` — contract validation test;
-- `CMakeLists.txt` — CTest registration.
-
-The recovered `main` baseline was built/tested locally in Release configuration and `bluesky_event_hmi_contract_test` passed: **1/1 tests passed, 0 failed**.
-
-This confirms the current prototype contract and automated test baseline for the Event/HMI interface. EC-15 remains **PARTIAL** because real HMI/event-source integration, domain-specific evidence linkage, complete certification-package generation/integrity verification and physical/operational verification remain outstanding.
+The EC-15 baseline includes the BlueSky Event/HMI contract, automated contract test and CMake registration. The contract test passed in the recovered Release baseline. EC-15 remains **PARTIAL** pending real HMI/event-source integration and verification evidence.
 
 ## 14. EC-06 implementation reconciliation
 
-The EC-06 implementation baseline now includes:
+The EC-06 baseline includes the concrete Equipment Adapter, equipment identity/profile/configuration/capability/state/telemetry/action/data-output handling, automated test and CMake registration. EC-06 remains **PARTIAL** pending approved real equipment source integration and physical/operational verification.
 
-- `core/equipment_adapter_baseline.hpp` / `.cpp` — concrete Equipment Adapter;
-- equipment identity, profile/configuration references, capabilities, state, telemetry, action translation and data-output handling;
-- `core/equipment_adapter_baseline_test.cpp` — automated contract/behavior test;
+## 15. EC-03 implementation reconciliation
+
+The EC-03 baseline now includes:
+
+- `core/universal_navigation_adapter.hpp` — common Navigation Adapter contract;
+- `core/navigation_adapter_baseline.hpp` / `.cpp` — prototype `SRC-06 GNSS_RTK_NTRIP` adapter;
+- navigation sample identity, timestamp, position/velocity/attitude data, navigation quality and correction state;
+- validation of source identity, timestamp, validity, freshness and bounded navigation values;
+- `core/navigation_adapter_baseline_test.cpp` — automated validation test;
 - CMake/CTest registration;
-- `core/EC06_STATUS.md` — controlled implementation-status boundary.
+- `core/EC03_STATUS.md` — controlled implementation boundary.
 
-The baseline is a prototype/bench mechanism only. EC-06 remains **PARTIAL** because approved real equipment source integration, controlled execution evidence, domain processing/result linkage, integrity-controlled evidence package, certification export verification and physical/operational verification remain outstanding.
+CI for the EC-03 branch completed successfully: repository consistency, configure, build and test stages passed. The implementation is a prototype/bench mechanism only. EC-03 remains **PARTIAL** pending approved real GNSS/RTK/NTRIP source integration, controlled execution evidence, domain processing/result linkage, integrity-controlled evidence package, certification export verification and physical/operational verification.
+
+## 16. EC-07 implementation reconciliation
+
+The EC-07 baseline now includes:
+
+- `core/universal_energy_power_adapter.hpp` — common Energy/Power Adapter contract;
+- `core/energy_power_adapter_baseline.hpp` / `.cpp` — prototype `SRC-08 ENERGY_POWER` adapter;
+- battery identity, configuration version, energy state and quality;
+- voltage, current, power, remaining percentage, consumed capacity and estimated remaining time;
+- validation of source identity, timestamp, validity, freshness and bounded energy values;
+- `core/energy_power_adapter_baseline_test.cpp` — automated validation test;
+- CMake/CTest registration;
+- `core/EC07_STATUS.md` — controlled implementation boundary.
+
+The implementation is a prototype/bench mechanism only. EC-07 remains **PARTIAL** pending approved real energy/power source integration, controlled execution evidence, domain processing/result linkage, integrity-controlled evidence package, certification export verification and physical/operational verification.
