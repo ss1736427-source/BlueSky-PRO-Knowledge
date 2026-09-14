@@ -52,3 +52,16 @@ add_test(
     NAME flight_evidence_recorder_test
     COMMAND flight_evidence_recorder_test
 )
+
+add_executable(evidence_source_adapter_test
+    core/evidence_source_adapter_test.cpp
+)
+
+target_link_libraries(evidence_source_adapter_test PRIVATE
+    bluesky_autopilot_contract
+)
+
+add_test(
+    NAME evidence_source_adapter_test
+    COMMAND evidence_source_adapter_test
+)
