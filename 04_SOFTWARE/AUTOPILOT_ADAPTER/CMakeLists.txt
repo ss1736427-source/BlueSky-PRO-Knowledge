@@ -39,3 +39,16 @@ add_test(
     NAME universal_equipment_adapter_contract_test
     COMMAND universal_equipment_adapter_contract_test
 )
+
+add_executable(flight_evidence_recorder_test
+    core/flight_evidence_recorder_test.cpp
+)
+
+target_link_libraries(flight_evidence_recorder_test PRIVATE
+    bluesky_autopilot_contract
+)
+
+add_test(
+    NAME flight_evidence_recorder_test
+    COMMAND flight_evidence_recorder_test
+)

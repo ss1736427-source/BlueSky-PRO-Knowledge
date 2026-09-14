@@ -112,3 +112,13 @@ The controlled export mechanism is implemented by the project evidence export to
 ## 10. Extension rule
 
 If requirements, safety analysis, engineering analysis, external interfaces, equipment, or certification planning introduce a new evidence-bearing source not represented by EC-01…EC-20, a new evidence domain and source channel shall be added before implementation is considered complete. The common evidence contract remains unchanged.
+
+## 11. EC-14 implementation reconciliation
+
+The EC-14 implementation baseline now includes a concrete C++ recorder/replay mechanism and an automated contract test:
+
+- `core/flight_evidence_recorder.hpp` — session recorder and replay reader;
+- `core/flight_evidence_recorder_test.cpp` — multi-source collection, replay and raw-data preservation test;
+- `CMakeLists.txt` — CTest registration.
+
+This closes the previously missing **implementation mechanism** gap for EC-14. It does **not** close the domain as physical verification evidence: real source-adapter integration, controlled build execution evidence, certification-export verification and physical/operational verification remain outstanding.
