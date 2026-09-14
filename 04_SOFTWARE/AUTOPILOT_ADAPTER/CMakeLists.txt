@@ -14,54 +14,22 @@ target_include_directories(bluesky_autopilot_contract INTERFACE
 )
 target_compile_features(bluesky_autopilot_contract INTERFACE cxx_std_20)
 
-add_executable(universal_autopilot_adapter_contract_test
-    core/universal_autopilot_adapter_contract_test.cpp
-)
+add_executable(universal_autopilot_adapter_contract_test core/universal_autopilot_adapter_contract_test.cpp)
+target_link_libraries(universal_autopilot_adapter_contract_test PRIVATE bluesky_autopilot_contract)
+add_test(NAME universal_autopilot_adapter_contract_test COMMAND universal_autopilot_adapter_contract_test)
 
-target_link_libraries(universal_autopilot_adapter_contract_test PRIVATE
-    bluesky_autopilot_contract
-)
+add_executable(universal_equipment_adapter_contract_test core/universal_equipment_adapter_contract_test.cpp)
+target_link_libraries(universal_equipment_adapter_contract_test PRIVATE bluesky_autopilot_contract)
+add_test(NAME universal_equipment_adapter_contract_test COMMAND universal_equipment_adapter_contract_test)
 
-add_test(
-    NAME universal_autopilot_adapter_contract_test
-    COMMAND universal_autopilot_adapter_contract_test
-)
+add_executable(flight_evidence_recorder_test core/flight_evidence_recorder_test.cpp)
+target_link_libraries(flight_evidence_recorder_test PRIVATE bluesky_autopilot_contract)
+add_test(NAME flight_evidence_recorder_test COMMAND flight_evidence_recorder_test)
 
-add_executable(universal_equipment_adapter_contract_test
-    core/universal_equipment_adapter_contract_test.cpp
-)
+add_executable(evidence_source_adapter_test core/evidence_source_adapter_test.cpp)
+target_link_libraries(evidence_source_adapter_test PRIVATE bluesky_autopilot_contract)
+add_test(NAME evidence_source_adapter_test COMMAND evidence_source_adapter_test)
 
-target_link_libraries(universal_equipment_adapter_contract_test PRIVATE
-    bluesky_autopilot_contract
-)
-
-add_test(
-    NAME universal_equipment_adapter_contract_test
-    COMMAND universal_equipment_adapter_contract_test
-)
-
-add_executable(flight_evidence_recorder_test
-    core/flight_evidence_recorder_test.cpp
-)
-
-target_link_libraries(flight_evidence_recorder_test PRIVATE
-    bluesky_autopilot_contract
-)
-
-add_test(
-    NAME flight_evidence_recorder_test
-    COMMAND flight_evidence_recorder_test
-)
-
-add_executable(evidence_source_adapter_test
-    core/evidence_source_adapter_test.cpp
-)
-
-target_link_libraries(evidence_source_adapter_test PRIVATE
-    bluesky_autopilot_contract
-)
-
-add_test(
-    NAME evidence_source_adapter_test
-    COMMAND evidence_source_adapter_test
-)
+add_executable(bluesky_event_hmi_contract_test core/bluesky_event_hmi_contract_test.cpp)
+target_link_libraries(bluesky_event_hmi_contract_test PRIVATE bluesky_autopilot_contract)
+add_test(NAME bluesky_event_hmi_contract_test COMMAND bluesky_event_hmi_contract_test)
