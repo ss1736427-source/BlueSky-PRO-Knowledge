@@ -11,6 +11,7 @@ add_library(bluesky_planning
     orchestrator/algorithm_orchestrator.cpp
     benchmarks/solver_benchmark_runner.cpp
     adapter/universal_adapter_registry.cpp
+    compiler/mission_compiler.cpp
 )
 
 target_include_directories(bluesky_planning PUBLIC
@@ -97,6 +98,18 @@ add_executable(command_lifecycle_contract_stub_test
 
 target_link_libraries(command_lifecycle_contract_stub_test PRIVATE bluesky_planning)
 
+add_executable(mission_compiler_test
+    compiler/mission_compiler_test.cpp
+)
+
+target_link_libraries(mission_compiler_test PRIVATE bluesky_planning)
+
+add_executable(mission_compiler_multi_test
+    compiler/mission_compiler_multi_test.cpp
+)
+
+target_link_libraries(mission_compiler_multi_test PRIVATE bluesky_planning)
+
 enable_testing()
 add_test(NAME astar_dijkstra_benchmark COMMAND astar_dijkstra_benchmark)
 add_test(NAME orchestrator_integration_test COMMAND orchestrator_integration_test)
@@ -111,3 +124,5 @@ add_test(NAME universal_adapter_registry_test COMMAND universal_adapter_registry
 add_test(NAME adapter_service_resolver_test COMMAND adapter_service_resolver_test)
 add_test(NAME command_authority_gate_contract_stub_test COMMAND command_authority_gate_contract_stub_test)
 add_test(NAME command_lifecycle_contract_stub_test COMMAND command_lifecycle_contract_stub_test)
+add_test(NAME mission_compiler_test COMMAND mission_compiler_test)
+add_test(NAME mission_compiler_multi_test COMMAND mission_compiler_multi_test)
