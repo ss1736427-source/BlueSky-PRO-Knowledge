@@ -44,6 +44,6 @@ add_test(NAME autopilot_adapter_baseline_test COMMAND autopilot_adapter_baseline
 add_library(bluesky_c2_baseline STATIC core/c2_interface_baseline.cpp)
 target_link_libraries(bluesky_c2_baseline PUBLIC bluesky_autopilot_contract)
 
-a dd_executable(c2_interface_baseline_test core/c2_interface_baseline_test.cpp)
+add_executable(c2_interface_baseline_test core/c2_interface_baseline_test.cpp)
 target_link_libraries(c2_interface_baseline_test PRIVATE bluesky_c2_baseline)
 add_test(NAME c2_interface_baseline_test COMMAND c2_interface_baseline_test)
