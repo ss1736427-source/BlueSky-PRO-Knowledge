@@ -7,7 +7,7 @@
 
 A domain is **IMPLEMENTED** only when all required links exist:
 
-`Requirement → Verification Method → Test Case → Configuration → Execution → Source Adapter → Raw Record → Analysis → Result → Evidence Package → Certification Reference`
+`Requirement → Test Method → Test Case → Configuration → Execution → Source Data → Raw Data → Processed Data → Result → Evidence Package → Certification Reference`
 
 A domain is **PARTIAL** when the common collection/storage/export mechanism exists but one or more domain-specific source, method, execution, analysis, or certification links are not yet implemented.
 
@@ -103,11 +103,11 @@ A catalog entry, synthetic demonstration, replay, or bench fixture does not by i
 
 ## 8. Evidence data lifecycle
 
-The common lifecycle is defined in `VERIFICATION_DATA_LIFECYCLE.md`. All domains use the same sequence from requirement and verification method through source capture, raw-data preservation, analysis, result, evidence package and certification reference.
+The common lifecycle is defined in `VERIFICATION_DATA_LIFECYCLE.md`. All domains use the same sequence from requirement and test method through source data capture, raw-data preservation, processed data and analysis, result, evidence package and certification reference.
 
 ## 9. Certification export
 
-The controlled export structure is defined in `CERTIFICATION_EVIDENCE_EXPORT_SPECIFICATION.md`. Export must preserve provenance, evidence class, configuration identity and integrity information. It is a preparation mechanism for certification documentation, not a substitute for formal acceptance.
+The controlled export mechanism is implemented by the project evidence export tooling, including `certification_export.py`, and is governed by the verification/evidence integration contract. Export must preserve provenance, evidence class, configuration identity and integrity information. It is a preparation mechanism for certification documentation, not a substitute for formal acceptance.
 
 ## 10. Extension rule
 
