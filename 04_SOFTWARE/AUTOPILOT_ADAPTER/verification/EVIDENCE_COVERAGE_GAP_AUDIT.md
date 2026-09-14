@@ -136,3 +136,15 @@ The EC-18 implementation baseline now includes a controlled software configurati
 - baseline identifies repository, controlled branch, source revision, software release state, build system, C++ standard and primary build configuration.
 
 This establishes the prototype configuration-control mechanism and provides a stable configuration identifier for linkage into the common evidence lifecycle. EC-18 remains **PARTIAL** because execution-level artifact capture, toolchain identity capture where required, automated configuration verification, and complete verification/certification linkage have not yet been demonstrated.
+
+## 13. EC-15 implementation reconciliation
+
+The EC-15 baseline includes the BlueSky Event/HMI contract and automated contract test:
+
+- `core/bluesky_event_hmi_contract.hpp` — event severity/state model and required event fields;
+- `core/bluesky_event_hmi_contract_test.cpp` — contract validation test;
+- `CMakeLists.txt` — CTest registration.
+
+The recovered `main` baseline was built/tested locally in Release configuration and `bluesky_event_hmi_contract_test` passed: **1/1 tests passed, 0 failed**.
+
+This confirms the current prototype contract and automated test baseline for the Event/HMI interface. EC-15 remains **PARTIAL** because real HMI/event-source integration, domain-specific evidence linkage, complete certification-package generation/integrity verification and physical/operational verification remain outstanding.
