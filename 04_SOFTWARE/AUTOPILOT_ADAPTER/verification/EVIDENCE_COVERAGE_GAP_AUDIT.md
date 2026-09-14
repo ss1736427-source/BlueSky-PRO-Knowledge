@@ -115,10 +115,14 @@ If requirements, safety analysis, engineering analysis, external interfaces, equ
 
 ## 11. EC-14 implementation reconciliation
 
-The EC-14 implementation baseline now includes a concrete C++ recorder/replay mechanism and an automated contract test:
+The EC-14 implementation baseline now includes a concrete C++ recorder/replay mechanism, Source Adapter conversion, and automated contract tests:
 
 - `core/flight_evidence_recorder.hpp` — session recorder and replay reader;
 - `core/flight_evidence_recorder_test.cpp` — multi-source collection, replay and raw-data preservation test;
+- `core/evidence_source_adapter.hpp` — conversion from source-specific records to the common `EvidenceEvent` format without altering the source record;
+- `core/evidence_source_adapter_test.cpp` — adapter field-preservation and recorder persistence test;
 - `CMakeLists.txt` — CTest registration.
 
-This closes the previously missing **implementation mechanism** gap for EC-14. It does **not** close the domain as physical verification evidence: real source-adapter integration, controlled build execution evidence, certification-export verification and physical/operational verification remain outstanding.
+The Source Adapter test has been executed from the normal Release build and passed all diagnostic checks (source fields preserved, adapted event persisted, and raw reference persisted). A diagnostic copy also executes successfully. This confirms the implementation path `Source Record → Source Adapter → Common EvidenceEvent → Recorder` for the current prototype test fixture.
+
+This closes the previously missing **implementation mechanism and prototype adapter integration** gap for EC-14. It does **not** close the domain as physical verification evidence: controlled build execution evidence, complete certification-package generation/integrity verification and physical/operational verification remain outstanding. The Release/CTest `0xC0000409` issue observed earlier is a separate test-runner/runtime condition and shall not be treated as evidence of functional failure of the Source Adapter without reproducing it after the diagnostic test revision.
