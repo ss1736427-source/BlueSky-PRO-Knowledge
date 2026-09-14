@@ -126,3 +126,13 @@ The EC-14 implementation baseline now includes a concrete C++ recorder/replay me
 The Source Adapter test has been executed from the normal Release build and passed all diagnostic checks (source fields preserved, adapted event persisted, and raw reference persisted). A diagnostic copy also executes successfully. This confirms the implementation path `Source Record → Source Adapter → Common EvidenceEvent → Recorder` for the current prototype test fixture.
 
 This closes the previously missing **implementation mechanism and prototype adapter integration** gap for EC-14. It does **not** close the domain as physical verification evidence: controlled build execution evidence, complete certification-package generation/integrity verification and physical/operational verification remain outstanding. The Release/CTest `0xC0000409` issue observed earlier is a separate test-runner/runtime condition and shall not be treated as evidence of functional failure of the Source Adapter without reproducing it after the diagnostic test revision.
+
+## 12. EC-18 implementation reconciliation
+
+The EC-18 implementation baseline now includes a controlled software configuration record:
+
+- `SOFTWARE_CONFIGURATION_BASELINE.md` — controlled configuration identity and change-control rules;
+- `software_configuration_baseline.json` — machine-readable P0 configuration baseline;
+- baseline identifies repository, controlled branch, source revision, software release state, build system, C++ standard and primary build configuration.
+
+This establishes the prototype configuration-control mechanism and provides a stable configuration identifier for linkage into the common evidence lifecycle. EC-18 remains **PARTIAL** because execution-level artifact capture, toolchain identity capture where required, automated configuration verification, and complete verification/certification linkage have not yet been demonstrated.
