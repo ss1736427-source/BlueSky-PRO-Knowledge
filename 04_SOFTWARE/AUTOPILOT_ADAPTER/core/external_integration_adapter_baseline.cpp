@@ -1,5 +1,7 @@
 #include "external_integration_adapter_baseline.hpp"
 
+#include <utility>
+
 namespace bluesky::external_integration {
 
 ExternalIntegrationAdapterBaseline::ExternalIntegrationAdapterBaseline(std::string sourceId, std::string interfaceId)
