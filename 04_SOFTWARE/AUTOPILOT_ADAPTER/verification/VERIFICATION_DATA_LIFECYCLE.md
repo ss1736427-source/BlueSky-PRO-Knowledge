@@ -30,8 +30,6 @@ A domain shall not be considered fully implemented merely because a recorder, ex
 
 The complete chain shall be demonstrable from controlled requirement through controlled evidence output.
 
-`Source Adapter` is an implementation mechanism within the Source Data stage: it acquires/translates source-specific information into the common evidence event model while preserving source identity and original timestamp. `Raw Record` is the controlled storage representation of preserved source information; it is not an additional mandatory lifecycle stage.
-
 ---
 
 ## 3. Requirement
@@ -147,19 +145,17 @@ Source data shall preserve, as applicable:
 
 The source identity shall allow the recorded information to be traced to its origin.
 
-A Source Adapter is the domain-specific acquisition/translation boundary for this stage. It shall preserve source identity and original timestamps and shall not silently change a measured parameter or unit.
-
 ---
 
-## 9. Raw Data and Raw Record
+## 9. Raw Data
 
-Raw Data consists of values preserved as received from the source before domain-specific analytical transformation.
+Raw Data is the preserved representation of source information before domain-specific analytical transformation.
 
-Raw Data shall be retained unchanged and independently from processed representations.
+Raw data shall be retained unchanged and independently from processed representations.
 
-A Raw Record is the controlled storage representation of that preserved source information within the evidence record/package.
+The raw data shall provide the basis for reconstruction of subsequent processing and analysis.
 
-The raw record shall provide the basis for reconstruction of subsequent processing and analysis.
+The controlled storage representation may be a Raw Record within the evidence package. Raw Record is therefore a record/container representation, not an additional lifecycle stage.
 
 Prototype, replay, development and bench data shall be explicitly classified and shall not be represented as physical verification evidence.
 
@@ -167,21 +163,20 @@ Prototype, replay, development and bench data shall be explicitly classified and
 
 ## 10. Processed Data and Analysis
 
-Processed Data contains values derived from Raw Data according to an identified calculation or transformation.
+Processed Data contains values derived from Raw Data according to the applicable Test Method, such as approved calculations, statistics or transformations.
 
-Analysis evaluates recorded and/or processed data according to the applicable Test Method.
+Domain-specific analysis shall be identifiable and reproducible.
 
-Domain-specific processing and analysis shall be identifiable and reproducible.
+Processing and analysis shall preserve traceability to:
 
-Traceability shall be preserved to:
-
-* source data and raw records;
+* source data;
+* raw data/raw record;
 * configuration;
 * execution;
 * test method;
 * applicable test case.
 
-Analytical processing shall not obscure the original source record.
+Analytical processing shall not obscure or replace the original source record.
 
 ---
 
@@ -233,9 +228,9 @@ Certification Reference connects the controlled evidence package to the applicab
 
 The reference shall identify the controlled evidence package rather than requiring measured values to be manually re-entered wherever controlled referencing is possible.
 
-Certification export is an evidence preparation mechanism implemented through the existing verification/evidence integration contract and certification export mechanism.
+The controlled certification export mechanism is implemented by the project evidence export tooling, including `certification_export.py`, and is governed by the verification/evidence integration contract.
 
-Export itself does not constitute formal certification acceptance.
+Certification export is an evidence preparation mechanism. Export itself does not constitute formal certification acceptance.
 
 ---
 
@@ -286,7 +281,7 @@ The evidence mechanism shall support, as applicable:
 * integrity manifest;
 * integrity hash.
 
-Raw Data shall remain preserved independently from processed representations.
+Raw data shall remain preserved independently from processed representations.
 
 ---
 
@@ -306,6 +301,8 @@ A domain-specific implementation shall identify:
 * evidence package allocation;
 * certification reference.
 
+A Source Channel identifies the registered evidence-bearing source/channel. A Source Adapter is the software mechanism that acquires or translates source-specific data into the common evidence event/data model. They are distinct controls.
+
 The common evidence contract shall remain unchanged when a new domain is introduced.
 
 ---
@@ -319,6 +316,7 @@ An evidence-bearing domain is considered fully implemented only when the require
 The following controls shall be present where applicable:
 
 * stable source ID;
+* Source Channel allocation;
 * Source Adapter;
 * timestamp and provenance;
 * parameter/value/unit/quality;
@@ -367,7 +365,7 @@ manifest.sha256
 report.md
 ```
 
-The exact content of these records is controlled by the existing verification/evidence integration contract, certification export mechanism and implementation baseline.
+The exact content of these records is controlled by the applicable evidence integration contract and implementation baseline.
 
 ---
 
