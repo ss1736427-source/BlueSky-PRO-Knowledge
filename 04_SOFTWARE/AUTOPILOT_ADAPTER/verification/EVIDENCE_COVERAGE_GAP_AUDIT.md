@@ -148,3 +148,15 @@ The EC-15 baseline includes the BlueSky Event/HMI contract and automated contrac
 The recovered `main` baseline was built/tested locally in Release configuration and `bluesky_event_hmi_contract_test` passed: **1/1 tests passed, 0 failed**.
 
 This confirms the current prototype contract and automated test baseline for the Event/HMI interface. EC-15 remains **PARTIAL** because real HMI/event-source integration, domain-specific evidence linkage, complete certification-package generation/integrity verification and physical/operational verification remain outstanding.
+
+## 14. EC-06 implementation reconciliation
+
+The EC-06 implementation baseline now includes:
+
+- `core/equipment_adapter_baseline.hpp` / `.cpp` — concrete Equipment Adapter;
+- equipment identity, profile/configuration references, capabilities, state, telemetry, action translation and data-output handling;
+- `core/equipment_adapter_baseline_test.cpp` — automated contract/behavior test;
+- CMake/CTest registration;
+- `core/EC06_STATUS.md` — controlled implementation-status boundary.
+
+The baseline is a prototype/bench mechanism only. EC-06 remains **PARTIAL** because approved real equipment source integration, controlled execution evidence, domain processing/result linkage, integrity-controlled evidence package, certification export verification and physical/operational verification remain outstanding.
