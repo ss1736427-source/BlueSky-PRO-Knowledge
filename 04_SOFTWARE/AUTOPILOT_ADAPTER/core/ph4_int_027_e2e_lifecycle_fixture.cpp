@@ -44,7 +44,7 @@ int main() {
     const auto readBack = adapter.readBackMission();
     const bool readBackOk = readBack.has_value();
     const auto comparison = readBackOk ? adapter.compareMission(compiled.value(), readBack.value()) : MissionComparison{};
-    const bool verified = comparison.match;
+    const bool verified = comparison.equal;
 
     const auto start = adapter.startMission();
     const bool execution = start.acknowledged && start.executionState == ExecutionState::Acknowledged;
