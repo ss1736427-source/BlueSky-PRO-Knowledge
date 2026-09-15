@@ -33,7 +33,7 @@ int main() {
     assert(decodedReadback.has_value());
 
     const auto comparison = adapter.compareMission(approvedMission, *decodedReadback);
-    assert(comparison.match);
+    assert(comparison.equal);
 
     const auto completedEvent = source.emit(startAck->vehicleId, startAck->commandId, "COMPLETED");
     assert(completedEvent.flightRecordId == flightRecordId);
@@ -45,6 +45,6 @@ int main() {
               << Mavlink2Adapter::kProtocolVersion << "|"
               << startFrame << "|" << readbackFrame << "|"
               << approvedMission << "|" << *decodedReadback << "|"
-              << (comparison.match ? "MATCH" : "MISMATCH") << "\n";
+              << (comparison.equal ? "MATCH" : "MISMATCH") << "\n";
     return 0;
 }
