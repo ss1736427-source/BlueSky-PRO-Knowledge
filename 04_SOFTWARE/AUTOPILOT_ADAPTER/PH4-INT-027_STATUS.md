@@ -1,6 +1,6 @@
 # PH4-INT-027 — End-to-End Adapter Lifecycle Gate
 
-**Status:** IMPLEMENTATION PREPARATION — VERIFICATION PENDING  
+**Status:** CLOSED — CI VERIFIED  
 **Evidence boundary:** `SIL_FIXTURE_ONLY`  
 **Baseline:** `MAVLINK2 / BASELINE-1`
 
@@ -12,7 +12,7 @@ This stage does not introduce real transport, HIL, physical-UAV, flight-test or 
 
 ## Scope
 
-The fixture shall cover, in one correlated run:
+The fixture covers, in one correlated run:
 
 1. connect and operational session establishment;
 2. vehicle/autopilot/protocol identity availability;
@@ -37,18 +37,20 @@ The fixture must not imply that SIL execution is representative-UAV or flight-te
 
 `CONNECT → IDENTIFY → CAPABILITIES → COMPATIBILITY → COMPILE → UPLOAD → READ-BACK → VERIFY → EXECUTE → LOG → CLOSE`
 
-## Required evidence
+## Verification
 
-- one executable C++ SIL fixture;
-- one automated Python verification test;
-- CMake/CTest registration;
-- EvidenceSession record with one continuous correlation set;
-- deterministic PASS/FAIL output;
-- explicit `SIL_FIXTURE_ONLY` classification.
+- C++ SIL end-to-end fixture: PASS;
+- automated Python verification: PASS;
+- CMake/CTest registration: PASS;
+- EvidenceSession recording: PASS;
+- deterministic PASS/FAIL output: PASS;
+- evidence classification: `SIL_FIXTURE_ONLY`;
+- CI Run #589: Configure PASS, Build PASS, Evidence Recorder PASS, Test PASS;
+- PR #56 merged to `main` at commit `fb562666838c19d523d6c7ed6c8e07389293b76f`.
 
 ## Exit condition
 
-PH4-INT-027 closes only after the fixture, automated verification, CI Configure, Build, Evidence Recorder and Test stages all pass and the change is merged to `main`.
+PH4-INT-027 is closed. The Phase 4 Universal Integration Layer end-to-end lifecycle gate is verified at the SIL adapter boundary.
 
 ## Deferred
 
