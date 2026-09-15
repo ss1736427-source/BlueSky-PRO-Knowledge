@@ -42,6 +42,11 @@ jobs:
         continue-on-error: true
         run: ctest --test-dir build/autopilot-adapter --output-on-failure -R '^ph4_int_017_mission_execution_readback_correlation_fixture$'
 
+      - name: Diagnose PH4-INT-017 CTest working directory
+        continue-on-error: true
+        working-directory: build/autopilot-adapter
+        run: ./ph4_int_017_mission_execution_readback_correlation_fixture
+
       - name: Test
         run: |
           ctest --test-dir build/autopilot-adapter --output-on-failure
