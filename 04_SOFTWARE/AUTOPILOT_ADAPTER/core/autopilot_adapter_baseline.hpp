@@ -1,13 +1,9 @@
 #pragma once
-
 #include "universal_autopilot_adapter.hpp"
-
 #include <cstdint>
 #include <optional>
 #include <string>
-
 namespace bluesky::autopilot {
-
 class AutopilotAdapterBaseline : public UniversalAutopilotAdapter {
 public:
     explicit AutopilotAdapterBaseline(Identity identity = {});
@@ -55,7 +51,6 @@ public:
     CommandResult verify(const std::string& baseline) override;
     LogAcquisitionResult acquireFlightLog(const std::string& logId) override;
     CommandResult close() override;
-
 private:
     CommandResult command(const std::string& name);
     Identity identity_;
@@ -65,6 +60,6 @@ private:
     std::string configuration_{};
     std::uint64_t commandSequence_{0};
     bool closed_{false};
+    bool sessionStarted_{false};
 };
-
-} // namespace bluesky::autopilot
+}
