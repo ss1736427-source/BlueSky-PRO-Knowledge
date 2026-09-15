@@ -43,9 +43,19 @@ TELEMETRY / EVENTS / LOGS
    ↓
 REPLANNING / RECOVERY
    ↓
-REPLAY / PREDICTED-vs-ACTUAL
+VIRTUAL ↔ REAL ↔ REPLAY ANALYSIS
    ↓
-CORRECTIONS
+INTERNAL EXPERIENCE / CORRECTIONS
+   ↓
+EXTERNAL / TECHNOLOGY / COMPETITIVE INTELLIGENCE
+   ↓
+BENCHMARK / GAP / OPPORTUNITY ANALYSIS
+   ↓
+HYPOTHESIS / EXPERIMENT / VALIDATION
+   ↓
+APPROVED MODEL / ALGORITHM / KNOWLEDGE
+   ↓
+NEXT PREDICTION / PLANNING CYCLE
 ```
 
 ## 3. Current GAP classification
@@ -74,6 +84,16 @@ CORRECTIONS
 | Runtime state machine | specified | pending | pending | P0 |
 | Recovery / failsafe coordination | specified | pending | pending | P0 |
 | Replanning | specified | pending | pending | P0 |
+| Intelligence Core / Intelligence Contract | BASELINED | pending | pending | P1 |
+| Internal operational experience | BASELINED | pending | pending | P1 |
+| Virtual/Real/Actual-condition Replay comparison | BASELINED | pending | pending | P1 |
+| Difference + cause analysis | BASELINED | pending | pending | P1 |
+| External Technology Intelligence | BASELINED | pending | pending | P1 |
+| Competitive Intelligence | BASELINED | pending | pending | P1 |
+| Comparison / Benchmark Engine | BASELINED | pending | pending | P1 |
+| Hypothesis / Experiment lifecycle | BASELINED | pending | pending | P1 |
+| Controlled learning / model promotion | BASELINED | pending | pending | P1 |
+| Knowledge provenance / governance | BASELINED | pending | pending | P1 |
 | Log / replay | specified | pending | pending | P1 |
 | Predicted-vs-actual analysis | specified | pending | pending | P1 |
 | Corrections / model learning | specified | pending | pending | P1 |
@@ -108,6 +128,26 @@ The replanning contract defines triggers, immutable constraints, validation of a
 
 The executable mission version, vehicle configuration, payload configuration, algorithms, environmental inputs, regulatory status and operator actions must be correlated with flight logs.
 
+### 4.8 Intelligence → Operational Core
+
+Intelligence may predict, analyse and recommend, but it must consume canonical domain contracts and must not bypass the Safety/Regulatory/Energy Gate or controlled runtime authority.
+
+### 4.9 Virtual Flight ↔ Real Flight
+
+The same mission configuration must support a forecast-based virtual run, correlation with actual flight results, and an actual-condition replay where data permits. The comparison must preserve the forecast/environment/model versions used for each result.
+
+### 4.10 Experience → Learning
+
+Operational discrepancies must be converted into learning candidates only after cause analysis and sufficient evidence. A single observation shall not silently modify production behaviour.
+
+### 4.11 External Intelligence → BlueSky improvement
+
+External research, technology and competitor information is reference evidence, not operational truth. External findings must pass provenance, relevance, hypothesis, experiment and validation steps before affecting production models or algorithms.
+
+### 4.12 Learning → Production
+
+Candidate models, corrections or algorithms require controlled validation, versioning, approval and rollback capability before promotion.
+
 ## 5. Definition of done for a P0 integration
 
 A P0 item is not complete at documentation stage. It becomes complete only when:
@@ -140,7 +180,13 @@ Implementation shall follow dependency order:
 12. ATM/Regulatory adapters
 13. Real-UAV validation
 14. Replay / predicted-vs-actual / corrections
+15. Intelligence Core integration
+16. External / Competitive Intelligence
+17. Comparison / Benchmark Engine
+18. Controlled learning / model promotion
 ```
+
+Intelligence architecture is defined now but implementation shall not block the current P0 operational dependency chain. Its contracts must consume, rather than redefine, the earlier domain contracts.
 
 UI work must consume these contracts and must not redefine them.
 
@@ -154,6 +200,7 @@ Whenever a new feature is proposed, the audit asks:
 - What is its failure behaviour?
 - How is it tested?
 - What evidence proves it works?
+- If it learns or changes behaviour, what is the promotion and rollback path?
 
 If one of these is missing, the feature remains a GAP rather than being considered complete.
 
@@ -170,6 +217,8 @@ The following P0 contracts are now baselined in the repository:
 - Operational Validation;
 - Unified Telemetry/Event Model;
 - End-to-End Operational Lifecycle.
+
+The Intelligence & Evolution Architecture is additionally baselined as a cross-cutting P1 architecture contract. It formalizes internal experience, virtual/real/replay comparison, external technology and competitive intelligence, benchmarking, hypothesis/experiment flow and controlled learning without changing the existing P0 domain contracts.
 
 These baselines close architectural definition gaps but do **not** imply implementation or verification completion.
 
@@ -194,4 +243,4 @@ The Algorithm Orchestrator is additionally implemented in `04_SOFTWARE/PLANNING`
 11. normalized telemetry/event implementation;
 12. real-UAV operational verification.
 
-These items are the next implementation work, in dependency order.
+These items remain the next implementation work in dependency order. Intelligence & Evolution contracts are now fixed so their later implementation can be attached without architectural rework.
