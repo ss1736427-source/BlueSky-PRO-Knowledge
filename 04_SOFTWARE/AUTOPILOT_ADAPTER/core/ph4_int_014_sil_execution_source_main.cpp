@@ -23,7 +23,8 @@ int main(int argc, char** argv) {
         << "\",\"unit\":\"none\",\"source\":\"SIL_EXECUTION_SOURCE\",\"quality\":\"VALID\",\"context\":{\"flight_record_id\":\""
         << event.flightRecordId << "\",\"evidence_domain_id\":\"EC-01\",\"vehicle_id\":\""
         << event.vehicleId << "\",\"command_id\":\"" << event.commandId
-        << "\",\"execution_state\":\"" << event.executionState << "\"}}\n";
+        << "\",\"execution_state\":\"" << event.executionState
+        << "\",\"execution_source\":\"SIL_FIXTURE\"}}\n";
 
     std::cout << "PH4_INT_014_SIL_EXECUTION_SOURCE: PASS\n";
     std::cout << "verification_status=SIL_FIXTURE_ONLY\n";
