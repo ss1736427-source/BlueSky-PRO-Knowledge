@@ -29,21 +29,12 @@ class Ph4Int017MissionExecutionReadbackCorrelationTest(unittest.TestCase):
         protocol, protocol_version = parts[6:8]
         framed_payload = parts[8]
 
-        frame_parts = framed_payload.split("|", 2)
-        self.assertEqual(frame_parts[0], "MAVLINK2")
-        self.assertEqual(frame_parts[1], "CMD_ACK")
-        start_frame = "|".join(frame_parts)
-
-        readback_parts = start_frame.split("MAVLINK2|MISSION_READBACK|", 1)
-        self.assertEqual(len(readback_parts), 2)
-        readback_frame = "MAVLINK2|MISSION_READBACK|" + readback_parts[1]
-
-        payload = readback_parts[1]
-        mission_parts = payload.split("|", 2)
-        self.assertGreaterEqual(len(mission_parts), 2)
-        approved_mission = "MISSION-017:UAV-MAV-017"
-        actual_mission = approved_mission
-        comparison = "MATCH"
+        readback_marker = "|MAVLINK2|MISSION_READBACK|"
+        self.assertIn(readback_marker, framed_payload)
+        start_frame, readback_and_results = framed_payload.split(readback_marker, 1)
+        start_frame = start_frame.rstrip("|")
+        readback_payload, approved_mission, actual_mission, comparison = readback_and_results.rsplit("|", 3)
+        readback_frame = "MAVLINK2|MISSION_READBACK|" + readback_payload
 
         self.assertEqual(flight_record_id, "FLIGHT-RECORD-PH4-INT-017")
         self.assertEqual(vehicle_id, "UAV-MAV-017")
