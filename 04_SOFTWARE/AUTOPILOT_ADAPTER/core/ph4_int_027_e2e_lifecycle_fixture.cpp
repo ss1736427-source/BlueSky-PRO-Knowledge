@@ -58,7 +58,7 @@ int main() {
     const bool closed = close.acknowledged && close.executionState == ExecutionState::Completed && adapter.getConnectionState() == ConnectionState::Disconnected;
 
     std::cout << "PH4_INT_027|FLIGHT-RECORD-PH4-INT-027|UAV-E2E-027|MAVLINK2|BASELINE-1"
-              << "|CAPABILITY= " << (capabilityGate ? "PASS" : "FAIL")
+              << "|CAPABILITY=" << (capabilityGate ? "PASS" : "FAIL")
               << "|CONNECTED=" << (connected ? "PASS" : "FAIL")
               << "|IDENTIFIED=" << (identified ? "PASS" : "FAIL")
               << "|COMPILED=" << (compiledOk ? "PASS" : "FAIL")
