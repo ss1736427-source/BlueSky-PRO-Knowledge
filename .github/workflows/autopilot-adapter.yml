@@ -35,20 +35,7 @@ jobs:
       - name: Build
         run: cmake --build build/autopilot-adapter --config Release --parallel
 
-      - name: Diagnose PH4-INT-017 direct invocation
-        run: ./build/autopilot-adapter/ph4_int_017_mission_execution_readback_correlation_fixture
-
-      - name: Diagnose PH4-INT-017 CTest invocation
-        continue-on-error: true
-        run: ctest --test-dir build/autopilot-adapter --output-on-failure -R '^ph4_int_017_mission_execution_readback_correlation_fixture$'
-
-      - name: Diagnose PH4-INT-017 CTest working directory
-        continue-on-error: true
-        working-directory: build/autopilot-adapter
-        run: ./ph4_int_017_mission_execution_readback_correlation_fixture
-
       - name: Test
-        continue-on-error: true
         run: |
           ctest --test-dir build/autopilot-adapter --output-on-failure
           c++ -std=c++20 -I04_SOFTWARE/AUTOPILOT_ADAPTER/core -I04_SOFTWARE/PLANNING 04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_007_direct_result_evidence_bridge.cpp 04_SOFTWARE/AUTOPILOT_ADAPTER/core/autopilot_adapter_baseline.cpp 04_SOFTWARE/AUTOPILOT_ADAPTER/core/c2_interface_baseline.cpp -o build/ph4_int_007_bridge
