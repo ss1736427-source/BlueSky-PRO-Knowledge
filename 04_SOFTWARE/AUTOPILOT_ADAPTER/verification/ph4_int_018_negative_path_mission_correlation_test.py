@@ -38,7 +38,10 @@ class Ph4Int018NegativePathMissionCorrelationTest(unittest.TestCase):
         suffix = "|MISMATCH|EXECUTION_FAILURE"
         self.assertTrue(tail.endswith(suffix))
         tail = tail[:-len(suffix)]
-        approved_mission, actual_mission = tail.rsplit("|", 1)
+        mission_fields = tail.split("|")
+        self.assertEqual(len(mission_fields), 3)
+        actual_mission, approved_mission, decoded_mission = mission_fields
+        self.assertEqual(actual_mission, decoded_mission)
         readback_frame = "MAVLINK2|MISSION_READBACK|" + actual_mission
 
         self.assertEqual(flight_record_id, "FLIGHT-RECORD-PH4-INT-018")
