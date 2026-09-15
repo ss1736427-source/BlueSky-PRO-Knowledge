@@ -69,6 +69,7 @@ public:
     bluesky::autopilot::CommandResult write(const std::string&) override { return {}; }
     std::optional<std::string> readBack() override { return std::string{"read-back"}; }
     bluesky::autopilot::CommandResult verify(const std::string&) override { return {}; }
+    bluesky::autopilot::LogAcquisitionResult acquireFlightLog(const std::string&) override { return {}; }
 };
 
 } // namespace
@@ -80,8 +81,6 @@ int main() {
 
     static_assert(std::is_abstract_v<UniversalAutopilotAdapter>);
 
-    // Contract coverage: every execution state defined by the adapter contract
-    // must remain a valid, distinct enum member after interface changes.
     const ExecutionState executionStates[] = {
         ExecutionState::Requested,
         ExecutionState::Validating,
@@ -112,6 +111,7 @@ int main() {
     assert(adapter.readBackMission().has_value());
     assert(adapter.readBaseline().has_value());
     assert(adapter.compare("baseline", "baseline").equal);
+    assert(!adapter.acquireFlightLog("LOG-024-CONTRACT").accepted);
 
     return 0;
 }

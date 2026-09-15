@@ -18,7 +18,7 @@ std::string AutopilotAdapterBaseline::getProtocolVersion() const { return identi
 Capabilities AutopilotAdapterBaseline::getCapabilities() const {
     return {{"arm", "disarm", "takeoff", "land", "hold", "resume", "rtl",
               "gotoPosition", "startMission", "pauseMission", "resumeMission", "abortMission"},
-            {"mission_upload", "mission_download", "mission_readback", "mission_compare"},
+            {"mission_upload", "mission_download", "mission_readback", "mission_compare", "flight_log_acquisition"},
             {}};
 }
 
@@ -147,6 +147,29 @@ CommandResult AutopilotAdapterBaseline::verify(const std::string& baseline) {
     result.executionState = result.acknowledged ? ExecutionState::Completed : ExecutionState::Failed;
     result.error = result.acknowledged ? ErrorCode::None : ErrorCode::ConfigurationMismatch;
     result.reason = result.acknowledged ? "VERIFIED" : "CONFIGURATION_MISMATCH";
+    return result;
+}
+
+LogAcquisitionResult AutopilotAdapterBaseline::acquireFlightLog(const std::string& logId) {
+    LogAcquisitionResult result;
+    result.logId = logId;
+    result.vehicleId = identity_.vehicleId;
+    if (connectionState_ != ConnectionState::Connected) {
+        result.executionState = ExecutionState::Rejected;
+        result.error = ErrorCode::NotConnected;
+        result.reason = "AUTOPILOT_NOT_CONNECTED";
+        return result;
+    }
+    if (logId.empty()) {
+        result.executionState = ExecutionState::Rejected;
+        result.error = ErrorCode::InvalidState;
+        result.reason = "LOG_ID_REQUIRED";
+        return result;
+    }
+    result.accepted = true;
+    result.executionState = ExecutionState::Completed;
+    result.reason = "ACQUIRED";
+    result.sourceReference = "SIL_LOG_SOURCE:" + logId;
     return result;
 }
 

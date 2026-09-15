@@ -94,6 +94,18 @@ struct MissionComparison {
     std::vector<std::string> mismatches;
 };
 
+struct LogAcquisitionResult {
+    std::string logId;
+    std::string vehicleId;
+    bool accepted{false};
+    ExecutionState executionState{ExecutionState::Unknown};
+    ErrorCode error{ErrorCode::None};
+    std::string reason;
+    std::string sourceReference;
+    std::int64_t sourceTimestampMs{0};
+    std::int64_t adapterTimestampMs{0};
+};
+
 class UniversalAutopilotAdapter {
 public:
     virtual ~UniversalAutopilotAdapter() = default;
@@ -152,6 +164,8 @@ public:
     virtual CommandResult write(const std::string& configuration) = 0;
     virtual std::optional<std::string> readBack() = 0;
     virtual CommandResult verify(const std::string& baseline) = 0;
+
+    virtual LogAcquisitionResult acquireFlightLog(const std::string& logId) = 0;
 };
 
 } // namespace bluesky::autopilot
