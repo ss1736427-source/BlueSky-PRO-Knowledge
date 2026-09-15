@@ -57,3 +57,5 @@ jobs:
           python 04_SOFTWARE/AUTOPILOT_ADAPTER/verification/ph4_int_017_mission_execution_readback_correlation_test.py
           ./build/autopilot-adapter/ph4_int_018_negative_path_mission_correlation_fixture
           python 04_SOFTWARE/AUTOPILOT_ADAPTER/verification/ph4_int_018_negative_path_mission_correlation_test.py
+          ./build/autopilot-adapter/ph4_int_019_configuration_lifecycle_fixture
+          python 04_SOFTWARE/AUTOPILOT_ADAPTER/verification/ph4_int_019_configuration_lifecycle_test.py
