@@ -31,31 +31,45 @@ This document binds the already-defined architecture contracts into one executab
         ↓
 11  BEST ADMISSIBLE SOLUTION
         ↓
-12  MISSION PACKAGE COMPILATION
+12  FORECAST VIRTUAL FLIGHT / BASELINE PREDICTION
         ↓
-13  AUTOMATED OPERATIONAL VALIDATION
+13  MISSION PACKAGE COMPILATION
         ↓
-14  ATM / AUTHORIZATION COMPLETION
+14  AUTOMATED OPERATIONAL VALIDATION
         ↓
-15  RELEASE
+15  ATM / AUTHORIZATION COMPLETION
         ↓
-16  C2 CONNECTION / AUTOPILOT UPLOAD
+16  RELEASE
         ↓
-17  READ-BACK + SEMANTIC VERIFICATION
+17  C2 CONNECTION / AUTOPILOT UPLOAD
         ↓
-18  FLIGHT EXECUTION
+18  READ-BACK + SEMANTIC VERIFICATION
         ↓
-19  TELEMETRY / EVENTS / C2 MONITORING
+19  FLIGHT EXECUTION
         ↓
-20  CONTINUE / LOCAL REPLAN / FULL REPLAN / RECOVERY / ABORT
+20  TELEMETRY / EVENTS / C2 MONITORING
         ↓
-21  FLIGHT COMPLETION
+21  CONTINUE / LOCAL REPLAN / FULL REPLAN / RECOVERY / ABORT
         ↓
-22  LOG + EVIDENCE CONSOLIDATION
+22  FLIGHT COMPLETION
         ↓
-23  REPLAY / PREDICTED-vs-ACTUAL
+23  LOG + EVIDENCE CONSOLIDATION
         ↓
-24  CORRECTIONS / MODEL IMPROVEMENT
+24  ACTUAL-CONDITION REPLAY / PREDICTED-vs-ACTUAL
+        ↓
+25  DIFFERENCE + CAUSE ANALYSIS
+        ↓
+26  INTERNAL EXPERIENCE / CORRECTIONS
+        ↓
+27  EXTERNAL / TECHNOLOGY / COMPETITIVE INTELLIGENCE
+        ↓
+28  BENCHMARK / GAP / OPPORTUNITY ANALYSIS
+        ↓
+29  HYPOTHESIS / EXPERIMENT / VALIDATION
+        ↓
+30  APPROVED MODEL / ALGORITHM / KNOWLEDGE
+        ↓
+31  NEXT PREDICTION / PLANNING CYCLE
 ```
 
 ## 3. Core architectural rule
@@ -90,6 +104,8 @@ ENERGY / TIME / PERFORMANCE RECALCULATION
 RANKING
   ↓
 SELECTED PLAN
+  ↓
+FORECAST VIRTUAL FLIGHT
 ```
 
 The orchestrator may use different algorithms for different subtasks or UAVs. Algorithm selection is internal and based on problem structure, computational cost, constraints and expected solution quality.
@@ -199,7 +215,33 @@ Possible actions are:
 
 After C2 recovery, BlueSky first establishes actual vehicle and mission state and reconciles it with its own state before issuing consequential commands.
 
-## 11. Evidence continuity
+## 11. Virtual / real / replay analysis
+
+For applicable missions BlueSky shall preserve three analytically distinct representations:
+
+1. **Forecast Virtual Flight** — baseline simulation using the forecast/environment information available for planning;
+2. **Real Flight** — objective observations and actual mission outcome;
+3. **Actual-Condition Replay** — replay/simulation of the same mission using measured conditions from the real flight where data permits.
+
+The purpose is to separate forecast/environment error from vehicle, battery, payload, execution or model error.
+
+```text
+FORECAST VIRTUAL
+      │
+      ├──────────────┐
+      ▼              │
+PREDICTION           │
+                     │
+REAL FLIGHT ─────► ACTUAL
+      │              │
+      ▼              │
+ACTUAL-CONDITION REPLAY
+      │
+      ▼
+DIFFERENCE + CAUSE ANALYSIS
+```
+
+## 12. Evidence continuity
 
 The following identities remain correlated across the lifecycle:
 
@@ -210,19 +252,97 @@ Payload configuration
 Autopilot/adapter version
 C2 session/channel
 Algorithm/orchestrator version
-Environment snapshot
+Environment forecast snapshot + source/version
+Actual environment observations
 Regulatory state
 Mission Package version
+Virtual Flight version
+Replay version
 Commands / ACKs
 Telemetry / events
 Flight logs
+Intelligence/model version
+Correction/learning candidate ID
 ```
 
-This allows the system to answer after a flight: what was planned, what data was used, what was uploaded, what the UAV actually did, what changed and why.
+This allows the system to answer after a flight: what was planned, what data was used, what was uploaded, what the UAV actually did, what changed, why it changed, and which model/knowledge version was involved.
 
-## 12. Implementation dependency order
+## 13. Intelligence and evolution loop
 
-The implementation sequence is:
+The Intelligence & Evolution layer operates as a controlled cross-cutting loop around the operational lifecycle.
+
+```text
+INTERNAL EXPERIENCE
+        │
+        ├── Predicted vs Actual
+        ├── Actual-condition Replay
+        ├── Operator Corrections
+        └── Mission Outcomes
+        │
+        ▼
+DIFFERENCE / CAUSE ANALYSIS
+        │
+        ▼
+LEARNING CANDIDATES
+        │
+        ├──────────────────────────┐
+        │                          │
+        ▼                          ▼
+EXTERNAL INTELLIGENCE       COMPETITIVE INTELLIGENCE
+        │                          │
+        └────────────┬─────────────┘
+                     ▼
+              BENCHMARK ENGINE
+                     │
+                GAP / OPPORTUNITY
+                     │
+                     ▼
+                HYPOTHESIS
+                     │
+                     ▼
+          SIMULATION / REPLAY / SIL
+                     │
+                     ▼
+                VALIDATION
+                     │
+                     ▼
+          APPROVED MODEL / ALGORITHM
+                     │
+                     ▼
+             NEXT PLANNING CYCLE
+```
+
+External intelligence is evidence for analysis, not an authority over operational behaviour.
+
+## 14. Controlled learning rule
+
+Raw telemetry, a single flight discrepancy, an operator correction or an external competitor claim shall not directly modify production behaviour.
+
+The controlled path is:
+
+`OBSERVE → ANALYSE → HYPOTHESIS → EXPERIMENT → VALIDATE → APPROVE → VERSION → PROMOTE → MONITOR`.
+
+Where a validated engineering model exists, learned corrections should preferably model residual error rather than silently replace the engineering model.
+
+## 15. Objective authority boundary
+
+Intelligence may recommend and predict, but safety, regulatory and energy constraints remain hard gates.
+
+```text
+INTELLIGENCE
+     ↓
+RECOMMENDATION / PREDICTION
+     ↓
+SAFETY + REGULATORY + ENERGY GATE
+     ↓
+CONTROLLED FLIGHT CORE
+```
+
+The intelligence layer must not silently change an operator-edited mission.
+
+## 16. Implementation dependency order
+
+The implementation sequence remains:
 
 1. canonical Mission Model;
 2. Vehicle/Payload Capability Model;
@@ -237,16 +357,26 @@ The implementation sequence is:
 11. HIL;
 12. ATM/Regulatory adapters;
 13. real-UAV integration and operational validation;
-14. replay and predicted-vs-actual correction loop.
+14. replay and predicted-vs-actual correction loop;
+15. Intelligence Core integration;
+16. External/Competitive Intelligence;
+17. Comparison/Benchmark Engine;
+18. controlled learning and model promotion.
 
-## 13. Definition of Done
+The Intelligence & Evolution architecture is defined before its implementation so current P0 work can proceed without rework. Its implementation consumes existing domain contracts and does not redefine them.
 
-The end-to-end architecture is operationally complete only when a representative mission can pass the complete chain:
+## 17. Definition of Done
 
-`OBJECTIVE → PLAN → VALIDATE → AUTHORIZE → RELEASE → UPLOAD → READ-BACK → EXECUTE → MONITOR → COMPLETE → EVIDENCE → REPLAY`
+The end-to-end architecture is operationally complete only when a representative mission can pass the complete operational chain and produce evidence for the intelligence loop:
 
-and every safety-critical transition has objective verification evidence.
+`OBJECTIVE → PLAN → VALIDATE → AUTHORIZE → RELEASE → UPLOAD → READ-BACK → EXECUTE → MONITOR → COMPLETE → EVIDENCE → REPLAY → CAUSE ANALYSIS`
 
-## 14. Anti-rework rule
+and the improvement loop can demonstrate:
 
-No UI, vendor adapter or implementation detail may redefine a canonical domain contract. If a new requirement crosses an existing boundary, the corresponding interface contract and traceability are updated before dependent implementation proceeds.
+`CAUSE / EXTERNAL EVIDENCE → HYPOTHESIS → EXPERIMENT → VALIDATION → APPROVED UPDATE → NEXT PREDICTION`.
+
+Every safety-critical transition and every production model/algorithm change requires objective verification evidence.
+
+## 18. Anti-rework rule
+
+No UI, vendor adapter, AI model or external intelligence source may redefine a canonical domain contract. If a new requirement crosses an existing boundary, the corresponding interface contract and traceability are updated before dependent implementation proceeds.
