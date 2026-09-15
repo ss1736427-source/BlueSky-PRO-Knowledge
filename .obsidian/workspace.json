@@ -187,6 +187,9 @@
   },
   "active": "058fcba7e26ecc4b",
   "lastOpenFiles": [
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_013_heterogeneous_adapter_conformance.cpp",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_013_evidence_session_test.py",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/PH4-INT-013_STATUS.md",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_012_operational_execution_bridge.cpp",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_012_evidence_session_test.py",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_011_flight_record_lifecycle_bridge.cpp",
@@ -199,8 +202,6 @@
     "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_010_evidence_session_test.py",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/PH4-INT-010_STATUS.md",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_009_flight_record_producer_test.cpp",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_009_flight_record_producer.hpp",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_009_flight_record_producer.cpp",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/PH4-INT-009_STATUS.md",
     "01_NORMATIVE/02_Requirements/NORM-REQ-004.md",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/PH4-INT-008_STATUS.md",
@@ -221,7 +222,6 @@
     "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/EC02_IMPLEMENTATION_RECONCILIATION.md",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/EC01_IMPLEMENTATION_RECONCILIATION.md",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/EC01_CI_GATE.md",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/EC06_STATUS.md",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/EC01_STATUS.md"
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/EC06_STATUS.md"
   ]
 }
