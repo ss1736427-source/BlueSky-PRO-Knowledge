@@ -187,6 +187,11 @@
   },
   "active": "058fcba7e26ecc4b",
   "lastOpenFiles": [
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_009_flight_record_producer_test.cpp",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_009_flight_record_producer.hpp",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_009_flight_record_producer.cpp",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_009_evidence_source_test.py",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/PH4-INT-009_STATUS.md",
     "01_NORMATIVE/02_Requirements/NORM-REQ-004.md",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/PH4-INT-008_STATUS.md",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_007_evidence_session_test.py",
@@ -196,9 +201,6 @@
     "04_SOFTWARE/AUTOPILOT_ADAPTER/build/flight_evidence_recorder_test.dir/Debug/flight_e.3DB34F6A.tlog/unsuccessfulbuild",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/build/universal_equipment_adapter_contract_test.dir/Debug/universa.6967999F.tlog/unsuccessfulbuild",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/build/ALL_BUILD.vcxproj.tmp31df5",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/build/RUN_TESTS.vcxproj.filters.tmp2222d",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/build/RUN_TESTS.vcxproj.tmp0d510",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/build/ph4_int_005_failure_propagation_fixture.vcxproj.filters",
     "Воздушный кодекс Ф — статья 131.md",
     "01_NORMATIVE/02_Requirements/NORM-REQ-002.md",
     "01_NORMATIVE/02_Requirements/NORM-REQ-001.md",
@@ -220,8 +222,6 @@
     "04_SOFTWARE/AUTOPILOT_ADAPTER/core/EC01_STATUS.md",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/core/BLUESKY_C2_COMMUNICATION_BASELINE.md",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/EC14_CONFLICT_RESOLUTION.md",
-    "conflict-files-obsidian-git.md",
-    "BlueSky_Project/BlueSky_Project from DeepSeek/_LEGACY/frontend/node_modules/kdbush/README.md",
-    "BlueSky_Project/BlueSky_Project from DeepSeek/_LEGACY/frontend/node_modules/json5/README.md"
+    "conflict-files-obsidian-git.md"
   ]
 }
