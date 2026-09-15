@@ -37,7 +37,8 @@ jobs:
 
       - name: Test
         run: |
-          ctest --test-dir build/autopilot-adapter --output-on-failure
+          ./build/autopilot-adapter/measurement_instrument_adapter_baseline_test
+          ctest --test-dir build/autopilot-adapter --output-on-failure -E measurement_instrument_adapter_baseline_test
           c++ -std=c++20 -I04_SOFTWARE/AUTOPILOT_ADAPTER/core -I04_SOFTWARE/PLANNING 04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_007_direct_result_evidence_bridge.cpp 04_SOFTWARE/AUTOPILOT_ADAPTER/core/autopilot_adapter_baseline.cpp 04_SOFTWARE/AUTOPILOT_ADAPTER/core/c2_interface_baseline.cpp -o build/ph4_int_007_bridge
           python 04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_007_evidence_session_test.py build/ph4_int_007_bridge
           c++ -std=c++20 -I04_SOFTWARE/AUTOPILOT_ADAPTER/core 04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_009_flight_record_producer_test.cpp 04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_009_flight_record_producer.cpp -o build/ph4_int_009_producer
