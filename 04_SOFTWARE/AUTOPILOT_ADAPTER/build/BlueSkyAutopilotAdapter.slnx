@@ -37,6 +37,8 @@
 		<BuildDependency Project="measurement_instrument_adapter_baseline_test.vcxproj"/>
 		<BuildDependency Project="navigation_adapter_baseline_test.vcxproj"/>
 		<BuildDependency Project="performance_model_adapter_baseline_test.vcxproj"/>
+		<BuildDependency Project="ph4_int_004_service_interface_fixture.vcxproj"/>
+		<BuildDependency Project="ph4_int_005_failure_propagation_fixture.vcxproj"/>
 		<BuildDependency Project="propulsion_adapter_baseline_test.vcxproj"/>
 		<BuildDependency Project="safety_failsafe_adapter_baseline_test.vcxproj"/>
 		<BuildDependency Project="security_access_adapter_baseline_test.vcxproj"/>
@@ -150,6 +152,16 @@
 	<Project Path="performance_model_adapter_baseline_test.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="89816b63-e386-3fb1-9ceb-06e3f2e4d00f">
 		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
 		<BuildDependency Project="bluesky_performance_model_baseline.vcxproj"/>
+	</Project>
+	<Project Path="ph4_int_004_service_interface_fixture.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="458372fc-a7dc-32a9-b666-9cb276591ecd">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		<BuildDependency Project="bluesky_autopilot_baseline.vcxproj"/>
+		<BuildDependency Project="bluesky_c2_baseline.vcxproj"/>
+	</Project>
+	<Project Path="ph4_int_005_failure_propagation_fixture.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="bdf191c7-b4da-3256-af7a-ec5d32b5785b">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		<BuildDependency Project="bluesky_autopilot_baseline.vcxproj"/>
+		<BuildDependency Project="bluesky_c2_baseline.vcxproj"/>
 	</Project>
 	<Project Path="propulsion_adapter_baseline_test.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="ccf949a7-01cb-39a7-9a6a-08c44d477735">
 		<BuildDependency Project="ZERO_CHECK.vcxproj"/>

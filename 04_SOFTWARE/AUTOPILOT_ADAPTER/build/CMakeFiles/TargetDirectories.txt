@@ -33,6 +33,8 @@ E:/Flight Planning/PROJECT_KNOWLEDGE/BlueSkyPro/04_SOFTWARE/AUTOPILOT_ADAPTER/bu
 E:/Flight Planning/PROJECT_KNOWLEDGE/BlueSkyPro/04_SOFTWARE/AUTOPILOT_ADAPTER/build/CMakeFiles/fault_recovery_adapter_baseline_test.dir
 E:/Flight Planning/PROJECT_KNOWLEDGE/BlueSkyPro/04_SOFTWARE/AUTOPILOT_ADAPTER/build/CMakeFiles/bluesky_measurement_instrument_baseline.dir
 E:/Flight Planning/PROJECT_KNOWLEDGE/BlueSkyPro/04_SOFTWARE/AUTOPILOT_ADAPTER/build/CMakeFiles/measurement_instrument_adapter_baseline_test.dir
+E:/Flight Planning/PROJECT_KNOWLEDGE/BlueSkyPro/04_SOFTWARE/AUTOPILOT_ADAPTER/build/CMakeFiles/ph4_int_004_service_interface_fixture.dir
+E:/Flight Planning/PROJECT_KNOWLEDGE/BlueSkyPro/04_SOFTWARE/AUTOPILOT_ADAPTER/build/CMakeFiles/ph4_int_005_failure_propagation_fixture.dir
 E:/Flight Planning/PROJECT_KNOWLEDGE/BlueSkyPro/04_SOFTWARE/AUTOPILOT_ADAPTER/build/CMakeFiles/RUN_TESTS.dir
 E:/Flight Planning/PROJECT_KNOWLEDGE/BlueSkyPro/04_SOFTWARE/AUTOPILOT_ADAPTER/build/CMakeFiles/ALL_BUILD.dir
 E:/Flight Planning/PROJECT_KNOWLEDGE/BlueSkyPro/04_SOFTWARE/AUTOPILOT_ADAPTER/build/CMakeFiles/ZERO_CHECK.dir
