@@ -66,6 +66,8 @@ public:
     std::optional<std::string> readBack() override;
     CommandResult verify(const std::string& baseline) override;
 
+    LogAcquisitionResult acquireFlightLog(const std::string& logId) override;
+
 private:
     CommandResult command(const std::string& name);
 
