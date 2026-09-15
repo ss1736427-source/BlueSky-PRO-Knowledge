@@ -28,7 +28,7 @@ int main(int argc, char** argv) {
     assert(!command.acknowledged && command.error == ErrorCode::NotConnected);
     out << "{\"timestamp_ms\":" << timestamp
         << ",\"parameter\":\"autopilot_command\",\"value\":\"REJECTED\",\"unit\":\"none\",\"source\":\"AUTOPILOT_ADAPTER\",\"quality\":\"VALID\",\"context\":{\"flight_record_id\":\"" << record.flightRecordId
-        << "\",\"command_id\":\"" << command.commandId << "\",\"vehicle_id\":\"" << command.vehicleId
+        << "\",\"evidence_domain_id\":\"EC-01\",\"command_id\":\"" << command.commandId << "\",\"vehicle_id\":\"" << command.vehicleId
         << "\",\"execution_state\":\"REJECTED\",\"error\":\"NotConnected\",\"reason\":\"" << command.reason << "\"}}\n";
 
     assert(c2.connect());
@@ -36,7 +36,7 @@ int main(int argc, char** argv) {
     assert(frame.accepted && frame.error == C2ErrorCode::None);
     out << "{\"timestamp_ms\":" << timestamp
         << ",\"parameter\":\"c2_send\",\"value\":\"ACCEPTED\",\"unit\":\"none\",\"source\":\"C2_LINK\",\"quality\":\"VALID\",\"context\":{\"flight_record_id\":\"" << record.flightRecordId
-        << "\",\"sequence\":" << frame.sequence << ",\"error\":\"None\",\"reason\":\"" << frame.reason << "\"}}\n";
+        << "\",\"evidence_domain_id\":\"EC-17\",\"sequence\":" << frame.sequence << ",\"error\":\"None\",\"reason\":\"" << frame.reason << "\"}}\n";
 
     std::cout << "PH4_INT_010_OPERATIONAL_EVIDENCE_BRIDGE: PASS\n";
     std::cout << "flight_record_id_propagation=PASS\n";
