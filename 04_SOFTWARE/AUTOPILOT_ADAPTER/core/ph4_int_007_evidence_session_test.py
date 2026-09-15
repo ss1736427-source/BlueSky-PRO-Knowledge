@@ -19,7 +19,21 @@ def main() -> int:
         run_dir = Path(tmp) / "RUN-PH4-INT-007"
         result = subprocess.run([str(fixture), str(raw)], capture_output=True, text=True)
         assert result.returncode == 0, result.stdout + result.stderr
-        session = EvidenceSession(run_dir, "RUN-PH4-INT-007", evidence_domain_ids=["EC-01"], configuration_id="CFG-PH4-INT-007", mission_id="MISSION-FIXTURE-007", session_id="SES-PH4-INT-007", data_class="DEMONSTRATION")
+        session = EvidenceSession(
+            run_dir,
+            "RUN-PH4-INT-007",
+            evidence_domain_ids=["EC-01"],
+            requirement_ids=["SYS-INT-001"],
+            test_method_id="METHOD-PH4-INT-007",
+            test_method_revision="A",
+            test_case_id="CASE-PH4-INT-007",
+            test_case_revision="A",
+            configuration_id="CFG-PH4-INT-007",
+            configuration={"configuration_id": "CFG-PH4-INT-007", "evidence_class": "DEMONSTRATION"},
+            mission_id="MISSION-FIXTURE-007",
+            session_id="SES-PH4-INT-007",
+            data_class="DEMONSTRATION",
+        )
         for line in raw.read_text(encoding="utf-8").splitlines():
             event = json.loads(line)
             adapter = C2LinkSourceAdapter() if event["source"] == "C2_LINK" else AutopilotTelemetrySourceAdapter()
@@ -34,6 +48,9 @@ def main() -> int:
         assert any(e["context"].get("reason") == "AUTOPILOT_NOT_CONNECTED" for e in events)
         assert any(e["context"].get("reason") == "CREDENTIAL_REFERENCE_REQUIRED" for e in events)
         assert all(e["context"]["session_id"] == "SES-PH4-INT-007" for e in events)
+        assert record["requirement_ids"] == ["SYS-INT-001"]
+        assert record["test_method_id"] == "METHOD-PH4-INT-007"
+        assert record["test_case_id"] == "CASE-PH4-INT-007"
     print("PH4_INT_007_EVIDENCE_SESSION_CHAIN: PASS")
     print("actual_adapter_c2_results=PASS")
     print("evidence_session_package=PASS")
