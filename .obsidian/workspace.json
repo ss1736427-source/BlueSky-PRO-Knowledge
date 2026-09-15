@@ -187,6 +187,10 @@
   },
   "active": "058fcba7e26ecc4b",
   "lastOpenFiles": [
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/ph4_int_018_negative_path_mission_correlation_test.py",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_018_negative_path_mission_correlation_fixture.cpp",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/PH4_INT_018_STATUS.md",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/PH4-INT-019_STATUS.md",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/ph4_int_017_mission_execution_readback_correlation_test.py",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_017_mission_execution_readback_correlation_fixture.cpp",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_016_mavlink2_sil_provenance_fixture.cpp",
@@ -198,8 +202,6 @@
     "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_014_sil_execution_source_test.cpp",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_014_sil_execution_source_main.cpp",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_014_sil_execution_source.hpp",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_014_sil_execution_source.cpp",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_014_sil_execution_evidence_test.py",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/PH4-INT-014_STATUS.md",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/PH4-INT-013_STATUS.md",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/PH4-INT-012_STATUS.md",
@@ -220,8 +222,6 @@
     "04_SOFTWARE/AUTOPILOT_ADAPTER/PH4_INT_005_FAILURE_PROPAGATION.md",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/PH4_INT_005_CMAKE_NOTE.md",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/PH4-INT-006_STATUS.md",
-    "04_SOFTWARE/PLANNING/compiler/README.md",
-    "04_SOFTWARE/PLANNING/compiler/EC05_STATUS.md",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/EC02_IMPLEMENTATION_RECONCILIATION.md"
+    "04_SOFTWARE/PLANNING/compiler/README.md"
   ]
 }
