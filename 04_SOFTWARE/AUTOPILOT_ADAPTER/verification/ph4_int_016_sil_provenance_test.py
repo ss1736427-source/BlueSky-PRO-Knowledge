@@ -18,9 +18,7 @@ from evidence_session import EvidenceSession
 
 class Ph4Int016SilProvenanceTest(unittest.TestCase):
     def test_protocol_execution_reaches_evidence_session(self) -> None:
-        binary = Path(__file__).resolve().parents[1] / "build" / "ph4_int_016_mavlink2_sil_provenance_fixture"
-        if not binary.exists():
-            binary = Path("build/autopilot-adapter/ph4_int_016_mavlink2_sil_provenance_fixture").resolve()
+        binary = ROOT / "build" / "autopilot-adapter" / "ph4_int_016_mavlink2_sil_provenance_fixture"
         self.assertTrue(binary.exists(), f"fixture binary missing: {binary}")
 
         line = subprocess.check_output([str(binary)], text=True).strip()
