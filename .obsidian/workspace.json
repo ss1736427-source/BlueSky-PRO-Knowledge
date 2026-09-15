@@ -191,6 +191,8 @@
   },
   "active": "058fcba7e26ecc4b",
   "lastOpenFiles": [
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_007_evidence_session_test.py",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_007_direct_result_evidence_bridge.cpp",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/build/evidence_source_adapter_test.dir/Debug/evidence.226E9B78.tlog/unsuccessfulbuild",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/build/universal_autopilot_adapter_contract_test.dir/Debug/universa.D9895409.tlog/unsuccessfulbuild",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/build/flight_evidence_recorder_test.dir/Debug/flight_e.3DB34F6A.tlog/unsuccessfulbuild",
@@ -200,8 +202,6 @@
     "04_SOFTWARE/AUTOPILOT_ADAPTER/build/RUN_TESTS.vcxproj.tmp0d510",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/build/ph4_int_005_failure_propagation_fixture.vcxproj.filters",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/build/ph4_int_005_failure_propagation_fixture.vcxproj",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/build/ph4_int_005_failure_propagation_fixture.dir/RelWithDebInfo",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/build/ph4_int_005_failure_propagation_fixture.dir/MinSizeRel",
     "Воздушный кодекс Ф — статья 131.md",
     "01_NORMATIVE/02_Requirements/NORM-REQ-004.md",
     "01_NORMATIVE/02_Requirements/NORM-REQ-002.md",
