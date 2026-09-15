@@ -50,3 +50,6 @@ jobs:
           python 04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_012_evidence_session_test.py build/ph4_int_012_bridge
           c++ -std=c++20 -I04_SOFTWARE/AUTOPILOT_ADAPTER/core 04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_013_heterogeneous_adapter_conformance.cpp 04_SOFTWARE/AUTOPILOT_ADAPTER/core/autopilot_adapter_baseline.cpp -o build/ph4_int_013_conformance
           python 04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_013_evidence_session_test.py build/ph4_int_013_conformance
+          c++ -std=c++20 -I04_SOFTWARE/AUTOPILOT_ADAPTER/core 04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_014_sil_execution_source_main.cpp 04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_014_sil_execution_source.cpp 04_SOFTWARE/AUTOPILOT_ADAPTER/core/autopilot_adapter_baseline.cpp -o build/ph4_int_014_sil
+          ./build/ph4_int_014_sil build/ph4_int_014_events.jsonl
+          python 04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_014_sil_execution_evidence_test.py build/ph4_int_014_sil
