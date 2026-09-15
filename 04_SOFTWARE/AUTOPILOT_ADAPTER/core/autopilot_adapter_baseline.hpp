@@ -11,7 +11,7 @@ namespace bluesky::autopilot {
 // Controlled prototype adapter. It normalizes a vehicle-facing state and
 // command boundary without binding the contract to a specific autopilot
 // protocol. Real protocol adapters are introduced behind this interface.
-class AutopilotAdapterBaseline final : public UniversalAutopilotAdapter {
+class AutopilotAdapterBaseline : public UniversalAutopilotAdapter {
 public:
     explicit AutopilotAdapterBaseline(Identity identity = {});
 
