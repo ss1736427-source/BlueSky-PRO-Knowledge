@@ -187,19 +187,21 @@
   },
   "active": "058fcba7e26ecc4b",
   "lastOpenFiles": [
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/ph4_int_017_mission_execution_readback_correlation_test.py",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_017_mission_execution_readback_correlation_fixture.cpp",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_016_mavlink2_sil_provenance_fixture.cpp",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_015_mavlink2_adapter_test.cpp",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_015_mavlink2_adapter.hpp",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_015_mavlink2_adapter.cpp",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/PH4_INT_017_STATUS.md",
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/PH4-INT-015_STATUS.md",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_014_sil_execution_source_test.cpp",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_014_sil_execution_source_main.cpp",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_014_sil_execution_source.hpp",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_014_sil_execution_source.cpp",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_014_sil_execution_evidence_test.py",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/PH4-INT-014_STATUS.md",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_013_heterogeneous_adapter_conformance.cpp",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_013_evidence_session_test.py",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/PH4-INT-013_STATUS.md",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_012_operational_execution_bridge.cpp",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_012_evidence_session_test.py",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_011_flight_record_lifecycle_bridge.cpp",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/core/ph4_int_011_flight_record_lifecycle.hpp",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/PH4-INT-012_STATUS.md",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/PH4-INT-011_STATUS.md",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/PH4-INT-010_STATUS.md",
@@ -220,8 +222,6 @@
     "04_SOFTWARE/AUTOPILOT_ADAPTER/PH4-INT-006_STATUS.md",
     "04_SOFTWARE/PLANNING/compiler/README.md",
     "04_SOFTWARE/PLANNING/compiler/EC05_STATUS.md",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/EC02_IMPLEMENTATION_RECONCILIATION.md",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/EC01_IMPLEMENTATION_RECONCILIATION.md",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/EC01_CI_GATE.md"
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/verification/EC02_IMPLEMENTATION_RECONCILIATION.md"
   ]
 }
