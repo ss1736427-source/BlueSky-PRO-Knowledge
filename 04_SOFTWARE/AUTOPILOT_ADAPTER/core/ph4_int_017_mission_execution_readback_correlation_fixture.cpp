@@ -1,9 +1,18 @@
 #include "ph4_int_014_sil_execution_source.hpp"
 #include "ph4_int_015_mavlink2_adapter.hpp"
 
-#include <cassert>
 #include <exception>
 #include <iostream>
+#include <stdexcept>
+#include <string>
+
+namespace {
+void require(bool condition, const char* message) {
+    if (!condition) {
+        throw std::runtime_error(message);
+    }
+}
+}
 
 int main() {
     try {
@@ -12,40 +21,43 @@ int main() {
         const std::string flightRecordId = "FLIGHT-RECORD-PH4-INT-017";
         const std::string approvedMission = "MISSION-017:UAV-MAV-017";
 
-        std::cerr << "PH4_INT_017_STAGE|construct\n";
         Mavlink2Adapter adapter({"UAV-MAV-017", "MULTIROTOR", "MAVLINK2-BASELINE", "SIL", "MAVLink2", "2"});
         SilExecutionSource source(flightRecordId);
 
-        std::cerr << "PH4_INT_017_STAGE|connect_upload\n";
-        assert(adapter.connect());
-        assert(adapter.uploadMission(approvedMission));
+        require(adapter.connect(), "CONNECT_FAILED");
+        require(adapter.uploadMission(approvedMission), "MISSION_UPLOAD_FAILED");
 
-        std::cerr << "PH4_INT_017_STAGE|command_ack\n";
         const auto started = adapter.startMission();
-        assert(started.acknowledged);
+        require(started.acknowledged, "MISSION_START_NOT_ACKNOWLEDGED");
         const auto startFrame = adapter.encodeCommand(started);
+        require(!startFrame.empty(), "COMMAND_FRAME_EMPTY");
         const auto startAck = adapter.decodeCommandAck(startFrame);
-        assert(startAck.has_value());
-        assert(startAck->commandId == started.commandId);
+        require(startAck.has_value(), "COMMAND_ACK_DECODE_FAILED");
+        require(startAck->commandId == started.commandId, "COMMAND_ID_CORRELATION_FAILED");
+        require(startAck->vehicleId == started.vehicleId, "VEHICLE_ID_CORRELATION_FAILED");
 
-        std::cerr << "PH4_INT_017_STAGE|executing\n";
         const auto executionEvent = source.emit(startAck->vehicleId, startAck->commandId, "EXECUTING");
-        assert(executionEvent.flightRecordId == flightRecordId);
+        require(executionEvent.flightRecordId == flightRecordId, "EXECUTING_FLIGHT_RECORD_CORRELATION_FAILED");
+        require(executionEvent.vehicleId == startAck->vehicleId, "EXECUTING_VEHICLE_CORRELATION_FAILED");
+        require(executionEvent.commandId == startAck->commandId, "EXECUTING_COMMAND_CORRELATION_FAILED");
 
-        std::cerr << "PH4_INT_017_STAGE|readback\n";
         const auto readback = adapter.readBackMission();
-        assert(readback.has_value());
+        require(readback.has_value(), "MISSION_READBACK_EMPTY");
+        require(*readback == approvedMission, "MISSION_READBACK_CONTENT_FAILED");
+
         const auto readbackFrame = adapter.encodeMissionReadback(*readback);
+        require(!readbackFrame.empty(), "MISSION_READBACK_FRAME_EMPTY");
         const auto decodedReadback = adapter.decodeMissionReadback(readbackFrame);
-        assert(decodedReadback.has_value());
+        require(decodedReadback.has_value(), "MISSION_READBACK_DECODE_FAILED");
+        require(*decodedReadback == approvedMission, "MISSION_READBACK_DECODE_CONTENT_FAILED");
 
-        std::cerr << "PH4_INT_017_STAGE|compare\n";
         const auto comparison = adapter.compareMission(approvedMission, *decodedReadback);
-        assert(comparison.equal);
+        require(comparison.equal, "MISSION_READBACK_COMPARISON_FAILED");
 
-        std::cerr << "PH4_INT_017_STAGE|completed\n";
         const auto completedEvent = source.emit(startAck->vehicleId, startAck->commandId, "COMPLETED");
-        assert(completedEvent.flightRecordId == flightRecordId);
+        require(completedEvent.flightRecordId == flightRecordId, "COMPLETED_FLIGHT_RECORD_CORRELATION_FAILED");
+        require(completedEvent.vehicleId == startAck->vehicleId, "COMPLETED_VEHICLE_CORRELATION_FAILED");
+        require(completedEvent.commandId == startAck->commandId, "COMPLETED_COMMAND_CORRELATION_FAILED");
 
         std::cout << "PH4_INT_017|" << flightRecordId << "|"
                   << startAck->vehicleId << "|" << startAck->commandId << "|"
