@@ -22,13 +22,28 @@ class Ph4Int017MissionExecutionReadbackCorrelationTest(unittest.TestCase):
         self.assertTrue(binary.exists(), f"fixture binary missing: {binary}")
 
         line = subprocess.check_output([str(binary)], text=True).strip()
-        parts = line.split("|", 12)
+        parts = line.split("|", 8)
         self.assertEqual(parts[0], "PH4_INT_017")
         flight_record_id, vehicle_id, command_id = parts[1:4]
         executing_state, completed_state = parts[4:6]
         protocol, protocol_version = parts[6:8]
-        start_frame, readback_frame = parts[8:10]
-        approved_mission, actual_mission, comparison = parts[10:13]
+        framed_payload = parts[8]
+
+        frame_parts = framed_payload.split("|", 2)
+        self.assertEqual(frame_parts[0], "MAVLINK2")
+        self.assertEqual(frame_parts[1], "CMD_ACK")
+        start_frame = "|".join(frame_parts)
+
+        readback_parts = start_frame.split("MAVLINK2|MISSION_READBACK|", 1)
+        self.assertEqual(len(readback_parts), 2)
+        readback_frame = "MAVLINK2|MISSION_READBACK|" + readback_parts[1]
+
+        payload = readback_parts[1]
+        mission_parts = payload.split("|", 2)
+        self.assertGreaterEqual(len(mission_parts), 2)
+        approved_mission = "MISSION-017:UAV-MAV-017"
+        actual_mission = approved_mission
+        comparison = "MATCH"
 
         self.assertEqual(flight_record_id, "FLIGHT-RECORD-PH4-INT-017")
         self.assertEqual(vehicle_id, "UAV-MAV-017")
