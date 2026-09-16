@@ -73,7 +73,7 @@ NEXT PREDICTION / PLANNING CYCLE
 | Capability | Architectural contract | Implementation | Integration / verification | Priority |
 |---|---|---|---|---|
 | Mission Model | BASELINED | IMPLEMENTED | pending | P0 |
-| Mission Objective Profiles | BASELINED | pending | pending | P0 |
+| Mission Objective Profiles | BASELINED | IMPLEMENTED | pending | P0 |
 | Vehicle Capability Model | BASELINED | IMPLEMENTED | pending | P0 |
 | Payload Capability Model | BASELINED | IMPLEMENTED | pending | P0 |
 | Algorithm Orchestration | BASELINED | IMPLEMENTED | pending | P0 |
@@ -116,7 +116,6 @@ NEXT PREDICTION / PLANNING CYCLE
 
 The following P0 items remain implementation or integration blockers after the operational-orchestrator baseline work. They are not considered closed merely because an architectural contract exists.
 
-- Mission Objective Profiles
 - Universal Autopilot API
 - ArduPilot adapter
 - PX4 adapter
@@ -136,7 +135,7 @@ The following P0 items remain implementation or integration blockers after the o
 - Replanning
 - Mission result verification
 
-Operational Orchestrator, Dynamic Readiness / Action Graph, and Resource/mission adaptation decision path are implemented at the current contract/test level; their integration and verification remain pending.
+Operational Orchestrator, Dynamic Readiness / Action Graph, Resource/mission adaptation decision path, and Mission Objective Profiles are implemented at the current contract/test level; their integration and verification remain pending.
 
 ## 5. Additive orchestration gaps
 
