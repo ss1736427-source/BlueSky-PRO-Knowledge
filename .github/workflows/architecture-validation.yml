@@ -23,6 +23,7 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
+          import re
 
           root = Path("02_ARCHITECTURE")
           required = [
@@ -38,19 +39,24 @@ jobs:
               text = path.read_text(encoding="utf-8")
               if not text.strip():
                   raise SystemExit(f"Empty architecture baseline: {path}")
+              if not text.startswith("# "):
+                  raise SystemExit(f"Missing top-level heading: {path}")
+              if not re.search(r"(?im)^\*\*Status:\*\*", text):
+                  raise SystemExit(f"Missing Status metadata: {path}")
 
-          checks = {
+          # Stable structural anchors only. Wording inside the documents may evolve.
+          anchors = {
               required[0]: ("Operational Orchestrator", "Energy"),
-              required[1]: ("MISSION COMPLETE", "Operational orchestration"),
-              required[2]: ("Operational Orchestrator", "implementation pending"),
+              required[1]: ("Canonical lifecycle", "Operational orchestration overlay", "Definition of Done"),
+              required[2]: ("End-to-end control chain", "Current GAP classification", "Remaining P0 implementation gaps"),
           }
 
-          for name, needles in checks.items():
+          for name, needles in anchors.items():
               text = (root / name).read_text(encoding="utf-8")
               missing = [needle for needle in needles if needle not in text]
               if missing:
                   raise SystemExit(
-                      f"Architecture baseline integrity failure in {name}: {', '.join(missing)}"
+                      f"Architecture baseline structural integrity failure in {name}: {', '.join(missing)}"
                   )
 
           print("Architecture documentation integrity: PASS")
