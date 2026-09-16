@@ -1,0 +1,57 @@
+name: BlueSky Architecture Validation
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '02_ARCHITECTURE/**'
+      - '.github/workflows/architecture-validation.yml'
+  pull_request:
+    paths:
+      - '02_ARCHITECTURE/**'
+      - '.github/workflows/architecture-validation.yml'
+
+jobs:
+  architecture-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate architecture document integrity
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          root = Path("02_ARCHITECTURE")
+          required = [
+              "BLUESKY_OPERATIONAL_ORCHESTRATOR_ENERGY_POLICY_BASELINE.md",
+              "BLUESKY_END_TO_END_OPERATIONAL_LIFECYCLE_BASELINE.md",
+              "BLUESKY_ARCHITECTURE_GAP_MATRIX.md",
+          ]
+
+          for name in required:
+              path = root / name
+              if not path.is_file():
+                  raise SystemExit(f"Missing required architecture baseline: {path}")
+              text = path.read_text(encoding="utf-8")
+              if not text.strip():
+                  raise SystemExit(f"Empty architecture baseline: {path}")
+
+          checks = {
+              required[0]: ("Operational Orchestrator", "Energy"),
+              required[1]: ("MISSION COMPLETE", "Operational orchestration"),
+              required[2]: ("Operational Orchestrator", "implementation pending"),
+          }
+
+          for name, needles in checks.items():
+              text = (root / name).read_text(encoding="utf-8")
+              missing = [needle for needle in needles if needle not in text]
+              if missing:
+                  raise SystemExit(
+                      f"Architecture baseline integrity failure in {name}: {', '.join(missing)}"
+                  )
+
+          print("Architecture documentation integrity: PASS")
+          PY
