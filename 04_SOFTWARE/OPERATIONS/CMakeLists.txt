@@ -1,0 +1,15 @@
+cmake_minimum_required(VERSION 3.20)
+project(BlueSkyOperationalOrchestrator LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+enable_testing()
+
+add_library(bluesky_operational_orchestrator_contract INTERFACE)
+target_include_directories(bluesky_operational_orchestrator_contract INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/core)
+target_compile_features(bluesky_operational_orchestrator_contract INTERFACE cxx_std_20)
+
+add_executable(operational_orchestrator_contract_test core/operational_orchestrator_contract_test.cpp)
+target_link_libraries(operational_orchestrator_contract_test PRIVATE bluesky_operational_orchestrator_contract)
+add_test(NAME operational_orchestrator_contract_test COMMAND operational_orchestrator_contract_test)
