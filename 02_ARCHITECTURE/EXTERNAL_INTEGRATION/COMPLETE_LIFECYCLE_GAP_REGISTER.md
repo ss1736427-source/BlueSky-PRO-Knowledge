@@ -77,8 +77,8 @@ NEXT MISSION
 | G0-03 | Command protocol | Command contract now baselined | Runtime implementation of state machine, ACK, retry, timeout, rejection, execution result | P0 |
 | G0-04 | Mission protocol | Canonical Mission Model + translator contract baselined | Vehicle mission compiler/translator, upload/read-back and semantic verification implementation | P0 |
 | G0-05 | Parameter protocol | Configuration contract baselined | Read/write/sync/compare/backup/restore implementation and verified baseline handling | P0 |
-| G0-06 | Vehicle state | Normalized state contract defined | Concrete telemetry/health mappings per adapter | P0 |
-| G0-07 | C2 transport | C2 framework + interface contract defined | Link/session implementation, primary/backup links, loss/recovery state machine | P0 |
+| G0-06 | Vehicle state | Normalized telemetry/state contract implemented | Concrete telemetry/health mappings per adapter and integration/replay verification | P0 |
+| G0-07 | C2 transport | C2 interface and deterministic channel-manager contract implemented | Link/session transport implementation and verified end-to-end loss/recovery integration | P0 |
 | G0-08 | Safety reconciliation | Safety reconciliation rule defined | Executable consistency checks between BlueSky and autopilot safety configuration | P0 |
 | G0-09 | Manual/override control | Authority model defined in autopilot/command contract | Concrete RC/joystick/manual override implementation and authority arbitration tests | P0 |
 | G0-10 | Pre-arm/health | Readiness contract exists | Concrete autopilot pre-arm/health mapping into BlueSky readiness gate | P0 |
@@ -138,15 +138,16 @@ TESTED
 VERIFIED
 ```
 
-The current pass closes the **SPECIFICATION / CONTRACT** portion for the following P0 boundaries:
+The current pass closes the **IMPLEMENTED contract** portion for the following P0 boundaries:
 
 - canonical Mission Model;
 - Mission Objective Profiles;
 - Universal Autopilot Interface;
 - Command Execution contract;
-- C2 interface/framework.
+- C2 interface/framework;
+- normalized telemetry/state runtime-facing contract.
 
-These items therefore remain open at implementation/integration/verification levels until executable software and evidence exist.
+These items remain open at integration/verification levels until executable integration and evidence exist. The C2 channel manager additionally provides a deterministic channel-selection/failover eligibility contract, while physical transport/session implementation remains open.
 
 ## Architectural rule
 
