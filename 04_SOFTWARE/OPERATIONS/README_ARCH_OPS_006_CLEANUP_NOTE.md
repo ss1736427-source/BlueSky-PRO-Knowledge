@@ -1,0 +1,1 @@
+Temporary implementation markers from ARCH-OPS-006 are being consolidated; authoritative contract, implementation, test and CI remain.
