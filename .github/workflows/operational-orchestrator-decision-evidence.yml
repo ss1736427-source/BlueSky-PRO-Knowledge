@@ -1,0 +1,16 @@
+name: BlueSky Operational Orchestrator Decision Evidence
+on:
+  push:
+    branches: [main, 'arch-ops-008-*']
+  pull_request:
+    paths:
+      - '04_SOFTWARE/OPERATIONS/**'
+      - '.github/workflows/operational-orchestrator-decision-evidence.yml'
+jobs:
+  contract-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: cmake -S 04_SOFTWARE/OPERATIONS -B build/operations -DCMAKE_BUILD_TYPE=Release
+      - run: cmake --build build/operations --config Release --parallel
+      - run: ctest --test-dir build/operations --output-on-failure
