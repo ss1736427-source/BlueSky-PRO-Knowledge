@@ -77,9 +77,9 @@ NEXT PREDICTION / PLANNING CYCLE
 | Vehicle Capability Model | BASELINED | IMPLEMENTED | pending | P0 |
 | Payload Capability Model | BASELINED | IMPLEMENTED | pending | P0 |
 | Algorithm Orchestration | BASELINED | IMPLEMENTED | pending | P0 |
-| **Operational Orchestrator** | **BASELINED** | pending | pending | **P0** |
-| **Dynamic Readiness / Action Graph** | **existing requirements + additive orchestration boundary** | pending | pending | **P0** |
-| **Resource/mission adaptation decision path** | **BASELINED by orchestration policy** | **IMPLEMENTED** | pending | **P0** |
+| **Operational Orchestrator** | **BASELINED** | **IMPLEMENTED** | **pending** | **P0** |
+| **Dynamic Readiness / Action Graph** | **existing requirements + additive orchestration boundary** | **IMPLEMENTED** | **pending** | **P0** |
+| **Resource/mission adaptation decision path** | **BASELINED by orchestration policy** | **IMPLEMENTED** | **pending** | **P0** |
 | Universal Autopilot API | BASELINED | pending | pending | P0 |
 | ArduPilot adapter | required | pending | pending | P0 |
 | PX4 adapter | required | pending | pending | P0 |
