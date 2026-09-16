@@ -2,6 +2,7 @@
 
 #include "operational_orchestrator_contract.hpp"
 
+#include <algorithm>
 #include <string>
 #include <vector>
 
@@ -51,6 +52,11 @@ inline bool admissible(const AdaptationCandidate& candidate,
            context.adaptation_authorized;
 }
 
+inline bool mandatory_gates_ok(const AdaptationCandidate& candidate) {
+    return candidate.feasible && candidate.safety_ok && candidate.regulatory_ok &&
+           candidate.energy_ok;
+}
+
 inline std::vector<const AdaptationCandidate*> admissible_candidates(
     const std::vector<AdaptationCandidate>& candidates,
     const AdaptationContext& context) {
@@ -75,8 +81,7 @@ inline AdaptationResult select_adaptation(
         return {AdaptationStatus::Proposed, admissible_set.front()};
 
     for (const auto& candidate : candidates) {
-        if (candidate.feasible && candidate.within_authorized_envelope &&
-            candidate.safety_ok && candidate.regulatory_ok && candidate.energy_ok)
+        if (mandatory_gates_ok(candidate))
             return {AdaptationStatus::RequiresHuman, &candidate};
     }
     return {AdaptationStatus::Infeasible, nullptr};
