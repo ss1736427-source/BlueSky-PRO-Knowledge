@@ -1,0 +1,74 @@
+name: BlueSky Operational Orchestrator Validation
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '04_SOFTWARE/OPERATIONS/BLUESKY_OPERATIONAL_ORCHESTRATOR_INTEGRATION_CONTRACT_001.md'
+      - '.github/workflows/operational-orchestrator-validation.yml'
+  push:
+    paths:
+      - '04_SOFTWARE/OPERATIONS/BLUESKY_OPERATIONAL_ORCHESTRATOR_INTEGRATION_CONTRACT_001.md'
+      - '.github/workflows/operational-orchestrator-validation.yml'
+
+jobs:
+  operational-orchestrator-contract-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate Operational Orchestrator integration contract
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          path = Path("04_SOFTWARE/OPERATIONS/BLUESKY_OPERATIONAL_ORCHESTRATOR_INTEGRATION_CONTRACT_001.md")
+          if not path.is_file():
+              raise SystemExit(f"Missing Operational Orchestrator integration contract: {path}")
+
+          text = path.read_text(encoding="utf-8")
+          if not text.strip():
+              raise SystemExit(f"Empty Operational Orchestrator integration contract: {path}")
+          if not text.startswith("# "):
+              raise SystemExit("Missing top-level heading")
+          if not re.search(r"(?im)^\*\*Status:\*\*", text):
+              raise SystemExit("Missing Status metadata")
+
+          required_sections = [
+              "Normalized Operational Snapshot",
+              "Dynamic Action / Dependency Graph",
+              "Automation and Human Authority",
+              "Deterministic Next-Action Selection",
+              "Resource / Mission Adaptation",
+              "Runtime / C2 Coordination",
+              "Multi-UAV Failure Handling",
+              "Result Verification and Lifecycle Closure",
+              "Decision Evidence and Replay Provenance",
+          ]
+
+          missing = [section for section in required_sections if section not in text]
+          if missing:
+              raise SystemExit(
+                  "Missing required contract sections: " + ", ".join(missing)
+              )
+
+          forbidden_redefinitions = [
+              "replace Mission Model",
+              "replace Objective Profiles",
+              "replace Capability Model",
+              "replace Algorithm Orchestrator",
+              "replace Runtime State Machine",
+              "replace C2",
+              "replace Energy Model",
+          ]
+          found = [item for item in forbidden_redefinitions if item in text]
+          if found:
+              raise SystemExit(
+                  "Non-breaking boundary violation: " + ", ".join(found)
+              )
+
+          print("Operational Orchestrator integration contract: PASS")
+          PY
