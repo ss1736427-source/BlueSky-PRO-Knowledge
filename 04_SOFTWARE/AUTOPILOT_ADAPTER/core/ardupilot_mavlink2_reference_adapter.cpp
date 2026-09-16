@@ -1,4 +1,5 @@
 #include "ardupilot_mavlink2_reference_adapter.hpp"
+#include <utility>
 
 namespace bluesky::autopilot {
 
