@@ -38,15 +38,17 @@ jobs:
               raise SystemExit("Missing Status metadata")
 
           required_sections = [
-              "Normalized Operational Snapshot",
-              "Dynamic Action / Dependency Graph",
-              "Automation and Human Authority",
-              "Deterministic Next-Action Selection",
-              "Resource / Mission Adaptation",
-              "Runtime / C2 Coordination",
-              "Multi-UAV Failure Handling",
-              "Result Verification and Lifecycle Closure",
-              "Decision Evidence and Replay Provenance",
+              "## 4. Normalized operational state",
+              "## 5. Action model",
+              "## 6. Next-action selection",
+              "## 7. Human authority boundary",
+              "## 8. Resource and mission adaptation",
+              "## 9. Runtime coordination",
+              "## 11. Multi-UAV failure interface",
+              "## 12. Mission completion",
+              "## 13. Evidence and traceability",
+              "## 17. Acceptance criteria",
+              "## 18. Implementation sequence / anti-rework rule",
           ]
 
           missing = [section for section in required_sections if section not in text]
@@ -55,19 +57,20 @@ jobs:
                   "Missing required contract sections: " + ", ".join(missing)
               )
 
-          forbidden_redefinitions = [
-              "replace Mission Model",
-              "replace Objective Profiles",
-              "replace Capability Model",
-              "replace Algorithm Orchestrator",
-              "replace Runtime State Machine",
-              "replace C2",
-              "replace Energy Model",
+          required_invariants = [
+              "Existing authoritative subsystem contracts remain authoritative.",
+              "The orchestrator coordinates; it does not duplicate subsystem ownership.",
+              "Hard safety/regulatory/validated energy constraints are feasibility gates.",
+              "AI/optimization cannot override mandatory gates.",
+              "Human authority is explicit and auditable.",
+              "FCS performs immediate flight control; BlueSky performs operational orchestration.",
+              "Mission completion requires verified mission result, not landing alone.",
           ]
-          found = [item for item in forbidden_redefinitions if item in text]
-          if found:
+
+          missing_invariants = [item for item in required_invariants if item not in text]
+          if missing_invariants:
               raise SystemExit(
-                  "Non-breaking boundary violation: " + ", ".join(found)
+                  "Missing required interface invariants: " + ", ".join(missing_invariants)
               )
 
           print("Operational Orchestrator integration contract: PASS")
