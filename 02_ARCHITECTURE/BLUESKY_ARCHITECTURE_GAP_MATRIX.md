@@ -80,9 +80,9 @@ NEXT PREDICTION / PLANNING CYCLE
 | **Operational Orchestrator** | **BASELINED** | **IMPLEMENTED** | **pending** | **P0** |
 | **Dynamic Readiness / Action Graph** | **existing requirements + additive orchestration boundary** | **IMPLEMENTED** | **pending** | **P0** |
 | **Resource/mission adaptation decision path** | **BASELINED by orchestration policy** | **IMPLEMENTED** | **pending** | **P0** |
-| Universal Autopilot API | BASELINED | pending | pending | P0 |
-| ArduPilot adapter | required | pending | pending | P0 |
-| PX4 adapter | required | pending | pending | P0 |
+| Universal Autopilot API | BASELINED | **IMPLEMENTED** | pending | P0 |
+| ArduPilot adapter | required | **IMPLEMENTED** | pending | P0 |
+| PX4 adapter | required | **IMPLEMENTED** | pending | P0 |
 | OEM adapter framework | required | pending | pending | P0 |
 | C2 abstraction | BASELINED | pending | pending | P0 |
 | Channel management / failover | BASELINED | pending | pending | P0 |
@@ -114,11 +114,8 @@ NEXT PREDICTION / PLANNING CYCLE
 
 ## 4. Remaining P0 implementation gaps
 
-The following P0 items remain implementation or integration blockers after the operational-orchestrator baseline work. They are not considered closed merely because an architectural contract exists.
+The following P0 items remain implementation or integration blockers after the operational-orchestrator and reference-autopilot-adapter work. They are not considered closed merely because an architectural contract exists.
 
-- Universal Autopilot API
-- ArduPilot adapter
-- PX4 adapter
 - OEM adapter framework
 - C2 abstraction
 - Channel management / failover
@@ -135,7 +132,15 @@ The following P0 items remain implementation or integration blockers after the o
 - Replanning
 - Mission result verification
 
-Operational Orchestrator, Dynamic Readiness / Action Graph, Resource/mission adaptation decision path, and Mission Objective Profiles are implemented at the current contract/test level; their integration and verification remain pending.
+Universal Autopilot API, ArduPilot reference adapter, PX4 MAVLink2 reference adapter, Operational Orchestrator, Dynamic Readiness / Action Graph, Resource/mission adaptation decision path, and Mission Objective Profiles are implemented at the current contract/test level; their integration and verification remain pending.
+
+### 4.1 Dependency-audit conclusion
+
+The reference autopilot abstraction chain is now executable at contract level for the Universal API, ArduPilot and PX4. The PX4 reference adapter was closed by ARCH-OPS-014 after its adapter consistency, configure, build and test gates passed. No duplicate Universal API implementation is required before proceeding.
+
+The next implementation work shall therefore be selected from the remaining P0 chain based on dependency order, not simply by the order of the GAP list. In particular, the C2 abstraction, Mission Package, telemetry normalization and runtime state-machine boundaries must be checked for prerequisite relationships before introducing mission upload/read-back or real integration behavior.
+
+This audit does **not** grant integration, SIL/HIL, real-UAV or certification verification status.
 
 ## 5. Additive orchestration gaps
 
