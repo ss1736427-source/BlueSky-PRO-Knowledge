@@ -1,0 +1,1 @@
+Authority / automation resolution verification is gated by CI.
