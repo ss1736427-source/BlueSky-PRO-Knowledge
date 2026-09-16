@@ -2,7 +2,9 @@
 
 #include <algorithm>
 #include <cstddef>
+#include <cstdint>
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace bluesky::c2 {
