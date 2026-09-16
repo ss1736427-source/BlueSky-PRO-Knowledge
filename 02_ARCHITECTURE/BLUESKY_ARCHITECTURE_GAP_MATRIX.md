@@ -249,6 +249,10 @@ Implementation shall follow dependency order:
 
 This order is additive to the existing dependency chain. No existing P0 contract is invalidated by the orchestration layer.
 
+Intelligence architecture is defined now but implementation shall not block the current P0 operational dependency chain. Its contracts must consume, rather than redefine, the earlier domain contracts.
+
+UI work must consume these contracts and must not redefine them.
+
 ## 8. Audit rule
 
 Whenever a new feature is proposed, the audit asks:
