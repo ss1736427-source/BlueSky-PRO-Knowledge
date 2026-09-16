@@ -77,9 +77,9 @@ NEXT PREDICTION / PLANNING CYCLE
 | Vehicle Capability Model | BASELINED | IMPLEMENTED | pending | P0 |
 | Payload Capability Model | BASELINED | IMPLEMENTED | pending | P0 |
 | Algorithm Orchestration | BASELINED | IMPLEMENTED | pending | P0 |
-| **Operational Orchestrator** | **BASELINED** | pending | pending | **P0** |
-| **Dynamic Readiness / Action Graph** | **existing requirements + additive orchestration boundary** | pending | pending | **P0** |
-| **Resource/mission adaptation decision path** | **BASELINED by orchestration policy** | **IMPLEMENTED** | pending | **P0** |
+| **Operational Orchestrator** | **BASELINED** | **IMPLEMENTED** | **pending** | **P0** |
+| **Dynamic Readiness / Action Graph** | **existing requirements + additive orchestration boundary** | **IMPLEMENTED** | **pending** | **P0** |
+| **Resource/mission adaptation decision path** | **BASELINED by orchestration policy** | **IMPLEMENTED** | **pending** | **P0** |
 | Universal Autopilot API | BASELINED | pending | pending | P0 |
 | ArduPilot adapter | required | pending | pending | P0 |
 | PX4 adapter | required | pending | pending | P0 |
@@ -112,38 +112,64 @@ NEXT PREDICTION / PLANNING CYCLE
 | Predicted-vs-actual analysis | specified | pending | pending | P1 |
 | Corrections / model learning | specified | pending | pending | P1 |
 
-## 4. Additive orchestration gaps
+## 4. Remaining P0 implementation gaps
+
+The following P0 items remain implementation or integration blockers after the operational-orchestrator baseline work. They are not considered closed merely because an architectural contract exists.
+
+- Mission Objective Profiles
+- Universal Autopilot API
+- ArduPilot adapter
+- PX4 adapter
+- OEM adapter framework
+- C2 abstraction
+- Channel management / failover
+- Mission Package
+- Mission upload + read-back verification
+- Regulatory adapter layer
+- FPL / authorization workflows
+- SIL
+- HIL
+- Automated pre-flight validation
+- Telemetry normalization
+- Runtime state machine
+- Recovery / failsafe coordination
+- Replanning
+- Mission result verification
+
+Operational Orchestrator, Dynamic Readiness / Action Graph, and Resource/mission adaptation decision path are implemented at the current contract/test level; their integration and verification remain pending.
+
+## 5. Additive orchestration gaps
 
 The following are architectural additions, not replacements for existing contracts:
 
-### 4.1 Task objective → acceptable outcomes
+### 5.1 Task objective → acceptable outcomes
 
 The mission objective shall be represented independently from the selected route, vehicle allocation and algorithm. A mission may define multiple acceptable outcomes and operational priorities. The orchestrator evaluates candidate solutions against mandatory acceptance conditions and then optimizes applicable objectives.
 
-### 4.2 Resource availability → mission adaptation
+### 5.2 Resource availability → mission adaptation
 
 Resource selection shall be able to identify unavailable/available UAVs and equipment and feed that state into planning. If the preferred resource is unavailable, the system shall evaluate feasible alternatives including another UAV, multiple UAVs, changed route/profile, task splitting or multiple sorties where permitted.
 
-### 4.3 Preparation → dynamic next action
+### 5.3 Preparation → dynamic next action
 
 Preparation shall be represented as a dependency-aware graph. Independent actions may proceed in parallel; blocked actions remain unavailable until prerequisites are satisfied. The orchestrator selects the next actionable step or coordinated parallel set rather than exposing a static checklist.
 
-### 4.4 Role-aware execution
+### 5.4 Role-aware execution
 
 The common preparation graph shall support one person performing multiple roles or several people performing distributed roles. Each role receives only its applicable human actions while the system retains the global readiness state.
 
-### 4.5 Automation → human authority
+### 5.5 Automation → human authority
 
 Actions shall be classified as automatable, human-guided or human-decision. Automation is permitted only within an explicit authority boundary. Mandatory configuration and safety/regulatory constraints cannot be silently changed.
 
-### 4.6 Mission adaptation envelope
+### 5.6 Mission adaptation envelope
 
 Active mission adaptation shall distinguish pre-authorized automatic changes from changes requiring human decision. The adaptation envelope shall be traceable to mission authorization, safety policy and verified vehicle/FCS capability.
 
-### 4.7 Next-action selection objective
+### 5.7 Next-action selection objective
 
 When several actions are executable, selection shall advance successful mission completion while respecting hard safety/regulatory constraints, protected energy reserve, task quality and operational timing/resource constraints.
 
-### 4.8 Result-based completion
+### 5.8 Result-based completion
 
 `LANDED` and `MISSION COMPLETE` shall remain distinct states. Mission completion requires the mission-specific result, data integrity and quality/output acceptance conditions to be satisfied.
