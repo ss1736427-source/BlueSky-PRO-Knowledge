@@ -20,7 +20,7 @@ int main(){
  auto d=in(r,"A",10,1100); assert(!d.accepted&&d.sequence_result==MavlinkSequenceResult::Duplicate);
  auto g=in(r,"A",13,1200); assert(g.accepted&&g.sequence_result==MavlinkSequenceResult::Gap&&g.snapshot.packets_lost==2);
  auto o=in(r,"A",14,1300); assert(o.accepted&&o.snapshot.link_state==MavlinkLinkState::Healthy);
- assert(r.tick("A",4001).link_state==MavlinkLinkState::Lost);
+ assert(r.tick("A",4301).link_state==MavlinkLinkState::Lost);
  auto rec=r.reconnect("A","UAV-028","ArduPilot:MAVLink2:1:1",1,1); assert(rec.link_state==MavlinkLinkState::Recovering&&!rec.sequence_initialized);
  auto rr=in(r,"A",20,5000); assert(rr.accepted&&rr.snapshot.link_state==MavlinkLinkState::Healthy);
  auto b=r.ingestRawFrame("B",MavlinkDialect::PX4,"UAV-029","PX4:MAVLink2:2:1",1000,hb(200)); assert(b.accepted&&b.snapshot.last_sequence==200);
