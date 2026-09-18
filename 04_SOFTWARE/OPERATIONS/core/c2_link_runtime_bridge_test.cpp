@@ -29,7 +29,7 @@ int main() {
     const auto active = transportSnapshot(
         "UDP-PRIMARY", MavlinkTransportChannelState::Connected, 10);
     const C2LinkMeasurement measurement{
-        42.0, 0.02, 128.0, true, true, 10000};
+        42.0, 0.02, 128.0, std::nullopt, true, true, 10000};
 
     const auto mapped = C2LinkRuntimeBridge::toChannelSnapshot(active, measurement);
     assert(mapped);
@@ -80,6 +80,8 @@ int main() {
     invalid = measurement;
     invalid.measured_timestamp_ms = 0;
     assert(!C2LinkRuntimeBridge::toChannelSnapshot(active, invalid));
+
+    runtime_measurement_integration_test();
 
     std::cout << "c2_link_runtime_bridge_test: PASS\n";
 }
