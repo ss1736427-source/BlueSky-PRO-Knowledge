@@ -216,6 +216,7 @@ MavlinkTransportChannelRuntime::receive(const std::string& channel_id) {
         }
     } else {
         ++channel.snapshot.stats.rejected_frames;
+        return std::nullopt;
     }
 
     return frame;
