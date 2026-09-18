@@ -52,9 +52,6 @@ NormalizedTelemetryState MavlinkTelemetryMapping::map(
     state.c2_state_valid = sample.heartbeat_present &&
         sample.heartbeat_healthy;
 
-    state.mission_valid = sample.mission_valid &&
-        sample.mission_state.has_value();
-
     return state;
 }
 
