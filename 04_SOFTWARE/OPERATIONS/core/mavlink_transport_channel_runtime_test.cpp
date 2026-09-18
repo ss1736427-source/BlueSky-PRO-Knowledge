@@ -29,6 +29,25 @@ static std::vector<std::uint8_t> heartbeat(std::uint8_t seq, std::uint8_t health
 }
 
 using namespace bluesky::operations;
+static void put_i64(std::vector<std::uint8_t>& f, std::size_t offset, std::int64_t value) {
+    const auto u = static_cast<std::uint64_t>(value);
+    for (std::size_t i = 0; i < 8; ++i)
+        f[offset + i] = static_cast<std::uint8_t>(u >> (8 * i));
+}
+
+static std::vector<std::uint8_t> timesync(std::uint8_t seq, std::int64_t tc1, std::int64_t ts1) {
+    std::vector<std::uint8_t> f(10 + 16 + 2, 0);
+    f[0] = 0xFD; f[1] = 16; f[4] = seq; f[5] = 1; f[6] = 1;
+    f[7] = 111; f[8] = 0; f[9] = 0;
+    put_i64(f, 10, tc1); put_i64(f, 18, ts1);
+    std::uint16_t c = 0xffff;
+    for (std::size_t i = 1; i < f.size() - 2; ++i) crc(f[i], c);
+    crc(34, c);
+    f[f.size() - 2] = static_cast<std::uint8_t>(c);
+    f[f.size() - 1] = static_cast<std::uint8_t>(c >> 8);
+    return f;
+}
+
 
 static MavlinkTransportChannelConfig config(const char* channel, const char* session,
     const char* vehicle, const char* source, std::uint8_t sysid) {
@@ -64,6 +83,15 @@ int main() {
     auto recovered=heartbeat(20);
     assert(r.injectReceive("CH-A",5000,recovered)); assert(r.receive("CH-A").has_value());
     a=r.snapshot("CH-A"); assert(a->link_metrics.observed_packets==1 && a->link_metrics.last_sequence==20);
+    auto ts_request = timesync(21, 0, 7000000);
+    auto ts_response = timesync(22, 123, 7000000);
+    assert(r.send("CH-A", 7000, ts_request));
+    assert(r.injectReceive("CH-A", 7075, ts_response));
+    assert(r.receive("CH-A").has_value());
+    a = r.snapshot("CH-A");
+    assert(a->link_latency.probes_sent == 1);
+    assert(a->link_latency.responses_received == 1);
+    assert(a->link_latency.last_rtt_ms && *a->link_latency.last_rtt_ms == 75);
 
     MavlinkTransportChannelRuntime udp_runtime(3000);
     auto udp=config("UDP-CH","UDP-SESSION","UAV-UDP","ArduPilot:MAVLink2:1:1",1);
