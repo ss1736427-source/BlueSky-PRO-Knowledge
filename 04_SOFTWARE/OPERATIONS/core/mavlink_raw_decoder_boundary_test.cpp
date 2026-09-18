@@ -17,7 +17,7 @@ static void crcAccumulate(std::uint8_t data, std::uint16_t& crc) {
 
 static std::vector<std::uint8_t> heartbeatFrame() {
     std::vector<std::uint8_t> frame{0xFD, 9, 0, 0, 7, 1, 1, 0, 0, 0,
-                                    0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0};
+                                    0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0};
     std::uint16_t crc = 0xffffU;
     for (std::size_t i = 1; i < frame.size() - 2; ++i) crcAccumulate(frame[i], crc);
     crcAccumulate(50, crc);
@@ -49,9 +49,6 @@ void testCorruptFrameRejected() {
 void testUnsupportedMessageRejected() {
     auto frame = heartbeatFrame();
     frame[7] = 150;
-    std::uint16_t crc = 0xffffU;
-    for (std::size_t i = 1; i < frame.size() - 2; ++i) crcAccumulate(frame[i], crc);
-    // No CRC extra is defined by this boundary for message 150; rejection must occur before decoding.
     const auto decoded = MavlinkRawDecoderBoundary::decodeFrame(
         MavlinkDialect::ArduPilot, "AP-UAV-027", "ArduPilot:MAVLink2:1:1", 2000, frame);
     assert(!decoded.has_value());
