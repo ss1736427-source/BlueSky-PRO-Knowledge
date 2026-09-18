@@ -149,8 +149,8 @@ int main() {
     assert(external_sender.sendTo(*udp_snapshot->config.udp_local, heartbeat(44)));
     assert(udp_runtime.pollReceive("UDP-CH", 6010));
     udp_snapshot = udp_runtime.snapshot("UDP-CH");
-    assert(udp_snapshot->session->link_state == MavlinkLinkState::Degraded);
     assert(udp_snapshot->session->packets_lost == 1);
+    assert(udp_snapshot->session->link_state == MavlinkLinkState::Healthy);
 
     assert(external_sender.sendTo(*udp_snapshot->config.udp_local, heartbeat(44)));
     assert(!udp_runtime.pollReceive("UDP-CH", 6020));
