@@ -1,5 +1,7 @@
 #include "mavlink_telemetry_replay_assembler.hpp"
 
+#include <algorithm>
+
 namespace bluesky::operations {
 
 MavlinkTelemetryReplay MavlinkTelemetryReplayAssembler::assemble(
