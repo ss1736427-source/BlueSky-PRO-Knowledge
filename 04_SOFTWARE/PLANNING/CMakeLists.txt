@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_library(bluesky_planning
+    command_lifecycle_runtime.cpp
     solvers/astar_solver.cpp
     solvers/dijkstra_solver.cpp
     orchestrator/algorithm_orchestrator.cpp
@@ -98,6 +99,12 @@ add_executable(command_lifecycle_contract_stub_test
 
 target_link_libraries(command_lifecycle_contract_stub_test PRIVATE bluesky_planning)
 
+add_executable(command_lifecycle_runtime_test
+    command_lifecycle_runtime_test.cpp
+)
+
+target_link_libraries(command_lifecycle_runtime_test PRIVATE bluesky_planning)
+
 add_executable(mission_compiler_test
     compiler/mission_compiler_test.cpp
 )
@@ -124,5 +131,6 @@ add_test(NAME universal_adapter_registry_test COMMAND universal_adapter_registry
 add_test(NAME adapter_service_resolver_test COMMAND adapter_service_resolver_test)
 add_test(NAME command_authority_gate_contract_stub_test COMMAND command_authority_gate_contract_stub_test)
 add_test(NAME command_lifecycle_contract_stub_test COMMAND command_lifecycle_contract_stub_test)
+add_test(NAME command_lifecycle_runtime_test COMMAND command_lifecycle_runtime_test)
 add_test(NAME mission_compiler_test COMMAND mission_compiler_test)
 add_test(NAME mission_compiler_multi_test COMMAND mission_compiler_multi_test)
