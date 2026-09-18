@@ -1,5 +1,7 @@
 #include "mavlink_session_boundary.hpp"
 
+#include <utility>
+
 namespace bluesky::autopilot {
 
 MavlinkSessionBoundary::MavlinkSessionBoundary(std::string dialect)
