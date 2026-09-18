@@ -11,14 +11,10 @@
             "id": "058fcba7e26ecc4b",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Воздушный кодекс Ф — статья 131.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Воздушный кодекс Ф — статья 131"
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Граф"
             }
           }
         ]
@@ -189,8 +185,9 @@
       "bases:Создать новую базу": false
     }
   },
-  "active": "0edc1e8c7f140214",
+  "active": "058fcba7e26ecc4b",
   "lastOpenFiles": [
+    "Воздушный кодекс Ф — статья 131.md",
     "08_HMI/DESIGN_SYSTEM/FIGMA/README.md",
     "08_HMI/DESIGN_SYSTEM/FIGMA/BlueSky_PRO_Figma_Visual_Tokens.svg",
     "08_HMI/DESIGN_SYSTEM/FIGMA/BlueSky_PRO_Figma_Visual_Tokens.json",
@@ -226,7 +223,6 @@
     "04_SOFTWARE/AUTOPILOT_ADAPTER/PH4-INT-015_STATUS.md",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/PH4-INT-014_STATUS.md",
     "04_SOFTWARE/AUTOPILOT_ADAPTER/PH4-INT-013_STATUS.md",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/PH4-INT-012_STATUS.md",
-    "04_SOFTWARE/AUTOPILOT_ADAPTER/PH4-INT-011_STATUS.md"
+    "04_SOFTWARE/AUTOPILOT_ADAPTER/PH4-INT-012_STATUS.md"
   ]
 }
