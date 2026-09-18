@@ -49,3 +49,10 @@ add_test(NAME mission_objective_profiles_test COMMAND mission_objective_profiles
 add_executable(normalized_telemetry_state_test core/normalized_telemetry_state_test.cpp)
 target_link_libraries(normalized_telemetry_state_test PRIVATE bluesky_operational_orchestrator_contract)
 add_test(NAME normalized_telemetry_state_test COMMAND normalized_telemetry_state_test)
+
+add_executable(vehicle_state_mapping_test
+    core/vehicle_state_mapping_test.cpp
+    core/vehicle_state_mapping.cpp
+    ../AUTOPILOT_ADAPTER/core/autopilot_adapter_baseline.cpp)
+target_link_libraries(vehicle_state_mapping_test PRIVATE bluesky_operational_orchestrator_contract)
+add_test(NAME vehicle_state_mapping_test COMMAND vehicle_state_mapping_test)
