@@ -39,13 +39,13 @@ std::optional<DecodedMavlinkMessage> MavlinkRawDecoderBoundary::decodeFrame(Mavl
         message.latitude_deg = static_cast<double>(readI32(payload, 4)) / 1e7; message.longitude_deg = static_cast<double>(readI32(payload, 8)) / 1e7; message.altitude_m = static_cast<double>(readI32(payload, 12)) / 1000.0;
         { const auto vx = static_cast<double>(readI16(payload, 20)) / 100.0; const auto vy = static_cast<double>(readI16(payload, 22)) / 100.0; message.ground_speed_mps = std::sqrt(vx * vx + vy * vy); }
         { const auto heading = readU16(payload, 26); if (heading != 0xffffU) message.heading_deg = static_cast<double>(heading) / 100.0; }
-        message.position_valid = true; message.navigation_valid = message.ground_speed_mps.has_value() && message.heading_deg.has_value(); break;
+        break;
     case 30:
         if (payload.size() < 16) return std::nullopt;
-        message.kind = MavlinkMessageKind::Attitude; message.roll_rad = static_cast<double>(readF32(payload, 4)); message.pitch_rad = static_cast<double>(readF32(payload, 8)); message.yaw_rad = static_cast<double>(readF32(payload, 12)); message.attitude_valid = true; break;
+        message.kind = MavlinkMessageKind::Attitude; message.roll_rad = static_cast<double>(readF32(payload, 4)); message.pitch_rad = static_cast<double>(readF32(payload, 8)); message.yaw_rad = static_cast<double>(readF32(payload, 12)); break;
     case 1:
         if (payload.size() < 31) return std::nullopt;
-        message.kind = MavlinkMessageKind::SysStatus; if (static_cast<std::int8_t>(payload[30]) >= 0) { message.battery_percent = static_cast<double>(static_cast<std::int8_t>(payload[30])); message.battery_valid = true; } message.health_valid = true; break;
+        message.kind = MavlinkMessageKind::SysStatus; if (static_cast<std::int8_t>(payload[30]) >= 0) message.battery_percent = static_cast<double>(static_cast<std::int8_t>(payload[30])); message.healthy = true; break;
     default: return std::nullopt;
     }
     return message;
