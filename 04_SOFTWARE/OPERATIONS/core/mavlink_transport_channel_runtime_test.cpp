@@ -134,7 +134,7 @@ int main() {
     assert(external_sender.open({"127.0.0.1", 0}));
     const auto sender_endpoint = external_sender.localEndpoint();
     assert(sender_endpoint);
-    assert(udp_runtime.setUdpRemote("UDP-CH", *sender_endpoint));
+    assert(udp_runtime.setUdpIngressPeer("UDP-CH", *sender_endpoint));
     assert(external_sender.sendTo(*udp_snapshot->config.udp_local, heartbeat(42)));
     assert(udp_runtime.pollReceive("UDP-CH", 6000));
 
@@ -188,7 +188,7 @@ int main() {
     assert(outbound);
     assert(*outbound == heartbeat(43));
 
-    assert(udp_runtime.setUdpRemote("UDP-CH", *sender_endpoint));
+    assert(udp_runtime.setUdpIngressPeer("UDP-CH", *sender_endpoint));
     assert(recovered_local && recovered_local->port != 0);
     assert(external_sender.sendTo(*recovered_local, heartbeat(1)));
     assert(udp_runtime.pollReceive("UDP-CH", 10000));
