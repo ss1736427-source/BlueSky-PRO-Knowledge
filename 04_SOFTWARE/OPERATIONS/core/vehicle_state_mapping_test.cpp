@@ -1,5 +1,5 @@
 #include "vehicle_state_mapping.hpp"
-#include "../AUTOPILOT_ADAPTER/core/autopilot_adapter_baseline.hpp"
+#include "../../AUTOPILOT_ADAPTER/core/autopilot_adapter_baseline.hpp"
 
 #ifdef NDEBUG
 #undef NDEBUG
