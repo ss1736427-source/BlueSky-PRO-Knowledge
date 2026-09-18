@@ -241,6 +241,15 @@ bool MavlinkTransportChannelRuntime::pollReceive(
 
     ++channel.snapshot.stats.received_frames;
     channel.snapshot.stats.last_receive_timestamp_ms = timestamp_ms;
+    channel.snapshot.stats.last_receive_endpoint = source;
+
+    if (channel.snapshot.config.udp_remote.has_value() &&
+        !(source.host == channel.snapshot.config.udp_remote->host &&
+          source.port == channel.snapshot.config.udp_remote->port)) {
+        ++channel.snapshot.stats.rejected_frames;
+        return false;
+    }
+
     channel.rx_queue.push_back(*frame);
     return receive(channel_id).has_value();
 }
