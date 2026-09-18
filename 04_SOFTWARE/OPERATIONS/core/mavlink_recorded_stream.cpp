@@ -56,8 +56,13 @@ MavlinkRecordedStream MavlinkRecordedStreamReader::read(
         message.healthy = healthy != 0;
         message.valid = valid != 0;
 
-        if (message.kind == MavlinkMessageKind::GlobalPositionInt &&
-            (fields >> v1 >> v2 >> v3 >> v4 >> v5)) {
+        if (message.kind == MavlinkMessageKind::Heartbeat) {
+            std::string flight_mode;
+            if (fields >> flight_mode) {
+                message.flight_mode = flight_mode;
+            }
+        } else if (message.kind == MavlinkMessageKind::GlobalPositionInt &&
+                   (fields >> v1 >> v2 >> v3 >> v4 >> v5)) {
             message.latitude_deg = v1;
             message.longitude_deg = v2;
             message.altitude_m = v3;
