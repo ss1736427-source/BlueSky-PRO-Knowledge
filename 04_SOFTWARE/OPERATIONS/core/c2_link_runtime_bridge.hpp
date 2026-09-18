@@ -12,6 +12,7 @@ struct C2LinkMeasurement {
     double latency_ms{0.0};
     double packet_loss{0.0};
     double capacity_kbps{0.0};
+    std::optional<double> observed_bandwidth_kbps;
     bool integrity_ok{false};
     bool authenticated{false};
     std::int64_t measured_timestamp_ms{0};
@@ -19,6 +20,9 @@ struct C2LinkMeasurement {
 
 class C2LinkRuntimeBridge final {
 public:
+    static C2LinkMeasurement fromRuntimeSnapshot(
+        const MavlinkTransportChannelSnapshot& transport);
+
     static std::optional<bluesky::c2::ChannelSnapshot> toChannelSnapshot(
         const MavlinkTransportChannelSnapshot& transport,
         const C2LinkMeasurement& measurement);
