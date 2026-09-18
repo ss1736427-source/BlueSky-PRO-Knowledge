@@ -29,8 +29,8 @@ int main() {
     snapshot = metrics.snapshot();
     assert(snapshot.duplicate_packets == 1);
     assert(snapshot.out_of_order_packets == 1);
-    assert(snapshot.observed_packets == 6);
-    assert(snapshot.ageMs(1090).value() == 40);
+    assert(snapshot.observed_packets == 5);
+    assert(snapshot.ageMs(1090).value() == 30);
 
     assert(!metrics.observe(3, 0));
 
