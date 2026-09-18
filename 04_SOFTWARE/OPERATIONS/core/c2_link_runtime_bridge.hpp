@@ -19,6 +19,14 @@ struct C2LinkMeasurement {
 
 class C2LinkRuntimeBridge final {
 public:
+    // Builds the C2 measurement input from executable per-channel runtime metrics.
+    // Capacity is represented as observed throughput, not physical link capacity.
+    static C2LinkMeasurement measureFromTransport(
+        const MavlinkTransportChannelSnapshot& transport,
+        bool integrity_ok,
+        bool authenticated,
+        std::int64_t measured_timestamp_ms);
+
     static std::optional<bluesky::c2::ChannelSnapshot> toChannelSnapshot(
         const MavlinkTransportChannelSnapshot& transport,
         const C2LinkMeasurement& measurement);
