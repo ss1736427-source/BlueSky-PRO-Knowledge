@@ -22,7 +22,8 @@ int main() {
     assert(byAddress && byAddress->vehicle_id == "UAV-02");
 
     const auto byVehicle = fleet.resolveVehicle("UAV-01");
-    assert(byVehicle && byVehicle->address == FleetAddress{1, 1});
+    const FleetAddress expectedAddress{1, 1};
+    assert(byVehicle && byVehicle->address == expectedAddress);
 
     const FleetAddressBinding duplicateAddress{"UAV-03", "ArduPilot:MAVLink2:3:1", "S3", {1, 1}};
     assert(fleet.registerBinding(duplicateAddress) == FleetAddressRegistrationResult::AddressCollision);
