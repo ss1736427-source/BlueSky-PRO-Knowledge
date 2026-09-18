@@ -41,6 +41,30 @@ int main() {
     assert(mapped->authenticated);
     assert(mapped->priority == 10);
 
+
+    auto measured_transport = active;
+    measured_transport.link_metrics.observed_packets = 9;
+    measured_transport.link_metrics.inferred_lost_packets = 1;
+    measured_transport.link_latency.last_rtt_ms = 40;
+    measured_transport.link_bandwidth.transmitted_bytes = 1000;
+    measured_transport.link_bandwidth.first_transmit_timestamp_ms = 1000;
+    measured_transport.link_bandwidth.last_transmit_timestamp_ms = 2000;
+    measured_transport.link_bandwidth.received_bytes = 2500;
+    measured_transport.link_bandwidth.first_receive_timestamp_ms = 1000;
+    measured_transport.link_bandwidth.last_receive_timestamp_ms = 2000;
+
+    const auto derived = C2LinkRuntimeBridge::measureFromTransport(
+        measured_transport, true, true, 12000);
+    assert(derived.latency_ms == 40.0);
+    assert(derived.packet_loss == 0.1);
+    assert(derived.capacity_kbps == 20.0);
+    assert(derived.integrity_ok && derived.authenticated);
+    assert(derived.measured_timestamp_ms == 12000);
+
+    const auto derivedMapped =
+        C2LinkRuntimeBridge::toChannelSnapshot(measured_transport, derived);
+    assert(derivedMapped && derivedMapped->capacityKbps == 20.0);
+
     const auto degraded = transportSnapshot(
         "UDP-BACKUP", MavlinkTransportChannelState::Degraded, 5);
     const auto backup = C2LinkRuntimeBridge::toChannelSnapshot(degraded, measurement);
