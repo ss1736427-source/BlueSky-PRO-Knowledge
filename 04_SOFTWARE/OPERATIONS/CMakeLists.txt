@@ -56,3 +56,9 @@ add_executable(vehicle_state_mapping_test
     ../AUTOPILOT_ADAPTER/core/autopilot_adapter_baseline.cpp)
 target_link_libraries(vehicle_state_mapping_test PRIVATE bluesky_operational_orchestrator_contract)
 add_test(NAME vehicle_state_mapping_test COMMAND vehicle_state_mapping_test)
+
+add_executable(mavlink_telemetry_mapping_test
+    core/mavlink_telemetry_mapping_test.cpp
+    core/mavlink_telemetry_mapping.cpp)
+target_link_libraries(mavlink_telemetry_mapping_test PRIVATE bluesky_operational_orchestrator_contract)
+add_test(NAME mavlink_telemetry_mapping_test COMMAND mavlink_telemetry_mapping_test)
