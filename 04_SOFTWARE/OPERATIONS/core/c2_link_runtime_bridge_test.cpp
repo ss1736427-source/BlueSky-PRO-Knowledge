@@ -23,6 +23,8 @@ static MavlinkTransportChannelSnapshot transportSnapshot(
     return snapshot;
 }
 
+static void runtime_measurement_integration_test();
+
 int main() {
     const auto active = transportSnapshot(
         "UDP-PRIMARY", MavlinkTransportChannelState::Connected, 10);
