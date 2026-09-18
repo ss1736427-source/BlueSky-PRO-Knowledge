@@ -1,7 +1,9 @@
 #include "mission_transfer_runtime.hpp"
+#include "../AUTOPILOT_ADAPTER/core/autopilot_adapter_baseline.hpp"
 
 #include <cassert>
 #include <iostream>
+#include <optional>
 
 namespace {
 
