@@ -1,7 +1,9 @@
 #pragma once
 
 #include "mavlink_session_runtime.hpp"
+#include "mavlink_udp_transport_driver.hpp"
 #include <cstdint>
+#include <memory>
 #include <optional>
 #include <string>
 #include <unordered_map>
@@ -37,6 +39,8 @@ struct MavlinkTransportChannelConfig {
     std::uint8_t component_id{0};
     MavlinkTransportType transport{MavlinkTransportType::DeterministicMemory};
     int priority{0};
+    std::optional<MavlinkUdpEndpoint> udp_local;
+    std::optional<MavlinkUdpEndpoint> udp_remote;
 };
 
 struct MavlinkTransportChannelStats {
@@ -80,6 +84,9 @@ public:
     std::optional<std::vector<std::uint8_t>> receive(
         const std::string& channel_id);
 
+    bool pollReceive(const std::string& channel_id,
+                     std::int64_t timestamp_ms);
+
     MavlinkSessionSnapshot tickSession(const std::string& session_id,
                                        std::int64_t now_ms);
 
@@ -91,6 +98,7 @@ private:
         MavlinkTransportChannelSnapshot snapshot;
         std::vector<std::vector<std::uint8_t>> rx_queue;
         std::vector<std::vector<std::uint8_t>> tx_queue;
+        std::unique_ptr<MavlinkUdpTransportDriver> udp_driver;
     };
 
     std::int64_t heartbeat_timeout_ms_;
