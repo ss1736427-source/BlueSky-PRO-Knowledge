@@ -21,7 +21,8 @@ void testVersionedStreamIsRead() {
     assert(stream.stream_id == "AP-REC-026");
     assert(stream.format_version == "1");
     assert(stream.messages.size() == 2);
-    assert(stream.messages[1].position_valid == false);
+    assert(stream.messages[1].latitude_deg.has_value());
+    assert(stream.messages[1].longitude_deg.has_value());
     assert(stream.messages[1].source_timestamp_ms == 1100);
 }
 
