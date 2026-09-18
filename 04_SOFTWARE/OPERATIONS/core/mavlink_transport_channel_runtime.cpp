@@ -17,6 +17,41 @@ std::optional<std::uint8_t> extractSequence(
     return std::nullopt;
 }
 
+std::optional<std::pair<bool, std::int64_t>> extractTimesync(
+    const std::vector<std::uint8_t>& frame) {
+    std::size_t payload = 0;
+    std::uint32_t message_id = 0;
+
+    if (frame.size() >= 10 && frame[0] == 0xFD) {
+        payload = 10;
+        message_id = static_cast<std::uint32_t>(frame[7]) |
+                     (static_cast<std::uint32_t>(frame[8]) << 8) |
+                     (static_cast<std::uint32_t>(frame[9]) << 16);
+    } else if (frame.size() >= 6 && frame[0] == 0xFE) {
+        payload = 6;
+        message_id = frame[5];
+    } else {
+        return std::nullopt;
+    }
+
+    if (message_id != 111 || frame.size() < payload + 16) {
+        return std::nullopt;
+    }
+
+    auto read_i64 = [&](std::size_t offset) {
+        std::uint64_t value = 0;
+        for (std::size_t i = 0; i < 8; ++i) {
+            value |= static_cast<std::uint64_t>(
+                         frame[payload + offset + i]) << (8 * i);
+        }
+        return static_cast<std::int64_t>(value);
+    };
+
+    const auto tc1 = read_i64(0);
+    const auto ts1 = read_i64(8);
+    return std::make_pair(tc1 != 0, ts1);
+}
+
 } // namespace
 
 MavlinkTransportChannelRuntime::MavlinkTransportChannelRuntime(
@@ -246,6 +281,10 @@ MavlinkTransportChannelRuntime::receive(const std::string& channel_id) {
         if (const auto sequence = extractSequence(frame)) {
             channel.link_metrics.observe(
                 *sequence, channel.snapshot.stats.last_receive_timestamp_ms);
+        }
+        if (const auto timesync = extractTimesync(frame); timesync && timesync->first) {
+            channel.link_latency.observeTimesyncResponse(
+                channel.snapshot.stats.last_receive_timestamp_ms, timesync->second);
         }
         if (result.snapshot.link_state == MavlinkLinkState::Degraded) {
             channel.snapshot.state = MavlinkTransportChannelState::Degraded;
