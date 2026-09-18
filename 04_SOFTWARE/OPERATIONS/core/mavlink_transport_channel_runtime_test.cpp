@@ -83,9 +83,12 @@ int main() {
     assert(a->stats.transmitted_frames == 1);
     assert(a->stats.received_frames == 1);
     assert(a->stats.accepted_frames == 1);
+    assert(a->link_metrics.observed_packets == 1);
+    assert(a->link_metrics.inferred_lost_packets == 0);
     assert(a->session && a->session->key.session_id == "SESSION-A");
     assert(b->session && b->session->key.session_id == "SESSION-B");
     assert(b->session->last_sequence == 200);
+    assert(b->link_metrics.last_sequence == 200);
 
     assert(r.fail("CH-A"));
     assert(!r.send("CH-A", 2000, frame_a));
@@ -99,6 +102,8 @@ int main() {
     assert(a->state == MavlinkTransportChannelState::Connected);
     assert(a->stats.reconnects == 1);
     assert(a->session && !a->session->sequence_initialized);
+    assert(a->link_metrics.observed_packets == 0);
+    assert(!a->link_metrics.sequence_initialized);
 
     auto recovered = heartbeat(20);
     assert(r.injectReceive("CH-A", 5000, recovered));
@@ -107,6 +112,8 @@ int main() {
     assert(a->session &&
            a->session->link_state == MavlinkLinkState::Healthy);
     assert(a->session->last_sequence == 20);
+    assert(a->link_metrics.observed_packets == 1);
+    assert(a->link_metrics.last_sequence == 20);
 
     assert(r.tickSession("SESSION-A", 8301).link_state ==
            MavlinkLinkState::Lost);
@@ -143,6 +150,8 @@ int main() {
     assert(udp_snapshot->stats.accepted_frames == 1);
     assert(udp_snapshot->session);
     assert(udp_snapshot->session->last_sequence == 42);
+    assert(udp_snapshot->link_metrics.observed_packets == 1);
+    assert(udp_snapshot->link_metrics.inferred_lost_packets == 0);
     assert(udp_snapshot->stats.last_receive_endpoint);
     assert(udp_snapshot->stats.last_receive_endpoint->port == sender_endpoint->port);
 
@@ -151,11 +160,14 @@ int main() {
     udp_snapshot = udp_runtime.snapshot("UDP-CH");
     assert(udp_snapshot->session->packets_lost == 1);
     assert(udp_snapshot->session->link_state == MavlinkLinkState::Healthy);
+    assert(udp_snapshot->link_metrics.inferred_lost_packets == 1);
+    assert(udp_snapshot->link_metrics.packetLossRatio() == 0.5);
 
     assert(external_sender.sendTo(*udp_snapshot->config.udp_local, heartbeat(44)));
     assert(!udp_runtime.pollReceive("UDP-CH", 6020));
     udp_snapshot = udp_runtime.snapshot("UDP-CH");
     assert(udp_snapshot->session->duplicates == 1);
+    assert(udp_snapshot->link_metrics.duplicate_packets == 1);
 
     MavlinkUdpTransportDriver unexpected_sender;
     assert(unexpected_sender.open({"127.0.0.1", 0}));
@@ -163,6 +175,7 @@ int main() {
     assert(!udp_runtime.pollReceive("UDP-CH", 6030));
     udp_snapshot = udp_runtime.snapshot("UDP-CH");
     assert(udp_snapshot->stats.rejected_frames >= 1);
+    assert(udp_snapshot->link_metrics.observed_packets == 2);
 
     assert(udp_runtime.tickSession("UDP-SESSION", 9020).link_state ==
            MavlinkLinkState::Lost);
@@ -173,6 +186,8 @@ int main() {
     udp_snapshot = udp_runtime.snapshot("UDP-CH");
     assert(udp_snapshot->state == MavlinkTransportChannelState::Connected);
     assert(udp_snapshot->session && !udp_snapshot->session->sequence_initialized);
+    assert(udp_snapshot->link_metrics.observed_packets == 0);
+    assert(!udp_snapshot->link_metrics.sequence_initialized);
 
     const auto recovered_local = udp_snapshot->config.udp_local;
 
@@ -195,6 +210,8 @@ int main() {
     udp_snapshot = udp_runtime.snapshot("UDP-CH");
     assert(udp_snapshot->session->last_sequence == 1);
     assert(udp_snapshot->session->link_state == MavlinkLinkState::Healthy);
+    assert(udp_snapshot->link_metrics.observed_packets == 1);
+    assert(udp_snapshot->link_metrics.last_sequence == 1);
 
     unexpected_sender.close();
     udp_runtime.disconnect("UDP-CH");
