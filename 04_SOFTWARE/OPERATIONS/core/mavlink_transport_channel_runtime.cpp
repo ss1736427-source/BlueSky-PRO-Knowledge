@@ -125,6 +125,7 @@ bool MavlinkTransportChannelRuntime::reconnect(
     channel.snapshot.state = MavlinkTransportChannelState::Connected;
     return true;
 }
+
 bool MavlinkTransportChannelRuntime::setUdpRemote(
     const std::string& channel_id, const MavlinkUdpEndpoint& remote) {
     auto it = channels_.find(channel_id);
@@ -134,6 +135,18 @@ bool MavlinkTransportChannelRuntime::setUdpRemote(
         return false;
     }
     it->second.snapshot.config.udp_remote = remote;
+    return true;
+}
+
+bool MavlinkTransportChannelRuntime::setUdpIngressPeer(
+    const std::string& channel_id, const MavlinkUdpEndpoint& peer) {
+    auto it = channels_.find(channel_id);
+    if (it == channels_.end() ||
+        it->second.snapshot.config.transport != MavlinkTransportType::Udp ||
+        peer.host.empty() || peer.port == 0) {
+        return false;
+    }
+    it->second.snapshot.config.udp_ingress_peer = peer;
     return true;
 }
 
@@ -244,9 +257,9 @@ bool MavlinkTransportChannelRuntime::pollReceive(
     channel.snapshot.stats.last_receive_timestamp_ms = timestamp_ms;
     channel.snapshot.stats.last_receive_endpoint = source;
 
-    if (channel.snapshot.config.udp_remote.has_value() &&
-        !(source.host == channel.snapshot.config.udp_remote->host &&
-          source.port == channel.snapshot.config.udp_remote->port)) {
+    if (channel.snapshot.config.udp_ingress_peer.has_value() &&
+        !(source.host == channel.snapshot.config.udp_ingress_peer->host &&
+          source.port == channel.snapshot.config.udp_ingress_peer->port)) {
         ++channel.snapshot.stats.rejected_frames;
         return false;
     }
