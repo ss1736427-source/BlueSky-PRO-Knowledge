@@ -31,6 +31,7 @@ struct MavlinkTransportChannelConfig {
     int priority{0};
     std::optional<MavlinkUdpEndpoint> udp_local;
     std::optional<MavlinkUdpEndpoint> udp_remote;
+    std::optional<MavlinkUdpEndpoint> udp_ingress_peer;
 };
 
 struct MavlinkTransportChannelStats {
@@ -59,6 +60,8 @@ public:
     bool fail(const std::string& channel_id);
     bool reconnect(const std::string& channel_id);
     bool setUdpRemote(const std::string& channel_id, const MavlinkUdpEndpoint& remote);
+    bool setUdpIngressPeer(const std::string& channel_id,
+                           const MavlinkUdpEndpoint& peer);
 
     bool send(const std::string& channel_id, std::int64_t timestamp_ms,
               const std::vector<std::uint8_t>& frame);
