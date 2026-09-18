@@ -186,6 +186,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Project>{0559A43F-04A8-345A-BC72-6A9756319F92}</Project>
       <Name>bluesky_airspace_geofence_baseline</Name>
     </ProjectReference>
+    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\bluesky_ardupilot_mavlink2_reference.vcxproj">
+      <Project>{48F8FFA5-0095-376E-90F4-E8ACE7CC7D53}</Project>
+      <Name>bluesky_ardupilot_mavlink2_reference</Name>
+    </ProjectReference>
     <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\bluesky_autopilot_baseline.vcxproj">
       <Project>{797360BE-2489-3990-B9BB-58C4BF001BD6}</Project>
       <Name>bluesky_autopilot_baseline</Name>
@@ -213,6 +217,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\bluesky_fault_recovery_baseline.vcxproj">
       <Project>{BA4DE5A2-87EB-3773-989D-75EC1B41DBD6}</Project>
       <Name>bluesky_fault_recovery_baseline</Name>
+    </ProjectReference>
+    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\bluesky_mavlink2_adapter.vcxproj">
+      <Project>{261D7275-8040-35BE-AC6B-4205733D41F6}</Project>
+      <Name>bluesky_mavlink2_adapter</Name>
     </ProjectReference>
     <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\bluesky_measurement_instrument_baseline.vcxproj">
       <Project>{3447BC8A-2B2C-35D4-90A6-F16CE60C4EF1}</Project>
@@ -294,6 +302,62 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Project>{BDF191C7-B4DA-3256-AF7A-EC5D32B5785B}</Project>
       <Name>ph4_int_005_failure_propagation_fixture</Name>
     </ProjectReference>
+    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\ph4_int_015_mavlink2_adapter_test.vcxproj">
+      <Project>{DAFBE2AE-CA22-30AC-92E9-0FAAD5422E7B}</Project>
+      <Name>ph4_int_015_mavlink2_adapter_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\ph4_int_016_mavlink2_sil_provenance_fixture.vcxproj">
+      <Project>{1EA1FFD1-A6E3-36E9-BE17-DC42BCCD9AF2}</Project>
+      <Name>ph4_int_016_mavlink2_sil_provenance_fixture</Name>
+    </ProjectReference>
+    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\ph4_int_017_mission_execution_readback_correlation_fixture.vcxproj">
+      <Project>{E75BB5BC-BACF-367A-A127-B71FE5739B6E}</Project>
+      <Name>ph4_int_017_mission_execution_readback_correlation_fixture</Name>
+    </ProjectReference>
+    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\ph4_int_018_negative_path_mission_correlation_fixture.vcxproj">
+      <Project>{766B2AC6-DD71-3CBD-8346-51BEE006927C}</Project>
+      <Name>ph4_int_018_negative_path_mission_correlation_fixture</Name>
+    </ProjectReference>
+    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\ph4_int_019_configuration_lifecycle_fixture.vcxproj">
+      <Project>{90D12BF2-D32F-3581-A212-80F88AE0723B}</Project>
+      <Name>ph4_int_019_configuration_lifecycle_fixture</Name>
+    </ProjectReference>
+    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\ph4_int_020_c2_lifecycle_correlation_fixture.vcxproj">
+      <Project>{C0B7E5DF-2297-3FCC-8255-62795561762B}</Project>
+      <Name>ph4_int_020_c2_lifecycle_correlation_fixture</Name>
+    </ProjectReference>
+    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\ph4_int_021_navigation_lifecycle_correlation_fixture.vcxproj">
+      <Project>{00B6DAF9-6192-3D7E-8369-25A213D0706A}</Project>
+      <Name>ph4_int_021_navigation_lifecycle_correlation_fixture</Name>
+    </ProjectReference>
+    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\ph4_int_022_link_loss_resynchronization_fixture.vcxproj">
+      <Project>{C54BE6B2-B240-3BB8-855A-1DD4EAF43444}</Project>
+      <Name>ph4_int_022_link_loss_resynchronization_fixture</Name>
+    </ProjectReference>
+    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\ph4_int_023_contingency_command_fixture.vcxproj">
+      <Project>{998B308C-AA5A-3ECE-9914-AC543EA65683}</Project>
+      <Name>ph4_int_023_contingency_command_fixture</Name>
+    </ProjectReference>
+    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\ph4_int_024_log_acquisition_fixture.vcxproj">
+      <Project>{5D437D4E-F86E-3FEC-97A7-901172949ED2}</Project>
+      <Name>ph4_int_024_log_acquisition_fixture</Name>
+    </ProjectReference>
+    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\ph4_int_025_clean_close_fixture.vcxproj">
+      <Project>{2AFA3AC7-AD1C-38B9-87D4-69E4F83EAF49}</Project>
+      <Name>ph4_int_025_clean_close_fixture</Name>
+    </ProjectReference>
+    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\ph4_int_026_capability_compatibility_fixture.vcxproj">
+      <Project>{9E288C18-A9A2-34DF-929D-8C90FC850622}</Project>
+      <Name>ph4_int_026_capability_compatibility_fixture</Name>
+    </ProjectReference>
+    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\ph4_int_027_e2e_lifecycle_fixture.vcxproj">
+      <Project>{75461B40-CCA6-3D4C-80D5-D24173BF3E1B}</Project>
+      <Name>ph4_int_027_e2e_lifecycle_fixture</Name>
+    </ProjectReference>
+    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\ph5_ap_001_reference_adapter_test.vcxproj">
+      <Project>{6678C924-63C0-3AE4-9ABB-1A3F1A333500}</Project>
+      <Name>ph5_ap_001_reference_adapter_test</Name>
+    </ProjectReference>
     <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\propulsion_adapter_baseline_test.vcxproj">
       <Project>{CCF949A7-01CB-39A7-9A6A-08C44D477735}</Project>
       <Name>propulsion_adapter_baseline_test</Name>
@@ -306,9 +370,9 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Project>{CCD4C341-3A5B-3050-BB05-3FE55FC24B3A}</Project>
       <Name>security_access_adapter_baseline_test</Name>
     </ProjectReference>
-    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\time_synchronization_adapter_baseline_test.vcxproj">
-      <Project>{952CA7A6-BB19-30B1-AE22-AFAB77BD511A}</Project>
-      <Name>time_synchronization_adapter_baseline_test</Name>
+    <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\time_sync_baseline_test.vcxproj">
+      <Project>{FA198E56-F702-35E7-BEA4-67E2BB9F02D7}</Project>
+      <Name>time_sync_baseline_test</Name>
     </ProjectReference>
     <ProjectReference Include="E:\Flight Planning\PROJECT_KNOWLEDGE\BlueSkyPro\04_SOFTWARE\AUTOPILOT_ADAPTER\build\universal_autopilot_adapter_contract_test.vcxproj">
       <Project>{D9895409-D782-3B44-AB1F-5081617988BE}</Project>
