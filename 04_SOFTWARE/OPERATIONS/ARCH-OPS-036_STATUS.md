@@ -1,6 +1,6 @@
 # ARCH-OPS-036 — Per-channel latency runtime
 
-Status: IMPLEMENTATION BASELINE — pending CI verification
+Status: IMPLEMENTATION BASELINE — CI verification in progress
 
 ## Scope
 Adds per-channel MAVLink round-trip latency measurement using TIMESYNC v2 request/response correlation.
@@ -17,3 +17,5 @@ Adds per-channel MAVLink round-trip latency measurement using TIMESYNC v2 reques
 SIL_MAVLINK_TIMESYNC_RTT
 
 No field, radio, serial, SITL, HIL, physical, or certification evidence is claimed.
+
+MAVLink reference: TIMESYNC v2 uses tc1=0 for requests, mirrors ts1 in responses, and permits RTT calculation from the echoed ts1. cite not valid in repo; see official MAVLink documentation.
