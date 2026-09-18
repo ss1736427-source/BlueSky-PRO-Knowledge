@@ -12,21 +12,11 @@
 namespace bluesky::operations {
 
 enum class MavlinkTransportChannelState {
-    Offline,
-    Connecting,
-    Connected,
-    Degraded,
-    Lost,
-    Recovering
+    Offline, Connecting, Connected, Degraded, Lost, Recovering
 };
 
 enum class MavlinkTransportType {
-    DeterministicMemory,
-    Serial,
-    Udp,
-    Tcp,
-    Radio,
-    Custom
+    DeterministicMemory, Serial, Udp, Tcp, Radio, Custom
 };
 
 struct MavlinkTransportChannelConfig {
@@ -44,13 +34,9 @@ struct MavlinkTransportChannelConfig {
 };
 
 struct MavlinkTransportChannelStats {
-    std::uint64_t received_frames{0};
-    std::uint64_t accepted_frames{0};
-    std::uint64_t rejected_frames{0};
-    std::uint64_t transmitted_frames{0};
-    std::uint64_t transmit_failures{0};
-    std::uint64_t reconnects{0};
-    std::uint64_t link_failures{0};
+    std::uint64_t received_frames{0}, accepted_frames{0}, rejected_frames{0};
+    std::uint64_t transmitted_frames{0}, transmit_failures{0};
+    std::uint64_t reconnects{0}, link_failures{0};
     std::int64_t last_receive_timestamp_ms{0};
     std::int64_t last_transmit_timestamp_ms{0};
 };
@@ -64,32 +50,24 @@ struct MavlinkTransportChannelSnapshot {
 
 class MavlinkTransportChannelRuntime final {
 public:
-    explicit MavlinkTransportChannelRuntime(
-        std::int64_t heartbeat_timeout_ms = 3000);
+    explicit MavlinkTransportChannelRuntime(std::int64_t heartbeat_timeout_ms = 3000);
 
     bool registerChannel(const MavlinkTransportChannelConfig& config);
     bool connect(const std::string& channel_id);
     bool disconnect(const std::string& channel_id);
     bool fail(const std::string& channel_id);
     bool reconnect(const std::string& channel_id);
+    bool setUdpRemote(const std::string& channel_id, const MavlinkUdpEndpoint& remote);
 
-    bool send(const std::string& channel_id,
-              std::int64_t timestamp_ms,
+    bool send(const std::string& channel_id, std::int64_t timestamp_ms,
               const std::vector<std::uint8_t>& frame);
-
-    bool injectReceive(const std::string& channel_id,
-                       std::int64_t timestamp_ms,
+    bool injectReceive(const std::string& channel_id, std::int64_t timestamp_ms,
                        const std::vector<std::uint8_t>& frame);
-
-    std::optional<std::vector<std::uint8_t>> receive(
-        const std::string& channel_id);
-
-    bool pollReceive(const std::string& channel_id,
-                     std::int64_t timestamp_ms);
+    std::optional<std::vector<std::uint8_t>> receive(const std::string& channel_id);
+    bool pollReceive(const std::string& channel_id, std::int64_t timestamp_ms);
 
     MavlinkSessionSnapshot tickSession(const std::string& session_id,
                                        std::int64_t now_ms);
-
     std::optional<MavlinkTransportChannelSnapshot> snapshot(
         const std::string& channel_id) const;
 
