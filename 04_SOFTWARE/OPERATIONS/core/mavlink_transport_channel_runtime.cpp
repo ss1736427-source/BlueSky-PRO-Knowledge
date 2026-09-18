@@ -2,6 +2,21 @@
 
 namespace bluesky::operations {
 
+namespace {
+
+std::optional<std::uint8_t> extractSequence(
+    const std::vector<std::uint8_t>& frame) {
+    if (frame.size() >= 6 && frame[0] == 0xFD) {
+        return frame[4];
+    }
+    if (frame.size() >= 4 && frame[0] == 0xFE) {
+        return frame[2];
+    }
+    return std::nullopt;
+}
+
+} // namespace
+
 MavlinkTransportChannelRuntime::MavlinkTransportChannelRuntime(
     std::int64_t heartbeat_timeout_ms)
     : heartbeat_timeout_ms_(heartbeat_timeout_ms),
@@ -97,6 +112,7 @@ bool MavlinkTransportChannelRuntime::reconnect(
 
     auto& channel = it->second;
     channel.snapshot.state = MavlinkTransportChannelState::Recovering;
+    channel.link_metrics.reset();
     session_runtime_.reconnect(
         channel.snapshot.config.session_id,
         channel.snapshot.config.vehicle_id,
@@ -105,8 +121,7 @@ bool MavlinkTransportChannelRuntime::reconnect(
         channel.snapshot.config.component_id);
 
     if (channel.snapshot.config.transport == MavlinkTransportType::Udp) {
-        if (!channel.udp_driver ||
-            !channel.udp_driver->open(*channel.snapshot.config.udp_local)) {
+        if (!channel.udp_driver || !channel.udp_driver->open(*channel.snapshot.config.udp_local)) {
             channel.snapshot.state = MavlinkTransportChannelState::Lost;
             ++channel.snapshot.stats.link_failures;
             return false;
@@ -222,6 +237,10 @@ MavlinkTransportChannelRuntime::receive(const std::string& channel_id) {
 
     if (result.accepted) {
         ++channel.snapshot.stats.accepted_frames;
+        if (const auto sequence = extractSequence(frame)) {
+            channel.link_metrics.observe(
+                *sequence, channel.snapshot.stats.last_receive_timestamp_ms);
+        }
         if (result.snapshot.link_state == MavlinkLinkState::Degraded) {
             channel.snapshot.state = MavlinkTransportChannelState::Degraded;
         } else if (result.snapshot.link_state == MavlinkLinkState::Healthy) {
@@ -293,6 +312,7 @@ MavlinkTransportChannelRuntime::snapshot(
     if (it == channels_.end()) return std::nullopt;
 
     auto result = it->second.snapshot;
+    result.link_metrics = it->second.link_metrics.snapshot();
     result.session = session_runtime_.snapshot(
         result.config.session_id);
     return result;
