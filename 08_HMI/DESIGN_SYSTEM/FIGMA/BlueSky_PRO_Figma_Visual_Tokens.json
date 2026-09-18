@@ -1,0 +1,221 @@
+{
+  "project": "BlueSky PRO",
+  "selection_status": "NO_FINAL_COLOR_OR_FONT_SELECTION",
+  "colors": [
+    {
+      "name": "MAIN BLACK",
+      "hex": "#000000",
+      "group": "current HMI"
+    },
+    {
+      "name": "PRIMARY TEXT",
+      "hex": "#FFFFFF",
+      "group": "current HMI"
+    },
+    {
+      "name": "SECONDARY TEXT",
+      "hex": "#BFBFBF",
+      "group": "current HMI"
+    },
+    {
+      "name": "MUTED",
+      "hex": "#7F7F7F",
+      "group": "current HMI"
+    },
+    {
+      "name": "GREEN",
+      "hex": "#64FF00",
+      "group": "normal / green zone"
+    },
+    {
+      "name": "AMBER",
+      "hex": "#FFD339",
+      "group": "caution / amber zone"
+    },
+    {
+      "name": "RED",
+      "hex": "#FF1E14",
+      "group": "warning / critical"
+    },
+    {
+      "name": "CYAN",
+      "hex": "#32FFFF",
+      "group": "navigation / information"
+    },
+    {
+      "name": "MAGENTA",
+      "hex": "#FF32FF",
+      "group": "target / selected / commanded"
+    },
+    {
+      "name": "PFD SKY",
+      "hex": "#006EAA",
+      "group": "PFD only"
+    },
+    {
+      "name": "PFD GROUND",
+      "hex": "#5F2A05",
+      "group": "PFD only"
+    },
+    {
+      "name": "OLD BG",
+      "hex": "#050A12",
+      "group": "previous baseline — preserve for comparison"
+    },
+    {
+      "name": "OLD PANEL",
+      "hex": "#08111D",
+      "group": "previous baseline — preserve for comparison"
+    },
+    {
+      "name": "OLD CARD",
+      "hex": "#0C1725",
+      "group": "previous baseline — preserve for comparison"
+    },
+    {
+      "name": "OLD HOVER",
+      "hex": "#111F30",
+      "group": "previous baseline — preserve for comparison"
+    },
+    {
+      "name": "OLD BLUE",
+      "hex": "#168BFF",
+      "group": "previous baseline — preserve for comparison"
+    },
+    {
+      "name": "OLD CYAN",
+      "hex": "#35B9FF",
+      "group": "previous baseline — preserve for comparison"
+    },
+    {
+      "name": "OLD GREEN",
+      "hex": "#39D98A",
+      "group": "previous baseline — preserve for comparison"
+    },
+    {
+      "name": "OLD AMBER",
+      "hex": "#FFC857",
+      "group": "previous baseline — preserve for comparison"
+    },
+    {
+      "name": "OLD RED",
+      "hex": "#FF5C6C",
+      "group": "previous baseline — preserve for comparison"
+    },
+    {
+      "name": "NVIS GREEN A",
+      "hex": "#00FF00",
+      "group": "night / NVIS"
+    },
+    {
+      "name": "NVIS GREEN B",
+      "hex": "#00C000",
+      "group": "night / NVIS"
+    },
+    {
+      "name": "NIGHT RED",
+      "hex": "#FF0000",
+      "group": "night / NVIS"
+    }
+  ],
+  "typography": [
+    {
+      "font": "B612 Mono Bold",
+      "size_px": 36,
+      "color": "#FFFFFF",
+      "use": "primary flight data"
+    },
+    {
+      "font": "B612 Bold",
+      "size_px": 22,
+      "color": "#FFFFFF",
+      "use": "main headers"
+    },
+    {
+      "font": "B612 Mono Bold",
+      "size_px": 20,
+      "color": "#64FF00",
+      "use": "status / numeric zone"
+    },
+    {
+      "font": "B612 Mono Bold",
+      "size_px": 20,
+      "color": "#32FFFF",
+      "use": "navigation"
+    },
+    {
+      "font": "B612 Mono Bold",
+      "size_px": 20,
+      "color": "#FF32FF",
+      "use": "target / selected"
+    },
+    {
+      "font": "B612 Bold",
+      "size_px": 16,
+      "color": "#FFFFFF",
+      "use": "section headers"
+    },
+    {
+      "font": "B612",
+      "size_px": 13,
+      "color": "#BFBFBF",
+      "use": "labels"
+    },
+    {
+      "font": "B612 Mono",
+      "size_px": 13,
+      "color": "#BFBFBF",
+      "use": "secondary numeric"
+    },
+    {
+      "font": "IBM Plex Sans Condensed",
+      "size_px": 12,
+      "color": "#7F7F7F",
+      "use": "service information"
+    },
+    {
+      "font": "IBM Plex Sans Condensed",
+      "size_px": 11,
+      "color": "#7F7F7F",
+      "use": "service labels"
+    },
+    {
+      "font": "Inter",
+      "size_px": null,
+      "color": "#FFFFFF",
+      "use": "existing UI candidate"
+    },
+    {
+      "font": "Inter Tight 600/700",
+      "size_px": null,
+      "color": "#FFFFFF",
+      "use": "existing header candidate"
+    }
+  ],
+  "navigation": {
+    "speed_display": [
+      "m/s",
+      "km/h"
+    ],
+    "internal_speed_unit": "m/s",
+    "parameters": [
+      "GS",
+      "AS",
+      "CLIMB",
+      "DESCENT",
+      "HGT",
+      "ALT"
+    ],
+    "altitude_rule": "HGT below 100 m; ALT at/above 100 m",
+    "examples": [
+      "HGT 30 m",
+      "ALT 115 m"
+    ],
+    "excluded": [
+      "ALTITUDE",
+      "CLIMB RATE",
+      "DESCENT RATE",
+      "+/- signs"
+    ]
+  }
+}
