@@ -39,6 +39,7 @@ struct MavlinkTransportChannelStats {
     std::uint64_t reconnects{0}, link_failures{0};
     std::int64_t last_receive_timestamp_ms{0};
     std::int64_t last_transmit_timestamp_ms{0};
+    std::optional<MavlinkUdpEndpoint> last_receive_endpoint;
 };
 
 struct MavlinkTransportChannelSnapshot {

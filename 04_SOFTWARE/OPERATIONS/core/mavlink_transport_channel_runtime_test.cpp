@@ -132,6 +132,9 @@ int main() {
 
     MavlinkUdpTransportDriver external_sender;
     assert(external_sender.open({"127.0.0.1", 0}));
+    const auto sender_endpoint = external_sender.localEndpoint();
+    assert(sender_endpoint);
+    assert(udp_runtime.setUdpRemote("UDP-CH", *sender_endpoint));
     assert(external_sender.sendTo(*udp_snapshot->config.udp_local, heartbeat(42)));
     assert(udp_runtime.pollReceive("UDP-CH", 6000));
 
@@ -140,6 +143,38 @@ int main() {
     assert(udp_snapshot->stats.accepted_frames == 1);
     assert(udp_snapshot->session);
     assert(udp_snapshot->session->last_sequence == 42);
+    assert(udp_snapshot->stats.last_receive_endpoint);
+    assert(udp_snapshot->stats.last_receive_endpoint->port == sender_endpoint->port);
+
+    assert(external_sender.sendTo(*udp_snapshot->config.udp_local, heartbeat(44)));
+    assert(udp_runtime.pollReceive("UDP-CH", 6010));
+    udp_snapshot = udp_runtime.snapshot("UDP-CH");
+    assert(udp_snapshot->session->packets_lost == 1);
+    assert(udp_snapshot->session->link_state == MavlinkLinkState::Healthy);
+
+    assert(external_sender.sendTo(*udp_snapshot->config.udp_local, heartbeat(44)));
+    assert(!udp_runtime.pollReceive("UDP-CH", 6020));
+    udp_snapshot = udp_runtime.snapshot("UDP-CH");
+    assert(udp_snapshot->session->duplicates == 1);
+
+    MavlinkUdpTransportDriver unexpected_sender;
+    assert(unexpected_sender.open({"127.0.0.1", 0}));
+    assert(unexpected_sender.sendTo(*udp_snapshot->config.udp_local, heartbeat(45)));
+    assert(!udp_runtime.pollReceive("UDP-CH", 6030));
+    udp_snapshot = udp_runtime.snapshot("UDP-CH");
+    assert(udp_snapshot->stats.rejected_frames >= 1);
+
+    assert(udp_runtime.tickSession("UDP-SESSION", 9020).link_state ==
+           MavlinkLinkState::Lost);
+    udp_snapshot = udp_runtime.snapshot("UDP-CH");
+    assert(udp_snapshot->state == MavlinkTransportChannelState::Lost);
+
+    assert(udp_runtime.reconnect("UDP-CH"));
+    udp_snapshot = udp_runtime.snapshot("UDP-CH");
+    assert(udp_snapshot->state == MavlinkTransportChannelState::Connected);
+    assert(udp_snapshot->session && !udp_snapshot->session->sequence_initialized);
+
+    const auto recovered_local = udp_snapshot->config.udp_local;
 
     MavlinkUdpTransportDriver external_receiver;
     assert(external_receiver.open({"127.0.0.1", 0}));
@@ -153,6 +188,15 @@ int main() {
     assert(outbound);
     assert(*outbound == heartbeat(43));
 
+    assert(udp_runtime.setUdpRemote("UDP-CH", *sender_endpoint));
+    assert(recovered_local && recovered_local->port != 0);
+    assert(external_sender.sendTo(*recovered_local, heartbeat(1)));
+    assert(udp_runtime.pollReceive("UDP-CH", 10000));
+    udp_snapshot = udp_runtime.snapshot("UDP-CH");
+    assert(udp_snapshot->session->last_sequence == 1);
+    assert(udp_snapshot->session->link_state == MavlinkLinkState::Healthy);
+
+    unexpected_sender.close();
     udp_runtime.disconnect("UDP-CH");
     external_sender.close();
     external_receiver.close();
