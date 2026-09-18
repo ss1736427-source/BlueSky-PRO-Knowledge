@@ -86,3 +86,9 @@ add_executable(mavlink_recorded_stream_test
     core/mavlink_telemetry_mapping.cpp)
 target_link_libraries(mavlink_recorded_stream_test PRIVATE bluesky_operational_orchestrator_contract)
 add_test(NAME mavlink_recorded_stream_test COMMAND mavlink_recorded_stream_test)
+
+add_executable(mavlink_raw_decoder_boundary_test
+    core/mavlink_raw_decoder_boundary_test.cpp
+    core/mavlink_raw_decoder_boundary.cpp)
+target_link_libraries(mavlink_raw_decoder_boundary_test PRIVATE bluesky_operational_orchestrator_contract)
+add_test(NAME mavlink_raw_decoder_boundary_test COMMAND mavlink_raw_decoder_boundary_test)
