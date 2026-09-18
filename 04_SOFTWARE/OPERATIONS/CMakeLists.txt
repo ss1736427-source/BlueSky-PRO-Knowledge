@@ -96,3 +96,11 @@ add_test(NAME mavlink_raw_decoder_boundary_test COMMAND mavlink_raw_decoder_boun
 add_executable(mavlink_session_runtime_test core/mavlink_session_runtime_test.cpp core/mavlink_session_runtime.cpp core/mavlink_raw_decoder_boundary.cpp)
 target_link_libraries(mavlink_session_runtime_test PRIVATE bluesky_operational_orchestrator_contract)
 add_test(NAME mavlink_session_runtime_test COMMAND mavlink_session_runtime_test)
+
+add_executable(mavlink_transport_channel_runtime_test
+    core/mavlink_transport_channel_runtime_test.cpp
+    core/mavlink_transport_channel_runtime.cpp
+    core/mavlink_session_runtime.cpp
+    core/mavlink_raw_decoder_boundary.cpp)
+target_link_libraries(mavlink_transport_channel_runtime_test PRIVATE bluesky_operational_orchestrator_contract)
+add_test(NAME mavlink_transport_channel_runtime_test COMMAND mavlink_transport_channel_runtime_test)
