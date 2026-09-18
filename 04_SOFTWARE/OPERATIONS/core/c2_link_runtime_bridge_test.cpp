@@ -81,3 +81,31 @@ int main() {
 
     std::cout << "c2_link_runtime_bridge_test: PASS\n";
 }
+
+
+static void runtime_measurement_integration_test() {
+    MavlinkTransportChannelSnapshot transport;
+    transport.config.channel_id = "CH-RUNTIME";
+    transport.config.transport = MavlinkTransportType::Udp;
+    transport.stats.last_receive_timestamp_ms = 2100;
+    transport.link_metrics = {};
+    transport.link_metrics.observed_packets = 2;
+    transport.link_metrics.inferred_lost_packets = 1;
+    transport.link_latency.last_rtt_ms = 40;
+    transport.link_bandwidth.transmitted_bytes = 200;
+    transport.link_bandwidth.received_bytes = 300;
+    transport.link_bandwidth.first_transmit_timestamp_ms = 1000;
+    transport.link_bandwidth.last_transmit_timestamp_ms = 1100;
+    transport.link_bandwidth.first_receive_timestamp_ms = 2000;
+    transport.link_bandwidth.last_receive_timestamp_ms = 2100;
+
+    const auto measurement =
+        C2LinkRuntimeBridge::fromRuntimeSnapshot(transport);
+    assert(measurement.latency_ms == 40.0);
+    assert(measurement.packet_loss == (1.0 / 3.0));
+    assert(measurement.observed_bandwidth_kbps);
+    assert(*measurement.observed_bandwidth_kbps == 40.0);
+    assert(measurement.measured_timestamp_ms == 2100);
+    assert(measurement.capacity_kbps == 0.0);
+}
+
