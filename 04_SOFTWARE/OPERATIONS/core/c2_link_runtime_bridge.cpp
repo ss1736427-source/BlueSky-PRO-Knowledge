@@ -2,6 +2,33 @@
 
 namespace bluesky::operations {
 
+C2LinkMeasurement C2LinkRuntimeBridge::fromRuntimeSnapshot(
+    const MavlinkTransportChannelSnapshot& transport) {
+    C2LinkMeasurement measurement;
+
+    if (transport.link_latency.last_rtt_ms.has_value()) {
+        measurement.latency_ms =
+            static_cast<double>(*transport.link_latency.last_rtt_ms);
+    }
+    measurement.packet_loss =
+        transport.link_metrics.packetLossRatio();
+
+    const auto tx = transport.link_bandwidth.transmitRateBytesPerSecond();
+    const auto rx = transport.link_bandwidth.receiveRateBytesPerSecond();
+    if (tx.has_value() || rx.has_value()) {
+        const double bytes_per_second =
+            tx.value_or(0.0) + rx.value_or(0.0);
+        measurement.observed_bandwidth_kbps =
+            bytes_per_second * 8.0 / 1000.0;
+    }
+
+    measurement.measured_timestamp_ms =
+        transport.stats.last_receive_timestamp_ms != 0
+            ? transport.stats.last_receive_timestamp_ms
+            : transport.stats.last_transmit_timestamp_ms;
+    return measurement;
+}
+
 bluesky::c2::ChannelState C2LinkRuntimeBridge::mapState(
     MavlinkTransportChannelState state) {
     switch (state) {
