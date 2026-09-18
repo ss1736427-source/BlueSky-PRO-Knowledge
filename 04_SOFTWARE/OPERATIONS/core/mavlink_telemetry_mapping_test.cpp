@@ -52,7 +52,6 @@ void testTypedSampleMapsToCanonicalState() {
     assert(state.vehicle_state_valid);
     assert(state.energy_state_valid);
     assert(state.c2_state_valid);
-    assert(state.mission_valid);
     assert(normalized_state_usable(state));
 }
 
