@@ -74,11 +74,14 @@ int main() {
     assert(r.receive("CH-A").has_value()); assert(r.receive("CH-B").has_value());
     a=r.snapshot("CH-A"); b=r.snapshot("CH-B");
     assert(a->link_metrics.observed_packets==1 && a->link_metrics.inferred_lost_packets==0);
+    assert(a->link_bandwidth.transmitted_bytes == frame_a.size());
+    assert(a->link_bandwidth.received_bytes == frame_a.size());
     assert(b->link_metrics.last_sequence==200);
 
     assert(r.fail("CH-A")); assert(!r.send("CH-A",2000,frame_a));
     assert(r.reconnect("CH-A")); a=r.snapshot("CH-A");
     assert(a->link_metrics.observed_packets==0 && !a->link_metrics.sequence_initialized);
+    assert(a->link_bandwidth.transmitted_bytes == 0 && a->link_bandwidth.received_bytes == 0);
 
     auto recovered=heartbeat(20);
     assert(r.injectReceive("CH-A",5000,recovered)); assert(r.receive("CH-A").has_value());
@@ -108,6 +111,7 @@ int main() {
     assert(udp_runtime.pollReceive("UDP-CH",6000));
     udp_snapshot=udp_runtime.snapshot("UDP-CH");
     assert(udp_snapshot->link_metrics.observed_packets==1);
+    assert(udp_snapshot->link_bandwidth.received_bytes == heartbeat(42).size());
 
     assert(external_sender.sendTo(*udp_snapshot->config.udp_local,heartbeat(44)));
     assert(udp_runtime.pollReceive("UDP-CH",6010));
@@ -132,6 +136,7 @@ int main() {
     assert(udp_runtime.reconnect("UDP-CH"));
     udp_snapshot=udp_runtime.snapshot("UDP-CH");
     assert(udp_snapshot->link_metrics.observed_packets==0);
+    assert(udp_snapshot->link_bandwidth.transmitted_bytes==0 && udp_snapshot->link_bandwidth.received_bytes==0);
 
     const auto recovered_local=udp_snapshot->config.udp_local;
     MavlinkUdpTransportDriver external_receiver;
@@ -141,6 +146,8 @@ int main() {
     assert(udp_runtime.send("UDP-CH",6100,heartbeat(43)));
     MavlinkUdpEndpoint source; const auto outbound=external_receiver.receive(&source);
     assert(outbound && *outbound==heartbeat(43));
+    udp_snapshot=udp_runtime.snapshot("UDP-CH");
+    assert(udp_snapshot->link_bandwidth.transmitted_bytes == heartbeat(43).size());
 
     assert(udp_runtime.setUdpIngressPeer("UDP-CH",*sender_endpoint));
     assert(recovered_local && external_sender.sendTo(*recovered_local,heartbeat(1)));
