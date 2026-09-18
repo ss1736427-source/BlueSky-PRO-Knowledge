@@ -111,9 +111,7 @@ bool MavlinkTransportChannelRuntime::reconnect(
             ++channel.snapshot.stats.link_failures;
             return false;
         }
-    }
-
-    const auto local = channel.udp_driver->localEndpoint();
+        const auto local = channel.udp_driver->localEndpoint();
         if (!local.has_value()) {
             channel.udp_driver->close();
             channel.snapshot.state = MavlinkTransportChannelState::Lost;
@@ -127,7 +125,6 @@ bool MavlinkTransportChannelRuntime::reconnect(
     channel.snapshot.state = MavlinkTransportChannelState::Connected;
     return true;
 }
-
 bool MavlinkTransportChannelRuntime::setUdpRemote(
     const std::string& channel_id, const MavlinkUdpEndpoint& remote) {
     auto it = channels_.find(channel_id);
