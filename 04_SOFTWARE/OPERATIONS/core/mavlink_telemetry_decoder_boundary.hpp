@@ -18,7 +18,8 @@ enum class MavlinkMessageKind {
     GlobalPositionInt,
     Attitude,
     SysStatus,
-    MissionState
+    MissionState,
+    Timesync
 };
 
 struct DecodedMavlinkMessage {
