@@ -151,6 +151,7 @@ bool MavlinkTransportChannelRuntime::reconnect(
     channel.snapshot.state = MavlinkTransportChannelState::Recovering;
     channel.link_metrics.reset();
     channel.link_latency.reset();
+    channel.link_bandwidth.reset();
     session_runtime_.reconnect(
         channel.snapshot.config.session_id,
         channel.snapshot.config.vehicle_id,
@@ -234,6 +235,7 @@ bool MavlinkTransportChannelRuntime::send(
         channel.link_latency.observeProbeSent(timestamp_ms, timesync->second);
     }
     channel.snapshot.stats.last_transmit_timestamp_ms = timestamp_ms;
+    channel.link_bandwidth.observeTransmit(frame.size(), timestamp_ms);
     return true;
 }
 
@@ -282,6 +284,7 @@ MavlinkTransportChannelRuntime::receive(const std::string& channel_id) {
             channel.link_metrics.observe(
                 *sequence, channel.snapshot.stats.last_receive_timestamp_ms);
         }
+        channel.link_bandwidth.observeReceive(frame.size(), channel.snapshot.stats.last_receive_timestamp_ms);
         if (const auto timesync = extractTimesync(frame); timesync && timesync->first) {
             channel.link_latency.observeTimesyncResponse(
                 channel.snapshot.stats.last_receive_timestamp_ms, timesync->second);
@@ -359,6 +362,7 @@ MavlinkTransportChannelRuntime::snapshot(
     auto result = it->second.snapshot;
     result.link_metrics = it->second.link_metrics.snapshot();
     result.link_latency = it->second.link_latency.snapshot();
+    result.link_bandwidth = it->second.link_bandwidth.snapshot();
     result.session = session_runtime_.snapshot(
         result.config.session_id);
     return result;
