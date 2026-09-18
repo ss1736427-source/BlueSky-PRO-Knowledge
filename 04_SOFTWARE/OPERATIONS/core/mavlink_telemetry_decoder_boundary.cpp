@@ -15,6 +15,10 @@ MavlinkTelemetryDecoderBoundary::decode(const DecodedMavlinkMessage& message) {
         return std::nullopt;
     }
 
+    if (message.kind == MavlinkMessageKind::Timesync) {
+        return std::nullopt;
+    }
+
     MavlinkTelemetrySample sample;
     sample.vehicle_id = message.vehicle_id;
     sample.source_id = message.source_id;
@@ -64,6 +68,8 @@ MavlinkTelemetryDecoderBoundary::decode(const DecodedMavlinkMessage& message) {
         sample.mission_valid = message.mission_state.has_value();
         sample.mission_state = message.mission_state;
         break;
+    case MavlinkMessageKind::Timesync:
+        return std::nullopt;
     }
 
     return sample;
