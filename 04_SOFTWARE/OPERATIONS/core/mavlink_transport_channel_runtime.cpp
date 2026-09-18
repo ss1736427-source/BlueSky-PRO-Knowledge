@@ -16,9 +16,17 @@ bool MavlinkTransportChannelRuntime::registerChannel(
         return false;
     }
 
+    if (config.transport == MavlinkTransportType::Udp &&
+        !config.udp_local.has_value()) {
+        return false;
+    }
+
     ChannelState state;
     state.snapshot.config = config;
     state.snapshot.state = MavlinkTransportChannelState::Offline;
+    if (config.transport == MavlinkTransportType::Udp) {
+        state.udp_driver = std::make_unique<MavlinkUdpTransportDriver>();
+    }
     channels_.emplace(config.channel_id, std::move(state));
     return true;
 }
@@ -33,6 +41,27 @@ bool MavlinkTransportChannelRuntime::connect(const std::string& channel_id) {
     }
 
     channel.snapshot.state = MavlinkTransportChannelState::Connecting;
+
+    if (channel.snapshot.config.transport == MavlinkTransportType::Udp) {
+        if (!channel.udp_driver ||
+            !channel.udp_driver->open(*channel.snapshot.config.udp_local)) {
+            channel.snapshot.state = MavlinkTransportChannelState::Lost;
+            ++channel.snapshot.stats.link_failures;
+            return false;
+        }
+    }
+
+    if (channel.snapshot.config.transport == MavlinkTransportType::Udp) {
+        const auto local = channel.udp_driver->localEndpoint();
+        if (!local.has_value()) {
+            channel.udp_driver->close();
+            channel.snapshot.state = MavlinkTransportChannelState::Lost;
+            ++channel.snapshot.stats.link_failures;
+            return false;
+        }
+        channel.snapshot.config.udp_local = *local;
+    }
+
     channel.snapshot.state = MavlinkTransportChannelState::Connected;
     return true;
 }
@@ -42,9 +71,11 @@ bool MavlinkTransportChannelRuntime::disconnect(
     auto it = channels_.find(channel_id);
     if (it == channels_.end()) return false;
 
-    it->second.snapshot.state = MavlinkTransportChannelState::Offline;
-    it->second.rx_queue.clear();
-    it->second.tx_queue.clear();
+    auto& channel = it->second;
+    if (channel.udp_driver) channel.udp_driver->close();
+    channel.snapshot.state = MavlinkTransportChannelState::Offline;
+    channel.rx_queue.clear();
+    channel.tx_queue.clear();
     return true;
 }
 
@@ -53,6 +84,7 @@ bool MavlinkTransportChannelRuntime::fail(const std::string& channel_id) {
     if (it == channels_.end()) return false;
 
     auto& channel = it->second;
+    if (channel.udp_driver) channel.udp_driver->close();
     channel.snapshot.state = MavlinkTransportChannelState::Lost;
     ++channel.snapshot.stats.link_failures;
     return true;
@@ -71,8 +103,37 @@ bool MavlinkTransportChannelRuntime::reconnect(
         channel.snapshot.config.source_id,
         channel.snapshot.config.system_id,
         channel.snapshot.config.component_id);
+
+    if (channel.snapshot.config.transport == MavlinkTransportType::Udp) {
+        if (!channel.udp_driver ||
+            !channel.udp_driver->open(*channel.snapshot.config.udp_local)) {
+            channel.snapshot.state = MavlinkTransportChannelState::Lost;
+            ++channel.snapshot.stats.link_failures;
+            return false;
+        }
+        const auto local = channel.udp_driver->localEndpoint();
+        if (!local.has_value()) {
+            channel.udp_driver->close();
+            channel.snapshot.state = MavlinkTransportChannelState::Lost;
+            ++channel.snapshot.stats.link_failures;
+            return false;
+        }
+        channel.snapshot.config.udp_local = *local;
+    }
+
     ++channel.snapshot.stats.reconnects;
     channel.snapshot.state = MavlinkTransportChannelState::Connected;
+    return true;
+}
+bool MavlinkTransportChannelRuntime::setUdpRemote(
+    const std::string& channel_id, const MavlinkUdpEndpoint& remote) {
+    auto it = channels_.find(channel_id);
+    if (it == channels_.end() ||
+        it->second.snapshot.config.transport != MavlinkTransportType::Udp ||
+        remote.host.empty() || remote.port == 0) {
+        return false;
+    }
+    it->second.snapshot.config.udp_remote = remote;
     return true;
 }
 
@@ -90,7 +151,18 @@ bool MavlinkTransportChannelRuntime::send(
         return false;
     }
 
-    channel.tx_queue.push_back(frame);
+    if (channel.snapshot.config.transport == MavlinkTransportType::Udp) {
+        if (!channel.udp_driver ||
+            !channel.snapshot.config.udp_remote.has_value() ||
+            !channel.udp_driver->sendTo(
+                *channel.snapshot.config.udp_remote, frame)) {
+            ++channel.snapshot.stats.transmit_failures;
+            return false;
+        }
+    } else {
+        channel.tx_queue.push_back(frame);
+    }
+
     ++channel.snapshot.stats.transmitted_frames;
     channel.snapshot.stats.last_transmit_timestamp_ms = timestamp_ms;
     return true;
@@ -147,6 +219,30 @@ MavlinkTransportChannelRuntime::receive(const std::string& channel_id) {
     }
 
     return frame;
+}
+
+bool MavlinkTransportChannelRuntime::pollReceive(
+    const std::string& channel_id,
+    std::int64_t timestamp_ms) {
+    auto it = channels_.find(channel_id);
+    if (it == channels_.end()) return false;
+
+    auto& channel = it->second;
+    if (channel.snapshot.config.transport != MavlinkTransportType::Udp ||
+        !channel.udp_driver ||
+        (channel.snapshot.state != MavlinkTransportChannelState::Connected &&
+         channel.snapshot.state != MavlinkTransportChannelState::Degraded)) {
+        return false;
+    }
+
+    MavlinkUdpEndpoint source;
+    const auto frame = channel.udp_driver->receive(&source);
+    if (!frame.has_value()) return false;
+
+    ++channel.snapshot.stats.received_frames;
+    channel.snapshot.stats.last_receive_timestamp_ms = timestamp_ms;
+    channel.rx_queue.push_back(*frame);
+    return receive(channel_id).has_value();
 }
 
 MavlinkSessionSnapshot MavlinkTransportChannelRuntime::tickSession(
