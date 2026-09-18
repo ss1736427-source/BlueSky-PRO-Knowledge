@@ -2,6 +2,7 @@
 
 #include "link_metrics_runtime.hpp"
 #include "link_latency_runtime.hpp"
+#include "link_bandwidth_runtime.hpp"
 #include "mavlink_session_runtime.hpp"
 #include "mavlink_udp_transport_driver.hpp"
 #include <cstdint>
@@ -51,6 +52,7 @@ struct MavlinkTransportChannelSnapshot {
     MavlinkTransportChannelStats stats;
     LinkMetricsSnapshot link_metrics;
     LinkLatencySnapshot link_latency;
+    LinkBandwidthSnapshot link_bandwidth;
     std::optional<MavlinkSessionSnapshot> session;
 };
 
@@ -84,6 +86,7 @@ private:
         MavlinkTransportChannelSnapshot snapshot;
         LinkMetricsRuntime link_metrics;
         LinkLatencyRuntime link_latency;
+        LinkBandwidthRuntime link_bandwidth;
         std::vector<std::vector<std::uint8_t>> rx_queue;
         std::vector<std::vector<std::uint8_t>> tx_queue;
         std::unique_ptr<MavlinkUdpTransportDriver> udp_driver;
