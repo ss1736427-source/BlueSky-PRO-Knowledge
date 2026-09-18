@@ -12,7 +12,7 @@ std::int32_t readI32(const std::vector<std::uint8_t>& p, std::size_t o) { return
 float readF32(const std::vector<std::uint8_t>& p, std::size_t o) { const auto raw = readU32(p, o); float value{}; std::memcpy(&value, &raw, sizeof(value)); return value; }
 void crcAccumulate(std::uint8_t data, std::uint16_t& crc) { const auto tmp = static_cast<std::uint8_t>(data ^ static_cast<std::uint8_t>(crc & 0xffU)); const auto tmp2 = static_cast<std::uint8_t>(tmp ^ static_cast<std::uint8_t>(tmp << 4)); crc = static_cast<std::uint16_t>((crc >> 8) ^ (static_cast<std::uint16_t>(tmp2) << 8) ^ (static_cast<std::uint16_t>(tmp2) << 3) ^ (static_cast<std::uint16_t>(tmp2) >> 4)); }
 std::uint16_t frameCrc(const std::vector<std::uint8_t>& frame, std::uint8_t extra) { std::uint16_t crc = 0xffffU; for (std::size_t i = 1; i + 2 < frame.size(); ++i) crcAccumulate(frame[i], crc); crcAccumulate(extra, crc); return crc; }
-std::optional<std::uint8_t> crcExtra(std::uint32_t msgid) { switch (msgid) { case 0: return 50; case 1: return 124; case 30: return 39; case 33: return 104; default: return std::nullopt; } }
+std::optional<std::uint8_t> crcExtra(std::uint32_t msgid) { switch (msgid) { case 0: return 50; case 1: return 124; case 30: return 39; case 33: return 104; case 111: return 34; default: return std::nullopt; } }
 } // namespace
 
 std::optional<DecodedMavlinkMessage> MavlinkRawDecoderBoundary::decodeFrame(MavlinkDialect dialect, const std::string& vehicle_id, const std::string& source_id, std::int64_t received_timestamp_ms, const std::vector<std::uint8_t>& frame) {
@@ -46,6 +46,9 @@ std::optional<DecodedMavlinkMessage> MavlinkRawDecoderBoundary::decodeFrame(Mavl
     case 1:
         if (payload.size() < 31) return std::nullopt;
         message.kind = MavlinkMessageKind::SysStatus; if (static_cast<std::int8_t>(payload[30]) >= 0) message.battery_percent = static_cast<double>(static_cast<std::int8_t>(payload[30])); message.healthy = true; break;
+    case 111:
+        if (payload.size() < 16) return std::nullopt;
+        message.kind = MavlinkMessageKind::Timesync; break;
     default: return std::nullopt;
     }
     return message;
