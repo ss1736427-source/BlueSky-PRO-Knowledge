@@ -104,6 +104,7 @@ target_link_libraries(mission_compiler_multi_test PRIVATE bluesky_planning)
 
 add_executable(mission_transfer_runtime_test
     mission_transfer_runtime_test.cpp
+    ../AUTOPILOT_ADAPTER/core/autopilot_adapter_baseline.cpp
 )
 target_link_libraries(mission_transfer_runtime_test PRIVATE bluesky_planning)
 
