@@ -69,3 +69,11 @@ add_executable(mavlink_telemetry_decoder_boundary_test
     core/mavlink_telemetry_mapping.cpp)
 target_link_libraries(mavlink_telemetry_decoder_boundary_test PRIVATE bluesky_operational_orchestrator_contract)
 add_test(NAME mavlink_telemetry_decoder_boundary_test COMMAND mavlink_telemetry_decoder_boundary_test)
+
+add_executable(mavlink_telemetry_replay_assembler_test
+    core/mavlink_telemetry_replay_assembler_test.cpp
+    core/mavlink_telemetry_replay_assembler.cpp
+    core/mavlink_telemetry_decoder_boundary.cpp
+    core/mavlink_telemetry_mapping.cpp)
+target_link_libraries(mavlink_telemetry_replay_assembler_test PRIVATE bluesky_operational_orchestrator_contract)
+add_test(NAME mavlink_telemetry_replay_assembler_test COMMAND mavlink_telemetry_replay_assembler_test)
