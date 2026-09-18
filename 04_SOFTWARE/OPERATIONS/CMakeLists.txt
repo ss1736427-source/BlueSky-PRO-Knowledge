@@ -70,3 +70,7 @@ if(WIN32)
     target_link_libraries(mavlink_udp_transport_driver_test PRIVATE ws2_32)
 endif()
 add_test(NAME mavlink_udp_transport_driver_test COMMAND mavlink_udp_transport_driver_test)
+
+add_executable(c2_link_runtime_bridge_test core/c2_link_runtime_bridge_test.cpp core/c2_link_runtime_bridge.cpp)
+target_link_libraries(c2_link_runtime_bridge_test PRIVATE bluesky_operational_orchestrator_contract)
+add_test(NAME c2_link_runtime_bridge_test COMMAND c2_link_runtime_bridge_test)
