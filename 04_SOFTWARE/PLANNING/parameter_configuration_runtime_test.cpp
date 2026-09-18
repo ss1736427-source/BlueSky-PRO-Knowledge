@@ -1,6 +1,10 @@
 #include "parameter_configuration_runtime.hpp"
 #include "../AUTOPILOT_ADAPTER/core/autopilot_adapter_baseline.hpp"
 
+#ifdef NDEBUG
+#undef NDEBUG
+#endif
+
 #include <cassert>
 #include <iostream>
 
