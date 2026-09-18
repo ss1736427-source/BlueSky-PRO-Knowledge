@@ -118,5 +118,44 @@ int main() {
     assert(b->state == MavlinkTransportChannelState::Offline);
     assert(!r.send("CH-B", 9000, frame_b));
 
+    MavlinkTransportChannelRuntime udp_runtime(3000);
+    auto udp = config(
+        "UDP-CH", "UDP-SESSION", "UAV-UDP", "ArduPilot:MAVLink2:1:1", 1);
+    udp.transport = MavlinkTransportType::Udp;
+    udp.udp_local = MavlinkUdpEndpoint{"127.0.0.1", 0};
+    assert(udp_runtime.registerChannel(udp));
+    assert(udp_runtime.connect("UDP-CH"));
+
+    auto udp_snapshot = udp_runtime.snapshot("UDP-CH");
+    assert(udp_snapshot && udp_snapshot->config.udp_local);
+    assert(udp_snapshot->config.udp_local->port != 0);
+
+    MavlinkUdpTransportDriver external_sender;
+    assert(external_sender.open({"127.0.0.1", 0}));
+    assert(external_sender.sendTo(*udp_snapshot->config.udp_local, heartbeat(42)));
+    assert(udp_runtime.pollReceive("UDP-CH", 6000));
+
+    udp_snapshot = udp_runtime.snapshot("UDP-CH");
+    assert(udp_snapshot->stats.received_frames == 1);
+    assert(udp_snapshot->stats.accepted_frames == 1);
+    assert(udp_snapshot->session);
+    assert(udp_snapshot->session->last_sequence == 42);
+
+    MavlinkUdpTransportDriver external_receiver;
+    assert(external_receiver.open({"127.0.0.1", 0}));
+    const auto receiver_endpoint = external_receiver.localEndpoint();
+    assert(receiver_endpoint);
+    assert(udp_runtime.setUdpRemote("UDP-CH", *receiver_endpoint));
+    assert(udp_runtime.send("UDP-CH", 6100, heartbeat(43)));
+
+    MavlinkUdpEndpoint source;
+    const auto outbound = external_receiver.receive(&source);
+    assert(outbound);
+    assert(*outbound == heartbeat(43));
+
+    udp_runtime.disconnect("UDP-CH");
+    external_sender.close();
+    external_receiver.close();
+
     std::cout << "mavlink_transport_channel_runtime_test: PASS\n";
 }
