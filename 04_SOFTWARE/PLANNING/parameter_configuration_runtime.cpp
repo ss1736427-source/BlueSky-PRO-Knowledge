@@ -151,11 +151,10 @@ ParameterConfigurationResult ParameterConfigurationRuntime::synchronize(
         return current;
     }
 
-    auto result = current;
-    result.backup = current.snapshot;
-
     const auto comparison = compare(approved, adapter);
     if (comparison.state == ParameterSyncState::Compared) {
+        auto result = comparison;
+        result.backup = current.snapshot;
         result.state = ParameterSyncState::Verified;
         result.reason = "CONFIGURATION_ALREADY_SYNCHRONIZED";
         return result;
@@ -166,12 +165,13 @@ ParameterConfigurationResult ParameterConfigurationRuntime::synchronize(
 
     const auto written = write(approved, adapter);
     if (written.state != ParameterSyncState::Written) {
-        written.backup = result.backup;
-        return written;
+        auto result = written;
+        result.backup = current.snapshot;
+        return result;
     }
 
     auto verified = verify(approved, adapter);
-    verified.backup = result.backup;
+    verified.backup = current.snapshot;
     return verified;
 }
 
