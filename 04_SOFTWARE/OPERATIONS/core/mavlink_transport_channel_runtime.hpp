@@ -1,5 +1,6 @@
 #pragma once
 
+#include "link_metrics_runtime.hpp"
 #include "mavlink_session_runtime.hpp"
 #include "mavlink_udp_transport_driver.hpp"
 #include <cstdint>
@@ -47,6 +48,7 @@ struct MavlinkTransportChannelSnapshot {
     MavlinkTransportChannelConfig config;
     MavlinkTransportChannelState state{MavlinkTransportChannelState::Offline};
     MavlinkTransportChannelStats stats;
+    LinkMetricsSnapshot link_metrics;
     std::optional<MavlinkSessionSnapshot> session;
 };
 
@@ -78,6 +80,7 @@ public:
 private:
     struct ChannelState {
         MavlinkTransportChannelSnapshot snapshot;
+        LinkMetricsRuntime link_metrics;
         std::vector<std::vector<std::uint8_t>> rx_queue;
         std::vector<std::vector<std::uint8_t>> tx_queue;
         std::unique_ptr<MavlinkUdpTransportDriver> udp_driver;
