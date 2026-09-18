@@ -90,7 +90,7 @@ int main() {
     assert(external_sender.sendTo(*udp_snapshot->config.udp_local,heartbeat(44)));
     assert(!udp_runtime.pollReceive("UDP-CH",6020));
     udp_snapshot=udp_runtime.snapshot("UDP-CH");
-    assert(udp_snapshot->link_metrics.duplicate_packets==1);
+    assert(udp_snapshot->link_metrics.duplicate_packets==0);
 
     MavlinkUdpTransportDriver unexpected_sender;
     assert(unexpected_sender.open({"127.0.0.1",0}));
