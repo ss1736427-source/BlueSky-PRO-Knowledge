@@ -188,6 +188,7 @@ int main() {
     assert(outbound);
     assert(*outbound == heartbeat(43));
 
+    assert(udp_runtime.setUdpRemote("UDP-CH", *sender_endpoint));
     assert(recovered_local && recovered_local->port != 0);
     assert(external_sender.sendTo(*recovered_local, heartbeat(1)));
     assert(udp_runtime.pollReceive("UDP-CH", 10000));
