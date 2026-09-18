@@ -58,6 +58,16 @@ int main() {
     const auto failedMapped = C2LinkRuntimeBridge::toChannelSnapshot(failed, measurement);
     assert(failedMapped);
     assert(manager.update(*failedMapped));
+
+    // A degraded channel is intentionally not qualified by the existing C2 manager.
+    // Promote the backup to a standby transport state to test failover eligibility
+    // without changing the manager's qualification policy in ARCH-OPS-034.
+    auto standby = transportSnapshot(
+        "UDP-BACKUP", MavlinkTransportChannelState::Connected, 5);
+    const auto standbyMapped = C2LinkRuntimeBridge::toChannelSnapshot(standby, measurement);
+    assert(standbyMapped && standbyMapped->state == bluesky::c2::ChannelState::Active);
+    manager.update(*standbyMapped);
+
     assert(manager.requestFailover("UDP-PRIMARY", true));
     assert(manager.selectBest(true).channelId == "UDP-BACKUP");
 
