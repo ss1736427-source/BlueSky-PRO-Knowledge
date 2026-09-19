@@ -146,3 +146,14 @@ By default, the Bottom Toolbar configuration displays the following tools/panels
 - `MAP`
 
 These are the default selected items in the toolbar configuration. They may be changed through the `☰` menu; the default configuration does not change the fixed static controls.
+
+
+### Unified tool-button styling
+
+All tools displayed in the central Bottom Toolbar area are rendered as buttons using one shared style configuration.
+
+- The style is configured once for the whole group, not per individual tool.
+- Group-level style settings apply simultaneously to every displayed tool button.
+- The shared style includes common button geometry, height/size, typography, text size, spacing/padding, border treatment and interaction states.
+- Individual tools cannot have separate visual styles.
+- A newly added tool automatically inherits the current shared tool-button style.
