@@ -379,3 +379,165 @@ The Left Panel closes by:
 
 A single click in the map area does not close the panel. The Bottom Toolbar Left button must always reflect the actual panel state.
 
+
+
+## Right Panel — operational control, checklist, warnings and validation — preliminary controlled state
+
+The Right Panel is an **operational panel**, not a duplicate telemetry dashboard. Detailed current telemetry belongs to the UAV Panel; spatial operational information belongs to the Map; non-immediate technical information, history, archives and journals belong to Administration / Technical State / Logs.
+
+### Default Right Panel state — Checklist
+
+The default content of the Right Panel during flight preparation is the **CHECKLIST**.
+
+The header displays the completion counter:
+
+`CHECKLIST 5/8 ✓`
+
+Rules:
+- completed checklist stages are shown **green**;
+- incomplete/pending stages are shown **amber/yellow**;
+- red is reserved for a critical/error condition, not for an ordinary incomplete checklist item;
+- completed items remain completed in system state even when visually hidden.
+
+### Completed checklist item dismissal
+
+To save screen space:
+- on **tablet**, a completed checklist item may be **swiped to the right** to hide it from the current visible list;
+- on **PC**, a completed checklist item may be hidden by **double-clicking** it with the mouse;
+- hiding a completed item is a presentation action only; it does not change its completed state or remove its audit/history record;
+- the completion counter remains based on actual checklist state, not on the number of currently visible rows.
+
+The remaining incomplete items stay visible.
+
+### WARNING — Header and Right Panel parallel behavior
+
+The Header `WARNING` indicator and the Right Panel `WARNINGS / CORRECTIONS` block operate in parallel.
+
+When an operational warning appears:
+- `WARNING` in the Header changes to the warning visual state;
+- the `WARNINGS / CORRECTIONS` area in the Right Panel is highlighted;
+- the warning is automatically expanded;
+- the operator sees the current warning and the required/recommended action.
+
+Closing a warning display does not erase the underlying event.
+
+### Warning severity and display channel
+
+Secondary operational warnings are presented through the Right Panel.
+
+Example: a change in wind direction may produce a Right Panel warning without covering the main map.
+
+A serious/critical warning is additionally presented as a large alert over the Map/Flight Chart so that the operator can assess the spatial situation and make the required decision.
+
+For a critical map alert:
+- Header `WARNING` is active;
+- Right Panel warning state is active;
+- the large alert is displayed on the map;
+- after reading/studying the alert, **double-clicking the warning area closes the visual alert**;
+- closing the visual alert does not delete the event from the journal;
+- if another active warning remains, the global `WARNING` state remains active.
+
+### Weather forecast change warning
+
+When a material forecast/weather update affects the mission, the Right Panel warning presents the **new TAF/METAR** and a concise comparison with the previous data.
+
+The concise comparison should identify, where available:
+- temperature: previous → new;
+- wind direction: previous → new;
+- wind speed: previous → new;
+- gusts: previous → new;
+- visibility: previous → new;
+- cloud-base / cloud-height limits: previous → new.
+
+The operator should immediately see **what changed and by how much**. Full TAF/METAR text and detailed comparison remain available through the warning details view.
+
+### Automatic validation after a relevant change
+
+Mission validation is not a permanently visible primary button.
+
+When a relevant mission input changes, the system automatically performs a new validation. Relevant changes include, as applicable:
+- route / waypoint changes;
+- selected UAV or UAV configuration changes;
+- battery/resource changes;
+- equipment changes;
+- weather/forecast changes;
+- restrictions/NOTAM changes;
+- other inputs that can affect mission readiness.
+
+After the automatic validation completes successfully, the Right Panel shows a **VALIDATE MISSION** confirmation control only when operator confirmation is required.
+
+The button uses a **dynamic breathing green outline** to attract attention.
+
+The meaning is:
+
+> Automatic validation has completed successfully. The result is OK. Operator confirmation is required.
+
+After the operator confirms the result:
+- the breathing outline stops;
+- the validation confirmation control disappears;
+- the current readiness state remains available.
+
+If automatic validation detects a problem, the interface presents the corresponding warning/error state instead of implying successful validation.
+
+If there is **no relevant change**, there is **no validation button on the Right Panel**.
+
+Validation is therefore an explicit confirmation of a newly checked state, not a substitute for automatic checking.
+
+### Mission Readiness and Start Mission
+
+`START MISSION` is not green by default.
+
+It becomes **green and active only when the mission has full current readiness** and all required checklist/validation conditions are satisfied.
+
+If a relevant change invalidates current readiness, `START MISSION` returns to the non-ready/disabled state until the new state is successfully checked and confirmed where required.
+
+### Selected UAV set
+
+The operator may select one or more UAVs for an operational command.
+
+#### Tablet
+- long press on a specific UAV card/area selects that UAV;
+- another long press on another UAV adds it to the selected set;
+- long press on an already selected UAV removes it from the selected set.
+
+#### PC
+- mouse click on a UAV card/area selects or adds the UAV to the selected set;
+- clicking an already selected UAV removes it from the selected set.
+
+The selected set may therefore contain one or several UAVs.
+
+### RETURN
+
+The normal Right Panel action is **RETURN**, not RTH.
+
+`RETURN` is addressed to the **currently selected UAV set**:
+- one selected UAV → command applies to that UAV;
+- two or more selected UAVs → command applies to all selected UAVs.
+
+The user-facing command is therefore explicitly associated with the selected UAV set rather than with the entire fleet.
+
+The underlying return procedure remains a Core/Safety-controlled flight procedure; the UI command does not hard-code the maneuver implementation.
+
+### ABORT
+
+`ABORT` is **removed from the normal Right Panel**.
+
+It is not presented as a routine operational button beside RETURN.
+
+ABORT is exposed only in the appropriate emergency/critical alert context, according to the applicable emergency procedure.
+
+### Operational action hierarchy
+
+The normal Right Panel therefore prioritizes:
+
+1. CHECKLIST;
+2. active WARNINGS / CORRECTIONS;
+3. Mission Readiness;
+4. contextual validation confirmation after relevant automatic re-check;
+5. `SEND FLIGHT PLAN`;
+6. `START MISSION` — green only at full readiness;
+7. `RETURN` — for the selected UAV set.
+
+`ABORT` is not part of this normal list and appears only in the relevant emergency context.
+
+This is a **preliminary controlled state** for further HMI/ergonomic validation; it does not yet constitute the final visual baseline.
