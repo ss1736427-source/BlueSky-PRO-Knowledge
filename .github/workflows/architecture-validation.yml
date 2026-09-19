@@ -1,5 +1,7 @@
 name: BlueSky Architecture Validation
 
+# CI dispatcher probe
+
 on:
   workflow_dispatch:
   push:
