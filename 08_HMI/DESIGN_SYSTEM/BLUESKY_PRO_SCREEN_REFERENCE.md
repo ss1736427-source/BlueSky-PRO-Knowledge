@@ -121,4 +121,7 @@ Panel Auto-hide is a configurable interface option. It is separate from the doub
 - `LEFT` and `RIGHT` panel controls remain static and are not part of the configurable tool list.
 
 Resulting right-side sequence:
-`… configurable tools → HH:MM → MENU ICON → RIGHT ▶`
+`… configurable tools → RIGHT ▶ → HH:MM → MENU ICON`
+
+- `RIGHT ▶` is immediately to the left of the clock/menu group.
+- `HH:MM` and the menu icon form the fixed rightmost group of the Bottom Toolbar.
