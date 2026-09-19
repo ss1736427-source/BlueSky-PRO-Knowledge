@@ -109,3 +109,16 @@ The Bottom Toolbar is the compact persistent control layer at the bottom of the 
 ### Auto-hide option
 
 Panel Auto-hide is a configurable interface option. It is separate from the double-click closure gesture. The exact automatic hiding trigger is configurable behavior and must not override the direct state indication of the LEFT/RIGHT controls.
+
+
+### Right-side toolbar controls
+
+- The text label `TOOLS` is replaced by a compact menu icon, using the supplied menu-icon reference.
+- The menu icon is a static control at the right side of the central tool area.
+- Immediately to the **left** of the menu icon is a static digital clock in `HH:MM` format.
+- The clock is display-only and is not part of the configurable tool list.
+- The menu icon opens configuration of which Flight Chart tools are displayed on the Bottom Toolbar.
+- `LEFT` and `RIGHT` panel controls remain static and are not part of the configurable tool list.
+
+Resulting right-side sequence:
+`… configurable tools → HH:MM → MENU ICON → RIGHT ▶`
