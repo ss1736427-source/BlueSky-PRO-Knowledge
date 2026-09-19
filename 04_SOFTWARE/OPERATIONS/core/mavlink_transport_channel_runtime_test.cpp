@@ -20,6 +20,7 @@ static void crc(std::uint8_t d, std::uint16_t& c) {
 static std::vector<std::uint8_t> heartbeat(std::uint8_t seq, std::uint8_t health = 3, std::uint8_t system_id = 1) {
     std::vector<std::uint8_t> f{0xFD, 9, 0, 0, seq, 1, 1, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, health, 0, 0, 0};
+    f[5] = system_id;
     std::uint16_t c = 0xffff;
     for (std::size_t i = 1; i < f.size() - 2; ++i) crc(f[i], c);
     crc(50, c);
