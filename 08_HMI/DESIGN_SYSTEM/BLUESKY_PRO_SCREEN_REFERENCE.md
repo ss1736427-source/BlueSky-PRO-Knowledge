@@ -260,3 +260,14 @@ The **thin horizontal mission-progress line at the bottom of the UAV Panel remai
 - It belongs to the `МИССИЯ` row at the bottom of the panel.
 - It is the only horizontal progress separator/indicator intentionally retained in the current UAV Panel composition.
 - Removing the horizontal divider lines between individual operational parameters does **not** remove the mission progress line.
+
+
+### UAV Panel — intermediate mission progress line styling
+
+The current UAV Panel mission progress line is accepted as an **intermediate visual variant**.
+
+- The mission progress line remains at the bottom of the panel.
+- Its current thickness is reduced to approximately **50% of the previous thickness**.
+- The line thickness is a configurable visual property.
+- The line color is a configurable visual property.
+- The current thin green presentation is only the intermediate visual selection and is not the final locked color/thickness baseline.
