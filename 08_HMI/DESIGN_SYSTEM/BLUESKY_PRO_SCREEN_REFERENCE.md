@@ -174,3 +174,49 @@ The `☰` menu configures the central tool set and its common group style. It do
 
 Those four elements remain static.
 
+
+
+## UAV Panel — controlled default composition
+
+The supplied visual reference `минимальная панель БПЛА(2).png` defines the **default UAV Panel data composition and layout**.
+
+### Default composition
+
+The expanded UAV Panel uses a wide horizontal composition with:
+
+- a left UAV identity block containing the UAV image/visual, UAV identifier and readiness/state indicator;
+- a vertical divider separating UAV identity from operational data;
+- a main operational-data block arranged vertically;
+- a settings control at the upper-right of the panel;
+- a mission status/progress row across the bottom of the panel.
+
+### Default operational data
+
+The default visual composition displays these data groups in this order:
+
+1. Height
+2. Speed
+3. Battery
+4. Engines
+
+The values are displayed in a large primary-value treatment aligned consistently to the right of their corresponding labels/icons.
+
+### Engines indication
+
+The Engines row uses a horizontal 0–100% scale with threshold-colored operating zones, a current-position marker and the current percentage value at the right.
+
+### Mission row
+
+The lower row contains:
+
+- `МИССИЯ` label;
+- horizontal mission progress bar;
+- current mission state at the right.
+
+### Composition rule
+
+This visual arrangement is the **default UAV Panel composition**. It is not a generic vertical side-card layout.
+
+For multiple UAVs, the same complete vertical composition is used as the data group for each UAV. UAV groups are arranged horizontally from left to right and separated by vertical dividers.
+
+The supplied image is the visual reference for the composition; it must not be silently replaced by a different panel arrangement during further HMI work.
