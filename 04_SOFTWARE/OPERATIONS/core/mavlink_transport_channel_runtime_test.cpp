@@ -71,8 +71,11 @@ int main() {
     assert(a && b);
     auto frame_a = heartbeat(10); auto frame_b = heartbeat(200);
     assert(r.send("CH-A",1000,frame_a));
-    assert(r.injectReceive("CH-A",1000,frame_a));
-    assert(r.injectReceive("CH-B",1000,frame_b));
+    assert(r.routeIncomingFrame(1000,frame_a).has_value());
+    assert(*r.routeIncomingFrame(1001,frame_b) == "CH-B");
+    auto unknown = heartbeat(201);
+    unknown[5] = 99;
+    assert(!r.routeIncomingFrame(1002,unknown).has_value());
     assert(r.receive("CH-A").has_value()); assert(r.receive("CH-B").has_value());
     a=r.snapshot("CH-A"); b=r.snapshot("CH-B");
     assert(a->link_metrics.observed_packets==1 && a->link_metrics.inferred_lost_packets==0);
