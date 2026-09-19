@@ -72,7 +72,8 @@ int main() {
     auto frame_a = heartbeat(10); auto frame_b = heartbeat(200);
     assert(r.send("CH-A",1000,frame_a));
     assert(r.routeIncomingFrame(1000,frame_a).has_value());
-    assert(*r.routeIncomingFrame(1001,frame_b) == "CH-B");
+    const auto routed_b = r.routeIncomingFrame(1001,frame_b);
+    assert(routed_b && *routed_b == "CH-B");
     auto unknown = heartbeat(201);
     unknown[5] = 99;
     assert(!r.routeIncomingFrame(1002,unknown).has_value());
