@@ -344,6 +344,49 @@ bool MavlinkTransportChannelRuntime::pollReceive(
     return receive(channel_id).has_value();
 }
 
+
+std::optional<std::string> MavlinkTransportChannelRuntime::routeIncomingFrame(
+    std::int64_t timestamp_ms,
+    const std::vector<std::uint8_t>& frame) {
+    if (timestamp_ms <= 0) return std::nullopt;
+
+    std::optional<FleetAddress> address;
+    if (frame.size() >= 7 && frame[0] == 0xFD) {
+        address = FleetAddress{frame[5], frame[6]};
+    } else if (frame.size() >= 5 && frame[0] == 0xFE) {
+        address = FleetAddress{frame[3], frame[4]};
+    } else {
+        return std::nullopt;
+    }
+
+    const auto binding = fleet_addressing_runtime_.resolveAddress(*address);
+    if (!binding.has_value()) return std::nullopt;
+
+    for (auto& [channel_id, channel] : channels_) {
+        const auto& config = channel.snapshot.config;
+        if (config.vehicle_id != binding->vehicle_id ||
+            config.source_id != binding->source_id ||
+            config.session_id != binding->session_id ||
+            config.system_id != address->system_id ||
+            config.component_id != address->component_id) {
+            continue;
+        }
+
+        if (channel.snapshot.state != MavlinkTransportChannelState::Connected &&
+            channel.snapshot.state != MavlinkTransportChannelState::Degraded) {
+            ++channel.snapshot.stats.rejected_frames;
+            return std::nullopt;
+        }
+
+        if (!injectReceive(channel_id, timestamp_ms, frame)) {
+            return std::nullopt;
+        }
+        return channel_id;
+    }
+
+    return std::nullopt;
+}
+
 MavlinkSessionSnapshot MavlinkTransportChannelRuntime::tickSession(
     const std::string& session_id, std::int64_t now_ms) {
     const auto snapshot = session_runtime_.tick(session_id, now_ms);

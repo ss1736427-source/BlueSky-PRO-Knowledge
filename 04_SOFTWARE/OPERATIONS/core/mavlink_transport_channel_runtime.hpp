@@ -77,6 +77,13 @@ public:
     std::optional<std::vector<std::uint8_t>> receive(const std::string& channel_id);
     bool pollReceive(const std::string& channel_id, std::int64_t timestamp_ms);
 
+    // Route an already received MAVLink frame by its system/component address.
+    // Address admission remains owned by FleetAddressingRuntime; session validation
+    // remains owned by MavlinkSessionRuntime.
+    std::optional<std::string> routeIncomingFrame(
+        std::int64_t timestamp_ms,
+        const std::vector<std::uint8_t>& frame);
+
     MavlinkSessionSnapshot tickSession(const std::string& session_id,
                                        std::int64_t now_ms);
     std::optional<MavlinkTransportChannelSnapshot> snapshot(
