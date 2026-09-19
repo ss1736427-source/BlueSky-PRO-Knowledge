@@ -296,3 +296,15 @@ The supplied sketch `Панель шаблонов левая(1).JPG` is the vis
 - The panel does not acquire a separate independent visual state from the Bottom Toolbar control.
 
 This is an intermediate controlled structure and remains subject to subsequent ergonomic and visual refinement.
+
+
+### Mission Template interaction and adaptive panel growth
+
+- Clicking a mission/template button places the corresponding mission template/tooling onto the Flight Chart for further work.
+- By default, the system may place a **system-defined set of complementary mission templates** onto the Flight Chart based on the mission being created. This default set is determined by the system for the requested mission; the operator then continues working with the displayed templates.
+- Template buttons whose templates are currently used/active on the Flight Chart are **highlighted** in the Mission Templates panel.
+- The panel's tool-management control adds a selected tool to the panel using the **same unified visual style as the other panel tools**.
+- The Mission Templates panel is **minimal and compact**. It sizes itself to the actual content and dimensions of the items inside it rather than occupying unused space.
+- The panel grows **vertically from top to bottom** as additional content is added.
+- A newly added tool/template is appended **at the bottom** of the panel; existing items do not shift into a different ordering unless the user explicitly reorders them.
+- The adaptive sizing applies to the panel container; it does not change the established compact visual style of the individual tools.
