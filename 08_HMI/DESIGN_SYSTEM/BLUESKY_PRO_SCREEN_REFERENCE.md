@@ -126,3 +126,12 @@ Resulting right-side sequence:
 - `RIGHT ▶`, `HH:MM`, and the menu icon are **static elements**.
 - Their order and positions are fixed: `RIGHT ▶ → HH:MM → MENU ICON`.
 - `RIGHT ▶` remains immediately to the left of the clock; the clock and menu icon form the fixed rightmost group.
+
+
+### Central tool area
+
+- The **middle section** of the Bottom Toolbar displays the Flight Chart tools selected for display through the menu.
+- Only tools enabled in the toolbar configuration are displayed in this central section.
+- The displayed tools are distributed **evenly across the available central width**.
+- The central tool area is adaptive to the available width; the fixed side controls do not move.
+- The central tool area does not contain `LEFT`, `RIGHT ▶`, `HH:MM`, or the menu icon; those are static controls.
