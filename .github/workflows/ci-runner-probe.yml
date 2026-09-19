@@ -1,0 +1,14 @@
+name: CI Runner Probe
+
+on:
+  push:
+    branches:
+      - arch-ops-043-ci-reindex-test
+  workflow_dispatch:
+
+jobs:
+  runner-probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Runner reached
+        run: echo "runner-probe-ok"
