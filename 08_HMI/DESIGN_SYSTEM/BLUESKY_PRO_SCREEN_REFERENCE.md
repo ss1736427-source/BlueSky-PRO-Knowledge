@@ -251,3 +251,12 @@ The UAV operational parameters must use the controlled BlueSky PRO navigation te
 For the UAV Panel, the primary compact navigation values use the same controlled abbreviations. Horizontal speed may be displayed in the user-facing `m/s` or `km/h` form according to the established display rule; Core units remain `m/s`.
 
 The UAV Panel must **not use horizontal divider lines between individual operational parameters**. Height, speed, battery and RPM are presented as one visually coherent data group, separated by spacing/alignment rather than horizontal rules. The vertical separation between the UAV identity block and operational-data block remains.
+
+
+### UAV Panel — mission progress line
+
+The **thin horizontal mission-progress line at the bottom of the UAV Panel remains**.
+
+- It belongs to the `МИССИЯ` row at the bottom of the panel.
+- It is the only horizontal progress separator/indicator intentionally retained in the current UAV Panel composition.
+- Removing the horizontal divider lines between individual operational parameters does **not** remove the mission progress line.
