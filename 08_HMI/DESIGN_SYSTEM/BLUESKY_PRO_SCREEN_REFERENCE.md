@@ -271,3 +271,28 @@ The current UAV Panel mission progress line is accepted as an **intermediate vis
 - The line thickness is a configurable visual property.
 - The line color is a configurable visual property.
 - The current thin green presentation is only the intermediate visual selection and is not the final locked color/thickness baseline.
+
+
+## Left Panel — Mission Templates — controlled intermediate structure
+
+The supplied sketch `Панель шаблонов левая(1).JPG` is the visual reference for the Mission Templates panel.
+
+### Visual composition
+
+- Preserve the visual style of the supplied Mission Templates sketch.
+- Remove the individual icons displayed beside each mission/template item.
+- Keep the mission/template name as the primary label and its secondary description text.
+- Keep the compact vertical list structure.
+- The `+` and list/menu controls in the panel header remain part of the current sketch reference.
+
+### Panel control
+
+- The Left Panel is opened by pressing the `ADMIN`/left-panel tool button assigned on the Bottom Toolbar according to the current toolbar configuration.
+- Pressing the same button again closes/collapses the Left Panel.
+- The Bottom Toolbar button is a direct state indicator:
+  - **panel open/expanded** → button highlighted;
+  - **panel closed/collapsed** → button not highlighted.
+- If the panel is closed through its external close/working-area interaction, the Bottom Toolbar button must immediately return to the non-highlighted state.
+- The panel does not acquire a separate independent visual state from the Bottom Toolbar control.
+
+This is an intermediate controlled structure and remains subject to subsequent ergonomic and visual refinement.
