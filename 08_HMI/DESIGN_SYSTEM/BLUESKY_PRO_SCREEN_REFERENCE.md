@@ -41,6 +41,40 @@ Treat the following as independent UI components during reconstruction:
 
 The exact grouping and placement are subject to ergonomic review. A panel may be moved, collapsed, replaced or split without changing unrelated components.
 
+## Top Header — intermediate controlled structure
+
+The current intermediate Header is defined as one adaptive component for both tablet and PC.
+
+### Common structure
+
+`LOGO → ETD → TOT → TRIP → ETA → READY → WARNING → OPERATOR`
+
+- **LOGO** — fixed/static left anchor.
+- **FLIGHT DATA zone** — adaptive central zone containing ETD, TOT, TRIP, ETA, READY and WARNING.
+- **OPERATOR** — fixed/static right anchor.
+- The flexible space belongs to the central layout; the fixed anchors do not move when the available width changes.
+
+### Tablet variant
+
+`LOGO → ETD → TOT → TRIP → ETA → READY → WARNING → OPERATOR → BAT`
+
+- **BAT** is tablet-only and represents the tablet/device battery state.
+- BAT is a separate device-level element; it is not part of the flight-data group.
+
+### PC variant
+
+`LOGO → ETD → TOT → TRIP → ETA → READY → WARNING → OPERATOR`
+
+- BAT is not displayed in the PC Header.
+
+### Responsive rule
+
+Do not create two unrelated Header designs. Use one component with adaptive composition:
+
+`TOP HEADER = FIXED LOGO + FLEXIBLE FLIGHT DATA + FIXED OPERATOR (+ TABLET-ONLY BAT)`
+
+This structure is an intermediate working baseline and remains subject to visual/ergonomic validation before final approval.
+
 ## Visual control
 
 The controlled color system is documented in `BLUESKY_PRO_COLORS.md`.
