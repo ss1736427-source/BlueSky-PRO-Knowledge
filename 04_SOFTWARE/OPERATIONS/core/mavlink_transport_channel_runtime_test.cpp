@@ -17,7 +17,7 @@ static void crc(std::uint8_t d, std::uint16_t& c) {
         (static_cast<std::uint16_t>(t2) >> 4));
 }
 
-static std::vector<std::uint8_t> heartbeat(std::uint8_t seq, std::uint8_t health = 3) {
+static std::vector<std::uint8_t> heartbeat(std::uint8_t seq, std::uint8_t health = 3, std::uint8_t system_id = 1) {
     std::vector<std::uint8_t> f{0xFD, 9, 0, 0, seq, 1, 1, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, health, 0, 0, 0};
     std::uint16_t c = 0xffff;
@@ -69,7 +69,7 @@ int main() {
 
     auto a = r.snapshot("CH-A"); auto b = r.snapshot("CH-B");
     assert(a && b);
-    auto frame_a = heartbeat(10); auto frame_b = heartbeat(200);
+    auto frame_a = heartbeat(10); auto frame_b = heartbeat(200, 3, 2);
     assert(r.send("CH-A",1000,frame_a));
     assert(r.routeIncomingFrame(1000,frame_a).has_value());
     const auto routed_b = r.routeIncomingFrame(1001,frame_b);
