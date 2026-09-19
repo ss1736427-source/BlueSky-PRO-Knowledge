@@ -233,3 +233,21 @@ The default UAV Panel composition is refined as follows:
 - Replace the battery presentation with a **horizontal segmented indicator**: a row of discrete rectangular sectors followed by the numeric percentage value.
 - The supplied reference image `Индикатор батареи 2.JPG` is the visual reference for the segmented battery indicator: horizontal discrete sectors with the percentage value to the right.
 - The battery indicator is part of the normal compact UAV data presentation and is not a separate framed card.
+
+
+### UAV Panel — parameter indication and separators
+
+The UAV operational parameters must use the controlled BlueSky PRO navigation terminology and indication rules:
+
+- `GS` — Ground Speed.
+- `AS` — Air Speed.
+- `HGT` — true height above ground.
+- `ALT` — barometric altitude.
+- `CLIMB` — climb.
+- `DESCENT` — descent.
+- Do not use `ALTITUDE`, `CLIMB RATE` or `DESCENT RATE` as displayed parameter names.
+- Do not add `+` or `−` signs to the primary `CLIMB`, `DESCENT`, `HGT` or `ALT` indications.
+
+For the UAV Panel, the primary compact navigation values use the same controlled abbreviations. Horizontal speed may be displayed in the user-facing `m/s` or `km/h` form according to the established display rule; Core units remain `m/s`.
+
+The UAV Panel must **not use horizontal divider lines between individual operational parameters**. Height, speed, battery and RPM are presented as one visually coherent data group, separated by spacing/alignment rather than horizontal rules. The vertical separation between the UAV identity block and operational-data block remains.
