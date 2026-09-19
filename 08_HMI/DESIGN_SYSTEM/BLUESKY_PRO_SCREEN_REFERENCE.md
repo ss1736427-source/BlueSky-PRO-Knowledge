@@ -88,72 +88,89 @@ The logo rules and asset status are documented in `BLUESKY_PRO_LOGO.md` and `08_
 Do not introduce a new visual identity while optimizing ergonomics. The task is to improve the working view while preserving the approved BlueSky PRO identity and supplied assets.
 
 
-## Bottom Toolbar — controlled panel-control behavior
+## Bottom Toolbar — controlled structure
 
-The Bottom Toolbar is the compact persistent control layer at the bottom of the Flight Chart. The map remains the primary workspace.
+The Bottom Toolbar is a compact persistent control layer at the bottom of the Flight Chart. The map remains the primary workspace.
 
-### Side-panel controls
+### Complete layout
 
-- `◀ LEFT` — static, compact control for the left panel.
-- `RIGHT ▶` — static, compact control for the right panel.
-- The controls remain fixed at their respective sides of the Bottom Toolbar.
-- They are direct panel state toggles: pressing the control opens the corresponding panel and highlights the button; pressing it again closes the panel and removes the highlight.
+`◀ LEFT → [ CENTRAL TOOL BUTTONS ] → RIGHT ▶ → HH:MM → ☰`
 
-### Double-click behavior
+The central area contains the tools selected for display. The four elements `◀ LEFT`, `RIGHT ▶`, `HH:MM` and `☰` are static controls and are not part of the configurable tool list.
 
-- A **single click** in the map area activates/ makes map controls available; it does not close the side panel.
-- A **double-click** in the map area closes an open side panel and the corresponding LEFT/RIGHT button returns to its non-highlighted state.
-- A click inside the panel does not close the panel.
-- Double-click closure is a persistent interaction rule and applies regardless of the Auto-hide setting.
+### Left panel control
 
-### Auto-hide option
+- `◀ LEFT` is a static, compact control fixed at the left side of the Bottom Toolbar.
+- Pressing it opens the left panel and highlights the button.
+- Pressing it again closes the left panel and removes the highlight.
+- The button state always corresponds to the actual panel state.
 
-Panel Auto-hide is a configurable interface option. It is separate from the double-click closure gesture. The exact automatic hiding trigger is configurable behavior and must not override the direct state indication of the LEFT/RIGHT controls.
+### Right-side fixed group
 
+The fixed right-side sequence is:
 
-### Right-side toolbar controls
+`RIGHT ▶ → HH:MM → ☰`
 
-- The text label `TOOLS` is replaced by a compact menu icon, using the supplied menu-icon reference.
-- The menu icon is a static control at the right side of the central tool area.
-- Immediately to the **left** of the menu icon is a static digital clock in `HH:MM` format.
-- The clock is display-only and is not part of the configurable tool list.
-- The menu icon opens configuration of which Flight Chart tools are displayed on the Bottom Toolbar.
-- `LEFT` and `RIGHT` panel controls remain static and are not part of the configurable tool list.
+- `RIGHT ▶` is a static, compact control for the right panel.
+- `HH:MM` is a static digital clock in 24-hour display format.
+- `☰` is a static menu icon replacing the previous `TOOLS` text label.
+- Their order and positions are fixed.
+- `RIGHT ▶`, `HH:MM` and `☰` are never redistributed with the central tools.
+- Pressing `RIGHT ▶` opens the right panel and highlights the button; pressing it again closes the panel and removes the highlight.
 
-Resulting right-side sequence:
-`… configurable tools → RIGHT ▶ → HH:MM → MENU ICON`
+### Map interaction and panel closure
 
-- `RIGHT ▶`, `HH:MM`, and the menu icon are **static elements**.
-- Their order and positions are fixed: `RIGHT ▶ → HH:MM → MENU ICON`.
-- `RIGHT ▶` remains immediately to the left of the clock; the clock and menu icon form the fixed rightmost group.
+- A **single click** in the map area activates/makes map controls available; it does not close an open side panel.
+- A **double-click** in the map area closes an open side panel.
+- After closure, the corresponding `LEFT` or `RIGHT ▶` button returns to its non-highlighted state.
+- A click inside a side panel does not close that panel.
+- Double-click closure is a permanent interaction rule and applies regardless of the Auto-hide setting.
 
+### Auto-hide
+
+- Panel Auto-hide is a configurable interface option.
+- Auto-hide is separate from the permanent double-click closure gesture.
+- The Auto-hide option must not alter the direct state indication of `LEFT` / `RIGHT ▶`.
+- The exact additional automatic-hide trigger is not defined by the current Bottom Toolbar decision and must not be invented at this stage.
 
 ### Central tool area
 
-- The **middle section** of the Bottom Toolbar displays the Flight Chart tools selected for display through the menu.
-- Only tools enabled in the toolbar configuration are displayed in this central section.
-- The displayed tools are distributed **evenly across the available central width**.
-- The central tool area is adaptive to the available width; the fixed side controls do not move.
-- The central tool area does not contain `LEFT`, `RIGHT ▶`, `HH:MM`, or the menu icon; those are static controls.
+- The middle section displays the Flight Chart tools selected through the `☰` menu.
+- Displayed tools are distributed **evenly across the available central width**.
+- The central area adapts to available width.
+- The fixed controls do not move when the number of central tools changes.
+- Tools are displayed as **buttons**, not as free-standing text labels.
+- All displayed tool buttons use one common visual style.
 
+### Default central tools
 
-### Default toolbar configuration
-
-By default, the Bottom Toolbar configuration displays the following tools/panels:
+The default Bottom Toolbar configuration displays:
 
 - `ADMIN`
 - `UAV PANEL`
 - `MAP`
 
-These are the default selected items in the toolbar configuration. They may be changed through the `☰` menu; the default configuration does not change the fixed static controls.
+These default tools are evenly distributed in the central area. The user may change the displayed tool set through `☰`.
 
+Previously defined Flight Chart tools such as `SELECT`, `POINT`, `LINE`, `ZONE`, `RTH`, `MEASURE`, `PROFILE` and `WEATHER` remain available as tool candidates; they are not the default central selection unless explicitly configured.
 
-### Unified tool-button styling
+### Unified tool-button style
 
-All tools displayed in the central Bottom Toolbar area are rendered as buttons using one shared style configuration.
-
-- The style is configured once for the whole group, not per individual tool.
-- Group-level style settings apply simultaneously to every displayed tool button.
-- The shared style includes common button geometry, height/size, typography, text size, spacing/padding, border treatment and interaction states.
+- The visual style is configured **once for the entire group of displayed central tool buttons**.
 - Individual tools cannot have separate visual styles.
-- A newly added tool automatically inherits the current shared tool-button style.
+- Shared settings apply simultaneously to every displayed tool button.
+- The shared style covers common geometry/size, height, typography, text size, spacing/padding, border treatment and interaction states.
+- A newly added tool automatically inherits the current shared style.
+- The central tool buttons therefore remain visually consistent regardless of their number or function.
+
+### Configuration boundaries
+
+The `☰` menu configures the central tool set and its common group style. It does not configure:
+
+- `◀ LEFT`
+- `RIGHT ▶`
+- `HH:MM`
+- `☰`
+
+Those four elements remain static.
+
