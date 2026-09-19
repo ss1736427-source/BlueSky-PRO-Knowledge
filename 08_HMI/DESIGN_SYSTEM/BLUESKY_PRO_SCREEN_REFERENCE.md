@@ -135,3 +135,14 @@ Resulting right-side sequence:
 - The displayed tools are distributed **evenly across the available central width**.
 - The central tool area is adaptive to the available width; the fixed side controls do not move.
 - The central tool area does not contain `LEFT`, `RIGHT ▶`, `HH:MM`, or the menu icon; those are static controls.
+
+
+### Default toolbar configuration
+
+By default, the Bottom Toolbar configuration displays the following tools/panels:
+
+- `ADMIN`
+- `UAV PANEL`
+- `MAP`
+
+These are the default selected items in the toolbar configuration. They may be changed through the `☰` menu; the default configuration does not change the fixed static controls.
