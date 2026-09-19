@@ -317,3 +317,65 @@ This is an intermediate controlled structure and remains subject to subsequent e
 - Hidden templates remain available through the panel's existing list/menu control and are not deleted or disabled.
 - When a hidden template is selected and becomes part of the task, it is added to the visible list and its button receives the active/highlighted state.
 - The default view therefore shows the operator only the templates relevant to the current task, keeping the panel minimal and compact.
+
+### Left Panel — mission context, hide/restore and Mission ID
+
+The Left Panel also acts as a compact working-context control for missions.
+
+#### Quick Hide
+
+- The panel provides a quick HIDE action.
+- HIDE first saves the current mission state automatically and only then hides the mission.
+- The current mission is removed from the Flight Chart/map and the active panel list is cleared.
+- No mission data is deleted by HIDE.
+- This allows the operator to leave a prepared mission intact, work on another task in a clean map/panel workspace, and later restore the prepared mission.
+- The hidden mission is restored through the + control.
+- Restoring a hidden mission returns the same mission to the map and panel with its saved state and the same Mission ID.
+
+#### Hidden missions and +
+
+- The + control provides access to saved hidden missions.
+- Selecting a hidden mission restores it as the active working mission.
+- + is therefore a mission-context restore mechanism, not a mechanism for creating duplicate Mission IDs.
+
+#### Draft deletion
+
+- Delete is a separate operation for deleting an unwanted draft mission after work with it.
+- HIDE must never imply deletion.
+- A saved/hidden mission remains available until explicitly deleted.
+
+#### Mission ID
+
+Each mission receives a unique, human-readable Mission ID immediately after creation.
+
+Controlled format:
+
+BS-YYMMDD-T-NNN
+
+where:
+- BS — BlueSky;
+- YYMMDD — mission creation date;
+- T — creation marker:
+  - M = Manual;
+  - A = Automatic;
+- NNN — sequential mission number for that date.
+
+Examples:
+- BS-260919-M-001
+- BS-260919-A-002
+
+Mission ID is immutable during save, hide, restore and editing. Hiding and restoring the mission never creates a new Mission ID.
+
+The creation marker records the original creation method. Manual corrections to an automatically generated mission do not change A to M; subsequent changes are tracked separately in mission history/audit data.
+
+The visible Mission ID is the human-readable identifier. The implementation may maintain a separate internal immutable UID for system-level uniqueness and synchronization; this internal UID is not part of the operator-facing ID.
+
+#### Left Panel closure
+
+The Left Panel closes by:
+- the Left-panel Bottom Toolbar button;
+- double-click in the map area;
+- automatic closure at mission start.
+
+A single click in the map area does not close the panel. The Bottom Toolbar Left button must always reflect the actual panel state.
+
