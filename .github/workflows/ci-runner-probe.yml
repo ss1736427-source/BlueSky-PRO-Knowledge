@@ -8,7 +8,7 @@ on:
 
 jobs:
   runner-probe:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: Runner reached
         run: echo "runner-probe-ok"
