@@ -220,3 +220,16 @@ This visual arrangement is the **default UAV Panel composition**. It is not a ge
 For multiple UAVs, the same complete vertical composition is used as the data group for each UAV. UAV groups are arranged horizontally from left to right and separated by vertical dividers.
 
 The supplied image is the visual reference for the composition; it must not be silently replaced by a different panel arrangement during further HMI work.
+
+
+### UAV Panel — latest composition corrections
+
+The default UAV Panel composition is refined as follows:
+
+- Remove the enclosing frame/border around the UAV visual/identity block. The UAV image, identifier and state remain grouped but are not enclosed in a separate rectangular card.
+- Remove the text state `ВЫПОЛНЯЕТСЯ` from the `МИССИЯ` row. The mission row retains the `МИССИЯ` label and mission progress indication without that status text.
+- Replace the `Двигатели` row with an `ОБОРОТЫ` row.
+- `ОБОРОТЫ` is represented as a percentage value; the displayed value is expressed in `%`.
+- Replace the battery presentation with a **horizontal segmented indicator**: a row of discrete rectangular sectors followed by the numeric percentage value.
+- The supplied reference image `Индикатор батареи 2.JPG` is the visual reference for the segmented battery indicator: horizontal discrete sectors with the percentage value to the right.
+- The battery indicator is part of the normal compact UAV data presentation and is not a separate framed card.
