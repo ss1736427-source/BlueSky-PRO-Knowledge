@@ -6,6 +6,22 @@ Status: WORKING REFERENCE
 
 The Right Panel is an **operational panel**, not a duplicate telemetry dashboard. Detailed current telemetry belongs to the UAV Panel; spatial operational information belongs to the Map; non-immediate technical information, history, archives and journals belong to Administration / Technical State / Logs.
 
+### Panel tool configuration
+
+Each panel provides a configuration control for selecting which supported tools/information blocks are displayed on that panel.
+
+Rules:
+- the operator can configure the visible tool set for each panel independently;
+- configuration changes presentation only and do not change data acquisition, calculation, mission state or control logic;
+- tools not selected for display remain available through the panel configuration and are not deleted or disabled;
+- newly enabled tools are appended to the panel according to the panel's established layout rules;
+- the panel's common visual style is applied uniformly to its displayed tools;
+- critical information and safety-relevant warnings cannot be made inaccessible by display filtering;
+- the system may temporarily surface a required warning or critical state even when its normal block is not currently displayed;
+- panel configuration is persistent for the operator/device context unless explicitly changed.
+
+The panel configuration control belongs to the panel itself and is distinct from the Bottom Toolbar menu, which configures the central Bottom Toolbar tool set.
+
 ### Default Right Panel state — Checklist
 
 The default content during flight preparation is **CHECKLIST**.
