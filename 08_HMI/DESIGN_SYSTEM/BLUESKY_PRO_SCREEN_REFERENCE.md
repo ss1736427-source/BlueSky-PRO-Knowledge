@@ -308,3 +308,12 @@ This is an intermediate controlled structure and remains subject to subsequent e
 - The panel grows **vertically from top to bottom** as additional content is added.
 - A newly added tool/template is appended **at the bottom** of the panel; existing items do not shift into a different ordering unless the user explicitly reorders them.
 - The adaptive sizing applies to the panel container; it does not change the established compact visual style of the individual tools.
+
+
+### Mission Templates — default filtered list
+
+- The Mission Templates list is **filtered by default** to show only the templates currently used in the active task.
+- All other available templates are **hidden from the default panel view**.
+- Hidden templates remain available through the panel's existing list/menu control and are not deleted or disabled.
+- When a hidden template is selected and becomes part of the task, it is added to the visible list and its button receives the active/highlighted state.
+- The default view therefore shows the operator only the templates relevant to the current task, keeping the panel minimal and compact.
