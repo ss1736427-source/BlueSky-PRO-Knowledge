@@ -86,3 +86,26 @@ The logo rules and asset status are documented in `BLUESKY_PRO_LOGO.md` and `08_
 ## Important constraint
 
 Do not introduce a new visual identity while optimizing ergonomics. The task is to improve the working view while preserving the approved BlueSky PRO identity and supplied assets.
+
+
+## Bottom Toolbar — controlled panel-control behavior
+
+The Bottom Toolbar is the compact persistent control layer at the bottom of the Flight Chart. The map remains the primary workspace.
+
+### Side-panel controls
+
+- `◀ LEFT` — static, compact control for the left panel.
+- `RIGHT ▶` — static, compact control for the right panel.
+- The controls remain fixed at their respective sides of the Bottom Toolbar.
+- They are direct panel state toggles: pressing the control opens the corresponding panel and highlights the button; pressing it again closes the panel and removes the highlight.
+
+### Double-click behavior
+
+- A **single click** in the map area activates/ makes map controls available; it does not close the side panel.
+- A **double-click** in the map area closes an open side panel and the corresponding LEFT/RIGHT button returns to its non-highlighted state.
+- A click inside the panel does not close the panel.
+- Double-click closure is a persistent interaction rule and applies regardless of the Auto-hide setting.
+
+### Auto-hide option
+
+Panel Auto-hide is a configurable interface option. It is separate from the double-click closure gesture. The exact automatic hiding trigger is configurable behavior and must not override the direct state indication of the LEFT/RIGHT controls.
