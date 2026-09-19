@@ -1,5 +1,6 @@
 #pragma once
 
+#include "fleet_addressing_runtime.hpp"
 #include "link_metrics_runtime.hpp"
 #include "link_latency_runtime.hpp"
 #include "link_bandwidth_runtime.hpp"
@@ -95,6 +96,7 @@ private:
     std::int64_t heartbeat_timeout_ms_;
     std::unordered_map<std::string, ChannelState> channels_;
     MavlinkSessionRuntime session_runtime_;
+    FleetAddressingRuntime fleet_addressing_runtime_;
 };
 
 } // namespace bluesky::operations

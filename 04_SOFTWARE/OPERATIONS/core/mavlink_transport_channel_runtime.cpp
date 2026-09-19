@@ -73,6 +73,16 @@ bool MavlinkTransportChannelRuntime::registerChannel(
         return false;
     }
 
+    const auto address_result = fleet_addressing_runtime_.registerBinding(
+        FleetAddressBinding{
+            config.vehicle_id,
+            config.source_id,
+            config.session_id,
+            FleetAddress{config.system_id, config.component_id}});
+    if (address_result != FleetAddressRegistrationResult::Registered) {
+        return false;
+    }
+
     ChannelState state;
     state.snapshot.config = config;
     state.snapshot.state = MavlinkTransportChannelState::Offline;
@@ -303,8 +313,7 @@ MavlinkTransportChannelRuntime::receive(const std::string& channel_id) {
 }
 
 bool MavlinkTransportChannelRuntime::pollReceive(
-    const std::string& channel_id,
-    std::int64_t timestamp_ms) {
+    const std::string& channel_id, std::int64_t timestamp_ms) {
     auto it = channels_.find(channel_id);
     if (it == channels_.end()) return false;
 

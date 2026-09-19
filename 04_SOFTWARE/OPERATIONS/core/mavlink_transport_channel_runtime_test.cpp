@@ -63,6 +63,8 @@ int main() {
     MavlinkTransportChannelRuntime r(3000);
     assert(r.registerChannel(config("CH-A","SESSION-A","UAV-A","ArduPilot:MAVLink2:1:1",1)));
     assert(r.registerChannel(config("CH-B","SESSION-B","UAV-B","ArduPilot:MAVLink2:2:1",2)));
+    auto duplicateAddress = config("CH-C","SESSION-C","UAV-C","ArduPilot:MAVLink2:3:1",1);
+    assert(!r.registerChannel(duplicateAddress));
     assert(r.connect("CH-A")); assert(r.connect("CH-B"));
 
     auto a = r.snapshot("CH-A"); auto b = r.snapshot("CH-B");
