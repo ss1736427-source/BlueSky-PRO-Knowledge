@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 
-ApplicationWindow {
+Item {
     id: root
     width: 1920
     height: 1080
