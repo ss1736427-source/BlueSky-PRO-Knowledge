@@ -107,6 +107,7 @@ add_executable(operational_action_execution_router_test
     core/operational_action_execution_router_test.cpp
     core/operational_action_execution_router.cpp
     ../PLANNING/capability_execution_integration.cpp
+    ../PLANNING/command_lifecycle_runtime.cpp
     ../PLANNING/mission_transfer_runtime.cpp
     ../AUTOPILOT_ADAPTER/core/autopilot_adapter_baseline.cpp
     core/capability_admission_boundary.cpp
