@@ -13,7 +13,9 @@ date: 2026-09-20
 
 Default branch: `main`.
 
-Verified HEAD: `5c9f20f7dbc66c19b7c310269e350cff4a996d97`.
+Audited baseline HEAD: `5c9f20f7dbc66c19b7c310269e350cff4a996d97`.
+
+Corrective commits produced by this audit: `125c14daa3565299523c16a5cb4a7fcab4eeb7a8`, `506789281bd1bf097bfa1f50afafb2bd229953bb`, `8432a8617c5624a40e2467eb648177af4eef41ee`, `1e2746d69276caf2745cb78ac343153e1c8fd306`, `457a61d460960ad70a31e5e8624fd4d3256cf3ba`.
 
 Verified tree contains 2,684 files, including 1,334 Markdown files and 1,503 files under `04_SOFTWARE`.
 
@@ -27,13 +29,13 @@ The current tree contains substantially more top-level areas than the current Ma
 
 The actual `main` tree confirms `04_SOFTWARE` exists. `07_EXTERNAL` does not. Several additional current areas are also omitted from the index.
 
-**Disposition: CORRECTION REQUIRED.**
+**Disposition: CORRECTED.**
 
 ### AUD-003-002 — Document Control Map and Master Index disagree
 
 The Document Control Map lists `04_SOFTWARE` and `07_EXTERNAL` as current controlled paths, while the Master Index says they do not exist.
 
-**Disposition: PATH AUTHORITY MUST BE NORMALIZED.**
+**Disposition: CORRECTED.**
 
 ### AUD-003-003 — Integrity Audit 002 is historical
 
@@ -49,13 +51,13 @@ It must remain preserved as a historical audit point and must not be treated as 
 
 Since then Git history shows substantial operational/software work (`ARCH-OPS-043…051`, PH4-INT-005, PH4-INT-006) and the HMI reconciliation baseline `HMI-RECONCILIATION-001`.
 
-**Disposition: HANDOVER STATE UPDATE REQUIRED.**
+**Disposition: CORRECTED.**
 
 ### AUD-003-005 — Master Index authority/status ambiguity
 
 The Document Control Map calls the Master Document Index the authoritative inventory, while the Index itself remains `DRAFT_FOR_AGREEMENT`.
 
-**Disposition: STATUS/authority wording must be normalized.**
+**Disposition: CORRECTED.**
 
 ### AUD-003-006 — Requirements closure remains incomplete
 
@@ -123,12 +125,12 @@ The following remain coherent and must be preserved:
 | Typography | OPEN |
 | Archive/legacy authority | CONTROLLED |
 
-## 5. Required corrections
+## 5. Corrections completed and remaining work
 
-1. Correct Master Document Index to the factual current tree.
-2. Normalize current-path terminology between Document Control Map and Master Index.
-3. Update Project State handover metadata/current-state section.
-4. Register this audit in the controlled documentation index.
+1. Master Document Index corrected to the factual current tree.
+2. Current-path terminology normalized between Document Control Map and Master Index.
+3. Project State handover metadata/current-state section updated.
+4. This audit registered in the controlled documentation index.
 5. Keep Audit 002 unchanged as historical evidence.
 6. Keep requirements, regulatory, verification and certification gaps explicitly open.
 7. Reconcile requirements ↔ architecture ↔ software ↔ verification before the next major implementation block.
@@ -154,4 +156,4 @@ TYPOGRAPHY                               OPEN
 ARCHIVE/LEGACY AUTHORITY                 CONTROLLED
 ```
 
-**Audit status: CURRENT STRUCTURE VERIFIED; DOCUMENTATION RECONCILIATION IN PROGRESS.**
+**Audit status: CURRENT STRUCTURE VERIFIED; PRIMARY GOVERNANCE CORRECTIONS COMPLETED; DOMAIN RECONCILIATION REMAINS IN PROGRESS.**
