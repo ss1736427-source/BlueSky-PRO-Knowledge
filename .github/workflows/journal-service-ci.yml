@@ -1,5 +1,8 @@
 name: journal-service-ci
 
+permissions:
+  contents: read
+
 on:
   push:
     branches: [main, 'feat/journal-*']
@@ -21,6 +24,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Verify CMake
+        run: cmake --version
 
       - name: Configure
         run: cmake -S 04_SOFTWARE/PLANNING -B 04_SOFTWARE/PLANNING/build-ci -DCMAKE_BUILD_TYPE=Release
