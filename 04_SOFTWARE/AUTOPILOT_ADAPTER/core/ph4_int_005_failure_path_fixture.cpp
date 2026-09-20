@@ -10,7 +10,15 @@ namespace {
 class ReadbackMismatchAdapter final : public bluesky::autopilot::AutopilotAdapterBaseline {
 public:
     ReadbackMismatchAdapter()
-        : AutopilotAdapterBaseline("VEH-PH4-005", "TEST", "PX4", "1.0", "MAVLink2", "2") {}
+        : AutopilotAdapterBaseline({
+            "VEH-PH4-005",
+            "UAS",
+            "PX4",
+            "1.0",
+            "MAVLink2",
+            "2",
+            {"MAVLink2"}
+        }) {}
 
     std::optional<std::string> readBackMission() override {
         return std::string{"MISMATCHED-READBACK"};
