@@ -2,7 +2,7 @@ import QtQuick
 
 Item {
     id: root
-    implicitHeight: 82
+    implicitHeight: 78
     property color bg: "#000000"
     property color text: "#FFFFFF"
     property color secondary: "#BFBFBF"
@@ -22,11 +22,11 @@ Item {
             ]
             delegate: Rectangle {
                 width: (parent.width - 24) / 4
-                height: 62
+                height: 58
                 color: "#0A0A0A"
                 border.color: index === 2 ? root.amber : root.divider
                 border.width: 1
-                Text { anchors.fill: parent; anchors.margins: 12; text: modelData; color: index === 2 ? root.amber : root.text; font.family: "B612 Mono"; font.pixelSize: 11; lineHeight: 1.25; verticalAlignment: Text.AlignVCenter }
+                Text { anchors.fill: parent; anchors.margins: 10; text: modelData; color: index === 2 ? root.amber : root.text; font.family: "B612 Mono"; font.pixelSize: 10; lineHeight: 1.25; verticalAlignment: Text.AlignVCenter }
             }
         }
     }
