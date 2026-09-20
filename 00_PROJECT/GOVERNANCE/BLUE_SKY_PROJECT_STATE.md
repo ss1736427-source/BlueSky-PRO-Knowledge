@@ -330,13 +330,14 @@ Data classes:
 
 ## 12. Current Repository State and Work Package
 
-Последнее подтверждённое состояние `main` включает:
+Последнее подтверждённое состояние `main` (`d020995c25838f25cac767d1fff481cb80ca8e6a`) включает:
 
 - repository-wide HMI reconciliation `HMI-RECONCILIATION-001`;
 - operational execution architecture through `ARCH-OPS-051`;
 - PH4-INT-005 failure-path propagation fixture;
 - PH4-INT-006 operational failure evidence binding;
-- current documentation reconciliation `REPOSITORY-DOCUMENTATION-AUDIT-003`.
+- current documentation reconciliation `REPOSITORY-DOCUMENTATION-AUDIT-003`;
+- requirements/architecture/software/verification reconciliation `RECON-004`.
 
 Это не отменяет утверждённый C2 work package. C2 remains an open controlled workstream requiring exact source/clause/applicability closure.
 
