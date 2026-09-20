@@ -12,6 +12,8 @@ Item {
     property int rightWidth: 340
     property int uavHeight: 82
     property int toolbarHeight: 54
+    property bool leftPanelOpen: true
+    property bool rightPanelOpen: true
 
     Rectangle { anchors.fill: parent; color: "#000000" }
 
@@ -35,7 +37,7 @@ Item {
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            width: root.leftWidth
+            width: root.leftPanelOpen ? root.leftWidth : 0
         }
 
         FlightChart {
@@ -51,7 +53,7 @@ Item {
             anchors.right: parent.right
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            width: root.rightWidth
+            width: root.rightPanelOpen ? root.rightWidth : 0
         }
     }
 
