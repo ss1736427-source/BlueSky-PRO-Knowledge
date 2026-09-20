@@ -15,5 +15,10 @@ Project {
         directory: "qml"
     }
 
+    Files {
+        filter: "qmldir"
+        directory: "qml"
+    }
+
     qt6Project: true
 }
