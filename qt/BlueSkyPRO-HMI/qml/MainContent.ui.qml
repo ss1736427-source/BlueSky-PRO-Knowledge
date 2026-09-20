@@ -16,6 +16,8 @@ Item {
     property bool rightPanelOpen: true
     property int selectedUavIndex: -1
     property string uavDecision: ""
+    property string lastJournalEvent: ""
+    signal journalEvent(string eventType, int uavIndex, string decision)
     signal uavDecisionRequested(string decision, int uavIndex)
 
     Rectangle { anchors.fill: parent; color: "#000000" }
@@ -96,7 +98,7 @@ Item {
     ContextOverlay {
         visible: root.selectedUavIndex >= 0
         uavIndex: root.selectedUavIndex
-        onDecisionRequested: { root.uavDecision = decision; root.uavDecisionRequested(decision, uavIndex); root.selectedUavIndex = -1 }
+        onDecisionRequested: { root.uavDecision = decision; root.lastJournalEvent = "UAV-" + (uavIndex + 1) + " · " + decision; root.journalEvent("UAV_DECISION", uavIndex, decision); root.uavDecisionRequested(decision, uavIndex); root.selectedUavIndex = -1 }
         onContextClosed: root.selectedUavIndex = -1
         id: contextOverlay
         anchors.right: rightPanel.left
