@@ -54,6 +54,8 @@ Coverage includes:
 - admitted mission passes the capability gate and reaches mission transfer;
 - rejected mission is stopped before mission transfer.
 
-## Next gap
+## Closure
+
+The guarded execution entry points are routed through ARCH-OPS-049, with external intake completed by ARCH-OPS-050/051.
 
 Connect the admission-integrated entry points to the higher-level operational orchestrator / action routing path so all external mission and command requests use the same guarded entry points.
