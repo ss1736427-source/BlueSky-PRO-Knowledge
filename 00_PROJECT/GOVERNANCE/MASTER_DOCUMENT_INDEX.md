@@ -26,33 +26,70 @@ system: aviation_system
 
 ## 2. Repository structure
 
-### 2.1 Текущие каталоги, присутствующие в main
+### 2.1 Фактические верхнеуровневые каталоги, присутствующие в main
+
+Проверено по Git tree на 2026-09-20:
 
 ```text
 00_PROJECT/
+01_ARCHITECTURE/
+01_NORMATIVE/
 01_REQUIREMENTS/
 02_ARCHITECTURE/
+02_SYSTEM/
 02_SYSTEM_DESIGN/
+03_FLEET/
 03_SYSTEM/
+04_INTEGRATION/
+04_SOFTWARE/
+05_C2/
 05_VERIFICATION/
 06_CERTIFICATION/
+06_EQUIPMENT/
+07_ATM_REGULATORY/
+07_DATA/
 08_HMI/
-99_ARCHIVE/
+08_PLANNING/
+09_VERIFICATION/
+10_TRACEABILITY/
+15_CERTIFICATION/
+90_TEMPLATES/
+91_REGISTRIES/
+BlueSky_Project/
+PROJECT_KNOWLEDGE_IMPORT/
+TRACEABILITY/
+_LEGACY/
+_SOURCE_ARCHIVE/
+tools/
+Скрины/
 ```
 
 ### 2.2 Назначение уровней
 
-- `00_PROJECT` — управление проектом, решения, baseline/control, master indexes и проектные правила.
-- `01_REQUIREMENTS` — системные, нормативные, safety и compliance requirements/traceability.
-- `02_ARCHITECTURE` — архитектурные решения, system design и interface control.
-- `02_SYSTEM_DESIGN` — детальная проработка системных моделей, алгоритмов и инженерных design records.
-- `03_SYSTEM` — функциональные блоки и модули BlueSky PRO.
-- `05_VERIFICATION` — verification plan, test vectors, test cases, results и evidence.
-- `06_CERTIFICATION` — certification basis, scope, strategy, requirements и certification documentation.
-- `08_HMI` — пользовательский интерфейс, UX, design system и HMI allocation.
-- `99_ARCHIVE` — сохранённые исторические/резервные материалы, не являющиеся текущими рабочими записями.
+Каталоги выше являются фактическими элементами текущего `main` tree. Они не все имеют одинаковый authority level.
 
-Каталоги `04_SOFTWARE` и `07_EXTERNAL`, встречавшиеся в более ранних планах структуры, не считаются существующими каталогами текущего `main`, пока соответствующие директории фактически не созданы.
+- `00_PROJECT` — управление проектом, решения, configuration/control, master indexes и project rules.
+- `01_REQUIREMENTS` — requirements, normative, safety, compliance и traceability.
+- `01_ARCHITECTURE` / `02_ARCHITECTURE` — архитектурные и интерфейсные материалы разных исторических/организационных слоёв; authority определяется конкретным controlled record.
+- `02_SYSTEM` / `02_SYSTEM_DESIGN` / `03_SYSTEM` — system architecture, detailed design и functional modules.
+- `03_FLEET` — fleet/adapter/vehicle configuration records.
+- `04_INTEGRATION` — integration material.
+- `04_SOFTWARE` — software implementation, tests и software engineering records.
+- `05_C2` — C2 working material.
+- `05_VERIFICATION` / `09_VERIFICATION` — verification material; authority определяется controlled verification record.
+- `06_CERTIFICATION` / `15_CERTIFICATION` — certification material разных рабочих слоёв; final authority определяется certification control records.
+- `06_EQUIPMENT` — equipment material.
+- `07_ATM_REGULATORY` — ATM/regulatory working material.
+- `07_DATA` — data, algorithms and capability records.
+- `08_HMI` — HMI, UX, design system and HMI allocation.
+- `08_PLANNING` — planning/optimization records.
+- `10_TRACEABILITY` / `TRACEABILITY` — traceability and reconciliation records.
+- `90_TEMPLATES` — templates.
+- `91_REGISTRIES` — registries.
+- `PROJECT_KNOWLEDGE_IMPORT`, `BlueSky_Project`, `_LEGACY`, `_SOURCE_ARCHIVE`, `Скрины` — imported, historical, source/archive or supporting material unless a specific controlled record explicitly promotes an item.
+- `tools` — repository tooling.
+
+`07_EXTERNAL` is **not present** in the current `main` tree and must not be referenced as an existing directory without a future creation/change record.
 
 ## 3. Source hierarchy
 
@@ -362,4 +399,9 @@ Do not create another parallel document when an existing controlled record can b
 
 For the current development sequence, work proceeds from the existing architecture into one block and one module at a time, with the corresponding requirements, design, HMI, verification and technical documentation maintained in their designated layers.
 
-**Status: DRAFT_FOR_AGREEMENT**
+**Status: CONTROLLED WORKING INDEX — structure verified 2026-09-20; content coverage remains subject to ongoing reconciliation.**
+
+
+## 17. Latest repository-wide documentation audit
+
+`TRACEABILITY/REPOSITORY_DOCUMENTATION_AUDIT_REPORT_003.md` is the current repository-wide structural reconciliation record. It does not supersede historical audit evidence; it supersedes earlier structure descriptions only for current path interpretation.
