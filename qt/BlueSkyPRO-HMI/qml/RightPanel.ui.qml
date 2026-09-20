@@ -29,7 +29,7 @@ Item {
 
     Rectangle { x: 16; y: 218; width: parent.width - 32; height: 1; color: root.divider }
     Text { x: 16; y: 235; text: "MISSION READINESS"; color: root.secondary; font.family: "B612"; font.pixelSize: 12; font.bold: true }
-    Text { x: 16; y: 260; text: "READY CHECK"; color: root.amber; font.family: "B612 Mono"; font.pixelSize: 13; font.bold: true }
+    Text { x: 16; y: 260; text: "MISSION READINESS"; color: root.amber; font.family: "B612 Mono"; font.pixelSize: 13; font.bold: true }
     Rectangle { x: 16; y: 286; width: parent.width - 32; height: 38; color: "transparent"; border.color: root.green; border.width: 1 }
     Text { x: 16; y: 286; width: parent.width - 32; height: 38; text: "VALIDATE MISSION"; color: root.green; font.family: "B612"; font.pixelSize: 12; font.bold: true; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter }
 
