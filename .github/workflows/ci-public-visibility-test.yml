@@ -1,0 +1,18 @@
+name: CI Public Visibility Test
+
+on:
+  push:
+    branches:
+      - ci-public-visibility-test
+  workflow_dispatch:
+
+jobs:
+  runner-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Runner reached
+        run: |
+          echo "public-visibility-test-ok"
+          echo "RUNNER_NAME=$RUNNER_NAME"
+          echo "RUNNER_OS=$RUNNER_OS"
