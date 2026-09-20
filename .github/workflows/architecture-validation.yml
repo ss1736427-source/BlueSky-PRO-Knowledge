@@ -41,7 +41,7 @@ jobs:
                   raise SystemExit(f"Empty architecture baseline: {path}")
               if not text.startswith("# "):
                   raise SystemExit(f"Missing top-level heading: {path}")
-              if not re.search(r"(?im)^\\*\\*Status:\\*\\*", text):
+              if not re.search(r"(?im)^\*\*Status:\*\*", text):
                   raise SystemExit(f"Missing Status metadata: {path}")
 
           anchors = {
