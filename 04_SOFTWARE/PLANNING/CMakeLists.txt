@@ -145,3 +145,13 @@ add_test(NAME mission_compiler_multi_test COMMAND mission_compiler_multi_test)
 add_test(NAME mission_transfer_runtime_test COMMAND mission_transfer_runtime_test)
 add_test(NAME parameter_configuration_runtime_test COMMAND parameter_configuration_runtime_test)
 add_test(NAME capability_execution_integration_test COMMAND capability_execution_integration_test)
+
+# JournalService validation test
+add_executable(journal_service_test
+    ../COMMON/journal/journal_service_test.cpp
+    ../COMMON/journal/journal_service.cpp
+    ../COMMON/journal/journal_store_memory.cpp
+)
+target_include_directories(journal_service_test PRIVATE ../COMMON/journal)
+target_compile_features(journal_service_test PRIVATE cxx_std_20)
+add_test(NAME journal_service_test COMMAND journal_service_test)
