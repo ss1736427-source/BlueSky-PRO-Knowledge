@@ -3,6 +3,22 @@ import QtQuick.Controls
 
 ApplicationWindow {
     id: root
+
+    // Design Studio preview theme. Production uses theme.qml via the CMake QML module.
+    QtObject {
+        id: theme
+        readonly property color bg: "#000000"
+        readonly property color text: "#FFFFFF"
+        readonly property color secondary: "#BFBFBF"
+        readonly property color muted: "#7F7F7F"
+        readonly property color green: "#64FF00"
+        readonly property color amber: "#FFD339"
+        readonly property color red: "#FF1E14"
+        readonly property color cyan: "#32FFFF"
+        readonly property color magenta: "#FF32FF"
+        readonly property color panel: "#0A0A0A"
+        readonly property color divider: "#202020"
+    }
     visible: true
     width: 1920
     height: 1080
@@ -10,7 +26,7 @@ ApplicationWindow {
     minimumHeight: 720
     title: "BlueSky PRO"
 
-    color: Theme.bg
+    color: theme.bg
 
     Rectangle {
         id: header
@@ -18,14 +34,14 @@ ApplicationWindow {
         anchors.left: parent.left
         anchors.right: parent.right
         height: 64
-        color: Theme.bg
+        color: theme.bg
 
         Rectangle {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
             height: 1
-            color: Theme.divider
+            color: theme.divider
         }
 
         Row {
@@ -35,22 +51,22 @@ ApplicationWindow {
 
             Text {
                 text: "BlueSky PRO"
-                color: Theme.text
+                color: theme.text
                 font.pixelSize: 22
                 font.bold: true
                 verticalAlignment: Text.AlignVCenter
             }
 
-            Text { text: "ETD 10:30"; color: Theme.secondary; font.pixelSize: 13; verticalAlignment: Text.AlignVCenter }
-            Text { text: "TOT 00:42"; color: Theme.secondary; font.pixelSize: 13; verticalAlignment: Text.AlignVCenter }
-            Text { text: "TRIP 01:18"; color: Theme.secondary; font.pixelSize: 13; verticalAlignment: Text.AlignVCenter }
-            Text { text: "ETA 11:48"; color: Theme.secondary; font.pixelSize: 13; verticalAlignment: Text.AlignVCenter }
+            Text { text: "ETD 10:30"; color: theme.secondary; font.pixelSize: 13; verticalAlignment: Text.AlignVCenter }
+            Text { text: "TOT 00:42"; color: theme.secondary; font.pixelSize: 13; verticalAlignment: Text.AlignVCenter }
+            Text { text: "TRIP 01:18"; color: theme.secondary; font.pixelSize: 13; verticalAlignment: Text.AlignVCenter }
+            Text { text: "ETA 11:48"; color: theme.secondary; font.pixelSize: 13; verticalAlignment: Text.AlignVCenter }
 
             Item { width: 1; height: 1 }
 
             Text {
                 text: "READY  CHECK"
-                color: Theme.amber
+                color: theme.amber
                 font.pixelSize: 14
                 font.bold: true
                 verticalAlignment: Text.AlignVCenter
@@ -58,7 +74,7 @@ ApplicationWindow {
 
             Text {
                 text: "Revalidation complete · confirm"
-                color: Theme.amber
+                color: theme.amber
                 font.pixelSize: 12
                 verticalAlignment: Text.AlignVCenter
             }
@@ -67,7 +83,7 @@ ApplicationWindow {
 
             Text {
                 text: "OPERATOR"
-                color: Theme.cyan
+                color: theme.cyan
                 font.pixelSize: 13
                 verticalAlignment: Text.AlignVCenter
             }
@@ -80,14 +96,14 @@ ApplicationWindow {
         anchors.left: parent.left
         anchors.bottom: bottomStrip.top
         width: 280
-        color: Theme.panel
+        color: theme.panel
 
         Rectangle {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             anchors.right: parent.right
             width: 1
-            color: Theme.divider
+            color: theme.divider
         }
 
         Column {
@@ -97,7 +113,7 @@ ApplicationWindow {
 
             Text {
                 text: "MISSION TEMPLATES"
-                color: Theme.secondary
+                color: theme.secondary
                 font.pixelSize: 13
                 font.bold: true
             }
@@ -107,14 +123,14 @@ ApplicationWindow {
                 delegate: Rectangle {
                     width: parent.width
                     height: 42
-                    color: index === 0 ? "#151515" : Theme.panel
-                    border.color: index === 0 ? Theme.cyan : Theme.divider
+                    color: index === 0 ? "#151515" : theme.panel
+                    border.color: index === 0 ? theme.cyan : theme.divider
                     border.width: 1
 
                     Text {
                         anchors.centerIn: parent
                         text: modelData
-                        color: Theme.text
+                        color: theme.text
                         font.pixelSize: 13
                     }
                 }
@@ -122,7 +138,7 @@ ApplicationWindow {
 
             Text {
                 text: "MISSION ANALYSIS"
-                color: Theme.secondary
+                color: theme.secondary
                 font.pixelSize: 13
                 font.bold: true
                 topPadding: 18
@@ -130,7 +146,7 @@ ApplicationWindow {
 
             Text {
                 text: "BS-260920-A-001\nPlanning · 4 UAV"
-                color: Theme.text
+                color: theme.text
                 font.pixelSize: 13
                 lineHeight: 1.35
             }
@@ -148,7 +164,7 @@ ApplicationWindow {
         Text {
             anchors.centerIn: parent
             text: "FLIGHT CHART"
-            color: Theme.muted
+            color: theme.muted
             font.pixelSize: 20
             font.bold: true
         }
@@ -158,14 +174,14 @@ ApplicationWindow {
             width: 560
             height: 300
             color: "transparent"
-            border.color: Theme.cyan
+            border.color: theme.cyan
             border.width: 1
 
             Text {
                 anchors.centerIn: parent
                 text: "MAP PROVIDER / LOCAL DATA\nROUTE · ZONES · WEATHER · UAV"
                 horizontalAlignment: Text.AlignHCenter
-                color: Theme.secondary
+                color: theme.secondary
                 font.pixelSize: 13
             }
         }
@@ -177,14 +193,14 @@ ApplicationWindow {
         anchors.right: parent.right
         anchors.bottom: bottomStrip.top
         width: 320
-        color: Theme.panel
+        color: theme.panel
 
         Rectangle {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             anchors.left: parent.left
             width: 1
-            color: Theme.divider
+            color: theme.divider
         }
 
         Column {
@@ -194,30 +210,30 @@ ApplicationWindow {
 
             Text {
                 text: "CHECKLIST"
-                color: Theme.text
+                color: theme.text
                 font.pixelSize: 16
                 font.bold: true
             }
 
-            Text { text: "✓ Mission definition"; color: Theme.green; font.pixelSize: 13 }
-            Text { text: "✓ UAV allocation"; color: Theme.green; font.pixelSize: 13 }
-            Text { text: "✓ C2 availability"; color: Theme.green; font.pixelSize: 13 }
-            Text { text: "⚠ Weather revalidation"; color: Theme.amber; font.pixelSize: 13 }
+            Text { text: "✓ Mission definition"; color: theme.green; font.pixelSize: 13 }
+            Text { text: "✓ UAV allocation"; color: theme.green; font.pixelSize: 13 }
+            Text { text: "✓ C2 availability"; color: theme.green; font.pixelSize: 13 }
+            Text { text: "⚠ Weather revalidation"; color: theme.amber; font.pixelSize: 13 }
 
             Rectangle {
                 width: parent.width
                 height: 1
-                color: Theme.divider
+                color: theme.divider
             }
 
             Text {
                 text: "MISSION READINESS"
-                color: Theme.secondary
+                color: theme.secondary
                 font.pixelSize: 13
                 font.bold: true
             }
 
-            Text { text: "Validation CONFIRM"; color: Theme.green; font.pixelSize: 14 }
+            Text { text: "Validation CONFIRM"; color: theme.green; font.pixelSize: 14 }
 
             Button {
                 text: "VALIDATE MISSION"
@@ -234,7 +250,7 @@ ApplicationWindow {
 
             Text {
                 text: "LOCKED UNTIL VALIDATION CONFIRMATION"
-                color: Theme.muted
+                color: theme.muted
                 font.pixelSize: 11
                 wrapMode: Text.WordWrap
                 width: parent.width
@@ -248,14 +264,14 @@ ApplicationWindow {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         height: 194
-        color: Theme.bg
+        color: theme.bg
 
         Rectangle {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: parent.top
             height: 1
-            color: Theme.divider
+            color: theme.divider
         }
 
         Row {
@@ -268,14 +284,14 @@ ApplicationWindow {
                 delegate: Rectangle {
                     width: (parent.width - 30) / 4
                     height: 72
-                    color: Theme.panel
-                    border.color: Theme.divider
+                    color: theme.panel
+                    border.color: theme.divider
                     border.width: 1
 
                     Text {
                         anchors.centerIn: parent
                         text: modelData
-                        color: modelData.indexOf("CHECK") >= 0 ? Theme.amber : Theme.green
+                        color: modelData.indexOf("CHECK") >= 0 ? theme.amber : theme.green
                         font.pixelSize: 13
                         font.bold: true
                     }
@@ -290,9 +306,9 @@ ApplicationWindow {
             anchors.margins: 10
             height: 34
 
-            Text { text: "◀ LEFT"; color: Theme.cyan; font.pixelSize: 12; anchors.verticalCenter: parent.verticalCenter }
-            Text { text: "CENTRAL TOOLS"; color: Theme.secondary; font.pixelSize: 12; anchors.centerIn: parent }
-            Text { text: "RIGHT ▶"; color: Theme.cyan; font.pixelSize: 12; anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter }
+            Text { text: "◀ LEFT"; color: theme.cyan; font.pixelSize: 12; anchors.verticalCenter: parent.verticalCenter }
+            Text { text: "CENTRAL TOOLS"; color: theme.secondary; font.pixelSize: 12; anchors.centerIn: parent }
+            Text { text: "RIGHT ▶"; color: theme.cyan; font.pixelSize: 12; anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter }
         }
     }
 }
