@@ -19,8 +19,7 @@ OrchestratorPipelineContext executable_context() {
     context.runtime.c2_operational = true;
     context.policy_version = "policy-050";
     context.input_state_version = "state-050";
-    context.selection.authority.authenticated = true;
-    context.selection.authority.source = "test";
+    context.selection.authority.system_authorized = true;
     return context;
 }
 
