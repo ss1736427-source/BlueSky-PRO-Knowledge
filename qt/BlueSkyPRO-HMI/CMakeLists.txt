@@ -20,7 +20,7 @@ qt_add_qml_module(appBlueSkyPRO
     URI BlueSky.PRO
     VERSION 1.0
     QML_FILES
-        qml/Main.qml
+        qml/App.qml
         qml/MainContent.ui.qml
         qml/Theme.qml
 )
