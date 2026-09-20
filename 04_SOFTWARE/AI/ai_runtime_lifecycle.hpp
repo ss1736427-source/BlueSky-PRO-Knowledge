@@ -1,5 +1,6 @@
 #pragma once
 #include "ai_runtime_continuity.hpp"
+#include "ai_trace_recorder.hpp"
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -13,6 +14,7 @@ public:
     bool validate_sequence(const std::string&) const noexcept;
     std::vector<LifecycleEvent> events_for(const std::string&) const;
 private:
+    static TraceStage trace_stage(LifecycleEventKind) noexcept;
     AiRuntimeContinuity& runtime_;
     std::vector<LifecycleEvent> events_;
 };
