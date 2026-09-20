@@ -8,6 +8,7 @@ Item {
     property color cyan: "#32FFFF"
     property color divider: "#202020"
     property string eventText: ""
+    property string eventType: "JOURNAL"
 
     implicitHeight: 32
 
@@ -22,7 +23,7 @@ Item {
         anchors.left: parent.left
         anchors.leftMargin: 12
         anchors.verticalCenter: parent.verticalCenter
-        text: eventText.length > 0 ? "JOURNAL · " + eventText : "JOURNAL · READY"
+        text: eventText.length > 0 ? eventType + " · " + eventText : eventType + " · READY"
         color: eventText.length > 0 ? root.cyan : root.secondary
         font.family: "B612 Mono"
         font.pixelSize: 10
