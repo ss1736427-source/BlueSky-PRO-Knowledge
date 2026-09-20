@@ -89,9 +89,9 @@ Their presence is not itself a defect. The authority boundary must remain explic
 
 ### AUD-003-010 — Empty root source file
 
-`Воздушный кодекс Ф — статья 131.md` exists with zero bytes. It cannot serve as evidence or a regulatory source record.
+`Воздушный кодекс Ф — статья 131.md` was verified as zero bytes and could not serve as evidence or a regulatory source record.
 
-**Disposition: classify as placeholder or remove through the normal change process; do not use as source.**
+**Disposition: CORRECTED — empty artifact removed from `main`.**
 
 ## 3. Validated principles
 
@@ -131,6 +131,7 @@ The following remain coherent and must be preserved:
 2. Current-path terminology normalized between Document Control Map and Master Index.
 3. Project State handover metadata/current-state section updated.
 4. This audit registered in the controlled documentation index.
+5. Empty regulatory placeholder removed.
 5. Keep Audit 002 unchanged as historical evidence.
 6. Keep requirements, regulatory, verification and certification gaps explicitly open.
 7. Reconcile requirements ↔ architecture ↔ software ↔ verification before the next major implementation block.
@@ -156,4 +157,4 @@ TYPOGRAPHY                               OPEN
 ARCHIVE/LEGACY AUTHORITY                 CONTROLLED
 ```
 
-**Audit status: CURRENT STRUCTURE VERIFIED; PRIMARY GOVERNANCE CORRECTIONS COMPLETED; DOMAIN RECONCILIATION REMAINS IN PROGRESS.**
+**Audit status: CURRENT STRUCTURE VERIFIED; PRIMARY GOVERNANCE CORRECTIONS COMPLETED; EMPTY ARTIFACT REMOVED; DOMAIN RECONCILIATION REMAINS IN PROGRESS.**
