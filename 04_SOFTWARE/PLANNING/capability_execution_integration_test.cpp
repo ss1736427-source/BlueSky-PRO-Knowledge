@@ -1,4 +1,5 @@
 #include "capability_execution_integration.hpp"
+#include "../AUTOPILOT_ADAPTER/core/autopilot_adapter_baseline.hpp"
 
 #include <cassert>
 
@@ -77,25 +78,21 @@ int main()
     VehicleEquipmentCapabilityProfile profile;
     profile.identity.vehicle_id = "veh-048";
     profile.identity.autopilot_type = "test";
+    profile.identity.supported_protocols = {"MAVLink"};
     profile.configuration.configuration_version = "cfg-048";
     profile.configuration.valid_for_mission = true;
 
     bluesky::autopilot::AutopilotAdapterBaseline adapter;
-    const auto blocked_mission = CapabilityExecutionIntegration::executeMission(
+    const auto admitted_mission = CapabilityExecutionIntegration::executeMission(
         admission,
         "dev-048",
         mission,
-        {"mission.start"},
+        {"mission.upload"},
         profile,
         adapter);
 
-    assert(blocked_mission.admission.state == CapabilityAdmissionState::Admitted);
-    assert(blocked_mission.transfer.state == MissionTransferState::Rejected);
-    assert(blocked_mission.transfer.reason == "MISSION_ID_AND_VERSION_REQUIRED" ||
-           blocked_mission.transfer.reason == "VEHICLE_CAPABILITY_PROFILE_INVALID" ||
-           blocked_mission.transfer.reason == "MISSION_VEHICLE_CONFIGURATION_MISMATCH" ||
-           blocked_mission.transfer.reason == "AUTOPILOT_NOT_CONNECTED" ||
-           blocked_mission.transfer.reason == "MISSION_COMPILATION_FAILED");
+    assert(admitted_mission.admission.state == CapabilityAdmissionState::Admitted);
+    assert(admitted_mission.transfer.state != MissionTransferState::Rejected);
 
     const auto rejected_mission = CapabilityExecutionIntegration::executeMission(
         admission,
