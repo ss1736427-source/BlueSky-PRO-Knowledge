@@ -404,4 +404,4 @@ For the current development sequence, work proceeds from the existing architectu
 
 ## 17. Latest repository-wide documentation audit
 
-`TRACEABILITY/REPOSITORY_DOCUMENTATION_AUDIT_REPORT_003.md` is the current repository-wide structural reconciliation record. It does not supersede historical audit evidence; it supersedes earlier structure descriptions only for current path interpretation.
+`TRACEABILITY/REPOSITORY_DOCUMENTATION_AUDIT_REPORT_004.md` is the current repository-wide reconciliation update. Audit 003 remains preserved as historical evidence; Audit 004 is the current interpretation of repository state at HEAD `d020995c25838f25cac767d1fff481cb80ca8e6a`.
