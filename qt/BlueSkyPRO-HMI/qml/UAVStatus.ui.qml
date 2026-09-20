@@ -2,6 +2,7 @@ import QtQuick
 
 Item {
     id: root
+    signal uavSelected(int index)
     implicitHeight: 78
     property color bg: "#000000"
     property color text: "#FFFFFF"
@@ -27,6 +28,7 @@ Item {
                 border.color: index === 2 ? root.amber : root.divider
                 border.width: 1
                 Text { anchors.fill: parent; anchors.margins: 10; text: modelData; color: index === 2 ? root.amber : root.text; font.family: "B612 Mono"; font.pixelSize: 10; lineHeight: 1.25; verticalAlignment: Text.AlignVCenter }
+                MouseArea { anchors.fill: parent; onClicked: root.uavSelected(index) }
             }
         }
     }
