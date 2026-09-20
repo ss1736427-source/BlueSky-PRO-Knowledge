@@ -173,3 +173,10 @@ add_test(NAME ph5_ap_002_reference_adapter_test COMMAND ph5_ap_002_reference_ada
 add_executable(ai_orchestration_boundary_test ../AI/ai_orchestration_boundary_test.cpp)
 target_include_directories(ai_orchestration_boundary_test PRIVATE ../AI)
 add_test(NAME ai_orchestration_boundary_test COMMAND ai_orchestration_boundary_test)
+
+add_library(bluesky_ai_orchestrator STATIC ../AI/ai_orchestrator.cpp)
+target_include_directories(bluesky_ai_orchestrator PUBLIC ../AI)
+target_link_libraries(bluesky_ai_orchestrator PUBLIC bluesky_autopilot_contract)
+add_executable(ai_orchestrator_test ../AI/ai_orchestrator_test.cpp)
+target_link_libraries(ai_orchestrator_test PRIVATE bluesky_ai_orchestrator)
+add_test(NAME ai_orchestrator_test COMMAND ai_orchestrator_test)
