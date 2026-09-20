@@ -22,6 +22,7 @@ struct CapabilityExecutionCommandResult {
 class CapabilityExecutionIntegration final {
 public:
     static CapabilityExecutionMissionResult executeMission(
+        operations::CapabilityAdmissionBoundary& admission_boundary,
         const std::string& device_id,
         const Mission& mission,
         const std::vector<std::string>& required_capabilities,
@@ -29,6 +30,7 @@ public:
         bluesky::autopilot::UniversalAutopilotAdapter& adapter);
 
     static CapabilityExecutionCommandResult dispatchCommand(
+        operations::CapabilityAdmissionBoundary& admission_boundary,
         const std::string& device_id,
         const command::CommandRequest& request,
         const std::vector<std::string>& required_capabilities,
