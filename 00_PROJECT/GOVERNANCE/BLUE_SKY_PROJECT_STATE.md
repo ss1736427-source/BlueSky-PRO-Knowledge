@@ -330,25 +330,35 @@ Data classes:
 
 ## 12. Current Repository State and Work Package
 
-Последнее подтверждённое состояние `main` включает:
+Последнее проверенное состояние main:
 
-- repository-wide HMI reconciliation `HMI-RECONCILIATION-001`;
-- operational execution architecture through `ARCH-OPS-051`;
+- current HEAD: d020995c25838f25cac767d1fff481cb80ca8e6a;
+- HMI reconciliation HMI-RECONCILIATION-001;
+- operational execution architecture through ARCH-OPS-051;
 - PH4-INT-005 failure-path propagation fixture;
 - PH4-INT-006 operational failure evidence binding;
-- current documentation reconciliation `REPOSITORY-DOCUMENTATION-AUDIT-003`.
+- PH4-INT-007 failure/evidence execution binding;
+- PH4-INT-025 clean-close and archive lifecycle — CLOSED — CI VERIFIED;
+- PH4-INT-026 capability manifest and compatibility gate — CLOSED — CI VERIFIED;
+- current documentation reconciliation: REPOSITORY-DOCUMENTATION-AUDIT-004.
 
-Это не отменяет утверждённый C2 work package. C2 remains an open controlled workstream requiring exact source/clause/applicability closure.
+### Verified PH4 closure evidence
+
+- PH4-INT-025 implementation commit 608785d3dbb703033231db5adfb8643096feba27 has a directly retrievable GitHub Actions run #570 with conclusion success.
+- PH4-INT-025 merged main commit: b298a1ea9beac3502bf779b6ac28c8940b5e52a5.
+- PH4-INT-026 is merged by PR #55 into main at 5a9ba793c05ed12f5180280b657d7eeb83887085; its controlled status record states CI run #578 succeeded. A direct commit-workflow lookup for the merge commit did not return a workflow run, so this audit does not independently promote that CI claim beyond the controlled project record.
+- Both stages remain bounded to SIL_FIXTURE_ONLY; no HIL, physical-UAV, flight-test, certification or real transport evidence is claimed.
 
 ### Current deterministic sequence
 
-1. Complete repository/documentation reconciliation.
+1. Complete repository/documentation reconciliation against current HEAD.
 2. Reconcile requirements ↔ architecture ↔ software ↔ verification.
 3. Continue C2 source/clause/applicability closure.
 4. Reconcile safety/certification/evidence dependencies.
 5. Reconcile AI/data/offline layers.
 6. Reconcile HMI/UI traceability.
-7. Freeze the next implementation work package only after the affected documentation chain is consistent.
+7. Continue Phase 4 from PH4-INT-027 only after the affected documentation/evidence chain is consistent.
+8. Freeze the next implementation work package only after its requirements, design, verification and evidence records are aligned.
 
 The repository-wide audit does not promote draft or working records to certification baseline.
 
