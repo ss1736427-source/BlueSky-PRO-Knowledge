@@ -19,8 +19,14 @@ ApplicationWindow {
         anchors.right: parent.right
         height: 64
         color: Theme.bg
-        border.bottom: 1
-        border.color: Theme.divider
+
+        Rectangle {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            height: 1
+            color: Theme.divider
+        }
 
         Row {
             anchors.fill: parent
@@ -57,7 +63,7 @@ ApplicationWindow {
                 verticalAlignment: Text.AlignVCenter
             }
 
-            Item { Layout.fillWidth: true; width: 1; height: 1 }
+            Item { width: 1; height: 1 }
 
             Text {
                 text: "OPERATOR"
@@ -75,8 +81,14 @@ ApplicationWindow {
         anchors.bottom: bottomStrip.top
         width: 280
         color: Theme.panel
-        border.right: 1
-        border.color: Theme.divider
+
+        Rectangle {
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            width: 1
+            color: Theme.divider
+        }
 
         Column {
             anchors.fill: parent
@@ -166,8 +178,14 @@ ApplicationWindow {
         anchors.bottom: bottomStrip.top
         width: 320
         color: Theme.panel
-        border.left: 1
-        border.color: Theme.divider
+
+        Rectangle {
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            width: 1
+            color: Theme.divider
+        }
 
         Column {
             anchors.fill: parent
@@ -231,8 +249,14 @@ ApplicationWindow {
         anchors.bottom: parent.bottom
         height: 194
         color: Theme.bg
-        border.top: 1
-        border.color: Theme.divider
+
+        Rectangle {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: parent.top
+            height: 1
+            color: Theme.divider
+        }
 
         Row {
             anchors.fill: parent
@@ -246,6 +270,7 @@ ApplicationWindow {
                     height: 72
                     color: Theme.panel
                     border.color: Theme.divider
+                    border.width: 1
 
                     Text {
                         anchors.centerIn: parent
