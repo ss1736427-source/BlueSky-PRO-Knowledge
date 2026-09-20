@@ -1,17 +1,25 @@
-# ARCH-OPS-050 Status
+# ARCH-OPS-050 — External Operational Request Intake
 
-**Status:** IMPLEMENTATION_BASELINE
+**Status:** CLOSED — CI VERIFIED
 
-Implemented:
+## Verified
 
 - external operational request envelope;
 - mandatory request/action/device identity validation;
 - explicit required capabilities;
-- mandatory entry through run_orchestrator_pipeline();
+- mandatory entry through `run_orchestrator_pipeline()`;
 - exact selected-action match;
-- deterministic rejection for runtime-blocked/non-executable/non-selected actions;
+- deterministic rejection for blocked/non-executable/non-selected actions;
 - no direct execution in the intake boundary.
 
-Evidence target: SIL_EXTERNAL_OPERATIONAL_REQUEST_INTAKE.
+## Evidence target
 
-Next gap: bind accepted intake results to ARCH-OPS-049 execution routing.
+SIL_EXTERNAL_OPERATIONAL_REQUEST_INTAKE
+
+## CI
+
+Verified through ARCH-OPS-050 pull-request CI; merged to `main`.
+
+## Closure
+
+Accepted intake results are bound to ARCH-OPS-049 by ARCH-OPS-051.
