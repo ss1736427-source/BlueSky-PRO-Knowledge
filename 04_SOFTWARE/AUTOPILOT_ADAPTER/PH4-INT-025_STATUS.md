@@ -1,6 +1,6 @@
 # PH4-INT-025 — Clean Close and Archive
 
-**Status:** IMPLEMENTATION PREPARATION — VERIFICATION PENDING  
+**Status:** CLOSED — CI VERIFIED  
 **Evidence boundary:** `SIL_FIXTURE_ONLY`  
 **Baseline:** `MAVLINK2 / BASELINE-1`
 
@@ -8,42 +8,44 @@
 
 Establish and verify the normalized autopilot-adapter close lifecycle after operational activity, including deterministic cleanup, correlation preservation, and archive closure without changing flight-controller authority.
 
-## Scope
-
-The stage shall cover:
+## Scope verified
 
 - explicit clean-close operation at the adapter boundary;
-- close allowed after completed or terminated operational lifecycle;
-- rejection/handling of invalid close state;
-- idempotent close behavior where applicable;
-- preservation of vehicle, mission, flight-record, source/protocol/version correlation;
+- close gated by a valid operational lifecycle;
+- successful close after operational activity;
+- invalid-state handling;
+- idempotent repeated close;
+- execution blocked after close;
+- reconnect boundary behavior;
+- preservation of vehicle, mission, flight-record and protocol correlation;
 - EvidenceSession lifecycle closure and archive state;
 - separation of close/archive from mission execution and contingency authority.
 
 ## Safety and boundary
 
-Close and archive are lifecycle/evidence operations. They must not be interpreted as a command to the flight controller and must not alter onboard flight-control authority.
+Close and archive are lifecycle/evidence operations. They do not transfer flight-controller authority and do not constitute a flight command.
 
 BlueSky remains supervisory. Protocol-specific cleanup remains inside the adapter boundary.
 
-## Required evidence
+## Verification
 
-Evidence shall remain classified as `SIL_FIXTURE_ONLY`. No HIL, physical-UAV, flight-test, certification, or real MAVLink-transport evidence is claimed.
+- C++ SIL clean-close fixture: PASS;
+- automated Python verification: PASS;
+- CMake/CTest registration: PASS;
+- EvidenceSession correlation and archive closure: PASS;
+- successful CI workflow: `BlueSky Autopilot Adapter`;
+- successful CI run: `#570`;
+- verified implementation commit: `608785d3dbb703033231db5adfb8643096feba27`;
+- merged main implementation: `b298a1ea9beac3502bf779b6ac28c8940b5e52a5`.
 
-## Acceptance sequence
+## Evidence boundary
 
-1. Baseline the clean-close lifecycle contract.
-2. Implement the SIL fixture.
-3. Register the fixture in CMake without disturbing existing targets.
-4. Verify successful close after operational completion/termination.
-5. Verify invalid-state and repeat-close behavior.
-6. Verify correlation, provenance and EvidenceSession archive closure.
-7. Run repository CI.
-8. Merge only after CI is green.
-9. Change this document to `CLOSED — CI VERIFIED` only after merge and verified CI result.
+Evidence remains classified as `SIL_FIXTURE_ONLY`. No HIL, physical-UAV, flight-test, certification, or real MAVLink-transport evidence is claimed.
 
 ## Exit condition
 
-PH4-INT-025 remains open until contract implementation, automated verification, CI, and merge are all confirmed.
+Satisfied: implementation, automated verification, CI and merge were confirmed.
 
-PH4-INT-026 must not begin before this exit condition is satisfied.
+## Next deterministic gap
+
+Continue from the existing Phase 4 chain only after reconciling the already-implemented downstream capability and end-to-end lifecycle stages with this closure record.
