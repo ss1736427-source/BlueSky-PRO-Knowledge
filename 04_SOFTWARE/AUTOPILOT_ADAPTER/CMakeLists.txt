@@ -207,3 +207,10 @@ target_link_libraries(bluesky_ai_runtime_continuity PUBLIC bluesky_ai_orchestrat
 add_executable(ai_runtime_continuity_test ../AI/ai_runtime_continuity_test.cpp)
 target_link_libraries(ai_runtime_continuity_test PRIVATE bluesky_ai_runtime_continuity)
 add_test(NAME ai_runtime_continuity_test COMMAND ai_runtime_continuity_test)
+
+add_library(bluesky_ai_runtime_lifecycle STATIC ../AI/ai_runtime_lifecycle.cpp)
+target_include_directories(bluesky_ai_runtime_lifecycle PUBLIC ../AI)
+target_link_libraries(bluesky_ai_runtime_lifecycle PUBLIC bluesky_ai_runtime_continuity)
+add_executable(ai_runtime_lifecycle_test ../AI/ai_runtime_lifecycle_test.cpp)
+target_link_libraries(ai_runtime_lifecycle_test PRIVATE bluesky_ai_runtime_lifecycle)
+add_test(NAME ai_runtime_lifecycle_test COMMAND ai_runtime_lifecycle_test)
