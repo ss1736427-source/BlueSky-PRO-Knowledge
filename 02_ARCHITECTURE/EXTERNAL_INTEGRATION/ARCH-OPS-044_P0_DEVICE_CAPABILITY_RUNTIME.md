@@ -54,6 +54,8 @@ The runtime does not authenticate a device, negotiate transport, interpret vendo
 
 This runtime does not perform live MAVLink capability discovery. It provides the controlled state boundary that a future MAVLink/vendor adapter can populate from heartbeat, capability, firmware and protocol discovery.
 
-## Next deterministic gap
+## Closure
+
+The capability runtime is consumed by ARCH-OPS-045 discovery and ARCH-OPS-046 compatibility. The historical next-gap statement is closed.
 
 Bind capability discovery to the existing device identity and MAVLink session admission path, then verify capability-to-mission/command compatibility before execution.
