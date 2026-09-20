@@ -27,6 +27,8 @@ The boundary accepts an already decoded discovery report. Transport and protocol
 
 `SIL_CAPABILITY_DISCOVERY_BOUNDARY`
 
-## Next gap
+## Closure
+
+Capability compatibility is provided by ARCH-OPS-046 and consumed by ARCH-OPS-047. The historical next-gap statement is closed.
 
 Use the admitted capability snapshot as a prerequisite for mission/command compatibility resolution.
