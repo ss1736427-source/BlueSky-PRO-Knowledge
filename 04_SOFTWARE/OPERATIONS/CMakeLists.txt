@@ -122,4 +122,18 @@ add_executable(external_operational_request_intake_test
 )
 target_link_libraries(external_operational_request_intake_test PRIVATE bluesky_operational_orchestrator_contract)
 add_test(NAME external_operational_request_intake_test COMMAND external_operational_request_intake_test)
-
+add_executable(external_operational_request_execution_test
+    core/external_operational_request_execution_test.cpp
+    core/external_operational_request_execution.cpp
+    core/external_operational_request_intake.cpp
+    core/operational_action_execution_router.cpp
+    ../PLANNING/capability_execution_integration.cpp
+    ../PLANNING/command_lifecycle_runtime.cpp
+    ../PLANNING/mission_transfer_runtime.cpp
+    ../AUTOPILOT_ADAPTER/core/autopilot_adapter_baseline.cpp
+    core/capability_admission_boundary.cpp
+    core/capability_compatibility_gate.cpp
+    core/device_capability_runtime.cpp
+)
+target_link_libraries(external_operational_request_execution_test PRIVATE bluesky_operational_orchestrator_contract)
+add_test(NAME external_operational_request_execution_test COMMAND external_operational_request_execution_test)
