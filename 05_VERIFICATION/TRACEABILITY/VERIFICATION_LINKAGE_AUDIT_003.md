@@ -20,9 +20,9 @@ No new requirement is created and no requirement is marked VERIFIED.
 
 The requirement declares verification_method: test and contains verification objectives for task assignment, result aggregation, conflict handling, agent failure, timeout, authority boundaries, resource constraints and traceability.
 
-Architecture traceability reaches verification/evidence, but the controlled requirement matrix still records Existing TEST-* linkage to be checked. No direct authoritative TEST-* / verification-case identifier was found.
+Architecture traceability reaches verification/evidence, but the controlled requirement matrix still records Existing TEST-* linkage to be checked. No equivalent existing controlled TEST-* case providing the required direct coverage was found. Controlled case `TEST-072` has now been allocated to `SYS-REQ-110`.
 
-Disposition: Requirement PRESENT; Verification method TEST; Verification case NOT DIRECTLY ALLOCATED; Execution result OPEN; Evidence OPEN; Configuration OPEN.
+Disposition: Requirement PRESENT; Verification method TEST; Verification case `TEST-072` ALLOCATED; Execution result OPEN; Evidence OPEN; Configuration OPEN.
 
 This is a real verification-linkage gap, not a requirement gap.
 
@@ -30,9 +30,9 @@ This is a real verification-linkage gap, not a requirement gap.
 
 The requirement declares verification_method: test and defines authority-boundary, Safety Gate, Mission Validation, operator approval, rejection, conflict, bounded automatic authorization and traceability verification objectives.
 
-No direct authoritative TEST-* / verification-case allocation was established by this pass.
+No equivalent existing controlled TEST-* case providing the required direct coverage was found. Controlled case `TEST-073` has now been allocated to `SYS-REQ-111`.
 
-Disposition: Requirement PRESENT; Verification method TEST; Verification case NOT DIRECTLY ALLOCATED; Execution result OPEN; Evidence OPEN; Configuration OPEN.
+Disposition: Requirement PRESENT; Verification method TEST; Verification case `TEST-073` ALLOCATED; Execution result OPEN; Evidence OPEN; Configuration OPEN.
 
 This is a real verification-linkage gap.
 
@@ -40,9 +40,9 @@ This is a real verification-linkage gap.
 
 The requirement declares verification_method: test and defines verification objectives covering offline operation, local model control, authority and safety preservation, knowledge availability, degraded operation, state continuity, recovery, synchronization, model/configuration control, resource protection, observability and traceability.
 
-No direct authoritative TEST-* / verification-case allocation was found.
+No equivalent existing controlled TEST-* case providing the required direct coverage was found. Controlled case `TEST-074` has now been allocated to `SYS-REQ-112`.
 
-Disposition: Requirement PRESENT; Verification method TEST; Verification case NOT DIRECTLY ALLOCATED; Execution result OPEN; Evidence OPEN; Configuration OPEN.
+Disposition: Requirement PRESENT; Verification method TEST; Verification case `TEST-074` ALLOCATED; Execution result OPEN; Evidence OPEN; Configuration OPEN.
 
 This is a real verification-linkage gap.
 
@@ -80,16 +80,16 @@ No new requirement or verification case is required.
 
 | Requirement | Verification allocation | Execution | Evidence |
 |---|---|---|---|
-| SYS-REQ-110 | GAP — direct case allocation | OPEN | OPEN |
-| SYS-REQ-111 | GAP — direct case allocation | OPEN | OPEN |
-| SYS-REQ-112 | GAP — direct case allocation | OPEN | OPEN |
+| SYS-REQ-110 | COVERED: TEST-072 | OPEN | OPEN |
+| SYS-REQ-111 | COVERED: TEST-073 | OPEN | OPEN |
+| SYS-REQ-112 | COVERED: TEST-074 | OPEN | OPEN |
 | SAF-REQ-002 | COVERED: C2-V02/V04/V06 | NOT EXECUTED | OPEN |
 | SAF-REQ-004 | COVERED: C2-V04/V06 | NOT EXECUTED | OPEN |
 | SAF-REQ-010 | COVERED: V-RET-002 / EVD-018 | NOT EXECUTED | PLANNED |
 
 ## 8. Controlled next action
 
-For SYS-REQ-110/111/112, search the existing verification repository for equivalent cases before creating anything new. If no equivalent case exists, create a verification-case allocation record, not a new system requirement.
+For SYS-REQ-110/111/112, the existing verification repository was searched. `TEST-049` provides supporting AI resource-isolation coverage for `SYS-REQ-087`, but it does not provide equivalent direct coverage for these three requirements. Controlled direct cases `TEST-072`, `TEST-073` and `TEST-074` were therefore created. Execution, results, evidence and configuration remain open.
 
 For SAF-REQ-002/004/010, do not create duplicate cases. The remaining work is controlled execution and evidence capture.
 
