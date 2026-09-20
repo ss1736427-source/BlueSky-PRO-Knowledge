@@ -12,6 +12,15 @@ int main() {
     assert(lifecycle.record({"E5",c,LifecycleEventKind::TaskCompleted,"TASK-1",5}));
     assert(lifecycle.validate_sequence(c));
     assert(lifecycle.events_for(c).size()==5);
+    const auto trace=runtime.trace(c);
+    assert(trace.size()==5);
+    assert(trace[0].stage==TraceStage::SystemEvent);
+    assert(trace[1].stage==TraceStage::AiTask);
+    assert(trace[2].stage==TraceStage::Orchestrator);
+    assert(trace[3].stage==TraceStage::Agent);
+    assert(trace[4].stage==TraceStage::Result);
+    assert(trace[4].event_id=="E5");
+    assert(trace[4].correlation_id==c);
     assert(!lifecycle.record({"E5-DUP",c,LifecycleEventKind::TaskCompleted,"TASK-1",5}));
     const std::string conflict="CORR-LIFE-002";
     assert(lifecycle.record({"F1",conflict,LifecycleEventKind::SystemEvent,"SYS-2",1}));
