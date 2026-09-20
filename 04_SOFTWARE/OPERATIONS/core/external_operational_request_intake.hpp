@@ -18,6 +18,7 @@ struct ExternalOperationalRequestResult {
     ExternalOperationalRequestState state{ExternalOperationalRequestState::Rejected};
     std::string request_id;
     std::string action_id;
+    ActionExecutionBinding binding{};
     std::string reason;
     OrchestratorPipelineResult pipeline{};
 };
