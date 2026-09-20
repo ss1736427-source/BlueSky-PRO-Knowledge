@@ -196,3 +196,8 @@ add_executable(ai_runtime_integration_test ../AI/ai_runtime_integration_test.cpp
 target_link_libraries(ai_runtime_integration_test PRIVATE bluesky_ai_orchestrator bluesky_ai_trace bluesky_ai_proposal)
 target_include_directories(ai_runtime_integration_test PRIVATE ../AI)
 add_test(NAME ai_runtime_integration_test COMMAND ai_runtime_integration_test)
+add_library(bluesky_ai_offline_continuity STATIC ../AI/ai_offline_continuity.cpp)
+target_include_directories(bluesky_ai_offline_continuity PUBLIC ../AI)
+add_executable(ai_offline_continuity_test ../AI/ai_offline_continuity_test.cpp)
+target_link_libraries(ai_offline_continuity_test PRIVATE bluesky_ai_offline_continuity)
+add_test(NAME ai_offline_continuity_test COMMAND ai_offline_continuity_test)
