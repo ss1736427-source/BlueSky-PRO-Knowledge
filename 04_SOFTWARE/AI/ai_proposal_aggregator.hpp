@@ -1,6 +1,7 @@
 #pragma once
 #include "ai_orchestration_boundary.hpp"
 #include <string>
+#include <unordered_map>
 namespace bluesky::ai {
 struct ProposalSubmission { Proposal proposal; std::string source_result_id; std::string proposal_digest; };
 class ProposalAggregator final {
