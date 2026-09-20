@@ -1,24 +1,28 @@
-# ARCH-OPS-046 — Status
+# ARCH-OPS-046 — Capability Compatibility Gate
 
-**Status:** IMPLEMENTATION_BASELINE
+**Status:** CLOSED — CI VERIFIED
 
-Implemented:
+## Verified
 
 - deterministic capability compatibility request;
 - validated capability lifecycle prerequisite;
-- required-capability normalization and deduplication;
+- normalization and deduplication;
 - explicit missing-capability result;
 - unknown and unvalidated device handling;
-- SIL evidence target;
 - CTest coverage.
 
-Boundary exclusions:
+## Evidence target
 
-- authentication;
-- transport;
-- MAVLink/vendor message parsing;
-- command dispatch;
-- mission execution;
-- persistence.
+SIL_CAPABILITY_COMPATIBILITY_GATE
 
-Evidence target: `SIL_CAPABILITY_COMPATIBILITY_GATE`.
+## CI
+
+Verified through ARCH-OPS-046 pull-request CI; merged to `main`.
+
+## Boundary
+
+Authentication, transport, MAVLink/vendor parsing, command dispatch, mission execution and persistence remain outside this gate.
+
+## Closure
+
+Compatibility results are consumed by ARCH-OPS-047 admission and ARCH-OPS-048 execution integration.
