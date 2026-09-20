@@ -102,6 +102,14 @@ target_link_libraries(bluesky_external_integration_baseline PRIVATE bluesky_auto
 add_executable(external_integration_adapter_baseline_test core/external_integration_adapter_baseline_test.cpp)
 target_link_libraries(external_integration_adapter_baseline_test PRIVATE bluesky_external_integration_baseline)
 add_test(NAME external_integration_adapter_baseline_test COMMAND external_integration_adapter_baseline_test)
+add_executable(ph4_int_007_failure_evidence_execution_binding
+    core/ph4_int_007_failure_evidence_execution_binding.cpp
+    core/autopilot_adapter_baseline.cpp
+    core/c2_interface_baseline.cpp
+    ../PLANNING/mission_transfer_runtime.cpp
+)
+target_link_libraries(ph4_int_007_failure_evidence_execution_binding PRIVATE bluesky_autopilot_contract)
+add_test(NAME ph4_int_007_failure_evidence_execution_binding COMMAND ph4_int_007_failure_evidence_execution_binding)
 add_executable(ph4_int_005_failure_path_fixture
     core/ph4_int_005_failure_path_fixture.cpp
     core/autopilot_adapter_baseline.cpp
