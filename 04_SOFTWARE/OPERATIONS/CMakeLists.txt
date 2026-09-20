@@ -103,3 +103,15 @@ add_test(NAME capability_compatibility_gate_test COMMAND capability_compatibilit
 add_executable(capability_admission_boundary_test core/capability_admission_boundary_test.cpp core/capability_admission_boundary.cpp core/capability_compatibility_gate.cpp core/device_capability_runtime.cpp)
 target_link_libraries(capability_admission_boundary_test PRIVATE bluesky_operational_orchestrator_contract)
 add_test(NAME capability_admission_boundary_test COMMAND capability_admission_boundary_test)
+add_executable(operational_action_execution_router_test
+    core/operational_action_execution_router_test.cpp
+    core/operational_action_execution_router.cpp
+    ../PLANNING/capability_execution_integration.cpp
+    ../PLANNING/mission_transfer_runtime.cpp
+    ../AUTOPILOT_ADAPTER/core/autopilot_adapter_baseline.cpp
+    core/capability_admission_boundary.cpp
+    core/capability_compatibility_gate.cpp
+    core/device_capability_runtime.cpp
+)
+target_link_libraries(operational_action_execution_router_test PRIVATE bluesky_operational_orchestrator_contract)
+add_test(NAME operational_action_execution_router_test COMMAND operational_action_execution_router_test)
