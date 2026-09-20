@@ -31,13 +31,13 @@ Item {
     Text { x: 16; y: 235; text: "MISSION READINESS"; color: root.secondary; font.family: "B612"; font.pixelSize: 12; font.bold: true }
     Text { x: 16; y: 260; text: "READY CHECK"; color: root.amber; font.family: "B612 Mono"; font.pixelSize: 13; font.bold: true }
     Rectangle { x: 16; y: 286; width: parent.width - 32; height: 38; color: "transparent"; border.color: root.green; border.width: 1 }
-    Text { anchors.fill: parent; anchors.topMargin: 286; anchors.bottomMargin: 0; text: "VALIDATE MISSION"; color: root.green; font.family: "B612"; font.pixelSize: 12; font.bold: true; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter }
+    Text { x: 16; y: 286; width: parent.width - 32; height: 38; text: "VALIDATE MISSION"; color: root.green; font.family: "B612"; font.pixelSize: 12; font.bold: true; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter }
 
     Rectangle { x: 16; y: 334; width: parent.width - 32; height: 38; color: "transparent"; border.color: root.divider; border.width: 1 }
-    Text { anchors.fill: parent; anchors.topMargin: 334; text: "SEND FLIGHT PLAN"; color: root.secondary; font.family: "B612"; font.pixelSize: 12; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter }
+    Text { x: 16; y: 334; width: parent.width - 32; height: 38; text: "SEND FLIGHT PLAN"; color: root.secondary; font.family: "B612"; font.pixelSize: 12; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter }
 
     Rectangle { x: 16; y: 382; width: parent.width - 32; height: 38; color: "transparent"; border.color: root.divider; border.width: 1 }
-    Text { anchors.fill: parent; anchors.topMargin: 382; text: "START MISSION"; color: root.muted; font.family: "B612"; font.pixelSize: 12; font.bold: true; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter }
+    Text { x: 16; y: 382; width: parent.width - 32; height: 38; text: "START MISSION"; color: root.muted; font.family: "B612"; font.pixelSize: 12; font.bold: true; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter }
 
     Text { x: 16; y: 437; text: "START remains inactive until full readiness."; color: root.muted; font.family: "B612"; font.pixelSize: 9 }
 
