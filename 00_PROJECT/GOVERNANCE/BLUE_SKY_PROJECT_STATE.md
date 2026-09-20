@@ -1,7 +1,7 @@
 # BLUE SKY — PROJECT STATE
 
 > Контрольное состояние проекта для передачи между чатами.
-> Дата состояния: 2026-09-02.
+> Дата состояния: 2026-09-20.
 
 ## 1. Project Identity
 
@@ -328,13 +328,29 @@ Data classes:
 - подтверждение применимости связанных frequency / communications requirements;
 - окончательная verification evidence structure.
 
-## 12. Current Work Package
+## 12. Current Repository State and Work Package
 
-**Текущий приоритет:**
-разобрать Приказ №142 по требованиям непосредственно к BlueSky и связать их с:
-`SRS → ICD → Safety → Verification Plan → RTM → Evidence`.
+Последнее подтверждённое состояние `main` включает:
 
-Затем аналогично обработать применимые положения №140/№312/№367/№354.
+- repository-wide HMI reconciliation `HMI-RECONCILIATION-001`;
+- operational execution architecture through `ARCH-OPS-051`;
+- PH4-INT-005 failure-path propagation fixture;
+- PH4-INT-006 operational failure evidence binding;
+- current documentation reconciliation `REPOSITORY-DOCUMENTATION-AUDIT-003`.
+
+Это не отменяет утверждённый C2 work package. C2 remains an open controlled workstream requiring exact source/clause/applicability closure.
+
+### Current deterministic sequence
+
+1. Complete repository/documentation reconciliation.
+2. Reconcile requirements ↔ architecture ↔ software ↔ verification.
+3. Continue C2 source/clause/applicability closure.
+4. Reconcile safety/certification/evidence dependencies.
+5. Reconcile AI/data/offline layers.
+6. Reconcile HMI/UI traceability.
+7. Freeze the next implementation work package only after the affected documentation chain is consistent.
+
+The repository-wide audit does not promote draft or working records to certification baseline.
 
 ## 13. Project Rules
 
