@@ -14,16 +14,21 @@ This document records the source set used to rebuild the current desktop HMI ref
 ## Source hierarchy used
 
 1. `08_HMI/DESIGN_SYSTEM/BLUESKY_PRO_DESIGN_SYSTEM.md` — visual source of truth; current working baseline.
-2. `08_HMI/DESIGN_SYSTEM/BLUESKY_PRO_PANEL_LAYOUT.md` — panel classes, map priority, layout flexibility and UAV-panel configuration.
-3. `08_HMI/DESIGN_SYSTEM/BLUESKY_PRO_SCREEN_REFERENCE.md` — current operational Right Panel behavior.
-4. `08_HMI/DESIGN_SYSTEM/BLUESKY_PRO_HMI_DESIGN_BASELINE.md` — component model, UX priorities and layout areas.
-5. `08_HMI/DESIGN_SYSTEM/BLUESKY_PRO_UI_TRACEABILITY.md` — UI IDs, functional allocation and safety boundary.
-6. `08_HMI/DESIGN_SYSTEM/BLUESKY_PRO_FIGMA_HANDOFF.md` — Figma componentization and Qt 6 + QML handoff rules.
-7. `02_ARCHITECTURE/UX/BLUESKY_PRO_UX_MINIMAL_INFORMATION_PRINCIPLE_001.md` — minimal information density and contextual display.
-8. `02_SYSTEM/Design/Interface/Mission Dashboard.md` — earlier UAV/panel display configuration material; treated as historical supporting material where it is not superseded.
-9. `08_HMI/DESIGN_SYSTEM/FIGMA/BlueSky_PRO_Figma_Visual_Tokens.json` and `.svg` — visual token reference.
-10. `08_HMI/ASSETS/logo/README.md` and `08_HMI/DESIGN_SYSTEM/BLUESKY_PRO_LOGO.md` — controlled logo asset rules.
-11. Mission, navigation, map and requirements/traceability documents were checked for UI-impacting allocation and terminology.
+2. `08_HMI/DESIGN_SYSTEM/BLUESKY_PRO_PANEL_BEHAVIOR_SPECIFICATION_001.md` — consolidated panel behavior and interaction rules from the 2026-09-19 controlled HMI changes.
+3. `08_HMI/DESIGN_SYSTEM/BLUESKY_PRO_PANEL_LAYOUT.md` — panel classes, map priority, layout flexibility and UAV-panel configuration.
+4. `08_HMI/DESIGN_SYSTEM/BLUESKY_PRO_SCREEN_REFERENCE.md` — detailed operational Right Panel behavior and local UAV decision context.
+5. `08_HMI/DESIGN_SYSTEM/BLUESKY_PRO_HMI_DESIGN_BASELINE.md` — component model, UX priorities and layout areas.
+6. `08_HMI/DESIGN_SYSTEM/BLUESKY_PRO_UI_TRACEABILITY.md` — UI IDs, functional allocation and safety boundary.
+7. `08_HMI/DESIGN_SYSTEM/BLUESKY_PRO_FIGMA_HANDOFF.md` — Figma componentization and Qt 6 + QML handoff rules.
+8. `02_ARCHITECTURE/UX/BLUESKY_PRO_UX_MINIMAL_INFORMATION_PRINCIPLE_001.md` — minimal information density and contextual display.
+9. `02_SYSTEM/Design/Interface/Mission Dashboard.md` — earlier UAV/panel display configuration material; treated as historical supporting material where it is not superseded.
+10. `08_HMI/DESIGN_SYSTEM/FIGMA/BlueSky_PRO_Figma_Visual_Tokens.json` and `.svg` — visual token reference.
+11. `08_HMI/ASSETS/logo/README.md` and `08_HMI/DESIGN_SYSTEM/BLUESKY_PRO_LOGO.md` — controlled logo asset rules.
+12. Mission, navigation, map and requirements/traceability documents were checked for UI-impacting allocation and terminology.
+
+## 2026-09-19 panel consolidation
+
+The panel behavior specification is the canonical consolidation of the following controlled commits: `257ed2be`, `0aea2f39`, `36748919`, `9fde6b9c`, `438cf15`, `954c50ba`, `c2b9d1dc`, `baf999d2`, `65df3ea6`, `2640be05`, `c079957f`. These changes are retained in Git history and are not treated as disposable drafts.
 
 ## Reconciled desktop layout
 
