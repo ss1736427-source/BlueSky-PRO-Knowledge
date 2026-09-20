@@ -15,6 +15,8 @@ Item {
     property bool leftPanelOpen: true
     property bool rightPanelOpen: true
     property int selectedUavIndex: -1
+    property string uavDecision: ""
+    signal uavDecisionRequested(string decision, int uavIndex)
 
     Rectangle { anchors.fill: parent; color: "#000000" }
 
@@ -93,6 +95,9 @@ Item {
 
     ContextOverlay {
         visible: root.selectedUavIndex >= 0
+        uavIndex: root.selectedUavIndex
+        onDecisionRequested: { root.uavDecision = decision; root.uavDecisionRequested(decision, uavIndex); root.selectedUavIndex = -1 }
+        onContextClosed: root.selectedUavIndex = -1
         id: contextOverlay
         anchors.right: rightPanel.left
         anchors.bottom: uavStatus.top
