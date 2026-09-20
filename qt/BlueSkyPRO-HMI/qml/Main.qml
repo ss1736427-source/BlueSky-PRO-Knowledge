@@ -162,10 +162,12 @@ ApplicationWindow {
         color: "#07131A"
 
         Text {
-            anchors.centerIn: parent
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: 18
             text: "FLIGHT CHART"
-            color: theme.muted
-            font.pixelSize: 20
+            color: theme.secondary
+            font.pixelSize: 16
             font.bold: true
         }
 
@@ -179,7 +181,7 @@ ApplicationWindow {
 
             Text {
                 anchors.centerIn: parent
-                text: "MAP PROVIDER / LOCAL DATA\nROUTE · ZONES · WEATHER · UAV"
+                text: "MAP PROVIDER / LOCAL DATA\n\nROUTE · ZONES · WEATHER · UAV"
                 horizontalAlignment: Text.AlignHCenter
                 color: theme.secondary
                 font.pixelSize: 13
@@ -239,6 +241,19 @@ ApplicationWindow {
                 text: "VALIDATE MISSION"
                 width: parent.width
                 height: 42
+                contentItem: Text {
+                    text: parent.text
+                    color: theme.green
+                    font.pixelSize: 13
+                    font.bold: true
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+                background: Rectangle {
+                    color: "transparent"
+                    border.color: theme.green
+                    border.width: 1
+                }
             }
 
             Button {
@@ -246,6 +261,19 @@ ApplicationWindow {
                 width: parent.width
                 height: 42
                 enabled: false
+                contentItem: Text {
+                    text: parent.text
+                    color: theme.muted
+                    font.pixelSize: 13
+                    font.bold: true
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+                background: Rectangle {
+                    color: "transparent"
+                    border.color: theme.divider
+                    border.width: 1
+                }
             }
 
             Text {
