@@ -39,6 +39,8 @@ Target: `SIL_CAPABILITY_COMPATIBILITY_GATE`
 
 The SIL test must cover compatible, missing-capability, unvalidated, unknown-device, invalid-request, and duplicate-requirement cases.
 
-## Next deterministic gap
+## Closure
+
+Compatibility results are consumed by ARCH-OPS-047 admission. The historical next-gap statement is closed.
 
 Bind compatibility results into the command/mission admission path without allowing incompatible actions to enter execution.
