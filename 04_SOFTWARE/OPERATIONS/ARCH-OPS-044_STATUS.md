@@ -1,21 +1,28 @@
 # ARCH-OPS-044 — Device Capability Runtime
 
-**Status:** IMPLEMENTATION_BASELINE
+**Status:** CLOSED — CI VERIFIED
 
-## Evidence
+## Verified
 
-- `SIL_DEVICE_CAPABILITY_RUNTIME`
-- deterministic registration and update semantics;
-- duplicate capability normalization;
-- lifecycle transition;
-- immutable resolve-by-device copy;
+- deterministic capability registration and update;
+- capability normalization and deduplication;
+- lifecycle transition `Discovered → Validated`;
+- immutable resolve-by-device snapshot;
 - missing-device handling;
 - CMake/CTest registration.
 
+## Evidence
+
+SIL_DEVICE_CAPABILITY_RUNTIME
+
+## CI
+
+Verified through ARCH-OPS-044 pull-request CI; merged to `main`.
+
 ## Boundary
 
-No live transport, authentication, vendor discovery, certificate handling, or mission execution is claimed.
+No live transport, authentication, vendor discovery, certificate handling, persistence or mission execution is claimed.
 
-## Next gap
+## Closure
 
-Bind capability discovery to device identity/session admission and use the resulting capability set as a prerequisite for mission and command compatibility checks.
+Capability discovery and compatibility were subsequently integrated by ARCH-OPS-045…047. This status no longer carries those historical next-gap statements.
