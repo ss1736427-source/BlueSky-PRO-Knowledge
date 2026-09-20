@@ -17,9 +17,10 @@ Audit 004 is a controlled update to Audit 003. It does not rewrite historical au
 ## 2. Current repository state
 
 - Branch: `main`.
-- Current verified HEAD: `d020995c25838f25cac767d1fff481cb80ca8e6a`.
-- Current HEAD is two commits ahead of Audit-003 corrective baseline `300c5f52cb8891405e77fbe79a9468320a2bbe41`.
-- Current latest commit: `PH4-INT-025: Reconcile clean-close closure status`.
+- Audit source baseline HEAD: `d020995c25838f25cac767d1fff481cb80ca8e6a`.
+- Audit-004 was created from that baseline and then committed to `main`.
+- Current post-audit HEAD: `69fe8dfe51b3aa18a56009c178f8243babe6b99a`.
+- Current latest audit commit: `AUD-004: Add current repository reconciliation audit`.
 - No combined commit status entries are returned for current HEAD; this is not interpreted as CI failure or success.
 
 ## 3. Recent implementation reconciliation
