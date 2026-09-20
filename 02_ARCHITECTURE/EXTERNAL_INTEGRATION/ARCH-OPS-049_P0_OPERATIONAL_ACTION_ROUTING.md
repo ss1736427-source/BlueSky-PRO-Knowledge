@@ -33,6 +33,8 @@ Target: SIL_OPERATIONAL_ACTION_EXECUTION_ROUTER
 
 Coverage includes selected command routing, action mismatch rejection, and capability rejection before command dispatch.
 
-## Next gap
+## Closure
+
+External operational request intake is implemented by ARCH-OPS-050 and bound to this router by ARCH-OPS-051. The routing chain is complete.
 
 Bind external operational request intake to the orchestrator pipeline so action selection cannot be bypassed by direct callers.
