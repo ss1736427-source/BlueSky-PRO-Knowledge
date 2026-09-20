@@ -8,6 +8,8 @@ Item {
     property color secondary: "#BFBFBF"
     property color cyan: "#32FFFF"
     property color divider: "#202020"
+    property bool leftOpen: true
+    property bool rightOpen: true
 
     Rectangle { anchors.fill: parent; color: root.bg }
     Row {
@@ -20,7 +22,7 @@ Item {
             delegate: Rectangle {
                 width: Math.max(76, label.implicitWidth + 28); height: 38
                 color: "#0A0A0A"; border.color: root.divider; border.width: 1
-                Text { id: label; anchors.centerIn: parent; text: modelData; color: (index < 2 ? root.cyan : root.secondary); font.family: "B612 Mono"; font.pixelSize: 10 }
+                Text { id: label; anchors.centerIn: parent; text: modelData; color: index === 0 ? (root.leftOpen ? root.cyan : root.secondary) : index === 1 ? (root.rightOpen ? root.cyan : root.secondary) : root.secondary; font.family: "B612 Mono"; font.pixelSize: 10 }
             }
         }
     }

@@ -19,7 +19,7 @@ Item {
     Row {
         anchors.left: parent.left; anchors.leftMargin: 190
         anchors.verticalCenter: parent.verticalCenter
-        spacing: 22
+        spacing: 18
         Text { text: "MISSION  PREPARATION"; color: root.cyan; font.family: "B612"; font.pixelSize: 12; font.bold: true }
         Text { text: "ETD 10:30"; color: root.secondary; font.family: "B612 Mono"; font.pixelSize: 13 }
         Text { text: "TOT —"; color: root.secondary; font.family: "B612 Mono"; font.pixelSize: 13 }
@@ -29,7 +29,7 @@ Item {
     Row {
         anchors.right: parent.right; anchors.rightMargin: 18
         anchors.verticalCenter: parent.verticalCenter
-        spacing: 18
+        spacing: 14
         Text { text: "C2  CONNECTED"; color: root.green; font.family: "B612 Mono"; font.pixelSize: 11; font.bold: true }
         Text { text: "GNSS  OK"; color: root.green; font.family: "B612 Mono"; font.pixelSize: 11 }
         Text { text: "WARNING"; color: root.amber; font.family: "B612 Mono"; font.pixelSize: 11; font.bold: true }
