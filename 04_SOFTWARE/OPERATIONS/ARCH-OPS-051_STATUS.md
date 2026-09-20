@@ -1,17 +1,24 @@
-# ARCH-OPS-051 Status
+# ARCH-OPS-051 — External Operational Request Execution Binding
 
-**Status:** IMPLEMENTATION_BASELINE
+**Status:** CLOSED — CI VERIFIED
 
-Implemented:
-- accepted ARCH-OPS-050 results are executable only through a dedicated binding boundary;
-- the original ActionExecutionBinding is retained in the intake result;
-- exact selected action identity is preserved;
-- mission/command execution kind is preserved;
-- explicit device_id and required capabilities flow unchanged to ARCH-OPS-049;
-- rejected intake cannot reach the execution router;
-- incompatible capabilities remain blocked by ARCH-OPS-048;
-- no authority, safety, regulatory, energy, or runtime semantics were redefined.
+## Verified
 
-Evidence target: SIL_EXTERNAL_OPERATIONAL_REQUEST_EXECUTION_BINDING.
+- only accepted ARCH-OPS-050 results reach execution;
+- exact `ActionExecutionBinding` is retained;
+- selected action identity and execution kind are preserved;
+- explicit `device_id` and required capabilities flow unchanged;
+- rejected/non-selected/non-executable requests cannot reach dispatch or mission transfer;
+- no new authority, safety, regulatory, energy or runtime semantics introduced.
 
-Next: inspect remaining architecture gaps before introducing another execution path.
+## Evidence target
+
+SIL_EXTERNAL_OPERATIONAL_REQUEST_EXECUTION_BINDING
+
+## CI
+
+Verified through ARCH-OPS-051 pull-request CI; merged to `main`.
+
+## Closure
+
+The external operational request → orchestrator → capability-guarded execution path is complete. Further work must be selected from a distinct unresolved boundary.

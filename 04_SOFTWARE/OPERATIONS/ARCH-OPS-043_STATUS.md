@@ -1,24 +1,31 @@
 # ARCH-OPS-043 — Device identity runtime
 
-**Status:** IMPLEMENTED — awaiting exact-HEAD CI verification
+**Status:** CLOSED — CI VERIFIED
 
 ## Scope
 
-Provides a deterministic identity registry for UAV, autopilot and component identity with credential fingerprint uniqueness and explicit lifecycle state.
+Deterministic device identity registry for UAV, autopilot and component identity with credential-fingerprint uniqueness and explicit lifecycle state.
+
+## Verified
+
+- registration and idempotency;
+- identity collision and credential collision handling;
+- resolution and lifecycle transitions;
+- explicit separation from MAVLink session identity and system/component addressing;
+- no private-key storage or live authentication claim.
 
 ## Evidence target
 
 SIL_DEVICE_IDENTITY_RUNTIME
 
-## Authority boundaries
+## CI
 
-- DeviceIdentityRuntime owns device identity registration, credential fingerprint uniqueness and identity lifecycle state.
-- MavlinkSessionRuntime remains authoritative for live MAVLink session identity.
-- FleetAddressingRuntime remains authoritative for system/component address ownership.
-- AutopilotAdapter identity remains the vehicle/autopilot capability identity source.
-- This slice does not generate, store, rotate or expose private keys.
-- It does not authenticate a live link or establish certificate trust.
+Verified through the ARCH-OPS-043 pull-request CI gate. The implementation was merged to `main`.
 
-## Verification target
+## Boundary
 
-Deterministic contract tests cover registration, idempotency, identity collision, credential collision, resolution, lifecycle transitions and removal.
+Cryptographic validation, key provisioning, certificate trust and live-link authentication remain outside this slice.
+
+## Next
+
+Continue from the already integrated capability/session chain; do not reopen this closed runtime slice.

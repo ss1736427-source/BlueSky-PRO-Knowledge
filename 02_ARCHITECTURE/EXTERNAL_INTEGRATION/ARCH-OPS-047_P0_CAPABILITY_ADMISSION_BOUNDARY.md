@@ -44,6 +44,8 @@ Target: `SIL_CAPABILITY_ADMISSION_BOUNDARY`
 
 The SIL test covers admitted compatible actions and rejection of invalid, unknown, unvalidated, and capability-missing actions.
 
-## Next deterministic gap
+## Closure
+
+The admission boundary is connected to mission/command execution by ARCH-OPS-048. The historical next-gap statement is closed.
 
 Connect this admission boundary to the existing mission transfer and command dispatch entry points so incompatible actions cannot reach execution.

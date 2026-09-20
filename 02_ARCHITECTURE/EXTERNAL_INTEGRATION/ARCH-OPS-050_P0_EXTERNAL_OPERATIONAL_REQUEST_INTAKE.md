@@ -31,6 +31,8 @@ The intake normalizes the external request envelope and submits it to the existi
 
 Target: SIL_EXTERNAL_OPERATIONAL_REQUEST_INTAKE
 
-## Next gap
+## Closure
+
+Accepted intake results are bound to ARCH-OPS-049 by ARCH-OPS-051. The external request intake chain is complete.
 
 Bind accepted intake results to the existing ARCH-OPS-049 execution router for a complete external-request-to-execution path.

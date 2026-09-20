@@ -1,16 +1,27 @@
-# ARCH-OPS-047 — Status
+# ARCH-OPS-047 — Capability Admission Boundary
 
-**Status:** IMPLEMENTATION_BASELINE
+**Status:** CLOSED — CI VERIFIED
 
-Implemented:
+## Verified
 
 - deterministic action admission request;
 - compatibility gate integration;
 - explicit admitted/rejected decision;
 - deterministic rejection reasons;
-- SIL evidence target;
 - CTest coverage.
+
+## Evidence target
+
+SIL_CAPABILITY_ADMISSION_BOUNDARY
+
+## CI
+
+Verified through ARCH-OPS-047 pull-request CI; merged to `main`.
+
+## Boundary
 
 This layer does not execute or dispatch the admitted action.
 
-Evidence target: `SIL_CAPABILITY_ADMISSION_BOUNDARY`.
+## Closure
+
+The admission boundary is integrated into mission/command execution by ARCH-OPS-048.

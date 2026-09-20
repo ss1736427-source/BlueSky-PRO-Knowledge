@@ -33,6 +33,8 @@ External request
 
 Target: SIL_EXTERNAL_OPERATIONAL_REQUEST_EXECUTION_BINDING
 
-## Next gap
+## Closure
+
+The external request → orchestrator → capability admission → mission/command execution path is complete. Further work must be selected from a distinct unresolved architecture boundary.
 
 External request execution binding is complete. The next architectural gap should be selected from the remaining external-integration / operational execution boundaries rather than bypassing this chain.
