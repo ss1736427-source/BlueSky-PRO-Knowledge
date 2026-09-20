@@ -10,6 +10,7 @@ ExternalOperationalRequestResult ExternalOperationalRequestIntake::evaluate(
     ExternalOperationalRequestResult result;
     result.request_id = request.request_id;
     result.action_id = request.binding.action_id;
+    result.binding = request.binding;
 
     if (request.request_id.empty()) {
         result.reason = "REQUEST_ID_REQUIRED";
