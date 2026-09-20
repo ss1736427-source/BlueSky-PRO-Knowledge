@@ -181,10 +181,6 @@ ApplicationWindow {
                         font.pixelSize: 13
                     }
 
-                    MouseArea {
-                        anchors.fill: parent
-                        hoverEnabled: true
-                    }
                 }
             }
 
@@ -600,12 +596,7 @@ ApplicationWindow {
             height: 72
 
             Repeater {
-                model: [
-                    { name: "UAV-01", state: "READY", color: "#64FF00" },
-                    { name: "UAV-02", state: "READY", color: "#64FF00" },
-                    { name: "UAV-03", state: "CHECK", color: "#FFD339" },
-                    { name: "UAV-04", state: "READY", color: "#64FF00" }
-                ]
+                model: ["UAV-01  READY", "UAV-02  READY", "UAV-03  CHECK", "UAV-04  READY"]
 
                 delegate: Rectangle {
                     width: (parent.width - 30) / 4
@@ -616,8 +607,8 @@ ApplicationWindow {
 
                     Text {
                         anchors.centerIn: parent
-                        text: modelData.name + "   " + modelData.state
-                        color: modelData.color
+                        text: modelData
+                        color: index === 2 ? theme.amber : theme.green
                         font.pixelSize: 13
                         font.bold: true
                     }
