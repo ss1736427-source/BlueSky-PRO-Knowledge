@@ -21,7 +21,15 @@ qt_add_qml_module(appBlueSkyPRO
     VERSION 1.0
     QML_FILES
         qml/App.qml
+        qml/Main.qml
         qml/MainContent.ui.qml
+        qml/TopHeader.ui.qml
+        qml/LeftPanel.ui.qml
+        qml/FlightChart.ui.qml
+        qml/RightPanel.ui.qml
+        qml/UAVStatus.ui.qml
+        qml/BottomToolbar.ui.qml
+        qml/ContextOverlay.ui.qml
         qml/Theme.qml
 )
 
