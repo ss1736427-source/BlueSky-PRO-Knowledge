@@ -8,6 +8,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_library(bluesky_planning
     command_lifecycle_runtime.cpp
     mission_transfer_runtime.cpp
+    capability_execution_integration.cpp
     parameter_configuration_runtime.cpp
     solvers/astar_solver.cpp
     solvers/dijkstra_solver.cpp
@@ -115,6 +116,15 @@ add_executable(parameter_configuration_runtime_test
 )
 target_link_libraries(parameter_configuration_runtime_test PRIVATE bluesky_planning)
 
+add_executable(capability_execution_integration_test
+    capability_execution_integration_test.cpp
+    ../AUTOPILOT_ADAPTER/core/autopilot_adapter_baseline.cpp
+    ../OPERATIONS/core/capability_admission_boundary.cpp
+    ../OPERATIONS/core/capability_compatibility_gate.cpp
+    ../OPERATIONS/core/device_capability_runtime.cpp
+)
+target_link_libraries(capability_execution_integration_test PRIVATE bluesky_planning)
+
 enable_testing()
 add_test(NAME astar_dijkstra_benchmark COMMAND astar_dijkstra_benchmark)
 add_test(NAME orchestrator_integration_test COMMAND orchestrator_integration_test)
@@ -134,3 +144,4 @@ add_test(NAME mission_compiler_test COMMAND mission_compiler_test)
 add_test(NAME mission_compiler_multi_test COMMAND mission_compiler_multi_test)
 add_test(NAME mission_transfer_runtime_test COMMAND mission_transfer_runtime_test)
 add_test(NAME parameter_configuration_runtime_test COMMAND parameter_configuration_runtime_test)
+add_test(NAME capability_execution_integration_test COMMAND capability_execution_integration_test)
