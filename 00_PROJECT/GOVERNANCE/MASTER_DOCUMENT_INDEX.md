@@ -1,7 +1,7 @@
 ---
 id: MASTER-DOCUMENT-INDEX-001
 type: master_document_index
-status: draft_for_agreement
+status: CONTROLLED_WORKING_INDEX
 jurisdiction: Russian Federation
 system: aviation_system
 ---
