@@ -137,7 +137,9 @@ Certification
 → 06_CERTIFICATION/
 
 External interfaces/data
-→ 07_EXTERNAL/
+→ 04_INTEGRATION/ + 07_DATA/ + applicable external-interface records
+
+Note: `07_EXTERNAL/` is not present in current main.
 
 HMI
 → 08_HMI/
