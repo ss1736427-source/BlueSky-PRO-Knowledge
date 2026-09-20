@@ -32,3 +32,9 @@ The HMI remains presentation/event-source only. The JournalStore interface is th
 ## Integrity
 
 Authoritative immutable storage, retention, access control, synchronization and evidence/export requirements remain to be allocated to the controlled persistence implementation.
+
+## UAV decision service
+
+`JournalService::recordUavDecision()` is the controlled application entry point for `UAV_DECISION` events. It validates the minimum event identity (`event_type`, Mission ID, UAV ID and operator decision) before forwarding the event to `JournalStore`.
+
+The HMI exposes an append integration signal but does not instantiate or own the authoritative JournalStore.
