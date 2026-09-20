@@ -18,7 +18,9 @@ Item {
     property string uavDecision: ""
     property string lastJournalEvent: ""
     property string missionId: "BS-260920-A-001"
+    property string journalStatus: "READY"
     signal journalEvent(string eventType, int uavIndex, string decision)
+    signal journalAppendRequested(string eventType, string missionId, int uavIndex, string decision)
     signal uavDecisionRequested(string decision, int uavIndex)
 
     Rectangle { anchors.fill: parent; color: "#000000" }
@@ -99,7 +101,7 @@ Item {
     ContextOverlay {
         visible: root.selectedUavIndex >= 0
         uavIndex: root.selectedUavIndex
-        onDecisionRequested: { root.uavDecision = decision; root.lastJournalEvent = root.missionId + " · UAV-" + (uavIndex + 1) + " · " + decision; root.journalEvent("UAV_DECISION", uavIndex, decision); root.uavDecisionRequested(decision, uavIndex); root.selectedUavIndex = -1 }
+        onDecisionRequested: { root.uavDecision = decision; root.lastJournalEvent = root.missionId + " · UAV-" + (uavIndex + 1) + " · " + decision; root.journalEvent("UAV_DECISION", uavIndex, decision); root.journalAppendRequested("UAV_DECISION", root.missionId, uavIndex, decision); root.journalStatus = "EVENT EMITTED"; root.uavDecisionRequested(decision, uavIndex); root.selectedUavIndex = -1 }
         onContextClosed: root.selectedUavIndex = -1
         id: contextOverlay
         anchors.right: rightPanel.left
