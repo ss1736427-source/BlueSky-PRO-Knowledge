@@ -69,7 +69,7 @@ int main() {
     assert(auth_result.reason == "CREDENTIAL_REFERENCE_REQUIRED");
     const auto auth_evidence = bluesky::operations::bind_failure_evidence(
         makeDecision("c2-authentication", "SELECTED->FAILED"), "REJECTED",
-        auth_result.reason, "C2_INTERFACE", c2.getIdentity().endpoint_id);
+        auth_result.reason, "C2_INTERFACE", c2.getIdentity().endpointId);
     assert(auth_evidence.action_id == "c2-authentication");
     assert(auth_evidence.result == "REJECTED");
     assert(auth_evidence.reason == auth_result.reason);
@@ -83,7 +83,7 @@ int main() {
     assert(frame_result.reason == "CHANNEL_AND_PAYLOAD_REQUIRED");
     const auto frame_evidence = bluesky::operations::bind_failure_evidence(
         makeDecision("c2-dispatch", "SELECTED->FAILED"), "REJECTED",
-        frame_result.reason, "C2_INTERFACE", c2.getIdentity().endpoint_id);
+        frame_result.reason, "C2_INTERFACE", c2.getIdentity().endpointId);
     assert(frame_evidence.action_id == "c2-dispatch");
     assert(frame_evidence.result == "REJECTED");
     assert(frame_evidence.reason == frame_result.reason);
