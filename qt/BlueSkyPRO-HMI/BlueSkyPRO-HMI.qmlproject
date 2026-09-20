@@ -1,7 +1,7 @@
 import QmlProject 1.1
 
 Project {
-    mainFile: "qml/MainContent.qml"
+    mainFile: "qml/MainContent.ui.qml"
 
     QmlFiles {
         directory: "qml"
