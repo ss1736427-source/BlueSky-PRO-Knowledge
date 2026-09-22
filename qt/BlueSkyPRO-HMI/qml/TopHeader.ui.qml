@@ -21,7 +21,7 @@ Item {
     property bool tabletVariant: width < 1500
     property string etd: "10:30"
     property string tot: "—"
-    property string trip: "01:18"
+    property string trip: "—"
     property string eta: "11:48"
     property bool ready: true
     property bool warningActive: true
