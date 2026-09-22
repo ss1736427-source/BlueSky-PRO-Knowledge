@@ -18,6 +18,8 @@ Item {
     // Contextual validation is not shown until automatic revalidation succeeds.
     property bool validationConfirmationRequired: false
     property bool missionReady: false
+    property bool warningActive: true
+    property real validationPulse: 1.0
 
     Rectangle {
         anchors.fill: parent
@@ -68,6 +70,7 @@ Item {
     Text {
         x: 16
         y: 174
+        visible: root.warningActive
         text: "Wind correction pending confirmation"
         color: root.amber
         font.family: "B612"
@@ -77,6 +80,7 @@ Item {
     Text {
         x: 16
         y: 195
+        visible: root.warningActive
         text: "Battery degradation model applied"
         color: root.secondary
         font.family: "B612"
@@ -112,7 +116,7 @@ Item {
         width: parent.width - 32
         height: 38
         color: "transparent"
-        border.color: root.green
+        border.color: Qt.rgba(root.green.r, root.green.g, root.green.b, root.validationPulse)
         border.width: 1
     }
 
@@ -129,6 +133,13 @@ Item {
         font.bold: true
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
+    }
+
+    SequentialAnimation on validationPulse {
+        running: root.validationConfirmationRequired
+        loops: Animation.Infinite
+        NumberAnimation { from: 0.35; to: 1.0; duration: 650; easing.type: Easing.InOutSine }
+        NumberAnimation { from: 1.0; to: 0.35; duration: 650; easing.type: Easing.InOutSine }
     }
 
     Rectangle {
