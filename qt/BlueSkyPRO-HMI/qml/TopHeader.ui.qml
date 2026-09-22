@@ -134,15 +134,19 @@ Item {
         }
     }
 
-    // CENTRAL COMPOSITION — centered on the Header axis between TRIP and ETA.
-    Row {
+    // CENTRAL COMPOSITION — fills the adaptive space between equal-width anchors.
+    // Six equal sectors preserve the geometric center between TRIP and ETA.
+    Item {
         id: centralComposition
-        anchors.centerIn: parent
-        spacing: root.sectorGap
+        anchors.left: logoBlock.right
+        anchors.right: operatorBlock.left
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
 
         HeaderSector {
-            width: root.centralSectorWidth
-            height: root.height
+            id: etdSector
+            width: parent.width / 6
+            height: parent.height
             title: "ETD"
             value: root.etd
             valueColor: root.secondary
@@ -151,10 +155,13 @@ Item {
             headingValueGap: root.headingValueGap
             separatorHeight: root.separatorHeight
             separatorWidth: root.separatorWidth
+            anchors.left: parent.left
         }
+
         HeaderSector {
-            width: root.centralSectorWidth
-            height: root.height
+            id: totSector
+            width: parent.width / 6
+            height: parent.height
             title: "TOT"
             value: root.tot
             valueColor: root.secondary
@@ -163,10 +170,13 @@ Item {
             headingValueGap: root.headingValueGap
             separatorHeight: root.separatorHeight
             separatorWidth: root.separatorWidth
+            anchors.left: etdSector.right
         }
+
         HeaderSector {
-            width: root.centralSectorWidth
-            height: root.height
+            id: tripSector
+            width: parent.width / 6
+            height: parent.height
             title: "TRIP"
             value: root.trip
             valueColor: root.secondary
@@ -175,10 +185,13 @@ Item {
             headingValueGap: root.headingValueGap
             separatorHeight: root.separatorHeight
             separatorWidth: root.separatorWidth
+            anchors.left: totSector.right
         }
+
         HeaderSector {
-            width: root.centralSectorWidth
-            height: root.height
+            id: etaSector
+            width: parent.width / 6
+            height: parent.height
             title: "ETA"
             value: root.eta
             valueColor: root.secondary
@@ -187,10 +200,13 @@ Item {
             headingValueGap: root.headingValueGap
             separatorHeight: root.separatorHeight
             separatorWidth: root.separatorWidth
+            anchors.left: tripSector.right
         }
+
         HeaderSector {
-            width: root.centralSectorWidth
-            height: root.height
+            id: readySector
+            width: parent.width / 6
+            height: parent.height
             title: "READY"
             value: root.ready ? "READY" : "NOT READY"
             valueColor: root.ready ? root.green : root.amber
@@ -199,10 +215,13 @@ Item {
             headingValueGap: root.headingValueGap
             separatorHeight: root.separatorHeight
             separatorWidth: root.separatorWidth
+            anchors.left: etaSector.right
         }
+
         HeaderSector {
-            width: root.centralSectorWidth
-            height: root.height
+            id: warningSector
+            width: parent.width / 6
+            height: parent.height
             title: "WARNING"
             value: root.warningActive ? "!" : "—"
             valueColor: root.warningActive ? root.amber : root.muted
@@ -212,6 +231,7 @@ Item {
             separatorHeight: root.separatorHeight
             separatorWidth: root.separatorWidth
             showRightSeparator: false
+            anchors.left: readySector.right
         }
     }
 
@@ -223,15 +243,6 @@ Item {
         color: root.divider
     }
 
-    // Visual review guard: turns red if central composition reaches the symmetric anchors.
-    Rectangle {
-        visible: centralComposition.width > parent.width - 2 * root.anchorWidth
-        anchors.centerIn: centralComposition
-        width: centralComposition.width
-        height: parent.height
-        color: "transparent"
-        border.color: root.red
-        border.width: 1
-        z: 10
-    }
+    // Central composition always occupies the exact adaptive space between the two equal anchors.
+
 }
