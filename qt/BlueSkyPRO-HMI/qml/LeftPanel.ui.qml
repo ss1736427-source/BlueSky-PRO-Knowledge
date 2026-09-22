@@ -12,7 +12,9 @@ Item {
     property color cyan: "#32FFFF"
     property color divider: "#202020"
 
+    property bool missionVisible: true
     signal hideMissionRequested()
+    signal restoreMissionRequested()
     signal missionTemplateMenuRequested()
 
     Rectangle {
@@ -66,6 +68,7 @@ Item {
     }
 
     Text {
+        visible: root.missionVisible
         x: 16
         y: 48
         text: "BS-260920-A-001"
@@ -76,6 +79,7 @@ Item {
     }
 
     Text {
+        visible: root.missionVisible
         x: 16
         y: 70
         text: "Area Survey"
@@ -85,6 +89,7 @@ Item {
     }
 
     Text {
+        visible: root.missionVisible
         x: 16
         y: 90
         text: "4 UAV · BVLOS · wind-aware"
@@ -94,6 +99,7 @@ Item {
     }
 
     Text {
+        visible: root.missionVisible
         x: 16
         y: 126
         text: "MISSION TEMPLATES"
@@ -105,6 +111,7 @@ Item {
 
     // Default view contains only the template used by the active task.
     Rectangle {
+        visible: root.missionVisible
         x: 16
         y: 151
         width: parent.width - 32
@@ -125,6 +132,7 @@ Item {
     }
 
     Text {
+        visible: root.missionVisible
         x: 16
         y: 196
         text: "+  MORE TEMPLATES"
@@ -135,6 +143,7 @@ Item {
     }
 
     MouseArea {
+        visible: root.missionVisible
         x: 16
         y: 190
         width: parent.width - 32
@@ -143,6 +152,7 @@ Item {
     }
 
     Text {
+        visible: root.missionVisible
         x: 16
         y: 238
         text: "HIDE"
@@ -153,6 +163,7 @@ Item {
     }
 
     MouseArea {
+        visible: root.missionVisible
         x: 16
         y: 232
         width: 80
@@ -161,6 +172,7 @@ Item {
     }
 
     Text {
+        visible: root.missionVisible
         x: 16
         y: 278
         text: "MISSION ID"
@@ -171,6 +183,7 @@ Item {
     }
 
     Text {
+        visible: root.missionVisible
         x: 16
         y: 300
         text: "immutable: BS-260920-A-001"
@@ -180,6 +193,7 @@ Item {
     }
 
     Text {
+        visible: root.missionVisible
         x: 16
         y: 342
         text: "PANEL TOOLS"
@@ -190,6 +204,7 @@ Item {
     }
 
     Text {
+        visible: root.missionVisible
         x: 16
         y: 366
         text: "Route · Altitude · Speed · Offset"
@@ -199,6 +214,7 @@ Item {
     }
 
     Text {
+        visible: root.missionVisible
         x: 16
         y: 386
         text: "Weather · Obstacles · Airspace"
