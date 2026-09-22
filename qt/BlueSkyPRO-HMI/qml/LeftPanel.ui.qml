@@ -64,7 +64,7 @@ Item {
         y: 8
         width: 26
         height: 28
-        onClicked: root.missionTemplateMenuRequested()
+        onClicked: root.missionVisible ? root.missionTemplateMenuRequested() : root.restoreMissionRequested()
     }
 
     Text {
