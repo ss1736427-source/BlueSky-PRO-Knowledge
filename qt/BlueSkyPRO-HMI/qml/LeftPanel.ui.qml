@@ -222,4 +222,53 @@ Item {
         font.family: "B612"
         font.pixelSize: 10
     }
+    Column {
+        visible: !root.missionVisible
+        anchors.horizontalCenter: parent.horizontalCenter
+        y: 72
+        spacing: 14
+
+        Text {
+            width: parent.parent.width - 32
+            horizontalAlignment: Text.AlignHCenter
+            text: "MISSION HIDDEN"
+            color: root.secondary
+            font.family: "B612"
+            font.pixelSize: 13
+            font.bold: true
+        }
+
+        Text {
+            width: parent.parent.width - 32
+            horizontalAlignment: Text.AlignHCenter
+            text: "Saved state retained"
+            color: root.muted
+            font.family: "IBM Plex Sans Condensed"
+            font.pixelSize: 11
+        }
+
+        Rectangle {
+            width: 150
+            height: 32
+            color: "transparent"
+            border.color: root.cyan
+            border.width: 1
+
+            Text {
+                anchors.fill: parent
+                text: "+  RESTORE"
+                color: root.cyan
+                font.family: "B612 Mono"
+                font.pixelSize: 10
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: root.restoreMissionRequested()
+            }
+        }
+    }
+
 }
