@@ -23,7 +23,10 @@ Item {
     signal journalAppendRequested(string eventType, string missionId, int uavIndex, string decision)
     signal uavDecisionRequested(string decision, int uavIndex)
 
-    Rectangle { anchors.fill: parent; color: "#000000" }
+    Rectangle {
+        anchors.fill: parent
+        color: "#000000"
+    }
 
     TopHeader {
         id: topHeader
@@ -31,6 +34,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         height: root.headerHeight
+        tabletVariant: root.width < 1500
     }
 
     Item {
@@ -74,20 +78,6 @@ Item {
         height: root.uavHeight
     }
 
-    Rectangle {
-        id: leftToggleHit
-        x: 12; y: parent.height - root.toolbarHeight; width: 90; height: root.toolbarHeight
-        color: "transparent"
-        MouseArea { anchors.fill: parent; onClicked: root.leftPanelOpen = !root.leftPanelOpen }
-    }
-
-    Rectangle {
-        id: rightToggleHit
-        x: 108; y: parent.height - root.toolbarHeight; width: 90; height: root.toolbarHeight
-        color: "transparent"
-        MouseArea { anchors.fill: parent; onClicked: root.rightPanelOpen = !root.rightPanelOpen }
-    }
-
     BottomToolbar {
         id: bottomToolbar
         anchors.left: parent.left
@@ -96,17 +86,27 @@ Item {
         height: root.toolbarHeight
         leftOpen: root.leftPanelOpen
         rightOpen: root.rightPanelOpen
+        onLeftPanelToggleRequested: root.leftPanelOpen = !root.leftPanelOpen
+        onRightPanelToggleRequested: root.rightPanelOpen = !root.rightPanelOpen
     }
 
     ContextOverlay {
+        id: contextOverlay
         visible: root.selectedUavIndex >= 0
         uavIndex: root.selectedUavIndex
-        onDecisionRequested: { root.uavDecision = decision; root.lastJournalEvent = root.missionId + " · UAV-" + (uavIndex + 1) + " · " + decision; root.journalEvent("UAV_DECISION", uavIndex, decision); root.journalAppendRequested("UAV_DECISION", root.missionId, uavIndex, decision); root.journalStatus = "EVENT EMITTED"; root.uavDecisionRequested(decision, uavIndex); root.selectedUavIndex = -1 }
-        onContextClosed: root.selectedUavIndex = -1
-        id: contextOverlay
         anchors.right: rightPanel.left
         anchors.bottom: uavStatus.top
         width: 360
         height: 122
+        onDecisionRequested: {
+            root.uavDecision = decision
+            root.lastJournalEvent = root.missionId + " · UAV-" + (uavIndex + 1) + " · " + decision
+            root.journalEvent("UAV_DECISION", uavIndex, decision)
+            root.journalAppendRequested("UAV_DECISION", root.missionId, uavIndex, decision)
+            root.journalStatus = "EVENT EMITTED"
+            root.uavDecisionRequested(decision, uavIndex)
+            root.selectedUavIndex = -1
+        }
+        onContextClosed: root.selectedUavIndex = -1
     }
 }
