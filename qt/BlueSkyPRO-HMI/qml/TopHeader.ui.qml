@@ -3,7 +3,7 @@ import QtQuick
 Item {
     id: root
 
-    implicitHeight: 68
+    implicitHeight: 62
 
     property color bg: "#000000"
     property color text: "#FFFFFF"
@@ -14,6 +14,11 @@ Item {
     property color red: "#FF1E14"
     property color cyan: "#32FFFF"
     property color divider: "#202020"
+
+    // One adaptive Header for PC and tablet.
+    // PC: LOGO -> ETD -> TOT -> TRIP -> ETA -> READY -> WARNING -> OPERATOR
+    // Tablet adds BAT as a separate device-level element.
+    property bool tabletVariant: false
 
     Rectangle {
         anchors.fill: parent
@@ -28,58 +33,81 @@ Item {
         color: root.divider
     }
 
-    Text {
-        x: 18
+    // Fixed/static left anchor.
+    Item {
+        id: logoBlock
+        width: 150
+        height: parent.height
+        anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
-        text: "BlueSky PRO"
-        color: root.text
-        font.family: "B612"
-        font.pixelSize: 22
-        font.bold: true
+
+        Text {
+            anchors.left: parent.left
+            anchors.leftMargin: 18
+            anchors.verticalCenter: parent.verticalCenter
+            text: "BlueSky PRO"
+            color: root.text
+            font.family: "B612"
+            font.pixelSize: 22
+            font.bold: true
+        }
     }
 
     Rectangle {
-        x: 160
+        anchors.left: logoBlock.right
+        anchors.verticalCenter: parent.verticalCenter
         width: 1
         height: 38
-        anchors.verticalCenter: parent.verticalCenter
         color: root.divider
     }
 
-    Row {
-        x: 182
+    // Fixed/static right anchor.
+    Item {
+        id: operatorBlock
+        width: root.tabletVariant ? 150 : 112
+        height: parent.height
+        anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
-        spacing: 8
 
         Text {
-            text: "MISSION"
-            color: root.muted
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            text: "PILOT"
+            color: root.cyan
             font.family: "B612"
             font.pixelSize: 11
             font.bold: true
         }
 
         Text {
-            text: "READY"
-            color: root.green
+            visible: root.tabletVariant
+            anchors.right: parent.right
+            anchors.rightMargin: 18
+            anchors.verticalCenter: parent.verticalCenter
+            text: "BAT  --%"
+            color: root.secondary
             font.family: "B612 Mono"
-            font.pixelSize: 16
-            font.bold: true
+            font.pixelSize: 11
         }
     }
 
     Rectangle {
-        x: 285
+        anchors.right: operatorBlock.left
+        anchors.verticalCenter: parent.verticalCenter
         width: 1
         height: 38
-        anchors.verticalCenter: parent.verticalCenter
         color: root.divider
     }
 
+    // Flexible central FLIGHT DATA zone.
     Row {
-        x: 308
+        id: flightData
+        anchors.left: logoBlock.right
+        anchors.leftMargin: 18
+        anchors.right: operatorBlock.left
+        anchors.rightMargin: 18
         anchors.verticalCenter: parent.verticalCenter
-        spacing: 22
+        spacing: 24
 
         Text {
             text: "ETD 10:30"
@@ -108,71 +136,19 @@ Item {
             font.family: "B612 Mono"
             font.pixelSize: 13
         }
-    }
-
-    Rectangle {
-        x: 720
-        width: 1
-        height: 38
-        anchors.verticalCenter: parent.verticalCenter
-        color: root.divider
-    }
-
-    Text {
-        x: 742
-        anchors.verticalCenter: parent.verticalCenter
-        text: "WARNING"
-        color: root.amber
-        font.family: "B612 Mono"
-        font.pixelSize: 11
-        font.bold: true
-    }
-
-    Row {
-        anchors.right: operatorBlock.left
-        anchors.rightMargin: 24
-        anchors.verticalCenter: parent.verticalCenter
-        spacing: 18
 
         Text {
-            text: "C2  CONNECTED"
+            text: "READY"
             color: root.green
             font.family: "B612 Mono"
-            font.pixelSize: 11
+            font.pixelSize: 13
             font.bold: true
         }
 
         Text {
-            text: "GNSS  OK"
-            color: root.green
+            text: "WARNING"
+            color: root.amber
             font.family: "B612 Mono"
-            font.pixelSize: 11
-        }
-    }
-
-    Rectangle {
-        id: operatorDivider
-        anchors.right: operatorBlock.left
-        anchors.rightMargin: 12
-        width: 1
-        height: 38
-        anchors.verticalCenter: parent.verticalCenter
-        color: root.divider
-    }
-
-    Item {
-        id: operatorBlock
-        width: 86
-        height: parent.height
-        anchors.right: parent.right
-        anchors.rightMargin: 18
-
-        Text {
-            anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-            text: "PILOT"
-            color: root.cyan
-            font.family: "B612"
             font.pixelSize: 11
             font.bold: true
         }
