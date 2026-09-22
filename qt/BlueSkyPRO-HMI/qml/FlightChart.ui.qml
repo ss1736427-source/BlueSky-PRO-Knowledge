@@ -11,6 +11,7 @@ Item {
     property color secondary: "#BFBFBF"
     property color muted: "#7F7F7F"
     property color divider: "#202020"
+    property bool missionVisible: true
 
     Rectangle {
         anchors.fill: parent
@@ -18,6 +19,7 @@ Item {
     }
 
     Text {
+        visible: root.missionVisible
         anchors.horizontalCenter: parent.horizontalCenter
         y: 28
         text: "FLIGHT CHART"
@@ -28,6 +30,7 @@ Item {
     }
 
     Text {
+        visible: root.missionVisible
         anchors.horizontalCenter: parent.horizontalCenter
         y: 58
         text: "MAP DESIGN PENDING"
@@ -37,6 +40,7 @@ Item {
     }
 
     Rectangle {
+        visible: root.missionVisible
         anchors.centerIn: parent
         width: Math.min(720, parent.width - 80)
         height: 220
@@ -77,4 +81,13 @@ Item {
             }
         }
     }
+    Text {
+        visible: !root.missionVisible
+        anchors.centerIn: parent
+        text: "NO ACTIVE MISSION"
+        color: root.muted
+        font.family: "B612 Mono"
+        font.pixelSize: 12
+    }
+
 }
