@@ -15,6 +15,8 @@ Item {
     property bool leftPanelOpen: true
     property bool rightPanelOpen: true
     property bool missionVisible: true
+    property bool missionReady: false
+    property bool warningActive: true
     property int selectedUavIndex: -1
     property string uavDecision: ""
     property string lastJournalEvent: ""
@@ -36,6 +38,8 @@ Item {
         anchors.right: parent.right
         height: root.headerHeight
         tabletVariant: false
+        ready: root.missionReady
+        warningActive: root.warningActive
     }
 
     Item {
@@ -71,6 +75,8 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             width: root.rightPanelOpen ? root.rightWidth : 0
+            missionReady: root.missionReady
+            warningActive: root.warningActive
         }
     }
 
