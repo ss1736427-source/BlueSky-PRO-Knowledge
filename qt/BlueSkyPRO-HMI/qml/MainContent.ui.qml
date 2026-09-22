@@ -14,6 +14,7 @@ Item {
     property int toolbarHeight: 54
     property bool leftPanelOpen: true
     property bool rightPanelOpen: true
+    property bool missionVisible: true
     property int selectedUavIndex: -1
     property string uavDecision: ""
     property string lastJournalEvent: ""
@@ -34,7 +35,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         height: root.headerHeight
-        tabletVariant: root.width < 1500
+        tabletVariant: false
     }
 
     Item {
@@ -50,6 +51,9 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             width: root.leftPanelOpen ? root.leftWidth : 0
+            missionVisible: root.missionVisible
+            onHideMissionRequested: root.missionVisible = false
+            onRestoreMissionRequested: root.missionVisible = true
         }
 
         FlightChart {
@@ -58,6 +62,7 @@ Item {
             anchors.right: rightPanel.left
             anchors.top: parent.top
             anchors.bottom: parent.bottom
+            missionVisible: root.missionVisible
         }
 
         RightPanel {
