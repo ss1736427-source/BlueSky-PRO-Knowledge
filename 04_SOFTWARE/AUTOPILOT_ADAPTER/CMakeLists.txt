@@ -223,3 +223,8 @@ add_executable(insurance_preflight_engine_test ../INSURANCE/insurance_preflight_
 target_link_libraries(insurance_preflight_engine_test PRIVATE bluesky_insurance_preflight)
 target_include_directories(insurance_preflight_engine_test PRIVATE ../INSURANCE)
 add_test(NAME insurance_preflight_engine_test COMMAND insurance_preflight_engine_test)
+
+add_executable(insurance_readiness_gate_test ../INSURANCE/insurance_readiness_gate_test.cpp)
+target_link_libraries(insurance_readiness_gate_test PRIVATE bluesky_insurance_preflight)
+target_include_directories(insurance_readiness_gate_test PRIVATE ../INSURANCE)
+add_test(NAME insurance_readiness_gate_test COMMAND insurance_readiness_gate_test)
