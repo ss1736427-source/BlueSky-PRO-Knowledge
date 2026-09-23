@@ -46,6 +46,7 @@ Fixed elements never participate in workspace reordering.
 - Active context is visually distinct but does not become a command/flight-control state.
 - Working typography: B612 Mono Bold 16 px for toolbar labels; IBM Plex Sans Condensed 9 px for DS annotation/reference text.
 - TIME is a fixed system element. The runtime displays the current clock in `HH:MM` format. The DS visual reference uses `HH:MM` as the format placeholder and must not contain a fabricated clock value.
+- Right-side system controls are right-anchored to the toolbar content edge. Reference geometry uses a compact TIME width of 72 px and ☰ width of 48 px, with 16 px spacing between the divider, TIME and ☰. This keeps system controls at minimum practical width without affecting workspace controls.
 
 ## Qt Design Studio source
 
