@@ -2,7 +2,7 @@
 id: TEST-075
 type: test_case
 title: Insurance Preflight Eligibility and Policy Coverage Test
-status: draft
+status: verified
 verification_method: test
 requirements:
   - SYS-REQ-052
@@ -41,4 +41,18 @@ Verify that the preflight insurance gate evaluates the specific INSURED_UAV, app
 
 ## Execution
 
-Not run. Verification result remains OPEN until controlled execution evidence is recorded.
+**VERIFIED — CI Run #687 (2026-09-23), workflow "BlueSky Autopilot Adapter", build-and-test job succeeded.**
+
+The controlled C++ preflight test was compiled and executed by CTest:
+
+- `insurance_preflight_engine_test`: **Passed** (CTest #47/49).
+- The test suite covers valid policy, expiry, UAV mismatch, non-applicable insurance, insufficient liability, ambiguous coverage, Remote ID requirement, and stable snapshot digest.
+- The readiness-gate implementation consumes the explicit `insurance_applicable` result; its regression coverage is included in the same CI build/test workflow.
+
+Evidence:
+- workflow run ID: `35865428007`
+- job ID: `107195686232`
+- head commit: `06c1cc4c9ac1e8c9779e554cca694ef1a7fc11f7`
+- merged to main as `e67ddcf993eabb4e7fc9fad7f2e898f3a6d04514`
+
+Verification conclusion: **PASS / VERIFIED** for the deterministic preflight engine and readiness-gate boundary. Legal applicability and insurer contractual interpretation remain ruleset/provider inputs rather than AI-derived decisions.
