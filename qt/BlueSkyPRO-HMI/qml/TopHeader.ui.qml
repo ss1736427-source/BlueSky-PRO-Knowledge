@@ -249,8 +249,6 @@ Item {
         height: Math.min(root.structuralDividerHeight, parent.height - 16)
         color: root.accent
         antialiasing: false
-        layer.enabled: true
-        layer.smooth: false
         z: 90
     }
 
@@ -261,8 +259,6 @@ Item {
         height: Math.min(root.structuralDividerHeight, parent.height - 16)
         color: root.accent
         antialiasing: false
-        layer.enabled: true
-        layer.smooth: false
         z: 90
     }
 
@@ -273,8 +269,6 @@ Item {
         height: Math.min(root.structuralDividerHeight, parent.height - 16)
         color: root.accent
         antialiasing: false
-        layer.enabled: true
-        layer.smooth: false
         z: 90
     }
 
@@ -285,8 +279,6 @@ Item {
         height: Math.min(root.structuralDividerHeight, parent.height - 16)
         color: root.accent
         antialiasing: false
-        layer.enabled: true
-        layer.smooth: false
         z: 90
     }
 
@@ -297,8 +289,6 @@ Item {
         height: Math.min(root.structuralDividerHeight, parent.height - 16)
         color: root.accent
         antialiasing: false
-        layer.enabled: true
-        layer.smooth: false
         z: 90
     }
 
@@ -309,8 +299,6 @@ Item {
         height: Math.min(root.structuralDividerHeight, parent.height - 16)
         color: root.accent
         antialiasing: false
-        layer.enabled: true
-        layer.smooth: false
         z: 90
     }
 
