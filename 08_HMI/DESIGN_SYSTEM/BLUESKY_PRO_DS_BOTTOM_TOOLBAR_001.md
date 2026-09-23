@@ -32,10 +32,11 @@ Fixed elements never participate in workspace reordering.
 
 ## Visual rules
 
-- Primary background: `#050A12` (controlled Design System source of truth)
+- Main background: `#050A12` (controlled Design System source of truth)
+- Toolbar/panel surface: `#08111D`
+- Button/card surface: `#0C1725`
+- Active/selected surface: `#111F30`
 - Primary text: `#FFFFFF`
-- Panel surface: `#08111D`
-- Card/selected surface: `#0C1725` / `#111F30`
 - Service text/borders: `#7F7F7F`
 - Active workspace accent: `#32FFFF`
 - 1 px service/component borders.
