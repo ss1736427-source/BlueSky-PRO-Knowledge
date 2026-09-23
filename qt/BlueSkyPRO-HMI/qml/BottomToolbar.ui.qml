@@ -34,6 +34,23 @@ Item {
         toolModel.move(fromIndex, toIndex, 1)
     }
 
+    function setToolEnabled(tool, enabled) {
+        var current = []
+        for (var i = 0; i < toolModel.count; ++i)
+            current.push(toolModel.get(i).tool)
+
+        var exists = current.indexOf(tool) >= 0
+        if (enabled && !exists) {
+            var insertIndex = current.length
+            toolModel.append({ tool: tool })
+            return
+        }
+
+        if (!enabled && exists) {
+            toolModel.remove(current.indexOf(tool), 1)
+        }
+    }
+
     Rectangle {
         anchors.fill: parent
         color: root.bg
