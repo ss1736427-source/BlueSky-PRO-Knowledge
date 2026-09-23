@@ -12,7 +12,7 @@ struct RiskObservation {
 struct ExposureObservation {
     std::string exposure_id; std::string uav_id; double flight_hours{0.0}; std::uint64_t cycles{0};
     bool bvlos{false}; double altitude_hours{0.0}; double adverse_weather_hours{0.0};
-    std::string configuration_id; std::string source_record_id; bool evidence_valid{false};
+    std::string configuration_id; std::string source_record_id; bool evidence_valid{false}; std::int64_t timestamp_epoch{0};
 };
 struct ClaimsEvidence {
     std::string claim_id; std::string uav_id; std::string event_id; std::vector<std::string> evidence_refs;
