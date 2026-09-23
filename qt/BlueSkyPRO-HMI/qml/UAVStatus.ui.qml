@@ -61,4 +61,25 @@ Item {
             }
         }
     }
+    PanelSettingsButton {
+        id: panelSettings
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.margins: 10
+        z: 400
+        onClicked: panelSettingsPopup.open = !panelSettingsPopup.open
+    }
+
+    PanelSettingsPopup {
+        id: panelSettingsPopup
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.topMargin: 44
+        width: 260
+        height: 254
+        title: "UAV PANEL SETTINGS"
+        tools: ["UAV Selection", "Control / C2", "Navigation", "Energy", "Payload / Equipment", "Maintenance", "Diagnostics", "Displayed Parameters"]
+        onClosed: open = false
+    }
+
 }
