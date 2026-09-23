@@ -4,6 +4,8 @@ Item {
     id: root
 
     // Top Header — composition workbench variant for Qt Design Studio.
+    // Design Studio workbench size only; runtime width remains adaptive through parent anchors.
+    implicitWidth: 1920
     implicitHeight: root.headerHeight
 
     property int headerHeight: 86
