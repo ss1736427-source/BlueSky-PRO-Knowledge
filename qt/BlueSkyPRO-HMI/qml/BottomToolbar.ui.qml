@@ -34,6 +34,13 @@ Item {
         toolModel.move(fromIndex, toIndex, 1)
     }
 
+    function enabledToolNames() {
+        var names = []
+        for (var i = 0; i < toolModel.count; ++i)
+            names.push(toolModel.get(i).tool)
+        return names
+    }
+
     function setToolEnabled(tool, enabled) {
         var current = []
         for (var i = 0; i < toolModel.count; ++i)
