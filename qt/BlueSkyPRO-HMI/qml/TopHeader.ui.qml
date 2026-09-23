@@ -349,4 +349,25 @@ Item {
 
     // Central composition always occupies the exact adaptive space between the two equal anchors.
 
+    PanelSettingsButton {
+        id: panelSettings
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.margins: 10
+        z: 400
+        onClicked: panelSettingsPopup.open = !panelSettingsPopup.open
+    }
+
+    PanelSettingsPopup {
+        id: panelSettingsPopup
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.topMargin: 44
+        width: 260
+        height: 254
+        title: "HEADER SETTINGS"
+        tools: ["ETD", "TOT", "TRIP", "ETA", "READY", "WARNING", "Operator", "Optional Aggregate Status"]
+        onClosed: open = false
+    }
+
 }
