@@ -18,7 +18,7 @@ Item {
     property color red: "#FF1E14"
     property color divider: "#111F30"
     property color panel: "#08111D"
-    property color accent: "#00A3FF"
+    property color accent: "#32FFFF"
     property int borderWidth: 1
     property int borderRadius: 4
 
@@ -246,7 +246,7 @@ Item {
 
     // Structural dividers — all coordinates are in the root coordinate space.
     Rectangle {
-        x: centralComposition.x
+        x: Math.round(centralComposition.x)
         y: Math.round((parent.height - root.separatorHeight) / 2)
         width: root.separatorWidth
         height: Math.min(root.separatorHeight, parent.height - 16)
@@ -255,7 +255,7 @@ Item {
     }
 
     Rectangle {
-        x: centralComposition.x + centralComposition.width / 6
+        x: Math.round(centralComposition.x + centralComposition.width / 6)
         y: Math.round((parent.height - root.separatorHeight) / 2)
         width: root.separatorWidth
         height: Math.min(root.separatorHeight, parent.height - 16)
@@ -264,7 +264,7 @@ Item {
     }
 
     Rectangle {
-        x: centralComposition.x + centralComposition.width * 2 / 6
+        x: Math.round(centralComposition.x + centralComposition.width * 2 / 6)
         y: Math.round((parent.height - root.separatorHeight) / 2)
         width: root.separatorWidth
         height: Math.min(root.separatorHeight, parent.height - 16)
@@ -273,7 +273,7 @@ Item {
     }
 
     Rectangle {
-        x: centralComposition.x + centralComposition.width * 3 / 6
+        x: Math.round(centralComposition.x + centralComposition.width * 3 / 6)
         y: Math.round((parent.height - root.separatorHeight) / 2)
         width: root.separatorWidth
         height: Math.min(root.separatorHeight, parent.height - 16)
@@ -282,7 +282,7 @@ Item {
     }
 
     Rectangle {
-        x: centralComposition.x + centralComposition.width * 4 / 6
+        x: Math.round(centralComposition.x + centralComposition.width * 4 / 6)
         y: Math.round((parent.height - root.separatorHeight) / 2)
         width: root.separatorWidth
         height: Math.min(root.separatorHeight, parent.height - 16)
@@ -291,7 +291,7 @@ Item {
     }
 
     Rectangle {
-        x: centralComposition.x + centralComposition.width * 5 / 6
+        x: Math.round(centralComposition.x + centralComposition.width * 5 / 6)
         y: Math.round((parent.height - root.separatorHeight) / 2)
         width: root.separatorWidth
         height: Math.min(root.separatorHeight, parent.height - 16)
@@ -300,7 +300,7 @@ Item {
     }
 
     Rectangle {
-        x: centralComposition.x + centralComposition.width
+        x: Math.round(centralComposition.x + centralComposition.width)
         y: Math.round((parent.height - root.separatorHeight) / 2)
         width: root.separatorWidth
         height: Math.min(root.separatorHeight, parent.height - 16)
