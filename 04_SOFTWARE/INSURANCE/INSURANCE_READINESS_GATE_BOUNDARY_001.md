@@ -16,7 +16,7 @@ The insurance subsystem does not set Mission state, Safety state, Approval state
 
 - PASS: insurance contributes no blocking condition.
 - WARNING: non-blocking insurance information remains visible to Mission Readiness.
-- REVIEW: unresolved insurance coverage/evidence is surfaced to Mission Readiness for its configured handling; this adapter does not silently convert it to execution authority.
+- REVIEW: unresolved mandatory insurance coverage/evidence prevents Ready until the review is resolved; this adapter does not grant execution authority.
 - BLOCK: when mandatory insurance applies, the result is a readiness-blocking condition.
 - When insurance is not applicable, absence of a policy does not create an insurance-only readiness block.
 
