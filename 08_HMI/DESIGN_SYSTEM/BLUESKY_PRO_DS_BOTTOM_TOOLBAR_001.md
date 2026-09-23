@@ -32,8 +32,7 @@ Fixed elements never participate in workspace reordering.
 
 ## Visual rules
 
-- Black primary surface: `#000000`
-- Panel surface: `#050505`
+- Primary background: `#000000`
 - Primary text: `#FFFFFF`
 - Service text/borders: `#7F7F7F`
 - Active workspace accent: `#32FFFF`
@@ -41,7 +40,8 @@ Fixed elements never participate in workspace reordering.
 - Reference DS geometry: `1440 × 96`.
 - Compact persistent height; application geometry remains responsive to the host window.
 - Active context is visually distinct but does not become a command/flight-control state.
-- Working typography: B612 Mono Bold 16 px for toolbar labels/time; IBM Plex Sans Condensed 9 px for DS annotation/reference text.
+- Working typography: B612 Mono Bold 16 px for toolbar labels; IBM Plex Sans Condensed 9 px for DS annotation/reference text.
+- TIME is a fixed system element. The DS visual reference uses the label `TIME`; it must not contain a fabricated runtime clock value.
 
 ## Qt Design Studio source
 
