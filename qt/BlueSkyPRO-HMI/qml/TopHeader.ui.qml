@@ -48,6 +48,9 @@ Item {
     // Design Studio preview is commonly rendered below 100% scene scale.
     // Keep divider geometry on integer logical coordinates and disable edge AA.
     property int structuralDividerHeight: 54
+    // Physical-pixel alignment: keeps a one-device-pixel stroke stable under fractional DPI.
+    property real devicePixelRatio: Screen.devicePixelRatio
+    property real pixelStrokeWidth: 1 / root.devicePixelRatio
 
     property bool tabletVariant: width < 1500
 
@@ -229,74 +232,73 @@ Item {
         }
     }
 
-    // Structural dividers — frozen visual composition.
-    // Seven single-pixel boundaries: LOGO | ETD | TOT | TRIP | ETA | READY | WARNING | OPERATOR.
-    // Each boundary is rendered exactly once by one Rectangle primitive.
+    // Structural dividers — one physical device pixel each.
+    // Coordinates and width are snapped to the display pixel grid.
     Rectangle {
-        x: Math.round(centralComposition.x)
-        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
-        width: 1
-        height: Math.min(root.structuralDividerHeight, parent.height - 16)
+        x: Math.round((centralComposition.x) * root.devicePixelRatio) / root.devicePixelRatio
+        y: Math.round(((parent.height - root.structuralDividerHeight) / 2) * root.devicePixelRatio) / root.devicePixelRatio
+        width: root.pixelStrokeWidth
+        height: Math.round(Math.min(root.structuralDividerHeight, parent.height - 16) * root.devicePixelRatio) / root.devicePixelRatio
         color: root.accent
         antialiasing: false
         z: 90
     }
 
     Rectangle {
-        x: Math.round(centralComposition.x + centralComposition.width / 6)
-        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
-        width: 1
-        height: Math.min(root.structuralDividerHeight, parent.height - 16)
+        x: Math.round((centralComposition.x + centralComposition.width / 6) * root.devicePixelRatio) / root.devicePixelRatio
+        y: Math.round(((parent.height - root.structuralDividerHeight) / 2) * root.devicePixelRatio) / root.devicePixelRatio
+        width: root.pixelStrokeWidth
+        height: Math.round(Math.min(root.structuralDividerHeight, parent.height - 16) * root.devicePixelRatio) / root.devicePixelRatio
         color: root.accent
         antialiasing: false
         z: 90
     }
 
     Rectangle {
-        x: Math.round(centralComposition.x + centralComposition.width * 2 / 6)
-        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
-        width: 1
-        height: Math.min(root.structuralDividerHeight, parent.height - 16)
+        x: Math.round((centralComposition.x + centralComposition.width * 2 / 6) * root.devicePixelRatio) / root.devicePixelRatio
+        y: Math.round(((parent.height - root.structuralDividerHeight) / 2) * root.devicePixelRatio) / root.devicePixelRatio
+        width: root.pixelStrokeWidth
+        height: Math.round(Math.min(root.structuralDividerHeight, parent.height - 16) * root.devicePixelRatio) / root.devicePixelRatio
         color: root.accent
         antialiasing: false
         z: 90
     }
 
     Rectangle {
-        x: Math.round(centralComposition.x + centralComposition.width * 3 / 6)
-        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
-        width: 1
-        height: Math.min(root.structuralDividerHeight, parent.height - 16)
+        x: Math.round((centralComposition.x + centralComposition.width * 3 / 6) * root.devicePixelRatio) / root.devicePixelRatio
+        y: Math.round(((parent.height - root.structuralDividerHeight) / 2) * root.devicePixelRatio) / root.devicePixelRatio
+        width: root.pixelStrokeWidth
+        height: Math.round(Math.min(root.structuralDividerHeight, parent.height - 16) * root.devicePixelRatio) / root.devicePixelRatio
         color: root.accent
         antialiasing: false
         z: 90
     }
 
     Rectangle {
-        x: Math.round(centralComposition.x + centralComposition.width * 4 / 6)
-        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
-        width: 1
-        height: Math.min(root.structuralDividerHeight, parent.height - 16)
+        x: Math.round((centralComposition.x + centralComposition.width * 4 / 6) * root.devicePixelRatio) / root.devicePixelRatio
+        y: Math.round(((parent.height - root.structuralDividerHeight) / 2) * root.devicePixelRatio) / root.devicePixelRatio
+        width: root.pixelStrokeWidth
+        height: Math.round(Math.min(root.structuralDividerHeight, parent.height - 16) * root.devicePixelRatio) / root.devicePixelRatio
         color: root.accent
         antialiasing: false
         z: 90
     }
 
     Rectangle {
-        x: Math.round(centralComposition.x + centralComposition.width * 5 / 6)
-        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
-        width: 1
-        height: Math.min(root.structuralDividerHeight, parent.height - 16)
+        x: Math.round((centralComposition.x + centralComposition.width * 5 / 6) * root.devicePixelRatio) / root.devicePixelRatio
+        y: Math.round(((parent.height - root.structuralDividerHeight) / 2) * root.devicePixelRatio) / root.devicePixelRatio
+        width: root.pixelStrokeWidth
+        height: Math.round(Math.min(root.structuralDividerHeight, parent.height - 16) * root.devicePixelRatio) / root.devicePixelRatio
         color: root.accent
         antialiasing: false
         z: 90
     }
 
     Rectangle {
-        x: Math.round(centralComposition.x + centralComposition.width)
-        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
-        width: 1
-        height: Math.min(root.structuralDividerHeight, parent.height - 16)
+        x: Math.round((centralComposition.x + centralComposition.width) * root.devicePixelRatio) / root.devicePixelRatio
+        y: Math.round(((parent.height - root.structuralDividerHeight) / 2) * root.devicePixelRatio) / root.devicePixelRatio
+        width: root.pixelStrokeWidth
+        height: Math.round(Math.min(root.structuralDividerHeight, parent.height - 16) * root.devicePixelRatio) / root.devicePixelRatio
         color: root.accent
         antialiasing: false
         z: 90
