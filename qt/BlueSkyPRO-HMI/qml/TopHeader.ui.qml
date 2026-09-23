@@ -52,9 +52,7 @@ Item {
         id: headerSurface
         anchors.fill: parent
         color: root.panel
-        border.color: root.accent
-        border.width: root.borderWidth
-        radius: root.borderRadius
+        border.width: 0
     }
 
     // LEFT ANCHOR — width is a composition parameter and contains the scalable logo.
@@ -258,12 +256,26 @@ Item {
         }
     }
 
+    // Explicit center axis: TRIP | ETA.
     Rectangle {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        height: 1
-        color: root.divider
+        id: centralAxis
+        anchors.left: centralComposition.left
+        anchors.leftMargin: centralComposition.width / 2
+        anchors.verticalCenter: parent.verticalCenter
+        width: root.separatorWidth
+        height: Math.min(root.separatorHeight, parent.height - 16)
+        color: root.accent
+        z: 90
+    }
+
+    // Outer frame is drawn last so child components cannot cover the border.
+    Rectangle {
+        anchors.fill: parent
+        color: "transparent"
+        border.color: root.accent
+        border.width: root.borderWidth
+        radius: root.borderRadius
+        z: 100
     }
 
     // Central composition always occupies the exact adaptive space between the two equal anchors.
