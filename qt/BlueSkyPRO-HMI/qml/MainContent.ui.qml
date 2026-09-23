@@ -134,7 +134,14 @@ Item {
         title: "TOOLS"
         tools: ["MAP", "UAV", "FPV", "ADMIN", "VIRTUAL FLT"]
         open: root.toolMenuOpen
-        onToolToggled: bottomToolbar.setToolEnabled(tool, enabled)
+        onToolToggled: {
+            bottomToolbar.setToolEnabled(tool, enabled)
+            if (!enabled && root.activeTool === tool) {
+                var fallback = toolMenu.firstEnabled()
+                if (fallback !== "")
+                    root.activeTool = fallback
+            }
+        }
         onClosed: root.toolMenuOpen = false
     }
 
