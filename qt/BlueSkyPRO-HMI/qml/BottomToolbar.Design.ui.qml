@@ -139,7 +139,7 @@ Item {
     }
 
     Rectangle {
-        x: 778
+        x: 1134
         y: 24
         width: 108
         height: 48
@@ -169,7 +169,7 @@ Item {
         y: 24
         width: 72
         height: 48
-        color: root.buttonColor
+        color: "transparent"
         Text {
             anchors.centerIn: parent
             text: "HH:MM"
@@ -185,7 +185,7 @@ Item {
         y: 24
         width: 48
         height: 48
-        color: root.buttonColor
+        color: "transparent"
         Text {
             anchors.centerIn: parent
             text: "☰"
