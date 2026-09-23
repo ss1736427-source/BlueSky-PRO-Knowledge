@@ -249,6 +249,8 @@ signal workspaceContextRequested(string tool)
             width: 76
             height: 38
             color: "#0C1725"
+            border.color: root.divider
+            border.width: 1
 
             Text {
                 anchors.centerIn: parent
@@ -277,7 +279,9 @@ signal workspaceContextRequested(string tool)
                 visible: model.enabled
                 width: Math.max(76, toolLabel.implicitWidth + 28)
                 height: 38
-                color: root.activeTool === model.key ? "#111F30" : "#0C1725"
+                color: root.activeTool === model.key ? "#101A20" : "#0A0A0A"
+                border.color: root.activeTool === model.key ? root.cyan : root.divider
+                border.width: 1
 
                 Text {
                     id: toolLabel
@@ -299,6 +303,8 @@ signal workspaceContextRequested(string tool)
             width: 76
             height: 38
             color: "#0C1725"
+            border.color: root.divider
+            border.width: 1
 
             Text {
                 anchors.centerIn: parent
