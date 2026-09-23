@@ -19,7 +19,7 @@ Item {
     property color divider: "#111F30"
     property color panel: "#08111D"
     property color accent: "#00A3FF"
-    property int borderWidth: 2
+    property int borderWidth: 1
     property int borderRadius: 4
 
     property string etd: "10:30"
@@ -44,7 +44,7 @@ Item {
     property int valueSize: 18
     property int headingValueGap: 3
     property int separatorHeight: 54
-    property int separatorWidth: 2
+    property int separatorWidth: 1
 
     property bool tabletVariant: width < 1500
 
