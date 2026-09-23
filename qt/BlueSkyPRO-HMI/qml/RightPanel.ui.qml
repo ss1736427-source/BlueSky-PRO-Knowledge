@@ -229,4 +229,25 @@ Item {
         font.family: "B612"
         font.pixelSize: 10
     }
+    PanelSettingsButton {
+        id: panelSettings
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.margins: 10
+        z: 400
+        onClicked: panelSettingsPopup.open = !panelSettingsPopup.open
+    }
+
+    PanelSettingsPopup {
+        id: panelSettingsPopup
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.topMargin: 44
+        width: 260
+        height: 230
+        title: "RIGHT PANEL SETTINGS"
+        tools: ["Checklist", "Warnings / Corrections", "Readiness", "Validation", "Send Flight Plan", "Mission Actions", "Safety Gate"]
+        onClosed: open = false
+    }
+
 }
