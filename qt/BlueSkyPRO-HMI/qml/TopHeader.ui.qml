@@ -310,13 +310,42 @@ Item {
         z: 90
     }
 
-    // Outer frame is drawn last so child components cannot cover the border.
+    // Outer frame: explicit 1px primitives, same as every structural divider.
+    // Do not use Rectangle.border here: its rasterization differs from the divider
+    // rectangles, especially at Design Studio zoom levels.
     Rectangle {
-        anchors.fill: parent
-        color: "transparent"
-        border.color: root.accent
-        border.width: root.headerStrokeWidth
-        radius: root.borderRadius
+        x: 0
+        y: 0
+        width: parent.width
+        height: root.headerStrokeWidth
+        color: root.accent
+        z: 100
+    }
+
+    Rectangle {
+        x: 0
+        y: parent.height - root.headerStrokeWidth
+        width: parent.width
+        height: root.headerStrokeWidth
+        color: root.accent
+        z: 100
+    }
+
+    Rectangle {
+        x: 0
+        y: 0
+        width: root.headerStrokeWidth
+        height: parent.height
+        color: root.accent
+        z: 100
+    }
+
+    Rectangle {
+        x: parent.width - root.headerStrokeWidth
+        y: 0
+        width: root.headerStrokeWidth
+        height: parent.height
+        color: root.accent
         z: 100
     }
 
