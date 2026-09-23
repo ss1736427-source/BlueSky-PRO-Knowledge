@@ -229,8 +229,19 @@ Item {
         }
     }
 
-    // Structural dividers — five interior separators only.
-    // Anchor boundaries are not redrawn here; this prevents boundary double-strokes.
+    // Structural dividers — frozen visual composition.
+    // Seven single-pixel boundaries: LOGO | ETD | TOT | TRIP | ETA | READY | WARNING | OPERATOR.
+    // Each boundary is rendered exactly once by one Rectangle primitive.
+    Rectangle {
+        x: Math.round(centralComposition.x)
+        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
+        width: 1
+        height: Math.min(root.structuralDividerHeight, parent.height - 16)
+        color: root.accent
+        antialiasing: false
+        z: 90
+    }
+
     Rectangle {
         x: Math.round(centralComposition.x + centralComposition.width / 6)
         y: Math.round((parent.height - root.structuralDividerHeight) / 2)
@@ -273,6 +284,16 @@ Item {
 
     Rectangle {
         x: Math.round(centralComposition.x + centralComposition.width * 5 / 6)
+        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
+        width: 1
+        height: Math.min(root.structuralDividerHeight, parent.height - 16)
+        color: root.accent
+        antialiasing: false
+        z: 90
+    }
+
+    Rectangle {
+        x: Math.round(centralComposition.x + centralComposition.width)
         y: Math.round((parent.height - root.structuralDividerHeight) / 2)
         width: 1
         height: Math.min(root.structuralDividerHeight, parent.height - 16)
