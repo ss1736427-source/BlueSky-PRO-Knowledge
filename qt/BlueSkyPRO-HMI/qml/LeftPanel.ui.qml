@@ -271,4 +271,25 @@ Item {
         }
     }
 
+    PanelSettingsButton {
+        id: panelSettings
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.margins: 10
+        z: 400
+        onClicked: panelSettingsPopup.open = !panelSettingsPopup.open
+    }
+
+    PanelSettingsPopup {
+        id: panelSettingsPopup
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.topMargin: 44
+        width: 260
+        height: 230
+        title: "LEFT PANEL SETTINGS"
+        tools: ["Mission Templates", "Mission ID", "Mission Parameters", "UAV Assignment", "Task Distribution", "Mission Optimization", "Constraints"]
+        onClosed: open = false
+    }
+
 }
