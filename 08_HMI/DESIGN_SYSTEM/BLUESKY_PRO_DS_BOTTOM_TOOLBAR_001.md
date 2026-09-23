@@ -13,13 +13,13 @@ Canonical Design System component for persistent workspace navigation and panel 
 
 ## Structure
 
-`LEFT ◀ | UAV | MAP | ADMIN | FPV | VIRTUAL FLT | RIGHT ▶ | TIME | ☰ TOOLS`
+`LEFT ◀ | UAV | MAP | ADMIN | FPV | VIRTUAL FLT | RIGHT ▶ | TIME | ☰`
 
 ### Fixed elements
 - LEFT ◀
 - RIGHT ▶
 - TIME
-- ☰ TOOLS
+- ☰
 
 ### Configurable workspace contexts
 - UAV
@@ -73,7 +73,7 @@ The two files are intentionally separated so Qt Design Studio can edit the visua
 3. Disabling the active context immediately selects the first enabled context in saved order.
 4. At least one workspace context must remain enabled.
 5. Re-enabled contexts return to their saved position.
-6. TOOLS configures the workspace toolbar; it is not a workspace context.
+6. ☰ configures the workspace toolbar; it is not a workspace context.
 7. LEFT/RIGHT control panel visibility and remain fixed.
 8. TIME is a system element and remains fixed.
 9. Toolbar configuration changes presentation/navigation only.
