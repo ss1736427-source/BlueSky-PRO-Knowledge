@@ -20,7 +20,8 @@ public:
         assessment.insurance_decision = preflight.decision;
         assessment.blocks_readiness =
             assessment.mandatory_insurance_applicable &&
-            preflight.decision == InsuranceDecision::Block;
+            (preflight.decision == InsuranceDecision::Block ||
+             preflight.decision == InsuranceDecision::Review);
         return assessment;
     }
 };
