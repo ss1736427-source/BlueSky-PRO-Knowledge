@@ -245,6 +245,7 @@ Item {
         y: Math.round((parent.height - root.structuralDividerHeight) / 2)
         width: root.headerStrokeWidth
         height: Math.min(root.structuralDividerHeight, parent.height - 16)
+        antialiasing: false
         color: root.accent
         z: 90
     }
@@ -254,6 +255,7 @@ Item {
         y: Math.round((parent.height - root.structuralDividerHeight) / 2)
         width: root.headerStrokeWidth
         height: Math.min(root.structuralDividerHeight, parent.height - 16)
+        antialiasing: false
         color: root.accent
         z: 90
     }
@@ -273,6 +275,7 @@ Item {
         y: Math.round((parent.height - root.structuralDividerHeight) / 2)
         width: root.headerStrokeWidth
         height: Math.min(root.structuralDividerHeight, parent.height - 16)
+        antialiasing: false
         color: root.accent
         z: 90
     }
@@ -282,6 +285,7 @@ Item {
         y: Math.round((parent.height - root.structuralDividerHeight) / 2)
         width: root.headerStrokeWidth
         height: Math.min(root.structuralDividerHeight, parent.height - 16)
+        antialiasing: false
         color: root.accent
         z: 90
     }
@@ -291,6 +295,7 @@ Item {
         y: Math.round((parent.height - root.structuralDividerHeight) / 2)
         width: root.headerStrokeWidth
         height: Math.min(root.structuralDividerHeight, parent.height - 16)
+        antialiasing: false
         color: root.accent
         z: 90
     }
@@ -313,6 +318,7 @@ Item {
         y: parent.height - root.headerStrokeWidth
         width: parent.width
         height: root.headerStrokeWidth
+        antialiasing: false
         color: root.accent
         z: 100
     }
@@ -322,6 +328,7 @@ Item {
         y: 0
         width: root.headerStrokeWidth
         height: parent.height
+        antialiasing: false
         color: root.accent
         z: 100
     }
@@ -331,6 +338,7 @@ Item {
         y: 0
         width: root.headerStrokeWidth
         height: parent.height
+        antialiasing: false
         color: root.accent
         z: 100
     }
