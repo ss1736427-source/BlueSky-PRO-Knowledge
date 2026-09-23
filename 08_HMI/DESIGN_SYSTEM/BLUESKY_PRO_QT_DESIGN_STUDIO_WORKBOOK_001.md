@@ -130,6 +130,45 @@ Rules:
 - ETA = estimated mission landing;
 - individual UAV timing remains in UAV context.
 
+
+### 6.1 Top Header composition workbench
+
+The current Top Header visual implementation is a **working composition variant** for Qt Design Studio review.
+
+Geometry:
+
+`LEFT LOGO ANCHOR | ETD | TOT | TRIP | ETA | READY | WARNING | RIGHT OPERATOR ANCHOR`
+
+Rules:
+- left and right anchor fields use equal outer geometry;
+- LOGO is scalable inside the left anchor;
+- OPERATOR is a dedicated compact card inside the right anchor;
+- the six central sectors fill the adaptive space between the two anchors;
+- all six central sectors have equal width;
+- the geometric center is between TRIP and ETA;
+- each sector centers its heading and value on one vertical axis;
+- values are placed directly below abbreviations/status headings;
+- vertical separators divide the central sectors;
+- Header geometry remains adjustable until visual review is complete.
+
+Current QML components:
+- `TopHeader.ui.qml`
+- `HeaderSector.ui.qml`
+
+Working composition controls include:
+- header height;
+- equal anchor width;
+- logo scale and visual dimensions;
+- operator icon/label scale;
+- heading/value sizes;
+- heading-to-value gap;
+- separator height/width.
+
+The working variant is documented separately in:
+`BLUESKY_PRO_TOP_HEADER_COMPOSITION_WORKING_001.md`
+
+This geometry is not frozen production geometry.
+
 ## 7. LEFT PANEL
 
 Purpose: mission context and Mission Templates.
