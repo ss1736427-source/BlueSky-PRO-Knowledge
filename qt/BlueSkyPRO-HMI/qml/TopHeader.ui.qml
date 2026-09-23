@@ -9,14 +9,14 @@ Item {
     implicitHeight: root.headerHeight
 
     property int headerHeight: 86
-    property color bg: "#000000"
+    property color bg: "#050A12"
     property color text: "#FFFFFF"
     property color secondary: "#BFBFBF"
     property color muted: "#7F7F7F"
     property color green: "#64FF00"
     property color amber: "#FFD339"
     property color red: "#FF1E14"
-    property color divider: "#202020"
+    property color divider: "#111F30"
 
     property string etd: "10:30"
     property string tot: "—"
@@ -107,7 +107,7 @@ Item {
                     height: root.operatorIconSize
                     radius: width / 2
                     anchors.horizontalCenter: parent.horizontalCenter
-                    color: "#101010"
+                    color: "#0C1725"
                     border.color: root.secondary
                     border.width: 1
 
