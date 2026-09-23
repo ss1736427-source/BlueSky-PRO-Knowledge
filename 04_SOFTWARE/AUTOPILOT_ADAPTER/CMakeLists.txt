@@ -228,3 +228,11 @@ add_executable(insurance_readiness_gate_test ../INSURANCE/insurance_readiness_ga
 target_link_libraries(insurance_readiness_gate_test PRIVATE bluesky_insurance_preflight)
 target_include_directories(insurance_readiness_gate_test PRIVATE ../INSURANCE)
 add_test(NAME insurance_readiness_gate_test COMMAND insurance_readiness_gate_test)
+
+add_library(bluesky_insurance_uav_history STATIC ../INSURANCE/insurance_uav_history.cpp)
+target_include_directories(bluesky_insurance_uav_history PUBLIC ../INSURANCE)
+target_compile_features(bluesky_insurance_uav_history PUBLIC cxx_std_20)
+add_executable(insurance_uav_history_test ../INSURANCE/insurance_uav_history_test.cpp)
+target_link_libraries(insurance_uav_history_test PRIVATE bluesky_insurance_uav_history)
+target_include_directories(insurance_uav_history_test PRIVATE ../INSURANCE)
+add_test(NAME insurance_uav_history_test COMMAND insurance_uav_history_test)
