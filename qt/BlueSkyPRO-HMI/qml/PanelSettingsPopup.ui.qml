@@ -6,6 +6,8 @@ Item {
     property string title: "PANEL SETTINGS"
     property var tools: []
     property bool open: false
+    property var enabledTools: []
+    signal toolToggled(string tool, bool enabled)
 
     signal closed()
 
@@ -48,7 +50,14 @@ Item {
 
             delegate: Text {
                 width: parent.width
-                text: "☐  " + modelData
+                text: (root.enabledTools.indexOf(modelData) >= 0 ? "☑  " : "☐  ") + modelData
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        var enabled = root.enabledTools.indexOf(modelData) >= 0
+                        root.toolToggled(modelData, !enabled)
+                    }
+                }
                 color: "#BFBFBF"
                 font.family: "B612"
                 font.pixelSize: 10
