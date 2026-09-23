@@ -6,7 +6,7 @@ Item {
     width: 1440
     height: 96
 
-    property color backgroundColor: "#000000"
+    property color backgroundColor: "#050A12"
     property color primaryColor: "#FFFFFF"
     property color serviceColor: "#7F7F7F"
     property color activeColor: "#32FFFF"
