@@ -15,8 +15,7 @@ public:
     static InsuranceReadinessAssessment assess(
         const InsurancePreflightResult& preflight) noexcept {
         InsuranceReadinessAssessment assessment;
-        assessment.mandatory_insurance_applicable =
-            preflight.minimum_liability_rub > 0.0;
+        assessment.mandatory_insurance_applicable = preflight.insurance_applicable;
         assessment.insurance_decision = preflight.decision;
         assessment.blocks_readiness =
             assessment.mandatory_insurance_applicable &&
