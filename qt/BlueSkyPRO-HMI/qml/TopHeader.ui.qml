@@ -43,8 +43,6 @@ Item {
     property int headingSize: 11
     property int valueSize: 18
     property int headingValueGap: 3
-    property int separatorHeight: 54
-    property int separatorWidth: 1
     // One canonical stroke token for every Header line.
     property int headerStrokeWidth: 1
 
@@ -159,9 +157,6 @@ Item {
             headingSize: root.headingSize
             valueSize: root.valueSize
             headingValueGap: root.headingValueGap
-            separatorHeight: root.separatorHeight
-            separatorWidth: root.separatorWidth
-            showRightSeparator: false
             anchors.left: parent.left
         }
 
@@ -175,9 +170,6 @@ Item {
             headingSize: root.headingSize
             valueSize: root.valueSize
             headingValueGap: root.headingValueGap
-            separatorHeight: root.separatorHeight
-            separatorWidth: root.separatorWidth
-            showRightSeparator: false
             anchors.left: etdSector.right
         }
 
@@ -191,9 +183,6 @@ Item {
             headingSize: root.headingSize
             valueSize: root.valueSize
             headingValueGap: root.headingValueGap
-            separatorHeight: root.separatorHeight
-            separatorWidth: root.separatorWidth
-            showRightSeparator: false
             anchors.left: totSector.right
         }
 
@@ -207,9 +196,6 @@ Item {
             headingSize: root.headingSize
             valueSize: root.valueSize
             headingValueGap: root.headingValueGap
-            separatorHeight: root.separatorHeight
-            separatorWidth: root.separatorWidth
-            showRightSeparator: false
             anchors.left: tripSector.right
         }
 
@@ -223,9 +209,6 @@ Item {
             headingSize: root.headingSize
             valueSize: root.valueSize
             headingValueGap: root.headingValueGap
-            separatorHeight: root.separatorHeight
-            separatorWidth: root.separatorWidth
-            showRightSeparator: false
             anchors.left: etaSector.right
         }
 
@@ -239,9 +222,6 @@ Item {
             headingSize: root.headingSize
             valueSize: root.valueSize
             headingValueGap: root.headingValueGap
-            separatorHeight: root.separatorHeight
-            separatorWidth: root.separatorWidth
-            showRightSeparator: false
             anchors.left: readySector.right
         }
     }
