@@ -43,10 +43,9 @@ Item {
     property int headingSize: 11
     property int valueSize: 18
     property int headingValueGap: 3
-    property int separatorHeight: 54
-    property int separatorWidth: 1
     // One canonical stroke token for every Header line.
     property int headerStrokeWidth: 1
+    property int structuralDividerHeight: 54
 
     property bool tabletVariant: width < 1500
 
@@ -159,9 +158,6 @@ Item {
             headingSize: root.headingSize
             valueSize: root.valueSize
             headingValueGap: root.headingValueGap
-            separatorHeight: root.separatorHeight
-            separatorWidth: root.separatorWidth
-            showRightSeparator: false
             anchors.left: parent.left
         }
 
@@ -175,9 +171,6 @@ Item {
             headingSize: root.headingSize
             valueSize: root.valueSize
             headingValueGap: root.headingValueGap
-            separatorHeight: root.separatorHeight
-            separatorWidth: root.separatorWidth
-            showRightSeparator: false
             anchors.left: etdSector.right
         }
 
@@ -191,9 +184,6 @@ Item {
             headingSize: root.headingSize
             valueSize: root.valueSize
             headingValueGap: root.headingValueGap
-            separatorHeight: root.separatorHeight
-            separatorWidth: root.separatorWidth
-            showRightSeparator: false
             anchors.left: totSector.right
         }
 
@@ -207,9 +197,6 @@ Item {
             headingSize: root.headingSize
             valueSize: root.valueSize
             headingValueGap: root.headingValueGap
-            separatorHeight: root.separatorHeight
-            separatorWidth: root.separatorWidth
-            showRightSeparator: false
             anchors.left: tripSector.right
         }
 
@@ -223,9 +210,6 @@ Item {
             headingSize: root.headingSize
             valueSize: root.valueSize
             headingValueGap: root.headingValueGap
-            separatorHeight: root.separatorHeight
-            separatorWidth: root.separatorWidth
-            showRightSeparator: false
             anchors.left: etaSector.right
         }
 
@@ -239,9 +223,6 @@ Item {
             headingSize: root.headingSize
             valueSize: root.valueSize
             headingValueGap: root.headingValueGap
-            separatorHeight: root.separatorHeight
-            separatorWidth: root.separatorWidth
-            showRightSeparator: false
             anchors.left: readySector.right
         }
     }
@@ -249,63 +230,63 @@ Item {
     // Structural dividers — all coordinates are in the root coordinate space.
     Rectangle {
         x: Math.round(centralComposition.x)
-        y: Math.round((parent.height - root.separatorHeight) / 2)
+        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
         width: root.headerStrokeWidth
-        height: Math.min(root.separatorHeight, parent.height - 16)
+        height: Math.min(root.structuralDividerHeight, parent.height - 16)
         color: root.accent
         z: 90
     }
 
     Rectangle {
         x: Math.round(centralComposition.x + centralComposition.width / 6)
-        y: Math.round((parent.height - root.separatorHeight) / 2)
+        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
         width: root.headerStrokeWidth
-        height: Math.min(root.separatorHeight, parent.height - 16)
+        height: Math.min(root.structuralDividerHeight, parent.height - 16)
         color: root.accent
         z: 90
     }
 
     Rectangle {
         x: Math.round(centralComposition.x + centralComposition.width * 2 / 6)
-        y: Math.round((parent.height - root.separatorHeight) / 2)
+        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
         width: root.headerStrokeWidth
-        height: Math.min(root.separatorHeight, parent.height - 16)
+        height: Math.min(root.structuralDividerHeight, parent.height - 16)
         color: root.accent
         z: 90
     }
 
     Rectangle {
         x: Math.round(centralComposition.x + centralComposition.width * 3 / 6)
-        y: Math.round((parent.height - root.separatorHeight) / 2)
+        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
         width: root.headerStrokeWidth
-        height: Math.min(root.separatorHeight, parent.height - 16)
+        height: Math.min(root.structuralDividerHeight, parent.height - 16)
         color: root.accent
         z: 91
     }
 
     Rectangle {
         x: Math.round(centralComposition.x + centralComposition.width * 4 / 6)
-        y: Math.round((parent.height - root.separatorHeight) / 2)
+        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
         width: root.headerStrokeWidth
-        height: Math.min(root.separatorHeight, parent.height - 16)
+        height: Math.min(root.structuralDividerHeight, parent.height - 16)
         color: root.accent
         z: 90
     }
 
     Rectangle {
         x: Math.round(centralComposition.x + centralComposition.width * 5 / 6)
-        y: Math.round((parent.height - root.separatorHeight) / 2)
+        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
         width: root.headerStrokeWidth
-        height: Math.min(root.separatorHeight, parent.height - 16)
+        height: Math.min(root.structuralDividerHeight, parent.height - 16)
         color: root.accent
         z: 90
     }
 
     Rectangle {
         x: Math.round(centralComposition.x + centralComposition.width)
-        y: Math.round((parent.height - root.separatorHeight) / 2)
+        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
         width: root.headerStrokeWidth
-        height: Math.min(root.separatorHeight, parent.height - 16)
+        height: Math.min(root.structuralDividerHeight, parent.height - 16)
         color: root.accent
         z: 90
     }
