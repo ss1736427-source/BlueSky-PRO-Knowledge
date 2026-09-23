@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1440" height="96" viewBox="0 0 1440 96">
 <rect width="1440" height="96" fill="#050A12"/>
-<rect x="12" y="12" width="1416" height="72" rx="2" fill="#08111D" stroke="#7F7F7F" stroke-width="1"/>
+<rect x="12" y="12" width="1416" height="72" rx="2" fill="#08111D" stroke="#32FFFF" stroke-width="1"/>
 <g font-family="B612 Mono, monospace" font-size="16" font-weight="700">
 <rect x="24" y="24" width="108" height="48" fill="#0C1725" stroke="#7F7F7F"/>
 <text x="78" y="54" fill="#FFFFFF" text-anchor="middle">◀ LEFT</text>
@@ -16,7 +16,7 @@
 <text x="687" y="54" fill="#FFFFFF" text-anchor="middle">VIRTUAL FLT</text>
 <rect x="1134" y="24" width="108" height="48" fill="#0C1725" stroke="#7F7F7F"/>
 <text x="1188" y="54" fill="#FFFFFF" text-anchor="middle">RIGHT ▶</text>
-<line x1="1258" y1="24" x2="1258" y2="72" stroke="#7F7F7F"/>
+<line x1="1258" y1="24" x2="1258" y2="72" stroke="#32FFFF"/>
 <rect x="1274" y="24" width="72" height="48" fill="none"/>
 <text x="1310" y="54" fill="#FFFFFF" text-anchor="middle">HH:MM</text>
 <rect x="1362" y="24" width="48" height="48" fill="none"/>
