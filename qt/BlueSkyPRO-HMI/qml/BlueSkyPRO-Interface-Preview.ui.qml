@@ -10,7 +10,7 @@ Item {
     // Visual preview entry point: Header + Left + Flight Chart + Right +
     // UAV Status + Context Overlay + Bottom Toolbar.
     MainContent {
-        id: interface
+        id: previewContent
         anchors.fill: parent
     }
 }
