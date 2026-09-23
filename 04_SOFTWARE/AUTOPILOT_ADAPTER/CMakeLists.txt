@@ -236,3 +236,11 @@ add_executable(insurance_uav_history_test ../INSURANCE/insurance_uav_history_tes
 target_link_libraries(insurance_uav_history_test PRIVATE bluesky_insurance_uav_history)
 target_include_directories(insurance_uav_history_test PRIVATE ../INSURANCE)
 add_test(NAME insurance_uav_history_test COMMAND insurance_uav_history_test)
+
+add_library(bluesky_insurance_uav_risk_vector STATIC ../INSURANCE/insurance_uav_risk_vector.cpp)
+target_include_directories(bluesky_insurance_uav_risk_vector PUBLIC ../INSURANCE)
+target_compile_features(bluesky_insurance_uav_risk_vector PUBLIC cxx_std_20)
+add_executable(insurance_uav_risk_vector_test ../INSURANCE/insurance_uav_risk_vector_test.cpp)
+target_link_libraries(insurance_uav_risk_vector_test PRIVATE bluesky_insurance_uav_risk_vector)
+target_include_directories(insurance_uav_risk_vector_test PRIVATE ../INSURANCE)
+add_test(NAME insurance_uav_risk_vector_test COMMAND insurance_uav_risk_vector_test)
