@@ -49,6 +49,7 @@ Item {
     property bool designStudioPreview: true
     property int previewSeparatorWidth: 2
     property int effectiveSeparatorWidth: designStudioPreview ? previewSeparatorWidth : separatorWidth
+    property int effectiveBorderWidth: designStudioPreview ? previewSeparatorWidth : borderWidth
 
     property bool tabletVariant: width < 1500
 
@@ -317,7 +318,7 @@ Item {
         anchors.fill: parent
         color: "transparent"
         border.color: root.accent
-        border.width: root.borderWidth
+        border.width: root.effectiveBorderWidth
         radius: root.borderRadius
         z: 100
     }
