@@ -204,6 +204,13 @@ Item {
         saveConfiguration()
     }
 
+    function findToolIndex(key) {
+        for (var i = 0; i < toolModel.count; ++i)
+            if (toolModel.get(i).key === key)
+                return i
+        return -1
+    }
+
     function moveTool(from, to) {
         if (from < 0 || to < 0 || from >= toolModel.count || to >= toolModel.count || from === to)
             return
@@ -217,6 +224,14 @@ Item {
     Rectangle {
         anchors.fill: parent
         color: root.bg
+    }
+
+    Timer {
+        interval: 30000
+        repeat: true
+        running: true
+        triggeredOnStart: true
+        onTriggered: clockText.text = Qt.formatTime(new Date(), "hh:mm")
     }
 
     Row {
@@ -312,6 +327,7 @@ Item {
 
             Text {
                 anchors.centerIn: parent
+                id: clockText
                 text: Qt.formatTime(new Date(), "hh:mm")
                 color: root.secondary
                 font.family: "B612 Mono"
@@ -395,8 +411,6 @@ Item {
                 border.color: root.divider
                 border.width: 1
 
-                property real pressY: 0
-                property int sourceIndex: index
 
                 Text {
                     x: 12
@@ -431,21 +445,17 @@ Item {
                             root.setToolEnabled(model.key, !model.enabled)
                     }
 
-                    onPressed: configRow.pressY = mouse.y
-
                     onPositionChanged: {
                         if (!pressed)
                             return
 
-                        var target = configList.indexAt(1, mouse.y + configRow.y)
-                        if (target < 0)
+                        var point = mapToItem(configList, mouse.x, mouse.y)
+                        var target = configList.indexAt(point.x, point.y)
+                        var current = root.findToolIndex(model.key)
+                        if (target < 0 || current < 0 || target === current)
                             return
 
-                        var current = configRow.sourceIndex
-                        if (target !== current) {
-                            root.moveTool(current, target)
-                            configRow.sourceIndex = target
-                        }
+                        root.moveTool(current, target)
                     }
                 }
             }
