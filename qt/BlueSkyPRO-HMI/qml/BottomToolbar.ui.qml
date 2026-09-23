@@ -228,6 +228,38 @@ signal workspaceContextRequested(string tool)
         color: root.bg
     }
 
+    Rectangle {
+        x: 0
+        y: 0
+        width: parent.width
+        height: 1
+        color: root.cyan
+    }
+
+    Rectangle {
+        x: 0
+        y: parent.height - 1
+        width: parent.width
+        height: 1
+        color: root.cyan
+    }
+
+    Rectangle {
+        x: 0
+        y: 0
+        width: 1
+        height: parent.height
+        color: root.cyan
+    }
+
+    Rectangle {
+        x: parent.width - 1
+        y: 0
+        width: 1
+        height: parent.height
+        color: root.cyan
+    }
+
     Timer {
         interval: 30000
         repeat: true
