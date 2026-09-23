@@ -44,7 +44,9 @@ Item {
     property int valueSize: 18
     property int headingValueGap: 3
     // One canonical stroke token for every Header line.
-    property int headerStrokeWidth: 1
+    property real headerStrokeWidth: 1.0
+    // Design Studio preview is commonly rendered below 100% scene scale.
+    // Keep divider geometry on integer logical coordinates and disable edge AA.
     property int structuralDividerHeight: 54
 
     property bool tabletVariant: width < 1500
@@ -233,6 +235,7 @@ Item {
         y: Math.round((parent.height - root.structuralDividerHeight) / 2)
         width: root.headerStrokeWidth
         height: Math.min(root.structuralDividerHeight, parent.height - 16)
+        antialiasing: false
         color: root.accent
         z: 90
     }
@@ -260,6 +263,7 @@ Item {
         y: Math.round((parent.height - root.structuralDividerHeight) / 2)
         width: root.headerStrokeWidth
         height: Math.min(root.structuralDividerHeight, parent.height - 16)
+        antialiasing: false
         color: root.accent
         z: 91
     }
@@ -299,6 +303,7 @@ Item {
         y: 0
         width: parent.width
         height: root.headerStrokeWidth
+        antialiasing: false
         color: root.accent
         z: 100
     }
