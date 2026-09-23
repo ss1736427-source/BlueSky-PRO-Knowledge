@@ -132,7 +132,7 @@ Item {
         width: 300
         height: 250
         title: "TOOLS"
-        tools: ["MAP", "UAV", "FPV", "ADMIN", "VIRTUAL FLT", "DRAG TO REORDER"]
+        tools: ["MAP", "UAV", "FPV", "ADMIN", "VIRTUAL FLT"]
         open: root.toolMenuOpen
         onToolToggled: bottomToolbar.setToolEnabled(tool, enabled)
         onClosed: root.toolMenuOpen = false
