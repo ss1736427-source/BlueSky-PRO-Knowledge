@@ -1,4 +1,5 @@
 import QtQuick
+import Qt.labs.settings
 
 Item {
     id: root
@@ -13,8 +14,205 @@ Item {
     property bool leftOpen: true
     property bool rightOpen: true
 
+    // Bottom-toolbar configuration is presentation state only.
+    // It never changes mission data, flight logic, or safety state.
+    property string activeTool: "MAP"
+    readonly property var toolDefinitions: [
+        { key: "UAV", label: "UAV" },
+        { key: "MAP", label: "MAP" },
+        { key: "ADMIN", label: "ADMIN" },
+        { key: "FPV", label: "FPV" },
+        { key: "VIRTUAL FLT", label: "VIRTUAL FLT" }
+    ]
+
     signal leftPanelToggleRequested()
     signal rightPanelToggleRequested()
+    signal toolActivated(string tool)
+    signal toolConfigurationChanged(string orderJson, string enabledJson)
+
+    Settings {
+        id: settings
+        category: "BlueSkyPRO/BottomToolbar"
+        property string toolOrderJson: ""
+        property string enabledToolsJson: ""
+        property string activeTool: "MAP"
+    }
+
+    ListModel {
+        id: toolModel
+    }
+
+    function defaultOrder() {
+        return ["UAV", "MAP", "ADMIN", "FPV", "VIRTUAL FLT"]
+    }
+
+    function defaultEnabled() {
+        return {
+            "UAV": true,
+            "MAP": true,
+            "ADMIN": true,
+            "FPV": true,
+            "VIRTUAL FLT": true
+        }
+    }
+
+    function contains(list, value) {
+        for (var i = 0; i < list.length; ++i)
+            if (list[i] === value)
+                return true
+        return false
+    }
+
+    function normalizeOrder(raw) {
+        var defaults = defaultOrder()
+        var result = []
+
+        if (Array.isArray(raw)) {
+            for (var i = 0; i < raw.length; ++i) {
+                if (contains(defaults, raw[i]) && !contains(result, raw[i]))
+                    result.push(raw[i])
+            }
+        }
+
+        for (var j = 0; j < defaults.length; ++j) {
+            if (!contains(result, defaults[j]))
+                result.push(defaults[j])
+        }
+
+        return result
+    }
+
+    function normalizeEnabled(raw) {
+        var defaults = defaultEnabled()
+        var result = {}
+        var enabledCount = 0
+
+        for (var i = 0; i < toolDefinitions.length; ++i) {
+            var key = toolDefinitions[i].key
+            result[key] = raw && raw[key] === false ? false : defaults[key]
+            if (result[key])
+                ++enabledCount
+        }
+
+        // At least one work context must remain available.
+        if (enabledCount === 0)
+            result["MAP"] = true
+
+        return result
+    }
+
+    function loadConfiguration() {
+        var order
+        var enabled
+
+        try {
+            order = settings.toolOrderJson ? JSON.parse(settings.toolOrderJson) : defaultOrder()
+        } catch (e) {
+            order = defaultOrder()
+        }
+
+        try {
+            enabled = settings.enabledToolsJson ? JSON.parse(settings.enabledToolsJson) : defaultEnabled()
+        } catch (e2) {
+            enabled = defaultEnabled()
+        }
+
+        order = normalizeOrder(order)
+        enabled = normalizeEnabled(enabled)
+
+        toolModel.clear()
+        for (var i = 0; i < order.length; ++i) {
+            var key = order[i]
+            toolModel.append({
+                key: key,
+                label: key,
+                enabled: enabled[key]
+            })
+        }
+
+        var requestedActive = settings.activeTool
+        if (!contains(order, requestedActive) || !enabled[requestedActive])
+            requestedActive = firstEnabled(order, enabled)
+
+        root.activeTool = requestedActive
+        saveConfiguration()
+    }
+
+    function firstEnabled(order, enabled) {
+        for (var i = 0; i < order.length; ++i) {
+            if (enabled[order[i]])
+                return order[i]
+        }
+        return "MAP"
+    }
+
+    function currentOrder() {
+        var result = []
+        for (var i = 0; i < toolModel.count; ++i)
+            result.push(toolModel.get(i).key)
+        return result
+    }
+
+    function currentEnabled() {
+        var result = {}
+        for (var i = 0; i < toolModel.count; ++i)
+            result[toolModel.get(i).key] = toolModel.get(i).enabled
+        return result
+    }
+
+    function saveConfiguration() {
+        var order = currentOrder()
+        var enabled = currentEnabled()
+
+        settings.toolOrderJson = JSON.stringify(order)
+        settings.enabledToolsJson = JSON.stringify(enabled)
+        settings.activeTool = root.activeTool
+        root.toolConfigurationChanged(settings.toolOrderJson, settings.enabledToolsJson)
+    }
+
+    function activateTool(key) {
+        for (var i = 0; i < toolModel.count; ++i) {
+            var item = toolModel.get(i)
+            if (item.key === key && item.enabled) {
+                root.activeTool = key
+                settings.activeTool = key
+                root.toolActivated(key)
+                return
+            }
+        }
+    }
+
+    function setToolEnabled(key, enabled) {
+        var enabledCount = 0
+        for (var i = 0; i < toolModel.count; ++i)
+            if (toolModel.get(i).enabled)
+                ++enabledCount
+
+        if (!enabled && enabledCount <= 1)
+            return
+
+        for (var j = 0; j < toolModel.count; ++j) {
+            if (toolModel.get(j).key === key) {
+                toolModel.setProperty(j, "enabled", enabled)
+                break
+            }
+        }
+
+        if (!enabled && root.activeTool === key)
+            root.activeTool = firstEnabled(currentOrder(), currentEnabled())
+
+        saveConfiguration()
+    }
+
+    function moveTool(from, to) {
+        if (from < 0 || to < 0 || from >= toolModel.count || to >= toolModel.count || from === to)
+            return
+
+        toolModel.move(from, to, 1)
+        saveConfiguration()
+    }
+
+    Component.onCompleted: loadConfiguration()
 
     Rectangle {
         anchors.fill: parent
@@ -22,6 +220,7 @@ Item {
     }
 
     Row {
+        id: toolbarRow
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
@@ -29,37 +228,224 @@ Item {
         anchors.rightMargin: 12
         spacing: 6
 
-        Repeater {
-            model: ["LEFT ◀", "RIGHT ▶", "UAV", "MAP", "TOOLS", "LAYOUT", "FPV", "JOURNAL / LOG", "ADMIN"]
+        Rectangle {
+            width: 76
+            height: 38
+            color: "#0A0A0A"
+            border.color: root.divider
+            border.width: 1
+
+            Text {
+                anchors.centerIn: parent
+                text: "LEFT ◀"
+                color: root.leftOpen ? root.cyan : root.secondary
+                font.family: "B612 Mono"
+                font.pixelSize: 10
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: root.leftPanelToggleRequested()
+            }
+        }
+
+        ListView {
+            id: toolList
+            width: Math.max(1, toolbarRow.width - 76 - 76 - 76 - 18 - toolsButton.width)
+            height: 40
+            orientation: ListView.Horizontal
+            interactive: false
+            spacing: 6
+            model: toolModel
 
             delegate: Rectangle {
-                width: Math.max(76, label.implicitWidth + 28)
+                visible: model.enabled
+                width: Math.max(76, toolLabel.implicitWidth + 28)
                 height: 38
-                color: "#0A0A0A"
-                border.color: root.divider
+                color: root.activeTool === model.key ? "#101A20" : "#0A0A0A"
+                border.color: root.activeTool === model.key ? root.cyan : root.divider
                 border.width: 1
 
                 Text {
-                    id: label
+                    id: toolLabel
                     anchors.centerIn: parent
-                    text: modelData
-                    color: index === 0
-                           ? (root.leftOpen ? root.cyan : root.secondary)
-                           : index === 1
-                           ? (root.rightOpen ? root.cyan : root.secondary)
-                           : root.secondary
+                    text: model.label
+                    color: root.activeTool === model.key ? root.cyan : root.secondary
                     font.family: "B612 Mono"
                     font.pixelSize: 10
                 }
 
                 MouseArea {
                     anchors.fill: parent
-                    enabled: index < 2
+                    onClicked: root.activateTool(model.key)
+                }
+            }
+        }
+
+        Rectangle {
+            width: 76
+            height: 38
+            color: "#0A0A0A"
+            border.color: root.divider
+            border.width: 1
+
+            Text {
+                anchors.centerIn: parent
+                text: "RIGHT ▶"
+                color: root.rightOpen ? root.cyan : root.secondary
+                font.family: "B612 Mono"
+                font.pixelSize: 10
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: root.rightPanelToggleRequested()
+            }
+        }
+
+        Rectangle {
+            width: 76
+            height: 38
+            color: "#0A0A0A"
+            border.color: root.divider
+            border.width: 1
+
+            Text {
+                anchors.centerIn: parent
+                text: Qt.formatTime(new Date(), "hh:mm")
+                color: root.secondary
+                font.family: "B612 Mono"
+                font.pixelSize: 10
+            }
+        }
+
+        Rectangle {
+            id: toolsButton
+            width: 76
+            height: 38
+            color: toolsPopup.visible ? "#101A20" : "#0A0A0A"
+            border.color: toolsPopup.visible ? root.cyan : root.divider
+            border.width: 1
+
+            Text {
+                anchors.centerIn: parent
+                text: "☰ TOOLS"
+                color: toolsPopup.visible ? root.cyan : root.secondary
+                font.family: "B612 Mono"
+                font.pixelSize: 10
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: toolsPopup.visible = !toolsPopup.visible
+            }
+        }
+    }
+
+    Rectangle {
+        id: toolsPopup
+        visible: false
+        z: 20
+        width: 330
+        height: 330
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: root.height + 6
+        color: "#070C12"
+        border.color: root.divider
+        border.width: 1
+
+        Text {
+            x: 16
+            y: 14
+            text: "TOOLS CONFIGURATION"
+            color: root.text
+            font.family: "B612 Mono"
+            font.pixelSize: 11
+        }
+
+        Text {
+            x: 16
+            y: 34
+            text: "ENABLE / DISABLE · DRAG TO REORDER"
+            color: root.secondary
+            font.family: "B612 Mono"
+            font.pixelSize: 8
+        }
+
+        ListView {
+            id: configList
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.topMargin: 58
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 12
+            anchors.leftMargin: 12
+            anchors.rightMargin: 12
+            spacing: 5
+            model: toolModel
+            clip: true
+
+            delegate: Rectangle {
+                id: configRow
+                width: configList.width
+                height: 40
+                color: "#0A0A0A"
+                border.color: root.divider
+                border.width: 1
+
+                property real pressY: 0
+                property int sourceIndex: index
+
+                Text {
+                    x: 12
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: model.enabled ? "☑" : "☐"
+                    color: model.enabled ? root.cyan : root.secondary
+                    font.pixelSize: 16
+                }
+
+                Text {
+                    x: 42
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: model.label
+                    color: root.text
+                    font.family: "B612 Mono"
+                    font.pixelSize: 10
+                }
+
+                Text {
+                    anchors.right: parent.right
+                    anchors.rightMargin: 12
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: "⋮⋮"
+                    color: root.secondary
+                    font.pixelSize: 14
+                }
+
+                MouseArea {
+                    anchors.fill: parent
                     onClicked: {
-                        if (index === 0)
-                            root.leftPanelToggleRequested()
-                        else
-                            root.rightPanelToggleRequested()
+                        if (mouse.x < 36)
+                            root.setToolEnabled(model.key, !model.enabled)
+                    }
+
+                    onPressed: configRow.pressY = mouse.y
+
+                    onPositionChanged: {
+                        if (!pressed)
+                            return
+
+                        var target = configList.indexAt(1, mouse.y + configRow.y)
+                        if (target < 0)
+                            return
+
+                        var current = configRow.sourceIndex
+                        if (target !== current) {
+                            root.moveTool(current, target)
+                            configRow.sourceIndex = target
+                        }
                     }
                 }
             }
