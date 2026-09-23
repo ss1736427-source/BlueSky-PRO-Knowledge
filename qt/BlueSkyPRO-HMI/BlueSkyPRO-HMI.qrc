@@ -1,0 +1,19 @@
+<RCC>
+    <qresource>
+        <file>BlueSkyPRO-HMI.qmlproject</file>
+        <file>qml/App.qml</file>
+        <file>qml/BottomToolbar.ui.qml</file>
+        <file>qml/ContextOverlay.ui.qml</file>
+        <file>qml/FlightChart.ui.qml</file>
+        <file>qml/HeaderSector.ui.qml</file>
+        <file>qml/JournalStatus.ui.qml</file>
+        <file>qml/LeftPanel.ui.qml</file>
+        <file>qml/Main.qml</file>
+        <file>qml/MainContent.ui.qml</file>
+        <file>qml/qmldir</file>
+        <file>qml/RightPanel.ui.qml</file>
+        <file>qml/Theme.qml</file>
+        <file>qml/TopHeader.ui.qml</file>
+        <file>qml/UAVStatus.ui.qml</file>
+    </qresource>
+</RCC>
