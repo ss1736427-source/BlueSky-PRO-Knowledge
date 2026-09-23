@@ -21,10 +21,10 @@ Item {
 
     ListModel {
         id: toolModel
-        ListElement { tool: "UAV" }
         ListElement { tool: "MAP" }
-        ListElement { tool: "ADMIN" }
+        ListElement { tool: "UAV" }
         ListElement { tool: "FPV" }
+        ListElement { tool: "ADMIN" }
         ListElement { tool: "VIRTUAL FLT" }
     }
 
