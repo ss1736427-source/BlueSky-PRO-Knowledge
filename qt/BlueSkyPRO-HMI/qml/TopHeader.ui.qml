@@ -244,8 +244,7 @@ Item {
         }
     }
 
-    // Structural dividers are explicit QML rectangles for stable Design Studio rendering.
-    // All structural lines use the same 1 px accent token.
+    // Structural dividers — all coordinates are in the root coordinate space.
     Rectangle {
         x: centralComposition.x
         y: Math.round((parent.height - root.separatorHeight) / 2)
@@ -256,7 +255,7 @@ Item {
     }
 
     Rectangle {
-        x: etdSector.x + etdSector.width
+        x: centralComposition.x + centralComposition.width / 6
         y: Math.round((parent.height - root.separatorHeight) / 2)
         width: root.separatorWidth
         height: Math.min(root.separatorHeight, parent.height - 16)
@@ -265,7 +264,7 @@ Item {
     }
 
     Rectangle {
-        x: totSector.x + totSector.width
+        x: centralComposition.x + centralComposition.width * 2 / 6
         y: Math.round((parent.height - root.separatorHeight) / 2)
         width: root.separatorWidth
         height: Math.min(root.separatorHeight, parent.height - 16)
@@ -274,7 +273,7 @@ Item {
     }
 
     Rectangle {
-        x: tripSector.x + tripSector.width
+        x: centralComposition.x + centralComposition.width * 3 / 6
         y: Math.round((parent.height - root.separatorHeight) / 2)
         width: root.separatorWidth
         height: Math.min(root.separatorHeight, parent.height - 16)
@@ -283,7 +282,7 @@ Item {
     }
 
     Rectangle {
-        x: etaSector.x + etaSector.width
+        x: centralComposition.x + centralComposition.width * 4 / 6
         y: Math.round((parent.height - root.separatorHeight) / 2)
         width: root.separatorWidth
         height: Math.min(root.separatorHeight, parent.height - 16)
@@ -292,7 +291,7 @@ Item {
     }
 
     Rectangle {
-        x: readySector.x + readySector.width
+        x: centralComposition.x + centralComposition.width * 5 / 6
         y: Math.round((parent.height - root.separatorHeight) / 2)
         width: root.separatorWidth
         height: Math.min(root.separatorHeight, parent.height - 16)
