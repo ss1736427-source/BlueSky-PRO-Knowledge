@@ -347,7 +347,7 @@ signal workspaceContextRequested(string tool)
 
             Text {
                 anchors.centerIn: parent
-                text: "☰ TOOLS"
+                text: "☰"
                 color: toolsPopup.visible ? root.cyan : root.secondary
                 font.family: "B612 Mono"
                 font.pixelSize: 10
