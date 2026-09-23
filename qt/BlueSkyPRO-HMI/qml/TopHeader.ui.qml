@@ -19,7 +19,7 @@ Item {
     property color divider: "#111F30"
     property color panel: "#08111D"
     property color accent: "#00A3FF"
-    property int borderWidth: 1
+    property int borderWidth: 2
     property int borderRadius: 4
 
     property string etd: "10:30"
@@ -44,7 +44,7 @@ Item {
     property int valueSize: 18
     property int headingValueGap: 3
     property int separatorHeight: 54
-    property int separatorWidth: 1
+    property int separatorWidth: 2
 
     property bool tabletVariant: width < 1500
 
@@ -256,16 +256,29 @@ Item {
         }
     }
 
-    // Explicit center axis: TRIP | ETA.
+    // Explicit structural separators — drawn above all content for reliable DS rendering.
+    Repeater {
+        model: 7
+
+        Rectangle {
+            property int boundaryIndex: index
+            x: centralComposition.x + (centralComposition.width * boundaryIndex / 6)
+            y: Math.round((parent.height - root.separatorHeight) / 2)
+            width: root.separatorWidth
+            height: Math.min(root.separatorHeight, parent.height - 16)
+            color: root.accent
+            z: 90
+        }
+    }
+
+    // Explicit center axis: TRIP | ETA is the fourth boundary.
     Rectangle {
-        id: centralAxis
-        anchors.left: centralComposition.left
-        anchors.leftMargin: centralComposition.width / 2
-        anchors.verticalCenter: parent.verticalCenter
+        x: centralComposition.x + centralComposition.width / 2
+        y: Math.round((parent.height - root.separatorHeight) / 2)
         width: root.separatorWidth
         height: Math.min(root.separatorHeight, parent.height - 16)
         color: root.accent
-        z: 90
+        z: 91
     }
 
     // Outer frame is drawn last so child components cannot cover the border.
