@@ -383,7 +383,7 @@ Item {
         Text {
             x: 16
             y: 34
-            text: "ENABLE / DISABLE · DRAG TO REORDER"
+            text: "ENABLE / DISABLE · ORDER"
             color: root.secondary
             font.family: "B612 Mono"
             font.pixelSize: 8
