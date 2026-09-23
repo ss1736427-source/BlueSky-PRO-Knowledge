@@ -214,3 +214,12 @@ target_link_libraries(bluesky_ai_runtime_lifecycle PUBLIC bluesky_ai_runtime_con
 add_executable(ai_runtime_lifecycle_test ../AI/ai_runtime_lifecycle_test.cpp)
 target_link_libraries(ai_runtime_lifecycle_test PRIVATE bluesky_ai_runtime_lifecycle)
 add_test(NAME ai_runtime_lifecycle_test COMMAND ai_runtime_lifecycle_test)
+
+
+add_library(bluesky_insurance_preflight STATIC ../INSURANCE/insurance_preflight_engine.cpp)
+target_include_directories(bluesky_insurance_preflight PUBLIC ../INSURANCE)
+target_compile_features(bluesky_insurance_preflight PUBLIC cxx_std_20)
+add_executable(insurance_preflight_engine_test ../INSURANCE/insurance_preflight_engine_test.cpp)
+target_link_libraries(insurance_preflight_engine_test PRIVATE bluesky_insurance_preflight)
+target_include_directories(insurance_preflight_engine_test PRIVATE ../INSURANCE)
+add_test(NAME insurance_preflight_engine_test COMMAND insurance_preflight_engine_test)
