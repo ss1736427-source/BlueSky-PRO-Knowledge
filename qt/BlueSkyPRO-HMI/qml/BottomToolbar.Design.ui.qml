@@ -171,7 +171,7 @@ Item {
         border.width: 1
         Text {
             anchors.centerIn: parent
-            text: "TIME"
+            text: "HH:MM"
             color: root.primaryColor
             font.family: "B612 Mono"
             font.pixelSize: 16
