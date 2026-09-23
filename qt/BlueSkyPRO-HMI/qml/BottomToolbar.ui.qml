@@ -12,57 +12,192 @@ Item {
     property color divider: "#202020"
     property bool leftOpen: true
     property bool rightOpen: true
+    property string activeTool: "MAP"
 
     signal leftPanelToggleRequested()
     signal rightPanelToggleRequested()
+    signal toolRequested(string tool)
+    signal toolConfigurationRequested()
+
+    ListModel {
+        id: toolModel
+        ListElement { tool: "UAV" }
+        ListElement { tool: "MAP" }
+        ListElement { tool: "ADMIN" }
+        ListElement { tool: "FPV" }
+        ListElement { tool: "VIRTUAL FLT" }
+    }
+
+    function moveTool(fromIndex, toIndex) {
+        if (fromIndex === toIndex || toIndex < 0 || toIndex >= toolModel.count)
+            return
+        toolModel.move(fromIndex, toIndex, 1)
+    }
 
     Rectangle {
         anchors.fill: parent
         color: root.bg
     }
 
-    Row {
+    // Fixed left anchor.
+    Rectangle {
+        id: leftButton
         anchors.left: parent.left
-        anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
+        anchors.leftMargin: 10
+        width: 88
+        height: 38
+        color: "#0A0A0A"
+        border.color: root.divider
+        border.width: 1
+
+        Text {
+            anchors.centerIn: parent
+            text: "LEFT ◀"
+            color: root.leftOpen ? root.cyan : root.secondary
+            font.family: "B612 Mono"
+            font.pixelSize: 10
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: root.leftPanelToggleRequested()
+        }
+    }
+
+    // Fixed right anchor.
+    Rectangle {
+        id: rightButton
+        anchors.right: timeButton.left
+        anchors.rightMargin: 8
+        anchors.verticalCenter: parent.verticalCenter
+        width: 88
+        height: 38
+        color: "#0A0A0A"
+        border.color: root.divider
+        border.width: 1
+
+        Text {
+            anchors.centerIn: parent
+            text: "RIGHT ▶"
+            color: root.rightOpen ? root.cyan : root.secondary
+            font.family: "B612 Mono"
+            font.pixelSize: 10
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: root.rightPanelToggleRequested()
+        }
+    }
+
+    // Reorderable working tools.
+    Row {
+        id: toolRow
+        anchors.left: leftButton.right
+        anchors.right: rightButton.left
         anchors.leftMargin: 12
         anchors.rightMargin: 12
+        anchors.verticalCenter: parent.verticalCenter
+        height: 38
         spacing: 6
 
         Repeater {
-            model: ["LEFT ◀", "RIGHT ▶", "UAV", "MAP", "TOOLS", "LAYOUT", "FPV", "JOURNAL / LOG", "ADMIN"]
+            model: toolModel
 
             delegate: Rectangle {
-                width: Math.max(76, label.implicitWidth + 28)
+                property bool dragging: false
+                property int sourceIndex: index
+
+                width: Math.max(96, Math.min(132, (toolRow.width - 24) / Math.max(1, toolModel.count)))
                 height: 38
-                color: "#0A0A0A"
-                border.color: root.divider
+                color: root.activeTool === model.tool ? "#111F30" : "#0A0A0A"
+                border.color: root.activeTool === model.tool ? root.cyan : root.divider
                 border.width: 1
+                z: dragging ? 20 : 1
 
                 Text {
-                    id: label
                     anchors.centerIn: parent
-                    text: modelData
-                    color: index === 0
-                           ? (root.leftOpen ? root.cyan : root.secondary)
-                           : index === 1
-                           ? (root.rightOpen ? root.cyan : root.secondary)
-                           : root.secondary
+                    text: model.tool
+                    color: root.activeTool === model.tool ? root.cyan : root.secondary
                     font.family: "B612 Mono"
                     font.pixelSize: 10
+                    horizontalAlignment: Text.AlignHCenter
                 }
 
                 MouseArea {
+                    id: dragArea
                     anchors.fill: parent
-                    enabled: index < 2
-                    onClicked: {
-                        if (index === 0)
-                            root.leftPanelToggleRequested()
-                        else
-                            root.rightPanelToggleRequested()
+                    drag.target: parent
+                    drag.axis: Drag.XAxis
+                    onPressed: {
+                        parent.dragging = true
+                        parent.z = 20
                     }
+                    onReleased: {
+                        parent.dragging = false
+                        parent.z = 1
+
+                        var center = parent.x + parent.width / 2
+                        var target = parent.sourceIndex
+                        for (var i = 0; i < toolRow.children.length; ++i) {
+                            var candidate = toolRow.children[i]
+                            if (candidate === parent || candidate.width === undefined)
+                                continue
+                            if (center > candidate.x + candidate.width / 2)
+                                target = i
+                        }
+                        target = Math.max(0, Math.min(toolModel.count - 1, target))
+                        root.moveTool(parent.sourceIndex, target)
+                        root.toolRequested(model.tool)
+                    }
+                    onClicked: root.toolRequested(model.tool)
                 }
             }
+        }
+    }
+
+    Rectangle {
+        id: timeButton
+        anchors.right: settingsButton.left
+        anchors.rightMargin: 8
+        anchors.verticalCenter: parent.verticalCenter
+        width: 72
+        height: 38
+        color: "#000000"
+        border.color: root.divider
+        border.width: 1
+
+        Text {
+            anchors.centerIn: parent
+            text: Qt.formatTime(new Date(), "HH:mm")
+            color: root.secondary
+            font.family: "B612 Mono"
+            font.pixelSize: 11
+        }
+    }
+
+    Rectangle {
+        id: settingsButton
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.rightMargin: 10
+        width: 44
+        height: 38
+        color: "#08111D"
+        border.color: root.cyan
+        border.width: 1
+
+        Text {
+            anchors.centerIn: parent
+            text: "☰"
+            color: root.cyan
+            font.pixelSize: 16
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: root.toolConfigurationRequested()
         }
     }
 }
