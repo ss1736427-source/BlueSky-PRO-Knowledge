@@ -6,11 +6,11 @@ Item {
 
     implicitHeight: 54
 
-    property color bg: "#000000"
+    property color bg: "#050A12"
     property color text: "#FFFFFF"
     property color secondary: "#BFBFBF"
     property color cyan: "#32FFFF"
-    property color divider: "#202020"
+    property color divider: "#7F7F7F"
     property bool leftOpen: true
     property bool rightOpen: true
 
@@ -248,7 +248,7 @@ signal workspaceContextRequested(string tool)
         Rectangle {
             width: 76
             height: 38
-            color: "#0A0A0A"
+            color: "#0C1725"
             border.color: root.divider
             border.width: 1
 
@@ -302,7 +302,7 @@ signal workspaceContextRequested(string tool)
         Rectangle {
             width: 76
             height: 38
-            color: "#0A0A0A"
+            color: "#0C1725"
             border.color: root.divider
             border.width: 1
 
@@ -323,7 +323,7 @@ signal workspaceContextRequested(string tool)
         Rectangle {
             width: 76
             height: 38
-            color: "#0A0A0A"
+            color: "#0C1725"
             border.color: root.divider
             border.width: 1
 
@@ -369,7 +369,7 @@ signal workspaceContextRequested(string tool)
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.bottomMargin: root.height + 6
-        color: "#070C12"
+        color: "#08111D"
         border.color: root.divider
         border.width: 1
 
@@ -409,7 +409,7 @@ signal workspaceContextRequested(string tool)
                 id: configRow
                 width: configList.width
                 height: 40
-                color: "#0A0A0A"
+                color: "#0C1725"
                 border.color: root.divider
                 border.width: 1
 
