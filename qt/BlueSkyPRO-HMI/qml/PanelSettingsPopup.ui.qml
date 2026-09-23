@@ -9,6 +9,10 @@ Item {
     property var enabledTools: root.tools.slice()
     signal toolToggled(string tool, bool enabled)
 
+    function firstEnabled() {
+        return enabledTools.length > 0 ? enabledTools[0] : ""
+    }
+
     function toggleTool(tool) {
         var next = enabledTools.slice()
         var i = next.indexOf(tool)
