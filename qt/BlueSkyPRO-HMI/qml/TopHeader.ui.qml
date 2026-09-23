@@ -45,7 +45,7 @@ Item {
     property int headingValueGap: 3
     property int separatorHeight: 54
     property int separatorWidth: 1
-    // Preview stroke is intentionally 2 px only when DS zoom makes a 1 px stroke sub-pixel.
+    // DS preview uses the same width for every structural line so zoom does not create mixed-weight dividers.
     property bool designStudioPreview: true
     property int previewSeparatorWidth: 2
     property int effectiveSeparatorWidth: designStudioPreview ? previewSeparatorWidth : separatorWidth
@@ -261,7 +261,7 @@ Item {
     Rectangle {
         x: Math.round(centralComposition.x + centralComposition.width / 6)
         y: Math.round((parent.height - root.separatorHeight) / 2)
-        width: root.separatorWidth
+        width: root.effectiveSeparatorWidth
         height: Math.min(root.separatorHeight, parent.height - 16)
         color: root.accent
         z: 90
@@ -270,7 +270,7 @@ Item {
     Rectangle {
         x: Math.round(centralComposition.x + centralComposition.width * 2 / 6)
         y: Math.round((parent.height - root.separatorHeight) / 2)
-        width: root.separatorWidth
+        width: root.effectiveSeparatorWidth
         height: Math.min(root.separatorHeight, parent.height - 16)
         color: root.accent
         z: 90
@@ -279,7 +279,7 @@ Item {
     Rectangle {
         x: Math.round(centralComposition.x + centralComposition.width * 3 / 6)
         y: Math.round((parent.height - root.separatorHeight) / 2)
-        width: root.separatorWidth
+        width: root.effectiveSeparatorWidth
         height: Math.min(root.separatorHeight, parent.height - 16)
         color: root.accent
         z: 91
@@ -288,7 +288,7 @@ Item {
     Rectangle {
         x: Math.round(centralComposition.x + centralComposition.width * 4 / 6)
         y: Math.round((parent.height - root.separatorHeight) / 2)
-        width: root.separatorWidth
+        width: root.effectiveSeparatorWidth
         height: Math.min(root.separatorHeight, parent.height - 16)
         color: root.accent
         z: 90
@@ -297,7 +297,7 @@ Item {
     Rectangle {
         x: Math.round(centralComposition.x + centralComposition.width * 5 / 6)
         y: Math.round((parent.height - root.separatorHeight) / 2)
-        width: root.separatorWidth
+        width: root.effectiveSeparatorWidth
         height: Math.min(root.separatorHeight, parent.height - 16)
         color: root.accent
         z: 90
@@ -306,7 +306,7 @@ Item {
     Rectangle {
         x: Math.round(centralComposition.x + centralComposition.width)
         y: Math.round((parent.height - root.separatorHeight) / 2)
-        width: root.separatorWidth
+        width: root.effectiveSeparatorWidth
         height: Math.min(root.separatorHeight, parent.height - 16)
         color: root.accent
         z: 90
