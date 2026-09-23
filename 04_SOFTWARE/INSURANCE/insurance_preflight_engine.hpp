@@ -77,6 +77,12 @@ public:
     const std::string& ruleset_id() const noexcept { return ruleset_id_; }
     const std::string& ruleset_version() const noexcept { return ruleset_version_; }
     const std::string& decision_text() const noexcept { return decision_text_; }
+    const std::string& operation_type() const noexcept { return operation_type_; }
+    const std::string& territory_id() const noexcept { return territory_id_; }
+    const std::string& pilot_id() const noexcept { return pilot_id_; }
+    const std::string& uav_configuration_version() const noexcept { return uav_configuration_version_; }
+    std::uint64_t evaluation_time_epoch() const noexcept { return evaluation_time_epoch_; }
+    bool remote_id_available() const noexcept { return remote_id_available_; }
     double minimum_liability_rub() const noexcept { return minimum_liability_rub_; }
     double policy_limit_rub() const noexcept { return policy_limit_rub_; }
     const std::string& integrity_hash() const noexcept { return integrity_hash_; }
@@ -91,6 +97,12 @@ private:
     std::string ruleset_id_;
     std::string ruleset_version_;
     std::string decision_text_;
+    std::string operation_type_;
+    std::string territory_id_;
+    std::string pilot_id_;
+    std::string uav_configuration_version_;
+    std::uint64_t evaluation_time_epoch_{0};
+    bool remote_id_available_{false};
     double minimum_liability_rub_{0.0};
     double policy_limit_rub_{0.0};
     std::vector<CheckFinding> findings_;
