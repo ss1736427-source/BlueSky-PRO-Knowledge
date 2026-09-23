@@ -23,8 +23,6 @@ Item {
         height: 72
         radius: 2
         color: "#08111D"
-        border.color: root.serviceColor
-        border.width: 1
     }
 
     Rectangle {
@@ -33,8 +31,6 @@ Item {
         width: 108
         height: 48
         color: "#0C1725"
-        border.color: root.serviceColor
-        border.width: 1
         Text {
             anchors.centerIn: parent
             text: "◀ LEFT"
@@ -51,8 +47,6 @@ Item {
         width: 110
         height: 48
         color: "#0C1725"
-        border.color: root.serviceColor
-        border.width: 1
         Text {
             anchors.centerIn: parent
             text: "UAV"
@@ -69,8 +63,6 @@ Item {
         width: 110
         height: 48
         color: "#111F30"
-        border.color: root.activeColor
-        border.width: 1
         Text {
             anchors.centerIn: parent
             text: "MAP"
@@ -87,8 +79,6 @@ Item {
         width: 110
         height: 48
         color: "#0C1725"
-        border.color: root.serviceColor
-        border.width: 1
         Text {
             anchors.centerIn: parent
             text: "ADMIN"
@@ -105,8 +95,6 @@ Item {
         width: 110
         height: 48
         color: "#0C1725"
-        border.color: root.serviceColor
-        border.width: 1
         Text {
             anchors.centerIn: parent
             text: "FPV"
@@ -123,8 +111,6 @@ Item {
         width: 150
         height: 48
         color: "#0C1725"
-        border.color: root.serviceColor
-        border.width: 1
         Text {
             anchors.centerIn: parent
             text: "VIRTUAL FLT"
@@ -141,8 +127,6 @@ Item {
         width: 108
         height: 48
         color: "#0C1725"
-        border.color: root.serviceColor
-        border.width: 1
         Text {
             anchors.centerIn: parent
             text: "RIGHT ▶"
@@ -185,8 +169,6 @@ Item {
         width: 330
         height: 48
         color: "#0C1725"
-        border.color: root.primaryColor
-        border.width: 1
         Text {
             anchors.centerIn: parent
             text: "☰"
