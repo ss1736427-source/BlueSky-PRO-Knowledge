@@ -7,6 +7,9 @@ Item {
     height: 96
 
     property color backgroundColor: "#050A12"
+    property color panelColor: "#08111D"
+    property color buttonColor: "#0C1725"
+    property color activeSurfaceColor: "#111F30"
     property color primaryColor: "#FFFFFF"
     property color serviceColor: "#7F7F7F"
     property color activeColor: "#32FFFF"
@@ -21,40 +24,7 @@ Item {
         y: 12
         width: 1416
         height: 72
-        radius: 2
-        color: "#08111D"
-    }
-
-    Rectangle {
-        x: 24
-        y: 24
-        width: 108
-        height: 48
-        color: "#0C1725"
-        Text {
-            anchors.centerIn: parent
-            text: "◀ LEFT"
-            color: root.primaryColor
-            font.family: "B612 Mono"
-            font.pixelSize: 16
-            font.weight: Font.Bold
-        }
-    }
-
-    Rectangle {
-        x: 140
-        y: 24
-        width: 110
-        height: 48
-        color: "#0C1725"
-        Text {
-            anchors.centerIn: parent
-            text: "UAV"
-            color: root.primaryColor
-            font.family: "B612 Mono"
-            font.pixelSize: 16
-            font.weight: Font.Bold
-        }
+        color: root.panelColor
     }
 
     Rectangle {
@@ -62,79 +32,7 @@ Item {
         y: 24
         width: 110
         height: 48
-        color: "#111F30"
-        Text {
-            anchors.centerIn: parent
-            text: "MAP"
-            color: root.activeColor
-            font.family: "B612 Mono"
-            font.pixelSize: 16
-            font.weight: Font.Bold
-        }
-    }
-
-    Rectangle {
-        x: 376
-        y: 24
-        width: 110
-        height: 48
-        color: "#0C1725"
-        Text {
-            anchors.centerIn: parent
-            text: "ADMIN"
-            color: root.primaryColor
-            font.family: "B612 Mono"
-            font.pixelSize: 16
-            font.weight: Font.Bold
-        }
-    }
-
-    Rectangle {
-        x: 494
-        y: 24
-        width: 110
-        height: 48
-        color: "#0C1725"
-        Text {
-            anchors.centerIn: parent
-            text: "FPV"
-            color: root.primaryColor
-            font.family: "B612 Mono"
-            font.pixelSize: 16
-            font.weight: Font.Bold
-        }
-    }
-
-    Rectangle {
-        x: 612
-        y: 24
-        width: 150
-        height: 48
-        color: "#0C1725"
-        Text {
-            anchors.centerIn: parent
-            text: "VIRTUAL FLT"
-            color: root.primaryColor
-            font.family: "B612 Mono"
-            font.pixelSize: 16
-            font.weight: Font.Bold
-        }
-    }
-
-    Rectangle {
-        x: 778
-        y: 24
-        width: 108
-        height: 48
-        color: "#0C1725"
-        Text {
-            anchors.centerIn: parent
-            text: "RIGHT ▶"
-            color: root.primaryColor
-            font.family: "B612 Mono"
-            font.pixelSize: 16
-            font.weight: Font.Bold
-        }
+        color: root.activeSurfaceColor
     }
 
     Rectangle {
@@ -145,36 +43,130 @@ Item {
         color: root.serviceColor
     }
 
-    Rectangle {
+    Text {
+        x: 24
+        y: 24
+        width: 108
+        height: 48
+        text: "◀ LEFT"
+        color: root.primaryColor
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        font.family: "B612 Mono"
+        font.pixelSize: 16
+        font.weight: Font.Bold
+    }
+
+    Text {
+        x: 140
+        y: 24
+        width: 110
+        height: 48
+        text: "UAV"
+        color: root.primaryColor
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        font.family: "B612 Mono"
+        font.pixelSize: 16
+        font.weight: Font.Bold
+    }
+
+    Text {
+        x: 258
+        y: 24
+        width: 110
+        height: 48
+        text: "MAP"
+        color: root.activeColor
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        font.family: "B612 Mono"
+        font.pixelSize: 16
+        font.weight: Font.Bold
+    }
+
+    Text {
+        x: 376
+        y: 24
+        width: 110
+        height: 48
+        text: "ADMIN"
+        color: root.primaryColor
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        font.family: "B612 Mono"
+        font.pixelSize: 16
+        font.weight: Font.Bold
+    }
+
+    Text {
+        x: 494
+        y: 24
+        width: 110
+        height: 48
+        text: "FPV"
+        color: root.primaryColor
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        font.family: "B612 Mono"
+        font.pixelSize: 16
+        font.weight: Font.Bold
+    }
+
+    Text {
+        x: 612
+        y: 24
+        width: 150
+        height: 48
+        text: "VIRTUAL FLT"
+        color: root.primaryColor
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        font.family: "B612 Mono"
+        font.pixelSize: 16
+        font.weight: Font.Bold
+    }
+
+    Text {
+        x: 778
+        y: 24
+        width: 108
+        height: 48
+        text: "RIGHT ▶"
+        color: root.primaryColor
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        font.family: "B612 Mono"
+        font.pixelSize: 16
+        font.weight: Font.Bold
+    }
+
+    Text {
         x: 916
         y: 24
         width: 150
         height: 48
-        color: "#0C1725"
-        Text {
-            anchors.centerIn: parent
-            text: "HH:MM"
-            color: root.primaryColor
-            font.family: "B612 Mono"
-            font.pixelSize: 16
-            font.weight: Font.Bold
-        }
+        text: "HH:MM"
+        color: root.primaryColor
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        font.family: "B612 Mono"
+        font.pixelSize: 16
+        font.weight: Font.Bold
     }
 
-    Rectangle {
+    Text {
         x: 1080
         y: 24
         width: 330
         height: 48
-        color: "#0C1725"
-        Text {
-            anchors.centerIn: parent
-            text: "☰"
-            color: root.primaryColor
-            font.family: "B612 Mono"
-            font.pixelSize: 16
-            font.weight: Font.Bold
-        }
+        text: "☰"
+        color: root.primaryColor
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        font.family: "B612 Mono"
+        font.pixelSize: 16
+        font.weight: Font.Bold
     }
 
     Text {
