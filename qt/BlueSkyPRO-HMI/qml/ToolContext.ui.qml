@@ -6,6 +6,7 @@ Item {
     property string contextName: "UAV"
     property string contextSubtitle: ""
     property var sections: []
+    property bool fpvManual: false
 
     Rectangle {
         anchors.fill: parent
@@ -39,7 +40,85 @@ Item {
         color: "#202020"
     }
 
+    Rectangle {
+        visible: root.contextName === "FPV"
+        x: 24
+        y: 104
+        width: parent.width - 48
+        height: 250
+        color: "#000000"
+        border.color: "#202020"
+        border.width: 1
+
+        Text {
+            x: 18
+            y: 14
+            text: "UAV-03   " + (root.fpvManual ? "MANUAL ● ACTIVE" : "AUTO")
+            color: root.fpvManual ? "#64FF00" : "#FFFFFF"
+            font.family: "B612 Mono"
+            font.pixelSize: 13
+            font.bold: true
+        }
+
+        Rectangle {
+            x: 18
+            y: 44
+            width: parent.width - 36
+            height: 118
+            color: "#08111D"
+            border.color: "#202020"
+            border.width: 1
+
+            Text {
+                anchors.centerIn: parent
+                text: "CAMERA VIDEO"
+                color: "#7F7F7F"
+                font.family: "B612 Mono"
+                font.pixelSize: 12
+            }
+        }
+
+        Text { x: 18; y: 174; text: "ALT 82 m     SPD 18 m/s     HDG 274°     BAT 67%"; color: "#BFBFBF"; font.family: "B612 Mono"; font.pixelSize: 10 }
+        Text { x: 18; y: 196; text: "C2  ● CONNECTED     VIDEO  ● CONNECTED     RC  ● " + (root.fpvManual ? "ACTIVE" : "READY"); color: "#BFBFBF"; font.family: "B612 Mono"; font.pixelSize: 10 }
+
+        Rectangle {
+            x: parent.width - 190
+            y: 180
+            width: 172
+            height: 42
+            color: "transparent"
+            border.color: root.fpvManual ? "#64FF00" : "#32FFFF"
+            border.width: 1
+
+            Text {
+                anchors.fill: parent
+                text: root.fpvManual ? "RETURN TO AUTO" : "READY FOR CONTROL"
+                color: root.fpvManual ? "#64FF00" : "#32FFFF"
+                font.family: "B612 Mono"
+                font.pixelSize: 10
+                font.bold: true
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: root.fpvManual = !root.fpvManual
+            }
+        }
+
+        Text {
+            x: 18
+            y: 226
+            text: root.fpvManual ? "Pilot control active" : "Control transfer requires pilot confirmation"
+            color: "#7F7F7F"
+            font.family: "B612"
+            font.pixelSize: 10
+        }
+    }
+
     Flow {
+        visible: root.contextName !== "FPV"
         x: 24
         y: 104
         width: parent.width - 48
