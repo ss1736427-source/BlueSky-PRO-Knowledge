@@ -22,6 +22,7 @@ Item {
     property string lastJournalEvent: ""
     property string missionId: "BS-260920-A-001"
     property string journalStatus: "READY"
+    property string activeTool: "MAP"
     signal journalEvent(string eventType, int uavIndex, string decision)
     signal journalAppendRequested(string eventType, string missionId, int uavIndex, string decision)
     signal uavDecisionRequested(string decision, int uavIndex)
@@ -67,6 +68,25 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             missionVisible: root.missionVisible
+            visible: root.activeTool === "MAP"
+        }
+
+        ToolContext {
+            id: toolContext
+            anchors.left: leftPanel.right
+            anchors.right: rightPanel.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            visible: root.activeTool !== "MAP"
+            contextName: root.activeTool
+            contextSubtitle: root.activeTool === "UAV" ? "SELECT UAV → CONTROL / C2 → CONFIGURATION" : root.activeTool === "ADMIN" ? "SYSTEM ADMINISTRATION / ENGINEER / TECHNICIAN" : root.activeTool === "FPV" ? "VIDEO + FLIGHT DATA + CONTROL TRANSFER" : "SIMULATION / VIRTUAL UAV"
+            sections: root.activeTool === "UAV"
+                      ? ["UAV SELECTION", "CONTROL / C2", "UAV CONFIGURATION", "NAVIGATION", "ENERGY", "PAYLOAD / EQUIPMENT", "MAINTENANCE", "DIAGNOSTICS"]
+                      : root.activeTool === "ADMIN"
+                      ? ["USERS", "ROLES & ACCESS", "SYSTEM SETTINGS", "INTEGRATIONS", "DATA & SYNC", "DOCUMENTS", "AUDIT LOG"]
+                      : root.activeTool === "FPV"
+                      ? ["UAV SELECTION", "CONTROL STATION", "CONTROL MAPPING", "C2 / VIDEO STATE", "MANUAL CONTROL", "RETURN TO AUTO"]
+                      : ["VIRTUAL UAV", "SIMULATION", "ENVIRONMENT", "SCENARIOS", "PLANNED / SIMULATED / ACTUAL", "RESULTS"]
         }
 
         RightPanel {
@@ -99,6 +119,8 @@ Item {
         rightOpen: root.rightPanelOpen
         onLeftPanelToggleRequested: root.leftPanelOpen = !root.leftPanelOpen
         onRightPanelToggleRequested: root.rightPanelOpen = !root.rightPanelOpen
+        activeTool: root.activeTool
+        onToolRequested: root.activeTool = tool
     }
 
     ContextOverlay {
