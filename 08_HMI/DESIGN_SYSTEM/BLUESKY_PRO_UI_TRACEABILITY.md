@@ -28,6 +28,25 @@ system: BlueSky PRO
 | UI-ACTION-UPLOAD | Upload to UAV | mission transfer | integration / C2 | REVIEW |
 | UI-ACTION-RTH | Return to Home | return / safety | RET / SAFETY | CANDIDATE |
 | UI-NAV-001 | Bottom Navigation | context switching | HMI architecture | REVIEW |
+| UI-NAV-TOOLS-001 | Bottom Toolbar TOOLS | work-context composition / order / active-context persistence | HMI-BOTTOM-TOOLBAR-CONFIG-001 | CONTROLLED |
+| UI-NAV-LEFT-001 | LEFT | left-panel visibility control | HMI panel behavior | CONTROLLED |
+| UI-NAV-RIGHT-001 | RIGHT | right-panel visibility control | HMI panel behavior | CONTROLLED |
+| UI-NAV-TIME-001 | TIME | system time display | HMI architecture | CONTROLLED |
+
+## Bottom Toolbar configuration trace
+
+`UI-NAV-TOOLS-001` controls presentation and workspace navigation only. It does not modify mission state, route calculations, telemetry acquisition, flight-control logic or safety authority.
+
+Controlled behavior is defined in `BLUESKY_PRO_BOTTOM_TOOLBAR_CONFIGURATION_001.md`.
+
+Required trace cases:
+
+- enabled/disabled composition is persistent;
+- work-context order is persistent;
+- re-enabled contexts recover their saved position;
+- active context cannot remain disabled;
+- at least one work context remains available;
+- fixed LEFT / RIGHT / TIME / TOOLS elements remain outside reorderable work-context state.
 
 ## Safety authority boundary
 
