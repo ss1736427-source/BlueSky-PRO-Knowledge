@@ -189,7 +189,7 @@ Item {
         border.width: 1
         Text {
             anchors.centerIn: parent
-            text: "☰ TOOLS"
+            text: "☰"
             color: root.primaryColor
             font.family: "B612 Mono"
             font.pixelSize: 16
