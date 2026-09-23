@@ -39,7 +39,9 @@ Fixed elements never participate in workspace reordering.
 - Primary text: `#FFFFFF`
 - Service text/borders: `#7F7F7F`
 - Active workspace accent: `#32FFFF`
-- 1 px service/component borders.
+- No rectangular borders around toolbar controls.
+- Controls are separated by spacing and surface contrast; the active context uses the selected surface and accent text.
+- The toolbar surface remains visually continuous; the TIME/system area may use a subtle divider for structural separation.
 - Reference DS geometry: `1440 × 96`.
 - Compact persistent height; application geometry remains responsive to the host window.
 - Active context is visually distinct but does not become a command/flight-control state.
