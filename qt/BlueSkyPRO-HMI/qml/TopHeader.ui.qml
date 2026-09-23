@@ -17,6 +17,10 @@ Item {
     property color amber: "#FFD339"
     property color red: "#FF1E14"
     property color divider: "#111F30"
+    property color panel: "#08111D"
+    property color accent: "#00A3FF"
+    property int borderWidth: 1
+    property int borderRadius: 4
 
     property string etd: "10:30"
     property string tot: "—"
@@ -45,8 +49,12 @@ Item {
     property bool tabletVariant: width < 1500
 
     Rectangle {
+        id: headerSurface
         anchors.fill: parent
-        color: root.bg
+        color: root.panel
+        border.color: root.accent
+        border.width: root.borderWidth
+        radius: root.borderRadius
     }
 
     // LEFT ANCHOR — width is a composition parameter and contains the scalable logo.
