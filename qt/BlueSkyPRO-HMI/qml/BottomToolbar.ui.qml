@@ -108,6 +108,7 @@ Item {
             delegate: Rectangle {
                 property bool dragging: false
                 property int sourceIndex: index
+                property int dragStartIndex: index
 
                 width: Math.max(96, Math.min(132, (toolRow.width - 24) / Math.max(1, toolModel.count)))
                 height: 38
@@ -132,6 +133,7 @@ Item {
                     drag.axis: Drag.XAxis
                     onPressed: {
                         parent.dragging = true
+                        parent.dragStartIndex = index
                         parent.z = 20
                     }
                     onReleased: {
@@ -139,7 +141,7 @@ Item {
                         parent.z = 1
 
                         var center = parent.x + parent.width / 2
-                        var target = parent.sourceIndex
+                        var target = parent.dragStartIndex
                         for (var i = 0; i < toolRow.children.length; ++i) {
                             var candidate = toolRow.children[i]
                             if (candidate === parent || candidate.width === undefined)
@@ -148,7 +150,7 @@ Item {
                                 target = i
                         }
                         target = Math.max(0, Math.min(toolModel.count - 1, target))
-                        root.moveTool(parent.sourceIndex, target)
+                        root.moveTool(parent.dragStartIndex, target)
                         root.toolRequested(model.tool)
                     }
                     onClicked: root.toolRequested(model.tool)
