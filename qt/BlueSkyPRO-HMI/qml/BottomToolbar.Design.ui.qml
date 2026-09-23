@@ -22,7 +22,7 @@ Item {
         width: 1416
         height: 72
         radius: 2
-        color: root.backgroundColor
+        color: "#08111D"
         border.color: root.serviceColor
         border.width: 1
     }
@@ -32,7 +32,7 @@ Item {
         y: 24
         width: 108
         height: 48
-        color: root.backgroundColor
+        color: "#0C1725"
         border.color: root.serviceColor
         border.width: 1
         Text {
@@ -50,7 +50,7 @@ Item {
         y: 24
         width: 110
         height: 48
-        color: root.backgroundColor
+        color: "#0C1725"
         border.color: root.serviceColor
         border.width: 1
         Text {
@@ -68,7 +68,7 @@ Item {
         y: 24
         width: 110
         height: 48
-        color: root.backgroundColor
+        color: "#111F30"
         border.color: root.activeColor
         border.width: 1
         Text {
@@ -86,7 +86,7 @@ Item {
         y: 24
         width: 110
         height: 48
-        color: root.backgroundColor
+        color: "#0C1725"
         border.color: root.serviceColor
         border.width: 1
         Text {
@@ -104,7 +104,7 @@ Item {
         y: 24
         width: 110
         height: 48
-        color: root.backgroundColor
+        color: "#0C1725"
         border.color: root.serviceColor
         border.width: 1
         Text {
@@ -122,7 +122,7 @@ Item {
         y: 24
         width: 150
         height: 48
-        color: root.backgroundColor
+        color: "#0C1725"
         border.color: root.serviceColor
         border.width: 1
         Text {
@@ -140,7 +140,7 @@ Item {
         y: 24
         width: 108
         height: 48
-        color: root.backgroundColor
+        color: "#0C1725"
         border.color: root.serviceColor
         border.width: 1
         Text {
@@ -166,7 +166,7 @@ Item {
         y: 24
         width: 150
         height: 48
-        color: root.backgroundColor
+        color: "#0C1725"
         border.color: root.serviceColor
         border.width: 1
         Text {
@@ -184,7 +184,7 @@ Item {
         y: 24
         width: 330
         height: 48
-        color: root.backgroundColor
+        color: "#0C1725"
         border.color: root.primaryColor
         border.width: 1
         Text {
