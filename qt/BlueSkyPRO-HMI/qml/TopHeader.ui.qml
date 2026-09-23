@@ -229,23 +229,12 @@ Item {
         }
     }
 
-    // Structural dividers.
-    // QML UI files must stay declarative: no JavaScript paint blocks.
-    // All dividers use the same Rectangle primitive and identical raster settings.
-    Rectangle {
-        x: Math.round(centralComposition.x)
-        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
-        width: root.headerStrokeWidth
-        height: Math.min(root.structuralDividerHeight, parent.height - 16)
-        color: root.accent
-        antialiasing: false
-        z: 90
-    }
-
+    // Structural dividers — five interior separators only.
+    // Anchor boundaries are not redrawn here; this prevents boundary double-strokes.
     Rectangle {
         x: Math.round(centralComposition.x + centralComposition.width / 6)
         y: Math.round((parent.height - root.structuralDividerHeight) / 2)
-        width: root.headerStrokeWidth
+        width: 1
         height: Math.min(root.structuralDividerHeight, parent.height - 16)
         color: root.accent
         antialiasing: false
@@ -255,7 +244,7 @@ Item {
     Rectangle {
         x: Math.round(centralComposition.x + centralComposition.width * 2 / 6)
         y: Math.round((parent.height - root.structuralDividerHeight) / 2)
-        width: root.headerStrokeWidth
+        width: 1
         height: Math.min(root.structuralDividerHeight, parent.height - 16)
         color: root.accent
         antialiasing: false
@@ -265,7 +254,7 @@ Item {
     Rectangle {
         x: Math.round(centralComposition.x + centralComposition.width * 3 / 6)
         y: Math.round((parent.height - root.structuralDividerHeight) / 2)
-        width: root.headerStrokeWidth
+        width: 1
         height: Math.min(root.structuralDividerHeight, parent.height - 16)
         color: root.accent
         antialiasing: false
@@ -275,7 +264,7 @@ Item {
     Rectangle {
         x: Math.round(centralComposition.x + centralComposition.width * 4 / 6)
         y: Math.round((parent.height - root.structuralDividerHeight) / 2)
-        width: root.headerStrokeWidth
+        width: 1
         height: Math.min(root.structuralDividerHeight, parent.height - 16)
         color: root.accent
         antialiasing: false
@@ -285,17 +274,7 @@ Item {
     Rectangle {
         x: Math.round(centralComposition.x + centralComposition.width * 5 / 6)
         y: Math.round((parent.height - root.structuralDividerHeight) / 2)
-        width: root.headerStrokeWidth
-        height: Math.min(root.structuralDividerHeight, parent.height - 16)
-        color: root.accent
-        antialiasing: false
-        z: 90
-    }
-
-    Rectangle {
-        x: Math.round(centralComposition.x + centralComposition.width)
-        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
-        width: root.headerStrokeWidth
+        width: 1
         height: Math.min(root.structuralDividerHeight, parent.height - 16)
         color: root.accent
         antialiasing: false
