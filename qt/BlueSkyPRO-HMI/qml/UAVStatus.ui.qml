@@ -28,7 +28,11 @@ Item {
     }
 
     Row {
-        anchors.fill: parent
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.rightMargin: 46
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
         anchors.margins: 10
         spacing: 8
 
