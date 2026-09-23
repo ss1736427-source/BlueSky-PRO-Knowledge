@@ -6,13 +6,9 @@ Item {
     property string value: ""
     property color valueColor: "#BFBFBF"
     property color headingColor: "#BFBFBF"
-    property color divider: "#00A3FF"
     property int headingSize: 11
     property int valueSize: 18
     property int headingValueGap: 3
-    property int separatorHeight: 54
-    property int separatorWidth: 1
-    property bool showRightSeparator: true
 
     Text {
         id: heading
@@ -39,12 +35,4 @@ Item {
         horizontalAlignment: Text.AlignHCenter
     }
 
-    Rectangle {
-        visible: root.showRightSeparator
-        anchors.right: parent.right
-        anchors.verticalCenter: parent.verticalCenter
-        width: root.separatorWidth
-        height: Math.min(root.separatorHeight, parent.height - 16)
-        color: root.divider
-    }
 }
