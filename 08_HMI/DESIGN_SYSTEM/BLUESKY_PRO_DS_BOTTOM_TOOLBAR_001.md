@@ -38,8 +38,33 @@ Fixed elements never participate in workspace reordering.
 - Service text/borders: `#7F7F7F`
 - Active workspace accent: `#32FFFF`
 - 1 px service/component borders.
-- Compact persistent height; exact application geometry remains responsive to the host window.
+- Reference DS geometry: `1440 × 96`.
+- Compact persistent height; application geometry remains responsive to the host window.
 - Active context is visually distinct but does not become a command/flight-control state.
+- Working typography: B612 Mono Bold 16 px for toolbar labels/time; IBM Plex Sans Condensed 9 px for DS annotation/reference text.
+
+## Qt Design Studio source
+
+The editable Qt Design Studio visual source is:
+
+`qt/BlueSkyPRO-HMI/qml/BottomToolbar.Design.ui.qml`
+
+It is intentionally a visual-only `.ui.qml` component:
+- no runtime JavaScript functions;
+- no Settings persistence;
+- no mission/flight logic;
+- no safety authority;
+- no telemetry control.
+
+Runtime behavior remains in:
+
+`qt/BlueSkyPRO-HMI/qml/BottomToolbar.ui.qml`
+
+The Design Studio project entry point is:
+
+`qt/BlueSkyPRO-HMI/BlueSkyPRO-DesignStudio.qmlproject`
+
+The two files are intentionally separated so Qt Design Studio can edit the visual component without moving application behavior into the visual layer.
 
 ## Interaction rules
 
