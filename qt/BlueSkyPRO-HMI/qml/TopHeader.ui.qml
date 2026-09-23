@@ -229,23 +229,27 @@ Item {
         }
     }
 
-    // Structural dividers — one shared layer so every vertical line is rasterized identically.
-    Item {
-        id: dividerLayer
+    // Structural dividers — one Canvas owns all seven lines.
+    // This prevents overlapping Rectangle instances and guarantees one draw operation per line.
+    Canvas {
+        id: dividerCanvas
         anchors.fill: parent
         z: 90
+        antialiasing: false
 
-        Repeater {
-            model: 7
+        onPaint: {
+            var ctx = getContext("2d")
+            ctx.reset()
+            ctx.fillStyle = root.accent
 
-            Rectangle {
-                required property int index
-                x: Math.round(centralComposition.x + centralComposition.width * index / 6)
-                y: Math.round((parent.height - root.structuralDividerHeight) / 2)
-                width: root.headerStrokeWidth
-                height: Math.min(root.structuralDividerHeight, parent.height - 16)
-                color: root.accent
-                antialiasing: false
+            var x0 = Math.round(centralComposition.x)
+            var step = centralComposition.width / 6
+            var y0 = Math.round((height - root.structuralDividerHeight) / 2)
+            var h = Math.min(root.structuralDividerHeight, height - 16)
+
+            for (var i = 0; i < 7; ++i) {
+                var x = Math.round(x0 + step * i)
+                ctx.fillRect(x, y0, root.headerStrokeWidth, h)
             }
         }
     }
