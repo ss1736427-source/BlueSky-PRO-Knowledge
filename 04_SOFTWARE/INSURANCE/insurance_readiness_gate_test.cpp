@@ -25,7 +25,7 @@ int main() {
     review.minimum_liability_rub = 541860.0;
     auto c = InsuranceReadinessGate::assess(review);
     assert(c.mandatory_insurance_applicable);
-    assert(!c.blocks_readiness);
+    assert(c.blocks_readiness);
 
     InsurancePreflightResult block;
     block.decision = InsuranceDecision::Block;
