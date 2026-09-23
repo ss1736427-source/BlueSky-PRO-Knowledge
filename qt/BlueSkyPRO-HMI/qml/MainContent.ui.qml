@@ -122,7 +122,11 @@ Item {
         onRightPanelToggleRequested: root.rightPanelOpen = !root.rightPanelOpen
         activeTool: root.activeTool
         onToolRequested: root.activeTool = tool
-        onToolConfigurationRequested: root.toolMenuOpen = !root.toolMenuOpen
+        onToolConfigurationRequested: {
+            root.toolMenuOpen = !root.toolMenuOpen
+            if (root.toolMenuOpen)
+                toolMenu.syncEnabledTools(bottomToolbar.enabledToolNames())
+        }
     }
 
     PanelSettingsPopup {
