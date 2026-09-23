@@ -29,6 +29,7 @@ Item {
     signal rightPanelToggleRequested()
     signal toolActivated(string tool)
     signal toolConfigurationChanged(string orderJson, string enabledJson)
+signal workspaceContextRequested(string tool)
 
     Settings {
         id: settings
@@ -177,6 +178,7 @@ Item {
                 root.activeTool = key
                 settings.activeTool = key
                 root.toolActivated(key)
+                root.workspaceContextRequested(key)
                 return
             }
         }
