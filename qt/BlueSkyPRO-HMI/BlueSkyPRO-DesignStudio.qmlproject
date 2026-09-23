@@ -1,7 +1,7 @@
 import QmlProject 1.1
 
 Project {
-    mainFile: "qml/BottomToolbar.ui.qml"
+    mainFile: "qml/BottomToolbar.Design.ui.qml"
 
     QmlFiles {
         directory: "qml"
