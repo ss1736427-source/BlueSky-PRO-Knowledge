@@ -9,6 +9,10 @@ Item {
     property var enabledTools: root.tools.slice()
     signal toolToggled(string tool, bool enabled)
 
+    function syncEnabledTools(toolsList) {
+        enabledTools = toolsList.slice()
+    }
+
     function firstEnabled() {
         return enabledTools.length > 0 ? enabledTools[0] : ""
     }
