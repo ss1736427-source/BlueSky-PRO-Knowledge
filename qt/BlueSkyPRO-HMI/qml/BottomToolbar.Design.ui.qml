@@ -7,7 +7,6 @@ Item {
     height: 96
 
     property color backgroundColor: "#000000"
-    property color surfaceColor: "#050505"
     property color primaryColor: "#FFFFFF"
     property color serviceColor: "#7F7F7F"
     property color activeColor: "#32FFFF"
@@ -23,7 +22,7 @@ Item {
         width: 1416
         height: 72
         radius: 2
-        color: root.surfaceColor
+        color: root.backgroundColor
         border.color: root.serviceColor
         border.width: 1
     }
@@ -36,7 +35,6 @@ Item {
         color: root.backgroundColor
         border.color: root.serviceColor
         border.width: 1
-
         Text {
             anchors.centerIn: parent
             text: "◀ LEFT"
@@ -55,7 +53,6 @@ Item {
         color: root.backgroundColor
         border.color: root.serviceColor
         border.width: 1
-
         Text {
             anchors.centerIn: parent
             text: "UAV"
@@ -71,10 +68,9 @@ Item {
         y: 24
         width: 110
         height: 48
-        color: root.surfaceColor
+        color: root.backgroundColor
         border.color: root.activeColor
         border.width: 1
-
         Text {
             anchors.centerIn: parent
             text: "MAP"
@@ -93,7 +89,6 @@ Item {
         color: root.backgroundColor
         border.color: root.serviceColor
         border.width: 1
-
         Text {
             anchors.centerIn: parent
             text: "ADMIN"
@@ -112,7 +107,6 @@ Item {
         color: root.backgroundColor
         border.color: root.serviceColor
         border.width: 1
-
         Text {
             anchors.centerIn: parent
             text: "FPV"
@@ -131,7 +125,6 @@ Item {
         color: root.backgroundColor
         border.color: root.serviceColor
         border.width: 1
-
         Text {
             anchors.centerIn: parent
             text: "VIRTUAL FLT"
@@ -150,7 +143,6 @@ Item {
         color: root.backgroundColor
         border.color: root.serviceColor
         border.width: 1
-
         Text {
             anchors.centerIn: parent
             text: "RIGHT ▶"
@@ -177,10 +169,9 @@ Item {
         color: root.backgroundColor
         border.color: root.serviceColor
         border.width: 1
-
         Text {
             anchors.centerIn: parent
-            text: "TIME 12:48:32"
+            text: "TIME"
             color: root.primaryColor
             font.family: "B612 Mono"
             font.pixelSize: 16
@@ -196,7 +187,6 @@ Item {
         color: root.backgroundColor
         border.color: root.primaryColor
         border.width: 1
-
         Text {
             anchors.centerIn: parent
             text: "☰ TOOLS"
