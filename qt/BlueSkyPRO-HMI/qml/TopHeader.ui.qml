@@ -229,29 +229,91 @@ Item {
         }
     }
 
-    // Structural dividers — one Canvas owns all seven lines.
-    // This prevents overlapping Rectangle instances and guarantees one draw operation per line.
-    Canvas {
-        id: dividerCanvas
-        anchors.fill: parent
-        z: 90
+    // Structural dividers.
+    // QML UI files must stay declarative: no JavaScript paint blocks.
+    // All dividers use the same Rectangle primitive and identical raster settings.
+    Rectangle {
+        x: Math.round(centralComposition.x)
+        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
+        width: root.headerStrokeWidth
+        height: Math.min(root.structuralDividerHeight, parent.height - 16)
+        color: root.accent
         antialiasing: false
+        layer.enabled: true
+        layer.smooth: false
+        z: 90
+    }
 
-        onPaint: {
-            var ctx = getContext("2d")
-            ctx.reset()
-            ctx.fillStyle = root.accent
+    Rectangle {
+        x: Math.round(centralComposition.x + centralComposition.width / 6)
+        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
+        width: root.headerStrokeWidth
+        height: Math.min(root.structuralDividerHeight, parent.height - 16)
+        color: root.accent
+        antialiasing: false
+        layer.enabled: true
+        layer.smooth: false
+        z: 90
+    }
 
-            var x0 = Math.round(centralComposition.x)
-            var step = centralComposition.width / 6
-            var y0 = Math.round((height - root.structuralDividerHeight) / 2)
-            var h = Math.min(root.structuralDividerHeight, height - 16)
+    Rectangle {
+        x: Math.round(centralComposition.x + centralComposition.width * 2 / 6)
+        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
+        width: root.headerStrokeWidth
+        height: Math.min(root.structuralDividerHeight, parent.height - 16)
+        color: root.accent
+        antialiasing: false
+        layer.enabled: true
+        layer.smooth: false
+        z: 90
+    }
 
-            for (var i = 0; i < 7; ++i) {
-                var x = Math.round(x0 + step * i)
-                ctx.fillRect(x, y0, root.headerStrokeWidth, h)
-            }
-        }
+    Rectangle {
+        x: Math.round(centralComposition.x + centralComposition.width * 3 / 6)
+        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
+        width: root.headerStrokeWidth
+        height: Math.min(root.structuralDividerHeight, parent.height - 16)
+        color: root.accent
+        antialiasing: false
+        layer.enabled: true
+        layer.smooth: false
+        z: 90
+    }
+
+    Rectangle {
+        x: Math.round(centralComposition.x + centralComposition.width * 4 / 6)
+        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
+        width: root.headerStrokeWidth
+        height: Math.min(root.structuralDividerHeight, parent.height - 16)
+        color: root.accent
+        antialiasing: false
+        layer.enabled: true
+        layer.smooth: false
+        z: 90
+    }
+
+    Rectangle {
+        x: Math.round(centralComposition.x + centralComposition.width * 5 / 6)
+        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
+        width: root.headerStrokeWidth
+        height: Math.min(root.structuralDividerHeight, parent.height - 16)
+        color: root.accent
+        antialiasing: false
+        layer.enabled: true
+        layer.smooth: false
+        z: 90
+    }
+
+    Rectangle {
+        x: Math.round(centralComposition.x + centralComposition.width)
+        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
+        width: root.headerStrokeWidth
+        height: Math.min(root.structuralDividerHeight, parent.height - 16)
+        color: root.accent
+        antialiasing: false
+        layer.enabled: true
+        layer.smooth: false
+        z: 90
     }
 
     // Outer frame: explicit 1px primitives, same as every structural divider.
