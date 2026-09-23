@@ -28,7 +28,7 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        color: "#000000"
+        color: "#050A12"
     }
 
     TopHeader {
