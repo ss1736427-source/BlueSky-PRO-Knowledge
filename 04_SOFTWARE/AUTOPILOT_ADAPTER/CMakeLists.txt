@@ -272,3 +272,11 @@ add_executable(insurance_risk_temporal_test ../INSURANCE/insurance_risk_temporal
 target_link_libraries(insurance_risk_temporal_test PRIVATE bluesky_insurance_risk_temporal)
 target_include_directories(insurance_risk_temporal_test PRIVATE ../INSURANCE)
 add_test(NAME insurance_risk_temporal_test COMMAND insurance_risk_temporal_test)
+
+add_library(bluesky_insurance_battery_lifecycle STATIC ../INSURANCE/insurance_battery_lifecycle.cpp)
+target_include_directories(bluesky_insurance_battery_lifecycle PUBLIC ../INSURANCE)
+target_compile_features(bluesky_insurance_battery_lifecycle PUBLIC cxx_std_20)
+add_executable(insurance_battery_lifecycle_test ../INSURANCE/insurance_battery_lifecycle_test.cpp)
+target_link_libraries(insurance_battery_lifecycle_test PRIVATE bluesky_insurance_battery_lifecycle)
+target_include_directories(insurance_battery_lifecycle_test PRIVATE ../INSURANCE)
+add_test(NAME insurance_battery_lifecycle_test COMMAND insurance_battery_lifecycle_test)
