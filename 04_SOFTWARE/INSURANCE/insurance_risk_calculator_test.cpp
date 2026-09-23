@@ -56,7 +56,6 @@ int main() {
     InsuranceUavRiskVector wrong("UAV-2");
     assert(calculator.calculate(wrong, 200).empty());
 
-    std::cout << "insurance_risk_calculator_test: PASS
-";
+    std::cout << "insurance_risk_calculator_test: PASS\\n";
     return 0;
 }
