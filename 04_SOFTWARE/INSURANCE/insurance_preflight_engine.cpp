@@ -51,7 +51,10 @@ std::string InsurancePreflightEngine::calculate_integrity_hash(
     canonical << s.snapshot_id_ << '|' << s.flight_record_id_ << '|'
               << s.insured_uav_id_ << '|' << s.policy_id_ << '|'
               << s.policy_version_ << '|' << s.ruleset_id_ << '|'
-              << s.ruleset_version_ << '|' << std::fixed << std::setprecision(2)
+              << s.ruleset_version_ << '|' << s.operation_type_ << '|'
+              << s.territory_id_ << '|' << s.pilot_id_ << '|'
+              << s.uav_configuration_version_ << '|' << s.evaluation_time_epoch_ << '|'
+              << bit(s.remote_id_available_) << '|' << std::fixed << std::setprecision(2)
               << s.minimum_liability_rub_ << '|' << s.policy_limit_rub_ << '|'
               << s.decision_text_;
     for (const auto& f : s.findings_) {
@@ -149,6 +152,12 @@ InsurancePreflightResult InsurancePreflightEngine::evaluate(
     s.ruleset_id_ = ruleset.ruleset_id;
     s.ruleset_version_ = ruleset.version;
     s.decision_text_ = decision_name(result.decision);
+    s.operation_type_ = operation.operation_type;
+    s.territory_id_ = operation.territory_id;
+    s.pilot_id_ = operation.pilot_id;
+    s.uav_configuration_version_ = uav.configuration_version;
+    s.evaluation_time_epoch_ = operation.evaluation_time_epoch;
+    s.remote_id_available_ = operation.remote_id_available;
     s.minimum_liability_rub_ = result.minimum_liability_rub;
     s.policy_limit_rub_ = policy.liability_limit_rub;
     s.findings_ = f;
