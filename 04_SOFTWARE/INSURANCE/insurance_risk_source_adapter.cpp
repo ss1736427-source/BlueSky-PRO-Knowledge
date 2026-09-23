@@ -17,9 +17,9 @@ bool InsuranceRiskSourceAdapter::ingest(const C2GnssObservation& x){
  return risk_.add_observation({x.id+"-GNSS",x.uav_id,RiskDimension::NavigationGnss,std::to_string(x.gnss_deviation_m),"gnss_deviation_m",x.timestamp_epoch,x.source_record_id,x.method,x.method_version,x.evidence_valid});
 }
 bool InsuranceRiskSourceAdapter::ingest(const EnvironmentalObservation& x){
- if(x.uav_id!=uav_id_||x.id.empty()||x.source_record_id.empty()||x.method.empty()||x.method_version.empty()||!x.evidence_valid||x.wind_mps<0||x.gust_mps<0||x.precipitation_mm<0)return false;
+ if(x.uav_id!=uav_id_||x.id.empty()||x.source_record_id.empty()||x.method.empty()||x.method_version.empty()||!x.evidence_valid||x.flight_hours<0||x.wind_mps<0||x.gust_mps<0||x.precipitation_mm<0)return false;
  const auto a=risk_.add_observation({x.id,x.uav_id,RiskDimension::Environmental,std::to_string(x.gust_mps),"gust_mps",x.timestamp_epoch,x.source_record_id,x.method,x.method_version,x.evidence_valid});
  if(!a)return false;
- return risk_.add_exposure({x.id+"-EXP",x.uav_id,0.0,0,false,0.0,x.adverse?1.0:0.0,"",x.source_record_id,x.evidence_valid});
+ return risk_.add_exposure({x.id+"-EXP",x.uav_id,x.flight_hours,0,false,0.0,x.adverse?x.flight_hours:0.0,"",x.source_record_id,x.evidence_valid});
 }
 } // namespace bluesky::insurance
