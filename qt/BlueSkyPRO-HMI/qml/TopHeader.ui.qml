@@ -83,15 +83,6 @@ Item {
         }
     }
 
-    // Anchor boundaries use the same accent as the outer Header outline.
-    Rectangle {
-        anchors.left: logoBlock.right
-        anchors.verticalCenter: parent.verticalCenter
-        width: root.separatorWidth
-        height: Math.min(root.separatorHeight, parent.height - 16)
-        color: root.accent
-    }
-
     // RIGHT ANCHOR — outer geometry is intentionally identical to LOGO anchor.
     Item {
         id: operatorBlock
@@ -147,14 +138,6 @@ Item {
         }
     }
 
-    Rectangle {
-        anchors.right: operatorBlock.left
-        anchors.verticalCenter: parent.verticalCenter
-        width: root.separatorWidth
-        height: Math.min(root.separatorHeight, parent.height - 16)
-        color: root.accent
-    }
-
     // CENTRAL COMPOSITION — fills the adaptive space between equal-width anchors.
     // Six equal sectors preserve the geometric center between TRIP and ETA.
     Item {
@@ -176,6 +159,7 @@ Item {
             headingValueGap: root.headingValueGap
             separatorHeight: root.separatorHeight
             separatorWidth: root.separatorWidth
+            showRightSeparator: false
             anchors.left: parent.left
         }
 
@@ -191,6 +175,7 @@ Item {
             headingValueGap: root.headingValueGap
             separatorHeight: root.separatorHeight
             separatorWidth: root.separatorWidth
+            showRightSeparator: false
             anchors.left: etdSector.right
         }
 
@@ -206,6 +191,7 @@ Item {
             headingValueGap: root.headingValueGap
             separatorHeight: root.separatorHeight
             separatorWidth: root.separatorWidth
+            showRightSeparator: false
             anchors.left: totSector.right
         }
 
@@ -221,6 +207,7 @@ Item {
             headingValueGap: root.headingValueGap
             separatorHeight: root.separatorHeight
             separatorWidth: root.separatorWidth
+            showRightSeparator: false
             anchors.left: tripSector.right
         }
 
@@ -236,6 +223,7 @@ Item {
             headingValueGap: root.headingValueGap
             separatorHeight: root.separatorHeight
             separatorWidth: root.separatorWidth
+            showRightSeparator: false
             anchors.left: etaSector.right
         }
 
@@ -252,11 +240,12 @@ Item {
             separatorHeight: root.separatorHeight
             separatorWidth: root.separatorWidth
             showRightSeparator: false
+            showRightSeparator: false
             anchors.left: readySector.right
         }
     }
 
-    // Explicit structural separators — drawn above all content for reliable DS rendering.
+    // Explicit structural separators — one source of truth for all seven boundaries.
     Repeater {
         model: 7
 
@@ -269,16 +258,6 @@ Item {
             color: root.accent
             z: 90
         }
-    }
-
-    // Explicit center axis: TRIP | ETA is the fourth boundary.
-    Rectangle {
-        x: centralComposition.x + centralComposition.width / 2
-        y: Math.round((parent.height - root.separatorHeight) / 2)
-        width: root.separatorWidth
-        height: Math.min(root.separatorHeight, parent.height - 16)
-        color: root.accent
-        z: 91
     }
 
     // Outer frame is drawn last so child components cannot cover the border.
