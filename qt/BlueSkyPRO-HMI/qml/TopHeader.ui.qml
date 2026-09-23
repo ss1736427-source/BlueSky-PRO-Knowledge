@@ -45,11 +45,8 @@ Item {
     property int headingValueGap: 3
     property int separatorHeight: 54
     property int separatorWidth: 1
-    // DS preview uses the same width for every structural line so zoom does not create mixed-weight dividers.
-    property bool designStudioPreview: true
-    property int previewSeparatorWidth: 2
-    property int effectiveSeparatorWidth: designStudioPreview ? previewSeparatorWidth : separatorWidth
-    property int effectiveBorderWidth: designStudioPreview ? previewSeparatorWidth : borderWidth
+    // One canonical stroke token for every Header line.
+    property int headerStrokeWidth: 1
 
     property bool tabletVariant: width < 1500
 
@@ -105,7 +102,7 @@ Item {
                 anchors.fill: parent
                 color: "transparent"
                 border.color: root.divider
-                border.width: 1
+                border.width: root.headerStrokeWidth
                 radius: 3
             }
 
@@ -253,7 +250,7 @@ Item {
     Rectangle {
         x: Math.round(centralComposition.x)
         y: Math.round((parent.height - root.separatorHeight) / 2)
-        width: root.effectiveSeparatorWidth
+        width: root.headerStrokeWidth
         height: Math.min(root.separatorHeight, parent.height - 16)
         color: root.accent
         z: 90
@@ -262,7 +259,7 @@ Item {
     Rectangle {
         x: Math.round(centralComposition.x + centralComposition.width / 6)
         y: Math.round((parent.height - root.separatorHeight) / 2)
-        width: root.effectiveSeparatorWidth
+        width: root.headerStrokeWidth
         height: Math.min(root.separatorHeight, parent.height - 16)
         color: root.accent
         z: 90
@@ -271,7 +268,7 @@ Item {
     Rectangle {
         x: Math.round(centralComposition.x + centralComposition.width * 2 / 6)
         y: Math.round((parent.height - root.separatorHeight) / 2)
-        width: root.effectiveSeparatorWidth
+        width: root.headerStrokeWidth
         height: Math.min(root.separatorHeight, parent.height - 16)
         color: root.accent
         z: 90
@@ -280,7 +277,7 @@ Item {
     Rectangle {
         x: Math.round(centralComposition.x + centralComposition.width * 3 / 6)
         y: Math.round((parent.height - root.separatorHeight) / 2)
-        width: root.effectiveSeparatorWidth
+        width: root.headerStrokeWidth
         height: Math.min(root.separatorHeight, parent.height - 16)
         color: root.accent
         z: 91
@@ -289,7 +286,7 @@ Item {
     Rectangle {
         x: Math.round(centralComposition.x + centralComposition.width * 4 / 6)
         y: Math.round((parent.height - root.separatorHeight) / 2)
-        width: root.effectiveSeparatorWidth
+        width: root.headerStrokeWidth
         height: Math.min(root.separatorHeight, parent.height - 16)
         color: root.accent
         z: 90
@@ -298,7 +295,7 @@ Item {
     Rectangle {
         x: Math.round(centralComposition.x + centralComposition.width * 5 / 6)
         y: Math.round((parent.height - root.separatorHeight) / 2)
-        width: root.effectiveSeparatorWidth
+        width: root.headerStrokeWidth
         height: Math.min(root.separatorHeight, parent.height - 16)
         color: root.accent
         z: 90
@@ -307,7 +304,7 @@ Item {
     Rectangle {
         x: Math.round(centralComposition.x + centralComposition.width)
         y: Math.round((parent.height - root.separatorHeight) / 2)
-        width: root.effectiveSeparatorWidth
+        width: root.headerStrokeWidth
         height: Math.min(root.separatorHeight, parent.height - 16)
         color: root.accent
         z: 90
@@ -318,7 +315,7 @@ Item {
         anchors.fill: parent
         color: "transparent"
         border.color: root.accent
-        border.width: root.effectiveBorderWidth
+        border.width: root.headerStrokeWidth
         radius: root.borderRadius
         z: 100
     }
