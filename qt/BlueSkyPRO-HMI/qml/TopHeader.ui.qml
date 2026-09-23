@@ -229,75 +229,25 @@ Item {
         }
     }
 
-    // Structural dividers — all coordinates are in the root coordinate space.
-    Rectangle {
-        x: Math.round(centralComposition.x)
-        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
-        width: root.headerStrokeWidth
-        height: Math.min(root.structuralDividerHeight, parent.height - 16)
-        antialiasing: false
-        color: root.accent
+    // Structural dividers — one shared layer so every vertical line is rasterized identically.
+    Item {
+        id: dividerLayer
+        anchors.fill: parent
         z: 90
-    }
 
-    Rectangle {
-        x: Math.round(centralComposition.x + centralComposition.width / 6)
-        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
-        width: root.headerStrokeWidth
-        height: Math.min(root.structuralDividerHeight, parent.height - 16)
-        antialiasing: false
-        color: root.accent
-        z: 90
-    }
+        Repeater {
+            model: 7
 
-    Rectangle {
-        x: Math.round(centralComposition.x + centralComposition.width * 2 / 6)
-        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
-        width: root.headerStrokeWidth
-        height: Math.min(root.structuralDividerHeight, parent.height - 16)
-        antialiasing: false
-        color: root.accent
-        z: 90
-    }
-
-    Rectangle {
-        x: Math.round(centralComposition.x + centralComposition.width * 3 / 6)
-        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
-        width: root.headerStrokeWidth
-        height: Math.min(root.structuralDividerHeight, parent.height - 16)
-        antialiasing: false
-        color: root.accent
-        z: 91
-    }
-
-    Rectangle {
-        x: Math.round(centralComposition.x + centralComposition.width * 4 / 6)
-        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
-        width: root.headerStrokeWidth
-        height: Math.min(root.structuralDividerHeight, parent.height - 16)
-        antialiasing: false
-        color: root.accent
-        z: 90
-    }
-
-    Rectangle {
-        x: Math.round(centralComposition.x + centralComposition.width * 5 / 6)
-        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
-        width: root.headerStrokeWidth
-        height: Math.min(root.structuralDividerHeight, parent.height - 16)
-        antialiasing: false
-        color: root.accent
-        z: 90
-    }
-
-    Rectangle {
-        x: Math.round(centralComposition.x + centralComposition.width)
-        y: Math.round((parent.height - root.structuralDividerHeight) / 2)
-        width: root.headerStrokeWidth
-        height: Math.min(root.structuralDividerHeight, parent.height - 16)
-        antialiasing: false
-        color: root.accent
-        z: 90
+            Rectangle {
+                required property int index
+                x: Math.round(centralComposition.x + centralComposition.width * index / 6)
+                y: Math.round((parent.height - root.structuralDividerHeight) / 2)
+                width: root.headerStrokeWidth
+                height: Math.min(root.structuralDividerHeight, parent.height - 16)
+                color: root.accent
+                antialiasing: false
+            }
+        }
     }
 
     // Outer frame: explicit 1px primitives, same as every structural divider.
