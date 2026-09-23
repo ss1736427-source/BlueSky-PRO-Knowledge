@@ -20,7 +20,10 @@ This document is the visual source of truth for the BlueSky PRO HMI. The current
 
 ### Background and neutrals
 
-- Main background: `#000000`
+- Main background: `#050A12`
+- Panel surface: `#08111D`
+- Card surface: `#0C1725`
+- Selected / hover surface: `#111F30`
 - Primary text: `#FFFFFF`
 - Secondary text: `#BFBFBF`
 - Muted/service text: `#7F7F7F`
