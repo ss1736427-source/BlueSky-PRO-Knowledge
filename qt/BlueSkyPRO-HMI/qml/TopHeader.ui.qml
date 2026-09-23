@@ -244,9 +244,10 @@ Item {
         }
     }
 
-    // Anchor boundaries use the same 1 px accent line as all structural separators.
+    // Structural dividers are explicit QML rectangles for stable Design Studio rendering.
+    // All structural lines use the same 1 px accent token.
     Rectangle {
-        x: logoBlock.x + logoBlock.width
+        x: centralComposition.x
         y: Math.round((parent.height - root.separatorHeight) / 2)
         width: root.separatorWidth
         height: Math.min(root.separatorHeight, parent.height - 16)
@@ -255,7 +256,7 @@ Item {
     }
 
     Rectangle {
-        x: operatorBlock.x
+        x: etdSector.x + etdSector.width
         y: Math.round((parent.height - root.separatorHeight) / 2)
         width: root.separatorWidth
         height: Math.min(root.separatorHeight, parent.height - 16)
@@ -263,19 +264,49 @@ Item {
         z: 90
     }
 
-    // Explicit structural separators — one source of truth for all seven boundaries.
-    Repeater {
-        model: 7
+    Rectangle {
+        x: totSector.x + totSector.width
+        y: Math.round((parent.height - root.separatorHeight) / 2)
+        width: root.separatorWidth
+        height: Math.min(root.separatorHeight, parent.height - 16)
+        color: root.accent
+        z: 90
+    }
 
-        Rectangle {
-            property int boundaryIndex: index
-            x: centralComposition.x + (centralComposition.width * boundaryIndex / 6)
-            y: Math.round((parent.height - root.separatorHeight) / 2)
-            width: root.separatorWidth
-            height: Math.min(root.separatorHeight, parent.height - 16)
-            color: root.accent
-            z: 90
-        }
+    Rectangle {
+        x: tripSector.x + tripSector.width
+        y: Math.round((parent.height - root.separatorHeight) / 2)
+        width: root.separatorWidth
+        height: Math.min(root.separatorHeight, parent.height - 16)
+        color: root.accent
+        z: 91
+    }
+
+    Rectangle {
+        x: etaSector.x + etaSector.width
+        y: Math.round((parent.height - root.separatorHeight) / 2)
+        width: root.separatorWidth
+        height: Math.min(root.separatorHeight, parent.height - 16)
+        color: root.accent
+        z: 90
+    }
+
+    Rectangle {
+        x: readySector.x + readySector.width
+        y: Math.round((parent.height - root.separatorHeight) / 2)
+        width: root.separatorWidth
+        height: Math.min(root.separatorHeight, parent.height - 16)
+        color: root.accent
+        z: 90
+    }
+
+    Rectangle {
+        x: centralComposition.x + centralComposition.width
+        y: Math.round((parent.height - root.separatorHeight) / 2)
+        width: root.separatorWidth
+        height: Math.min(root.separatorHeight, parent.height - 16)
+        color: root.accent
+        z: 90
     }
 
     // Outer frame is drawn last so child components cannot cover the border.
