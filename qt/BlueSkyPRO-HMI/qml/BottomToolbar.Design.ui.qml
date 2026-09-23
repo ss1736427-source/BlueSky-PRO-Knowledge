@@ -157,7 +157,7 @@ Item {
     }
 
     Rectangle {
-        x: 900
+        x: 1258
         y: 24
         width: 1
         height: 48
@@ -165,9 +165,9 @@ Item {
     }
 
     Rectangle {
-        x: 916
+        x: 1274
         y: 24
-        width: 150
+        width: 72
         height: 48
         color: root.buttonColor
         Text {
@@ -181,9 +181,9 @@ Item {
     }
 
     Rectangle {
-        x: 1080
+        x: 1362
         y: 24
-        width: 330
+        width: 48
         height: 48
         color: root.buttonColor
         Text {
