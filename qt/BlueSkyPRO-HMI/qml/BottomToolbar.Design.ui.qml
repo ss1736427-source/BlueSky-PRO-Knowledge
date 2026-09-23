@@ -6,193 +6,213 @@ Item {
     width: 1440
     height: 96
 
-    property color background: "#000000"
-    property color surface: "#050505"
-    property color primary: "#FFFFFF"
-    property color secondary: "#BFBFBF"
-    property color divider: "#202020"
-    property color active: "#32FFFF"
+    property color backgroundColor: "#000000"
+    property color surfaceColor: "#050505"
+    property color primaryColor: "#FFFFFF"
+    property color serviceColor: "#7F7F7F"
+    property color activeColor: "#32FFFF"
 
     Rectangle {
         anchors.fill: parent
-        color: root.background
+        color: root.backgroundColor
     }
 
     Rectangle {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.verticalCenter: parent.verticalCenter
-        height: 64
-        color: root.surface
-        border.color: root.divider
+        x: 12
+        y: 12
+        width: 1416
+        height: 72
+        radius: 2
+        color: root.surfaceColor
+        border.color: root.serviceColor
+        border.width: 1
+    }
+
+    Rectangle {
+        x: 24
+        y: 24
+        width: 108
+        height: 48
+        color: root.backgroundColor
+        border.color: root.serviceColor
         border.width: 1
 
-        Row {
-            anchors.fill: parent
-            anchors.margins: 8
-            spacing: 6
-
-            Rectangle {
-                width: 104
-                height: 48
-                anchors.verticalCenter: parent.verticalCenter
-                color: root.surface
-                border.color: root.divider
-                border.width: 1
-
-                Text {
-                    anchors.centerIn: parent
-                    text: "◀ LEFT"
-                    color: root.primary
-                    font.family: "B612 Mono"
-                    font.pixelSize: 16
-                    font.bold: true
-                }
-            }
-
-            Rectangle {
-                width: 112
-                height: 48
-                anchors.verticalCenter: parent.verticalCenter
-                color: root.surface
-                border.color: root.divider
-                border.width: 1
-
-                Text {
-                    anchors.centerIn: parent
-                    text: "UAV"
-                    color: root.secondary
-                    font.family: "B612 Mono"
-                    font.pixelSize: 16
-                    font.bold: true
-                }
-            }
-
-            Rectangle {
-                width: 112
-                height: 48
-                anchors.verticalCenter: parent.verticalCenter
-                color: "#071419"
-                border.color: root.active
-                border.width: 1
-
-                Text {
-                    anchors.centerIn: parent
-                    text: "MAP"
-                    color: root.active
-                    font.family: "B612 Mono"
-                    font.pixelSize: 16
-                    font.bold: true
-                }
-            }
-
-            Rectangle {
-                width: 124
-                height: 48
-                anchors.verticalCenter: parent.verticalCenter
-                color: root.surface
-                border.color: root.divider
-                border.width: 1
-
-                Text {
-                    anchors.centerIn: parent
-                    text: "ADMIN"
-                    color: root.secondary
-                    font.family: "B612 Mono"
-                    font.pixelSize: 16
-                    font.bold: true
-                }
-            }
-
-            Rectangle {
-                width: 112
-                height: 48
-                anchors.verticalCenter: parent.verticalCenter
-                color: root.surface
-                border.color: root.divider
-                border.width: 1
-
-                Text {
-                    anchors.centerIn: parent
-                    text: "FPV"
-                    color: root.secondary
-                    font.family: "B612 Mono"
-                    font.pixelSize: 16
-                    font.bold: true
-                }
-            }
-
-            Rectangle {
-                width: 176
-                height: 48
-                anchors.verticalCenter: parent.verticalCenter
-                color: root.surface
-                border.color: root.divider
-                border.width: 1
-
-                Text {
-                    anchors.centerIn: parent
-                    text: "VIRTUAL FLT"
-                    color: root.secondary
-                    font.family: "B612 Mono"
-                    font.pixelSize: 16
-                    font.bold: true
-                }
-            }
-
-            Rectangle {
-                width: 112
-                height: 48
-                anchors.verticalCenter: parent.verticalCenter
-                color: root.surface
-                border.color: root.divider
-                border.width: 1
-
-                Text {
-                    anchors.centerIn: parent
-                    text: "RIGHT ▶"
-                    color: root.primary
-                    font.family: "B612 Mono"
-                    font.pixelSize: 16
-                    font.bold: true
-                }
-            }
-
-            Rectangle {
-                width: 116
-                height: 48
-                anchors.verticalCenter: parent.verticalCenter
-                color: root.surface
-                border.color: root.divider
-                border.width: 1
-
-                Text {
-                    anchors.centerIn: parent
-                    text: "TIME 12:48"
-                    color: root.secondary
-                    font.family: "B612 Mono"
-                    font.pixelSize: 16
-                    font.bold: true
-                }
-            }
-
-            Rectangle {
-                width: 136
-                height: 48
-                anchors.verticalCenter: parent.verticalCenter
-                color: root.surface
-                border.color: root.divider
-                border.width: 1
-
-                Text {
-                    anchors.centerIn: parent
-                    text: "☰ TOOLS"
-                    color: root.secondary
-                    font.family: "B612 Mono"
-                    font.pixelSize: 16
-                    font.bold: true
-                }
-            }
+        Text {
+            anchors.centerIn: parent
+            text: "◀ LEFT"
+            color: root.primaryColor
+            font.family: "B612 Mono"
+            font.pixelSize: 16
+            font.weight: Font.Bold
         }
+    }
+
+    Rectangle {
+        x: 140
+        y: 24
+        width: 110
+        height: 48
+        color: root.backgroundColor
+        border.color: root.serviceColor
+        border.width: 1
+
+        Text {
+            anchors.centerIn: parent
+            text: "UAV"
+            color: root.primaryColor
+            font.family: "B612 Mono"
+            font.pixelSize: 16
+            font.weight: Font.Bold
+        }
+    }
+
+    Rectangle {
+        x: 258
+        y: 24
+        width: 110
+        height: 48
+        color: root.surfaceColor
+        border.color: root.activeColor
+        border.width: 1
+
+        Text {
+            anchors.centerIn: parent
+            text: "MAP"
+            color: root.activeColor
+            font.family: "B612 Mono"
+            font.pixelSize: 16
+            font.weight: Font.Bold
+        }
+    }
+
+    Rectangle {
+        x: 376
+        y: 24
+        width: 110
+        height: 48
+        color: root.backgroundColor
+        border.color: root.serviceColor
+        border.width: 1
+
+        Text {
+            anchors.centerIn: parent
+            text: "ADMIN"
+            color: root.primaryColor
+            font.family: "B612 Mono"
+            font.pixelSize: 16
+            font.weight: Font.Bold
+        }
+    }
+
+    Rectangle {
+        x: 494
+        y: 24
+        width: 110
+        height: 48
+        color: root.backgroundColor
+        border.color: root.serviceColor
+        border.width: 1
+
+        Text {
+            anchors.centerIn: parent
+            text: "FPV"
+            color: root.primaryColor
+            font.family: "B612 Mono"
+            font.pixelSize: 16
+            font.weight: Font.Bold
+        }
+    }
+
+    Rectangle {
+        x: 612
+        y: 24
+        width: 150
+        height: 48
+        color: root.backgroundColor
+        border.color: root.serviceColor
+        border.width: 1
+
+        Text {
+            anchors.centerIn: parent
+            text: "VIRTUAL FLT"
+            color: root.primaryColor
+            font.family: "B612 Mono"
+            font.pixelSize: 16
+            font.weight: Font.Bold
+        }
+    }
+
+    Rectangle {
+        x: 778
+        y: 24
+        width: 108
+        height: 48
+        color: root.backgroundColor
+        border.color: root.serviceColor
+        border.width: 1
+
+        Text {
+            anchors.centerIn: parent
+            text: "RIGHT ▶"
+            color: root.primaryColor
+            font.family: "B612 Mono"
+            font.pixelSize: 16
+            font.weight: Font.Bold
+        }
+    }
+
+    Rectangle {
+        x: 900
+        y: 24
+        width: 1
+        height: 48
+        color: root.serviceColor
+    }
+
+    Rectangle {
+        x: 916
+        y: 24
+        width: 150
+        height: 48
+        color: root.backgroundColor
+        border.color: root.serviceColor
+        border.width: 1
+
+        Text {
+            anchors.centerIn: parent
+            text: "TIME 12:48:32"
+            color: root.primaryColor
+            font.family: "B612 Mono"
+            font.pixelSize: 16
+            font.weight: Font.Bold
+        }
+    }
+
+    Rectangle {
+        x: 1080
+        y: 24
+        width: 330
+        height: 48
+        color: root.backgroundColor
+        border.color: root.primaryColor
+        border.width: 1
+
+        Text {
+            anchors.centerIn: parent
+            text: "☰ TOOLS"
+            color: root.primaryColor
+            font.family: "B612 Mono"
+            font.pixelSize: 16
+            font.weight: Font.Bold
+        }
+    }
+
+    Text {
+        x: 24
+        y: 80
+        text: "DS / BOTTOM TOOLBAR / 001 — FIXED ANCHORS + CONFIGURABLE WORKSPACE CONTEXTS"
+        color: root.serviceColor
+        font.family: "IBM Plex Sans Condensed"
+        font.pixelSize: 9
     }
 }
