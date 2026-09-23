@@ -23,6 +23,7 @@ Item {
     property string missionId: "BS-260920-A-001"
     property string journalStatus: "READY"
     property string activeTool: "MAP"
+    property bool toolMenuOpen: false
     signal journalEvent(string eventType, int uavIndex, string decision)
     signal journalAppendRequested(string eventType, string missionId, int uavIndex, string decision)
     signal uavDecisionRequested(string decision, int uavIndex)
@@ -121,6 +122,19 @@ Item {
         onRightPanelToggleRequested: root.rightPanelOpen = !root.rightPanelOpen
         activeTool: root.activeTool
         onToolRequested: root.activeTool = tool
+        onToolConfigurationRequested: root.toolMenuOpen = !root.toolMenuOpen
+    }
+
+    PanelSettingsPopup {
+        id: toolMenu
+        anchors.right: parent.right
+        anchors.bottom: bottomToolbar.top
+        width: 300
+        height: 250
+        title: "TOOLS"
+        tools: ["MAP", "UAV", "FPV", "ADMIN", "VIRTUAL FLT", "DRAG TO REORDER"]
+        open: root.toolMenuOpen
+        onClosed: root.toolMenuOpen = false
     }
 
     ContextOverlay {
