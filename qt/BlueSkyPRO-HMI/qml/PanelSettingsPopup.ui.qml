@@ -6,7 +6,7 @@ Item {
     property string title: "PANEL SETTINGS"
     property var tools: []
     property bool open: false
-    property var enabledTools: []
+    property var enabledTools: root.tools.slice()
     signal toolToggled(string tool, bool enabled)
 
     function toggleTool(tool) {
