@@ -26,7 +26,7 @@ Item {
         height: 72
         radius: 2
         color: root.panelColor
-        border.color: root.serviceColor
+        border.color: root.activeColor
         border.width: 1
     }
 
@@ -161,7 +161,7 @@ Item {
         y: 24
         width: 1
         height: 48
-        color: root.serviceColor
+        color: root.activeColor
     }
 
     Rectangle {
