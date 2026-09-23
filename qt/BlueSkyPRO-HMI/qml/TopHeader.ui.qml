@@ -46,7 +46,9 @@ Item {
     property int separatorHeight: 54
     property int separatorWidth: 1
     // Preview stroke is intentionally 2 px only when DS zoom makes a 1 px stroke sub-pixel.
+    property bool designStudioPreview: true
     property int previewSeparatorWidth: 2
+    property int effectiveSeparatorWidth: designStudioPreview ? previewSeparatorWidth : separatorWidth
 
     property bool tabletVariant: width < 1500
 
@@ -250,7 +252,7 @@ Item {
     Rectangle {
         x: Math.round(centralComposition.x)
         y: Math.round((parent.height - root.separatorHeight) / 2)
-        width: root.previewSeparatorWidth
+        width: root.effectiveSeparatorWidth
         height: Math.min(root.separatorHeight, parent.height - 16)
         color: root.accent
         z: 90
