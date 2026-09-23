@@ -240,9 +240,27 @@ Item {
             separatorHeight: root.separatorHeight
             separatorWidth: root.separatorWidth
             showRightSeparator: false
-            showRightSeparator: false
             anchors.left: readySector.right
         }
+    }
+
+    // Anchor boundaries use the same 1 px accent line as all structural separators.
+    Rectangle {
+        x: logoBlock.x + logoBlock.width
+        y: Math.round((parent.height - root.separatorHeight) / 2)
+        width: root.separatorWidth
+        height: Math.min(root.separatorHeight, parent.height - 16)
+        color: root.accent
+        z: 90
+    }
+
+    Rectangle {
+        x: operatorBlock.x
+        y: Math.round((parent.height - root.separatorHeight) / 2)
+        width: root.separatorWidth
+        height: Math.min(root.separatorHeight, parent.height - 16)
+        color: root.accent
+        z: 90
     }
 
     // Explicit structural separators — one source of truth for all seven boundaries.
