@@ -79,6 +79,7 @@ InsurancePreflightResult InsurancePreflightEngine::evaluate(
     const InsurancePolicy& policy,
     const OperationContext& operation) const {
     InsurancePreflightResult result;
+    result.insurance_applicable = ruleset.insurance_applicable;
     result.minimum_liability_rub = calculate_minimum_liability(ruleset);
     auto& f = result.findings;
 

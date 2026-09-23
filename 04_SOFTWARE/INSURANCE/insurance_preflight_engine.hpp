@@ -85,8 +85,8 @@ public:
     bool remote_id_available() const noexcept { return remote_id_available_; }
     double minimum_liability_rub() const noexcept { return minimum_liability_rub_; }
     double policy_limit_rub() const noexcept { return policy_limit_rub_; }
-    const std::string& integrity_hash() const noexcept { return integrity_hash_; }
     const std::vector<CheckFinding>& findings() const noexcept { return findings_; }
+    const std::string& integrity_hash() const noexcept { return integrity_hash_; }
 private:
     friend class InsurancePreflightEngine;
     std::string snapshot_id_;
@@ -110,6 +110,7 @@ private:
 };
 
 struct InsurancePreflightResult {
+    bool insurance_applicable{false};
     InsuranceDecision decision{InsuranceDecision::Review};
     double minimum_liability_rub{0.0};
     std::vector<CheckFinding> findings;
