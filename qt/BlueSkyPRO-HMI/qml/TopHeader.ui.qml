@@ -85,6 +85,15 @@ Item {
         }
     }
 
+    // Anchor boundaries use the same accent as the outer Header outline.
+    Rectangle {
+        anchors.left: logoBlock.right
+        anchors.verticalCenter: parent.verticalCenter
+        width: root.separatorWidth
+        height: Math.min(root.separatorHeight, parent.height - 16)
+        color: root.accent
+    }
+
     // RIGHT ANCHOR — outer geometry is intentionally identical to LOGO anchor.
     Item {
         id: operatorBlock
@@ -138,6 +147,14 @@ Item {
                 }
             }
         }
+    }
+
+    Rectangle {
+        anchors.right: operatorBlock.left
+        anchors.verticalCenter: parent.verticalCenter
+        width: root.separatorWidth
+        height: Math.min(root.separatorHeight, parent.height - 16)
+        color: root.accent
     }
 
     // CENTRAL COMPOSITION — fills the adaptive space between equal-width anchors.
