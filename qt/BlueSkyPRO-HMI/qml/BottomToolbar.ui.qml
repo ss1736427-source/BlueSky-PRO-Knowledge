@@ -353,9 +353,15 @@ signal workspaceContextRequested(string tool)
         }
 
         Rectangle {
+            width: 1
+            height: 38
+            color: root.cyan
+        }
+
+        Rectangle {
             width: 76
             height: 38
-            color: "#0C1725"
+            color: "transparent"
 
             Text {
                 anchors.centerIn: parent
