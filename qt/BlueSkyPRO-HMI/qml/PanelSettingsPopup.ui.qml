@@ -9,6 +9,18 @@ Item {
     property var enabledTools: []
     signal toolToggled(string tool, bool enabled)
 
+    function toggleTool(tool) {
+        var next = enabledTools.slice()
+        var i = next.indexOf(tool)
+        var enabled = i < 0
+        if (enabled)
+            next.push(tool)
+        else
+            next.splice(i, 1)
+        enabledTools = next
+        toolToggled(tool, enabled)
+    }
+
     signal closed()
 
     visible: root.open
@@ -55,7 +67,7 @@ Item {
                     anchors.fill: parent
                     onClicked: {
                         var enabled = root.enabledTools.indexOf(modelData) >= 0
-                        root.toolToggled(modelData, !enabled)
+                        root.toggleTool(modelData)
                     }
                 }
                 color: "#BFBFBF"
