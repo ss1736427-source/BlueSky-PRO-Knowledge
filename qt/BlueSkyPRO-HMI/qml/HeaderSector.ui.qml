@@ -6,7 +6,7 @@ Item {
     property string value: ""
     property color valueColor: "#BFBFBF"
     property color headingColor: "#BFBFBF"
-    property color divider: "#202020"
+    property color divider: "#00A3FF"
     property int headingSize: 11
     property int valueSize: 18
     property int headingValueGap: 3
