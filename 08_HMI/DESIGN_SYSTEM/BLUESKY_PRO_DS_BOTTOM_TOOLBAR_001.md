@@ -39,8 +39,8 @@ Fixed elements never participate in workspace reordering.
 - Primary text: `#FFFFFF`
 - Service text/borders: `#7F7F7F`
 - Active workspace accent: `#32FFFF`
-- 1 px service/component borders on the toolbar frame and workspace controls.
-- TIME and ☰ system controls are frameless; the vertical divider before TIME remains the structural separator.
+- 1 px service/component borders on workspace controls. The outer toolbar panel frame uses the same `#32FFFF` / 1 px structural stroke as the Top Header.
+- TIME and ☰ system controls are frameless; the vertical divider before TIME remains the structural separator and uses the same `#32FFFF` / 1 px structural stroke as the Top Header.
 - Reference DS geometry: `1440 × 96`.
 - Compact persistent height; application geometry remains responsive to the host window.
 - Active context is visually distinct but does not become a command/flight-control state.
