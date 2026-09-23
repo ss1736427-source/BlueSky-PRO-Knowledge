@@ -2,8 +2,11 @@ import QtQuick
 
 Item {
     id: root
+
     signal uavSelected(int index)
-    implicitHeight: 78
+
+    implicitHeight: 82
+
     property color bg: "#000000"
     property color text: "#FFFFFF"
     property color secondary: "#BFBFBF"
@@ -11,25 +14,76 @@ Item {
     property color amber: "#FFD339"
     property color divider: "#202020"
 
-    Rectangle { anchors.fill: parent; color: root.bg }
+    // Visual working model. Final parameter set remains configurable per UAV panel.
+    property var uavModel: [
+        { id: "UAV-01", state: "READY", battery: "96%", detail: "C2 OK · HGT 80 m" },
+        { id: "UAV-02", state: "READY", battery: "94%", detail: "C2 OK · HGT 80 m" },
+        { id: "UAV-03", state: "CHECK", battery: "91%", detail: "correction pending" },
+        { id: "UAV-04", state: "READY", battery: "95%", detail: "C2 OK · HGT 80 m" }
+    ]
+
+    Rectangle {
+        anchors.fill: parent
+        color: root.bg
+    }
+
     Row {
-        anchors.fill: parent; anchors.margins: 10; spacing: 8
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.rightMargin: 46
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.margins: 10
+        spacing: 8
+
         Repeater {
-            model: [
-                "UAV-01  READY\nBAT 96% · C2 OK · HGT 80 m",
-                "UAV-02  READY\nBAT 94% · C2 OK · HGT 80 m",
-                "UAV-03  CHECK\nBAT 91% · correction pending",
-                "UAV-04  READY\nBAT 95% · C2 OK · HGT 80 m"
-            ]
+            model: root.uavModel
+
             delegate: Rectangle {
-                width: (parent.width - 24) / 4
-                height: 58
+                width: (parent.width - Math.max(0, root.uavModel.length - 1) * 8) / Math.max(1, root.uavModel.length)
+                height: 62
                 color: "#0A0A0A"
-                border.color: index === 2 ? root.amber : root.divider
+                border.color: modelData.state === "CHECK" ? root.amber : root.divider
                 border.width: 1
-                Text { anchors.fill: parent; anchors.margins: 10; text: modelData; color: index === 2 ? root.amber : root.text; font.family: "B612 Mono"; font.pixelSize: 10; lineHeight: 1.25; verticalAlignment: Text.AlignVCenter }
-                MouseArea { anchors.fill: parent; onClicked: root.uavSelected(index) }
+
+                Text {
+                    anchors.fill: parent
+                    anchors.margins: 10
+                    text: modelData.id + "  " + modelData.state
+                          + "\nBAT " + modelData.battery + " · " + modelData.detail
+                    color: modelData.state === "CHECK" ? root.amber : root.text
+                    font.family: "B612 Mono"
+                    font.pixelSize: 10
+                    lineHeight: 1.25
+                    verticalAlignment: Text.AlignVCenter
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: root.uavSelected(index)
+                }
             }
         }
     }
+    PanelSettingsButton {
+        id: panelSettings
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.margins: 10
+        z: 400
+        onClicked: panelSettingsPopup.open = !panelSettingsPopup.open
+    }
+
+    PanelSettingsPopup {
+        id: panelSettingsPopup
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.topMargin: 44
+        width: 260
+        height: 254
+        title: "UAV PANEL SETTINGS"
+        tools: ["UAV Selection", "Control / C2", "Navigation", "Energy", "Payload / Equipment", "Maintenance", "Diagnostics", "Displayed Parameters"]
+        onClosed: open = false
+    }
+
 }
