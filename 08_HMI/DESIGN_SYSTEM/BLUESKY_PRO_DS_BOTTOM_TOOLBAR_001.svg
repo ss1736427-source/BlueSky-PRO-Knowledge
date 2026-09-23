@@ -1,20 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1440" height="96" viewBox="0 0 1440 96">
 <rect width="1440" height="96" fill="#050A12"/>
-<rect x="12" y="12" width="1416" height="72" rx="2" fill="#08111D"/>
+<rect x="12" y="12" width="1416" height="72" rx="2" fill="#08111D" stroke="#7F7F7F" stroke-width="1"/>
 <g font-family="B612 Mono, monospace" font-size="16" font-weight="700">
-<rect x="24" y="24" width="108" height="48" fill="#0C1725"/>
+<rect x="24" y="24" width="108" height="48" fill="#0C1725" stroke="#7F7F7F"/>
 <text x="78" y="54" fill="#FFFFFF" text-anchor="middle">◀ LEFT</text>
-<rect x="140" y="24" width="110" height="48" fill="#0C1725"/>
+<rect x="140" y="24" width="110" height="48" fill="#0C1725" stroke="#7F7F7F"/>
 <text x="195" y="54" fill="#FFFFFF" text-anchor="middle">UAV</text>
-<rect x="258" y="24" width="110" height="48" fill="#111F30"/>
+<rect x="258" y="24" width="110" height="48" fill="#111F30" stroke="#32FFFF"/>
 <text x="313" y="54" fill="#32FFFF" text-anchor="middle">MAP</text>
-<rect x="376" y="24" width="110" height="48" fill="#0C1725"/>
+<rect x="376" y="24" width="110" height="48" fill="#0C1725" stroke="#7F7F7F"/>
 <text x="431" y="54" fill="#FFFFFF" text-anchor="middle">ADMIN</text>
-<rect x="494" y="24" width="110" height="48" fill="#0C1725"/>
+<rect x="494" y="24" width="110" height="48" fill="#0C1725" stroke="#7F7F7F"/>
 <text x="549" y="54" fill="#FFFFFF" text-anchor="middle">FPV</text>
-<rect x="612" y="24" width="150" height="48" fill="#0C1725"/>
+<rect x="612" y="24" width="150" height="48" fill="#0C1725" stroke="#7F7F7F"/>
 <text x="687" y="54" fill="#FFFFFF" text-anchor="middle">VIRTUAL FLT</text>
-<rect x="778" y="24" width="108" height="48" fill="#0C1725"/>
+<rect x="778" y="24" width="108" height="48" fill="#0C1725" stroke="#7F7F7F"/>
 <text x="832" y="54" fill="#FFFFFF" text-anchor="middle">RIGHT ▶</text>
 <line x1="900" y1="24" x2="900" y2="72" stroke="#7F7F7F"/>
 <rect x="916" y="24" width="150" height="48" fill="#0C1725"/>
