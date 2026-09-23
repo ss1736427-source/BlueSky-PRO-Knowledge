@@ -125,6 +125,5 @@ int main() {
     ambiguous_requires_review();
     remote_id_blocks();
     snapshot_is_stable();
-    std::cout << "insurance_preflight_engine_test: PASS
-";
+    std::cout << "insurance_preflight_engine_test: PASS\n";
 }
