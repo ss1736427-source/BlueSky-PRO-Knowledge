@@ -13,12 +13,12 @@ Canonical Design System component for persistent workspace navigation and panel 
 
 ## Structure
 
-`LEFT ◀ | UAV | MAP | ADMIN | FPV | VIRTUAL FLT | RIGHT ▶ | TIME | ☰`
+`LEFT ◀ | UAV | MAP | ADMIN | FPV | VIRTUAL FLT | RIGHT ▶ | HH:MM | ☰`
 
 ### Fixed elements
 - LEFT ◀
 - RIGHT ▶
-- TIME
+- TIME — current clock in `HH:MM`
 - ☰
 
 ### Configurable workspace contexts
@@ -41,7 +41,7 @@ Fixed elements never participate in workspace reordering.
 - Compact persistent height; application geometry remains responsive to the host window.
 - Active context is visually distinct but does not become a command/flight-control state.
 - Working typography: B612 Mono Bold 16 px for toolbar labels; IBM Plex Sans Condensed 9 px for DS annotation/reference text.
-- TIME is a fixed system element. The DS visual reference uses the label `TIME`; it must not contain a fabricated runtime clock value.
+- TIME is a fixed system element. The runtime displays the current clock in `HH:MM` format. The DS visual reference uses `HH:MM` as the format placeholder and must not contain a fabricated clock value.
 
 ## Qt Design Studio source
 
