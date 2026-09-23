@@ -151,8 +151,6 @@ Item {
         width: 150
         height: 48
         color: "#0C1725"
-        border.color: root.serviceColor
-        border.width: 1
         Text {
             anchors.centerIn: parent
             text: "HH:MM"
