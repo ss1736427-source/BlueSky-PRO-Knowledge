@@ -42,10 +42,6 @@ Item {
 
     property bool tabletVariant: width < 1500
 
-    function scalePx(value, percent) {
-        return Math.round(value * percent / 100)
-    }
-
     Rectangle {
         anchors.fill: parent
         color: root.bg
@@ -60,9 +56,9 @@ Item {
         anchors.bottom: parent.bottom
 
         Item {
-            width: Math.min(root.scalePx(root.logoVisualWidth, root.logoScale),
+            width: Math.min(Math.round(root.logoVisualWidth * root.logoScale / 100),
                             logoBlock.width - 2 * root.anchorPadding)
-            height: Math.min(root.scalePx(root.logoVisualHeight, root.logoScale),
+            height: Math.min(Math.round(root.logoVisualHeight * root.logoScale / 100),
                              logoBlock.height - 2 * root.anchorPadding)
             anchors.centerIn: parent
 
