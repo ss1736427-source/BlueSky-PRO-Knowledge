@@ -59,8 +59,12 @@ OperationContext operation() {
 void valid_policy_passes() {
     const auto r = InsurancePreflightEngine{}.evaluate(ruleset(), uav(), policy(), operation());
     assert(r.decision == InsuranceDecision::Pass);
+    assert(r.insurance_applicable);
     assert(r.minimum_liability_rub == 541860.0);
     assert(r.snapshot.decision_text() == "PASS");
+    assert(r.snapshot.flight_record_id() == "FLIGHT-001");
+    assert(r.snapshot.insured_uav_id() == "UAV-001");
+    assert(r.snapshot.policy_id() == "POL-001");
     assert(!r.snapshot.integrity_hash().empty());
 }
 
@@ -74,9 +78,17 @@ void wrong_uav_blocks() {
     assert(InsurancePreflightEngine{}.evaluate(ruleset(), uav(), p, operation()).decision == InsuranceDecision::Block);
 }
 
+void operation_outside_coverage_blocks() {
+    auto p = policy(); p.operation_covered = false;
+    assert(InsurancePreflightEngine{}.evaluate(ruleset(), uav(), p, operation()).decision == InsuranceDecision::Block);
+}
+
 void not_applicable_does_not_block() {
     auto r = ruleset(false);
-    assert(InsurancePreflightEngine{}.evaluate(r, uav(), InsurancePolicy{}, operation()).decision != InsuranceDecision::Block);
+    const auto result = InsurancePreflightEngine{}.evaluate(r, uav(), InsurancePolicy{}, operation());
+    assert(!result.insurance_applicable);
+    assert(result.minimum_liability_rub == 0.0);
+    assert(result.decision != InsuranceDecision::Block);
 }
 
 void insufficient_limit_blocks() {
@@ -107,10 +119,12 @@ int main() {
     valid_policy_passes();
     expired_policy_blocks();
     wrong_uav_blocks();
+    operation_outside_coverage_blocks();
     not_applicable_does_not_block();
     insufficient_limit_blocks();
     ambiguous_requires_review();
     remote_id_blocks();
     snapshot_is_stable();
-    std::cout << "insurance_preflight_engine_test: PASS\n";
+    std::cout << "insurance_preflight_engine_test: PASS
+";
 }
