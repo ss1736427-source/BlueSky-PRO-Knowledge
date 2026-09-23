@@ -20,6 +20,6 @@ bool InsuranceRiskSourceAdapter::ingest(const EnvironmentalObservation& x){
  if(x.uav_id!=uav_id_||x.id.empty()||x.source_record_id.empty()||x.method.empty()||x.method_version.empty()||!x.evidence_valid||x.flight_hours<0||x.wind_mps<0||x.gust_mps<0||x.precipitation_mm<0)return false;
  const auto a=risk_.add_observation({x.id,x.uav_id,RiskDimension::Environmental,std::to_string(x.gust_mps),"gust_mps",x.timestamp_epoch,x.source_record_id,x.method,x.method_version,x.evidence_valid});
  if(!a)return false;
- return risk_.add_exposure({x.id+"-EXP",x.uav_id,x.flight_hours,0,false,0.0,x.adverse?x.flight_hours:0.0,"",x.source_record_id,x.evidence_valid});
+ return risk_.add_exposure({x.id+"-EXP",x.uav_id,x.flight_hours,0,false,0.0,x.adverse?x.flight_hours:0.0,x.configuration_id,x.source_record_id,x.evidence_valid,x.timestamp_epoch});
 }
 } // namespace bluesky::insurance

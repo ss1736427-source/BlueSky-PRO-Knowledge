@@ -20,7 +20,7 @@ struct C2GnssObservation {
 struct EnvironmentalObservation {
  std::string id,uav_id,source_record_id,method,method_version;
  double flight_hours{0.0},wind_mps{0.0},gust_mps{0.0},temperature_c{0.0},precipitation_mm{0.0}; bool adverse{false};
- std::int64_t timestamp_epoch{0}; bool evidence_valid{false};
+ std::int64_t timestamp_epoch{0}; bool evidence_valid{false}; std::string configuration_id;
 };
 class InsuranceRiskSourceAdapter {
 public:

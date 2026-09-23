@@ -263,3 +263,12 @@ add_executable(insurance_risk_calculator_test ../INSURANCE/insurance_risk_calcul
 target_link_libraries(insurance_risk_calculator_test PRIVATE bluesky_insurance_risk_calculator)
 target_include_directories(insurance_risk_calculator_test PRIVATE ../INSURANCE)
 add_test(NAME insurance_risk_calculator_test COMMAND insurance_risk_calculator_test)
+
+add_library(bluesky_insurance_risk_temporal STATIC ../INSURANCE/insurance_risk_temporal.cpp)
+target_include_directories(bluesky_insurance_risk_temporal PUBLIC ../INSURANCE)
+target_link_libraries(bluesky_insurance_risk_temporal PUBLIC bluesky_insurance_uav_risk_vector)
+target_compile_features(bluesky_insurance_risk_temporal PUBLIC cxx_std_20)
+add_executable(insurance_risk_temporal_test ../INSURANCE/insurance_risk_temporal_test.cpp)
+target_link_libraries(insurance_risk_temporal_test PRIVATE bluesky_insurance_risk_temporal)
+target_include_directories(insurance_risk_temporal_test PRIVATE ../INSURANCE)
+add_test(NAME insurance_risk_temporal_test COMMAND insurance_risk_temporal_test)
