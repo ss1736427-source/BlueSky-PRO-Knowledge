@@ -25,7 +25,7 @@ Item {
     signal journalEvent(string eventType, int uavIndex, string decision)
     signal journalAppendRequested(string eventType, string missionId, int uavIndex, string decision)
     signal uavDecisionRequested(string decision, int uavIndex)
-    signal workspaceContextChanged(string context)
+    signal workspaceContextRequested(string context)
     property string workspaceContext: "MAP"
 
     Rectangle {
@@ -103,7 +103,7 @@ Item {
         onRightPanelToggleRequested: root.rightPanelOpen = !root.rightPanelOpen
         onToolActivated: {
             root.workspaceContext = tool
-            root.workspaceContextChanged(tool)
+            root.workspaceContextRequested(tool)
         }
     }
 
