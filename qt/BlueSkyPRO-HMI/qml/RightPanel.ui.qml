@@ -20,6 +20,7 @@ Item {
     property bool missionReady: false
     property bool warningActive: true
     property real validationPulse: 1.0
+    signal startMissionRequested()
 
     Rectangle {
         anchors.fill: parent
@@ -187,6 +188,15 @@ Item {
         font.bold: true
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
+    }
+
+    MouseArea {
+        x: 16
+        y: 382
+        width: parent.width - 32
+        height: 38
+        enabled: root.missionReady
+        onClicked: root.startMissionRequested()
     }
 
     Text {
