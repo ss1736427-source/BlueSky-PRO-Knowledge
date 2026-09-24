@@ -7,22 +7,22 @@
 
 BlueSky separates **task/coverage planning** from **dynamic flight-parameter calculation**.
 
-The optimizer first constructs a feasible route or route set satisfying the mission objective and known constraints. It then distributes the resulting work among compatible UAVs. Current wind is subsequently applied to calculate the actual flight parameters for each assigned route. If current conditions make the solution invalid or materially worse, BlueSky creates a Correction and re-optimizes as required.
+The optimizer constructs feasible route candidates from the mission objective and hard constraints, including active airspace/NOTAM restrictions, terrain and obstacle geometry. Wind is not merely a post-processing correction: when a wind snapshot is available and the mission profile requires wind-aware planning, wind participates in candidate edge costs and route selection. The selected route therefore minimizes the configured route objective while accounting for wind-adjusted ground speed, time and energy. A subsequent flight-parameter calculation verifies the selected route against the detailed vehicle-performance model. If conditions make the solution infeasible or materially worse, BlueSky creates a traceable Correction and re-optimizes.
 
 ```text
 TASK / COVERAGE REQUIREMENT
           ↓
-KNOWN CONSTRAINTS + TERRAIN + AIRSPACE
+KNOWN CONSTRAINTS + TERRAIN + AIRSPACE / NOTAM
           ↓
-BASE ROUTE OPTIMIZATION
+FEASIBLE SEARCH SPACE
           ↓
-ROUTE VARIANTS
+ROUTE SEARCH + WIND-AWARE EDGE COST
+          ↓
+ROUTE VARIANTS / DETOURS
           ↓
 FLEET / UAV DISTRIBUTION
           ↓
-CURRENT WIND
-          ↓
-WIND-AWARE FLIGHT CALCULATION
+VEHICLE-SPECIFIC WIND + PERFORMANCE CALCULATION
           ↓
 FINAL ROUTE / PARAMETERS
           ↓
@@ -57,11 +57,13 @@ The planner distinguishes required coverage, prohibited areas, mandatory points 
 
 Where appropriate, BlueSky represents the feasible environment as a weighted graph. Nodes may represent waypoints, coverage points, turns, altitude layers, launch/recovery points and transitions between coverage cells. Edges represent feasible flight segments.
 
-Edge cost can contain:
+Edge cost is evaluated only for feasible edges. Depending on the mission objective profile it can contain:
 
-`distance + time + energy + risk + mission penalty + constraint penalty`
+`distance + wind-adjusted time + wind-adjusted energy + operational cost`
 
-Hard safety and regulatory constraints are feasibility constraints, not merely optional cost weights.
+Hard safety and regulatory constraints are feasibility constraints, not cost weights. A prohibited/restricted edge is removed from the search graph; no finite penalty may make it selectable.
+
+For the default route-planning profile, geometric distance is the primary objective and wind-adjusted time/energy are secondary objectives. For an explicitly configured efficiency profile, the optimizer may select a slightly longer legal route when the wind-adjusted operational cost is lower. The objective profile and weights/tolerances are versioned inputs, not hidden optimizer behavior.
 
 ## 5. Dijkstra decision
 
@@ -125,9 +127,17 @@ UAV-03 route
 
 Assignment considers payload capability, endurance/energy, performance, battery/resource state, C2 availability, regulatory restrictions, launch/recovery constraints, mission priority and separation requirements.
 
-## 8. Wind calculation
+## 8. Wind-aware route optimization
 
-**Wind is applied to the already constructed and distributed baseline solution.**
+**Wind participates in route selection when wind-aware planning is enabled.**
+
+The optimizer evaluates the wind vector along candidate segments before selecting the final route. For each candidate segment and relevant altitude/time, it resolves the wind vector against the vehicle airspeed/performance model to estimate ground speed, traversal time and energy. A longer geometric detour can therefore be selected when it has materially better wind-adjusted operational cost under the active objective profile.
+
+The baseline route remains a deterministic reference. Wind-aware optimization produces a traceable candidate/variant rather than silently replacing the baseline.
+
+## 9. Wind calculation
+
+After candidate selection, the detailed vehicle-performance calculation verifies the selected route.
 
 For every segment and relevant altitude, BlueSky uses the wind vector together with the aircraft air-relative velocity to determine ground velocity and track.
 
@@ -149,15 +159,15 @@ The calculation updates heading/track, ground speed, segment time, ETA, energy c
 
 Wind speed and direction materially affect UAV flight time and energy; recent reviews specifically identify wind as an important factor in energy-aware UAV path planning. citeturn0search4turn0search5
 
-## 9. Important exception
+## 10. Wind as feasibility constraint
 
-Although the agreed sequence applies current wind after baseline route generation, wind may be promoted into the feasibility/optimization layer when it is a **hard constraint**. Example: forecast wind makes a particular corridor impossible for the selected UAV. In that case the route candidate must be rejected or regenerated before final distribution.
+Wind may also be a hard feasibility condition. Examples include maximum allowable wind, crosswind/headwind limits, minimum achievable ground speed, energy-reserve limits, or vehicle-specific operating envelopes. A candidate violating such a condition is rejected before route selection.
 
 Thus the architecture is:
 
-**baseline route → wind calculation → feasibility check → correction/re-optimization if necessary.**
+**hard constraints → feasible graph → distance/wind-aware optimization → detailed vehicle verification → Correction/re-optimization if required.**
 
-## 10. Corrections
+## 11. Corrections
 
 The baseline route remains the reference mission solution. Updated wind produces a traceable Correction rather than an unexplained route replacement.
 
@@ -177,11 +187,11 @@ COMPARE
 
 The Correction records the reason, input-data version, affected segments and resulting change.
 
-## 11. Re-optimization triggers
+## 12. Re-optimization triggers
 
 Full or partial re-optimization may be triggered by excessive wind, insufficient energy reserve, new restrictions, changed terrain/obstacle information, UAV state/capability changes, material C2 degradation or traffic/safety conditions.
 
-## 12. Energy model
+## 13. Energy model
 
 Energy calculation is a separate service from graph search. The edge evaluator receives vehicle configuration, payload, flight state, weather and segment geometry and returns estimated time and energy cost.
 
@@ -191,7 +201,7 @@ Conceptually:
 
 The model supports battery degradation and installed-equipment effects previously defined for BlueSky. Energy-aware UAV research models energy as a function of trajectory, vehicle state and environmental factors including wind. citeturn0search4
 
-## 13. Mission objective
+## 14. Mission objective
 
 BlueSky does not hard-code one universal optimization objective. Mission templates select the objective profile, for example:
 
@@ -208,7 +218,7 @@ A representative objective is:
 
 Safety/regulatory hard constraints cannot be traded away by reducing a weight.
 
-## 14. Role of Dijkstra
+## 15. Role of Dijkstra
 
 **Dijkstra:** deterministic graph search, least-cost path under the edge model, reference result and fallback.
 
@@ -222,11 +232,11 @@ Safety/regulatory hard constraints cannot be traded away by reducing a weight.
 
 **Correction engine:** responds to changing conditions and preserves traceability.
 
-## 15. Verification
+## 16. Verification
 
 Required reference scenarios include obstacles, restricted areas, mandatory waypoints, Dijkstra reference paths, wind from principal directions, variable wind by segment/altitude, energy reserve limits, payload-dependent performance, multi-UAV allocation, dynamic correction and deterministic replay/regression.
 
-## 16. Gate
+## 17. Gate
 
 PHASE 8 is complete only when BlueSky can:
 
@@ -239,10 +249,16 @@ PHASE 8 is complete only when BlueSky can:
 7. re-optimize when required;
 8. produce a versioned mission ready for the autopilot integration layer.
 
-## 17. Decision record
+## 18. Decision record
 
 **Baseline:** Dijkstra remains the deterministic reference algorithm.
 
-**Optimization architecture:** Dijkstra/A* are route-search backends inside a larger optimizer; coverage decomposition, fleet allocation, wind/energy calculation and dynamic correction are separate stages.
+**Optimization architecture:** Dijkstra/A* are route-search backends inside a larger optimizer; coverage decomposition, fleet allocation, wind-aware edge evaluation, detailed vehicle-performance verification and dynamic correction are separate stages.
+
+**Restriction behavior:** active prohibited/restricted geometry is excluded from the feasible search graph. The optimizer must generate legal detours rather than route through a restricted zone and penalize the crossing.
+
+**Default objective:** minimum geometric distance among feasible routes, with wind-adjusted time/energy as secondary criteria. An explicitly versioned mission objective may permit a longer route when its wind-adjusted operational cost is lower.
+
+**Wind:** wind is an optimization input when required by the mission profile, not merely a post-flight calculation.
 
 **AI:** may later assist higher-level optimization or Corrections, but must remain behind a defined contract and cannot silently replace the deterministic reference without verification evidence.
