@@ -82,7 +82,11 @@ The two files are intentionally separated so Qt Design Studio can edit the visua
 7. LEFT/RIGHT control panel visibility and remain fixed.
 8. TIME is a system element and remains fixed.
 9. Toolbar configuration changes presentation/navigation only.
-10. Toolbar configuration cannot delete data, alter mission logic, stop telemetry, change route calculations or bypass safety authority.
+10. **Strict enabled-button invariant:** if a workspace context is ENABLED in TOOLS CONFIGURATION, its button MUST be present on the Bottom Toolbar. Reordering, dragging, clicking, persistence restore, or delegate/model refresh MUST NOT remove an enabled button.
+11. Only an explicit DISABLE action may remove a workspace button from the Bottom Toolbar.
+12. Reordering changes position only; it never changes the enabled/disabled state.
+13. If an internal model/projection inconsistency occurs, the runtime must restore missing enabled buttons before completing the reorder operation.
+14. Toolbar configuration cannot delete data, alter mission logic, stop telemetry, change route calculations or bypass safety authority.
 
 ## Safety boundary
 
