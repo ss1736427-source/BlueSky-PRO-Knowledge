@@ -171,6 +171,27 @@ signal workspaceContextRequested(string tool)
         }
     }
 
+    function findVisibleIndex(key) {
+        for (var i = 0; i < visibleToolModel.count; ++i)
+            if (visibleToolModel.get(i).key === key)
+                return i
+        return -1
+    }
+
+    function syncVisibleOrder() {
+        var desired = []
+        for (var i = 0; i < toolModel.count; ++i) {
+            if (toolModel.get(i).enabled)
+                desired.push(toolModel.get(i).key)
+        }
+
+        for (var j = 0; j < desired.length; ++j) {
+            var current = findVisibleIndex(desired[j])
+            if (current >= 0 && current !== j)
+                visibleToolModel.move(current, j, 1)
+        }
+    }
+
     function currentOrder() {
         var result = []
         for (var i = 0; i < toolModel.count; ++i)
@@ -224,7 +245,17 @@ signal workspaceContextRequested(string tool)
             }
         }
 
-        rebuildVisibleToolModel()
+        if (enabled) {
+            var visibleIndex = findVisibleIndex(key)
+            if (visibleIndex < 0) {
+                visibleToolModel.append({ key: key, label: key })
+                syncVisibleOrder()
+            }
+        } else {
+            var hiddenIndex = findVisibleIndex(key)
+            if (hiddenIndex >= 0)
+                visibleToolModel.remove(hiddenIndex, 1)
+        }
 
         if (!enabled && root.activeTool === key)
             root.activeTool = firstEnabled(currentOrder(), currentEnabled())
@@ -244,21 +275,26 @@ signal workspaceContextRequested(string tool)
             return
 
         toolModel.move(from, to, 1)
-        rebuildVisibleToolModel()
+        syncVisibleOrder()
         saveConfiguration()
     }
 
     function moveVisibleTool(key, targetVisibleIndex) {
-        var from = findToolIndex(key)
-        if (from < 0 || targetVisibleIndex < 0 || targetVisibleIndex >= visibleToolModel.count)
+        var fromVisible = findVisibleIndex(key)
+        if (fromVisible < 0 || targetVisibleIndex < 0 || targetVisibleIndex >= visibleToolModel.count || fromVisible === targetVisibleIndex)
             return
 
         var targetKey = visibleToolModel.get(targetVisibleIndex).key
-        var to = findToolIndex(targetKey)
-        if (to < 0 || from === to)
+        var fromFull = findToolIndex(key)
+        var targetFull = findToolIndex(targetKey)
+        if (fromFull < 0 || targetFull < 0)
             return
 
-        moveTool(from, to)
+        // Keep the full model and visible projection in lockstep without
+        // clearing/recreating the visible delegates during a drop.
+        toolModel.move(fromFull, targetFull, 1)
+        visibleToolModel.move(fromVisible, targetVisibleIndex, 1)
+        saveConfiguration()
     }
 
     Component.onCompleted: loadConfiguration()
@@ -385,8 +421,11 @@ signal workspaceContextRequested(string tool)
                             preventStealing: true
                             hoverEnabled: true
 
+                            property string pressedToolKey: ""
+
                             onPressed: {
                                 var p = mapToItem(toolArea, mouse.x, mouse.y)
+                                pressedToolKey = model.key
                                 toolDelegate.pressX = p.x
                                 toolDelegate.dragOffsetX = 0
                                 toolDelegate.dragTargetIndex = index
@@ -441,15 +480,17 @@ signal workspaceContextRequested(string tool)
                                 toolDelegate.dragOffsetX = 0
 
                                 if (!wasDragged) {
-                                    root.activateTool(model.key)
+                                    root.activateTool(pressedToolKey)
                                 } else {
-                                    root.moveVisibleTool(model.key, toolDelegate.dragTargetIndex)
+                                    root.moveVisibleTool(pressedToolKey, toolDelegate.dragTargetIndex)
                                 }
+                                pressedToolKey = ""
                             }
 
                             onCanceled: {
                                 toolDelegate.dragging = false
                                 toolDelegate.dragOffsetX = 0
+                                pressedToolKey = ""
                             }
                         }
                     }
