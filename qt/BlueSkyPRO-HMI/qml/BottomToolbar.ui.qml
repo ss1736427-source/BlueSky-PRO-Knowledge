@@ -367,11 +367,12 @@ signal workspaceContextRequested(string tool)
                 MouseArea {
                     anchors.fill: parent
                     preventStealing: true
-                    property real pressX: 0
+                    property real pressToolbarX: 0
                     property bool moved: false
 
                     onPressed: {
-                        pressX = mouse.x
+                        var pressPoint = mapToItem(toolList, mouse.x, mouse.y)
+                        pressToolbarX = pressPoint.x
                         moved = false
                         root.dragToolKey = model.key
                         root.dragSourceIndex = index
@@ -383,7 +384,7 @@ signal workspaceContextRequested(string tool)
                             return
 
                         var p = mapToItem(toolList, mouse.x, mouse.y)
-                        var delta = Math.abs(p.x - (pressX + mapToItem(toolList, 0, 0).x))
+                        var delta = Math.abs(p.x - pressToolbarX)
                         if (delta > 8)
                             moved = true
 
