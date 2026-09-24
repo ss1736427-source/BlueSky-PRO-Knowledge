@@ -146,6 +146,32 @@ Vertical launch/recovery itself is a constrained route segment and must pass the
 
 If a safe vertical transition cannot be established within the authorized scope and UAV limits, the route is infeasible; the system must not bypass the restriction or obstacle merely to produce a route.
 
+
+### Pilot authorization confirmation and READY transition
+
+When the planned launch or route is located within a general regulatory restriction, the Flight Chart and readiness workflow shall present the pilot with a clear operational notification that the operation is inside a restricted area.
+
+The notification shall identify:
+- the applicable restriction;
+- the authority/authorization type required;
+- the geographic and time scope;
+- relevant altitude and operating conditions;
+- the evidence or authorization reference that must be confirmed.
+
+The system shall not treat the pilot's acknowledgement alone as authorization. The pilot confirmation must reference an actual authorization record or validated authorization evidence that has passed the applicable deterministic authorization/readiness checks.
+
+Before confirmation, the regulatory condition remains a readiness blocker:
+
+RESTRICTED AREA -> AUTHORIZATION REQUIRED -> NOT READY
+
+After a valid, current, scope-matching authorization is confirmed and all other readiness conditions pass:
+
+RESTRICTED AREA + VALID AUTHORIZATION -> READY
+
+A change, expiry, invalidation or scope mismatch of the authorization immediately invalidates the authorization-qualified readiness state and returns the affected operation to the applicable REVIEW/BLOCK state.
+
+This confirmation is an operational readiness step. It does not alter the underlying regulatory source, does not grant permission by itself, and does not bypass safety, physical obstacle, insurance, technical, weather or other mandatory readiness gates.
+
 ### Calculation and reuse rule
 
 Authorization is an input/dependency of the constrained environment snapshot. A new or changed authorization invalidates only affected spatial feasibility and downstream results.
