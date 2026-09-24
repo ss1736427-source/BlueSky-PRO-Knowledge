@@ -23,6 +23,8 @@ Item {
     implicitWidth: Math.max(270, Math.min(420,
         Math.max(widestTemplateText.width + 44, headerTitleText.width + 84)))
     implicitHeight: 520
+    // When hosted by MainContent the panel height is supplied by top/bottom anchors,
+    // so it follows the workspace height automatically.
 
     property color bg: "#08111D"
     property color card: "#0C1725"
@@ -58,12 +60,13 @@ Item {
         color: root.bg
     }
 
+    // Full panel frame follows the interface structural-stroke language.
     Rectangle {
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        width: 1
-        color: root.divider
+        anchors.fill: parent
+        color: "transparent"
+        border.color: root.cyan
+        border.width: 1
+        radius: 1
     }
 
     // Template panel header — compact, outlined in the same service geometry.
@@ -73,8 +76,8 @@ Item {
         width: parent.width - 20
         height: 38
         color: root.card
-        border.color: root.divider
-        border.width: 1
+        border.color: "transparent"
+        border.width: 0
 
         Text {
             x: 12
@@ -126,7 +129,9 @@ Item {
         x: 10
         y: 50
         width: parent.width - 20
+        height: Math.max(0, parent.height - y - 10)
         spacing: 3
+        clip: true
 
         Repeater {
             model: templateModel
