@@ -286,6 +286,17 @@ Persistent workspace/tool navigation and panel control.
 - maintains the established tool order unless explicitly reordered;
 - does not become a duplicate telemetry dashboard.
 
+### Strict enabled-button invariant
+
+ENABLE in Bottom Toolbar configuration is a hard visibility guarantee:
+
+- an enabled workspace context MUST have a corresponding button on the Bottom Toolbar;
+- drag/reorder operations may change position only;
+- clicking an enabled button activates the context but cannot remove the button;
+- persistence/load/model refresh must restore every enabled button;
+- only an explicit DISABLE action may remove a workspace button;
+- if an internal model/projection inconsistency occurs, the runtime must restore missing enabled buttons before completing the reorder operation.
+
 ## 9. Overlay / Context behavior
 
 Context panels are used for local decisions and secondary information.
