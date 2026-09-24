@@ -16,6 +16,7 @@ add_library(bluesky_planning
     benchmarks/solver_benchmark_runner.cpp
     adapter/universal_adapter_registry.cpp
     compiler/mission_compiler.cpp
+    constrained_open_space.cpp
 )
 
 target_include_directories(bluesky_planning PUBLIC
@@ -59,6 +60,11 @@ add_executable(route_constraint_validator_test
     route_constraint_validator.cpp
 )
 target_link_libraries(route_constraint_validator_test PRIVATE bluesky_planning)
+
+add_executable(constrained_open_space_test
+    constrained_open_space_test.cpp
+)
+target_link_libraries(constrained_open_space_test PRIVATE bluesky_planning)
 
 add_executable(route_model_contract_test
     model/route_model_contract_test.cpp
@@ -144,6 +150,7 @@ add_test(NAME orchestrator_determinism_test COMMAND orchestrator_determinism_tes
 add_test(NAME orchestrator_objective_test COMMAND orchestrator_objective_test)
 add_test(NAME orchestrator_rejection_reason_test COMMAND orchestrator_rejection_reason_test)
 add_test(NAME route_constraint_validator_test COMMAND route_constraint_validator_test)
+add_test(NAME constrained_open_space_test COMMAND constrained_open_space_test)
 add_test(NAME route_model_contract_test COMMAND route_model_contract_test)
 add_test(NAME mission_model_contract_test COMMAND mission_model_contract_test)
 add_test(NAME vehicle_equipment_capability_contract_test COMMAND vehicle_equipment_capability_contract_test)
