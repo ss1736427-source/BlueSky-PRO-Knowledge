@@ -50,7 +50,7 @@ Item {
         ListElement { title: "Линейное обследование"; subtitle: ""; accent: "#32FFFF" }
         ListElement { title: "Картографирование коридора"; subtitle: ""; accent: "#FFD339" }
         ListElement { title: "Точка интереса"; subtitle: ""; accent: "#FF32FF" }
-        ListElement { title: "Ручное управление"; subtitle: ""; accent: "#BFBFBF" }
+        ListElement { title: "Создать миссию"; subtitle: ""; accent: "#BFBFBF" }
     }
 
     Rectangle {
