@@ -58,8 +58,16 @@ Item {
             anchors.bottom: parent.bottom
             width: root.leftPanelOpen ? root.leftWidth : 0
             missionVisible: root.missionVisible
-            onHideMissionRequested: root.missionVisible = false
+            missionId: root.missionId
+            onHideMissionRequested: {
+                root.lastJournalEvent = root.missionId + " · MISSION_STATE_SAVE_REQUESTED"
+                root.missionVisible = false
+            }
             onRestoreMissionRequested: root.missionVisible = true
+            onCreateMissionRequested: {
+                root.lastJournalEvent = "CREATE_MISSION_REQUESTED"
+                root.missionVisible = true
+            }
         }
 
         FlightChart {
@@ -69,6 +77,7 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             missionVisible: root.missionVisible
+            onMapDoubleClicked: root.leftPanelOpen = false
         }
 
         RightPanel {
@@ -79,6 +88,7 @@ Item {
             width: root.rightPanelOpen ? root.rightWidth : 0
             missionReady: root.missionReady
             warningActive: root.warningActive
+            onStartMissionRequested: root.leftPanelOpen = false
         }
     }
 
