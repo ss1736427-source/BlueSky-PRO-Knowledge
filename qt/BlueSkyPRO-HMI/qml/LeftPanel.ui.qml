@@ -11,8 +11,17 @@ Item {
         text: "Картографирование территории"
     }
 
-    // Panel width follows the widest visible content, with controlled ergonomic bounds.
-    implicitWidth: Math.max(260, Math.min(420, widestTemplateText.width + 48))
+    TextMetrics {
+        id: headerTitleText
+        font.family: "B612"
+        font.pixelSize: 13
+        font.bold: true
+        text: "Mission Templates"
+    }
+
+    // Width is driven by the widest visible content and the fixed right-side header controls.
+    implicitWidth: Math.max(270, Math.min(420,
+        Math.max(widestTemplateText.width + 44, headerTitleText.width + 84)))
     implicitHeight: 520
 
     property color bg: "#08111D"
@@ -70,6 +79,7 @@ Item {
         Text {
             x: 12
             anchors.verticalCenter: parent.verticalCenter
+            rightPadding: 70
             text: "Mission Templates"
             color: root.text
             font.family: "B612"
@@ -77,23 +87,30 @@ Item {
             font.bold: true
         }
 
-        Text {
-            x: parent.width - 66
+        Row {
+            anchors.right: parent.right
+            anchors.rightMargin: 10
             anchors.verticalCenter: parent.verticalCenter
-            text: "+"
-            color: root.cyan
-            font.family: "B612 Mono"
-            font.pixelSize: 18
-            font.bold: true
-        }
+            spacing: 10
 
-        Text {
-            x: parent.width - 36
-            anchors.verticalCenter: parent.verticalCenter
-            text: "≡"
-            color: root.secondary
-            font.family: "B612 Mono"
-            font.pixelSize: 16
+            Text {
+                width: 18
+                horizontalAlignment: Text.AlignHCenter
+                text: "+"
+                color: root.cyan
+                font.family: "B612 Mono"
+                font.pixelSize: 18
+                font.bold: true
+            }
+
+            Text {
+                width: 18
+                horizontalAlignment: Text.AlignHCenter
+                text: "≡"
+                color: root.secondary
+                font.family: "B612 Mono"
+                font.pixelSize: 16
+            }
         }
 
         MouseArea {
