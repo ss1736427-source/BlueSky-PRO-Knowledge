@@ -10,6 +10,7 @@ Item {
     property color secondary: "#BFBFBF"
     property color muted: "#7F7F7F"
     property color cyan: "#32FFFF"
+    property color panelBorder: "#1B2A36"
     property color divider: "#202020"
 
     property bool missionVisible: true
@@ -20,6 +21,8 @@ Item {
     Rectangle {
         anchors.fill: parent
         color: root.bg
+        border.color: root.panelBorder
+        border.width: 1
     }
 
     Rectangle {
@@ -67,7 +70,21 @@ Item {
         onClicked: root.missionVisible ? root.missionTemplateMenuRequested() : root.restoreMissionRequested()
     }
 
-    Text {
+    Flickable {
+        id: contentFlick
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.topMargin: 44
+        anchors.bottomMargin: 12
+        clip: true
+        contentWidth: width
+        contentHeight: 410
+        interactive: contentHeight > height
+        boundsBehavior: Flickable.StopAtBounds
+
+        Text {
         visible: root.missionVisible
         x: 16
         y: 48
@@ -269,6 +286,8 @@ Item {
                 onClicked: root.restoreMissionRequested()
             }
         }
+    }
+
     }
 
     PanelSettingsButton {
