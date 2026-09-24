@@ -571,7 +571,12 @@ signal workspaceContextRequested(string tool)
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: toolsPopup.visible = !toolsPopup.visible
+                onClicked: {
+                    // Opening configuration must never expose a stale/incomplete
+                    // visible projection. ENABLED tools are restored first.
+                    root.ensureEnabledToolsVisible()
+                    toolsPopup.visible = !toolsPopup.visible
+                }
             }
         }
     }
@@ -580,6 +585,11 @@ signal workspaceContextRequested(string tool)
         id: toolsPopup
         visible: false
         z: 20
+
+        onVisibleChanged: {
+            if (visible)
+                root.ensureEnabledToolsVisible()
+        }
         width: 330
         height: 330
         anchors.right: parent.right
