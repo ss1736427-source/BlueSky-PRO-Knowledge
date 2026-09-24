@@ -192,6 +192,18 @@ signal workspaceContextRequested(string tool)
         }
     }
 
+    // STRICT INVARIANT:
+    // enabled=true means the tool MUST exist on the bottom toolbar.
+    // Reordering is never allowed to remove an enabled tool.
+    function ensureEnabledToolsVisible() {
+        for (var i = 0; i < toolModel.count; ++i) {
+            var item = toolModel.get(i)
+            if (item.enabled && findVisibleIndex(item.key) < 0)
+                visibleToolModel.append({ key: item.key, label: item.label })
+        }
+        syncVisibleOrder()
+    }
+
     function currentOrder() {
         var result = []
         for (var i = 0; i < toolModel.count; ++i)
@@ -275,7 +287,7 @@ signal workspaceContextRequested(string tool)
             return
 
         toolModel.move(from, to, 1)
-        syncVisibleOrder()
+        ensureEnabledToolsVisible()
         saveConfiguration()
     }
 
@@ -294,6 +306,9 @@ signal workspaceContextRequested(string tool)
         // clearing/recreating the visible delegates during a drop.
         toolModel.move(fromFull, targetFull, 1)
         visibleToolModel.move(fromVisible, targetVisibleIndex, 1)
+
+        // STRICT: a drag/reorder can never hide an enabled tool.
+        ensureEnabledToolsVisible()
         saveConfiguration()
     }
 
