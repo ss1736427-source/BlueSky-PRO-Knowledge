@@ -26,13 +26,13 @@ Item {
 
     ListModel {
         id: templateModel
-        ListElement { title: "Landscape Mapping"; subtitle: ""; accent: "#64FF00" }
-        ListElement { title: "Building Inspection"; subtitle: ""; accent: "#BFBFBF" }
-        ListElement { title: "3D Mapping"; subtitle: ""; accent: "#32FFFF" }
-        ListElement { title: "Linear Inspection"; subtitle: ""; accent: "#32FFFF" }
-        ListElement { title: "Corridor Mapping"; subtitle: ""; accent: "#FFD339" }
-        ListElement { title: "Point of Interest"; subtitle: ""; accent: "#FF32FF" }
-        ListElement { title: "Manual Flight"; subtitle: ""; accent: "#BFBFBF" }
+        ListElement { title: "Картографирование территории"; subtitle: ""; accent: "#64FF00" }
+        ListElement { title: "Обследование зданий"; subtitle: ""; accent: "#BFBFBF" }
+        ListElement { title: "3D картография"; subtitle: ""; accent: "#32FFFF" }
+        ListElement { title: "Линейное обследование"; subtitle: ""; accent: "#32FFFF" }
+        ListElement { title: "Картографирование коридора"; subtitle: ""; accent: "#FFD339" }
+        ListElement { title: "Точка интереса"; subtitle: ""; accent: "#FF32FF" }
+        ListElement { title: "Ручное управление"; subtitle: ""; accent: "#BFBFBF" }
     }
 
     Rectangle {
