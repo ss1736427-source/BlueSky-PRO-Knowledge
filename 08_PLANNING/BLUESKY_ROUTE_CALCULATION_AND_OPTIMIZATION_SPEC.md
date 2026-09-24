@@ -96,6 +96,67 @@ Dijkstra remains the deterministic reference/fallback search algorithm. A* may b
 
 The route search stage must not be duplicated by a second independent route generator inside the optimizer.
 
+
+## 4.1 Authorized exception to general regulatory restrictions
+
+A general regulatory restriction is not treated as an unconditional spatial block when the mission has a current, explicit and scope-matching authorization from the competent authority (for example, an ATC/airspace authority and/or local self-government authority where such authorization is applicable).
+
+The authorization must be resolved before constrained spatial search and must explicitly cover, as applicable:
+- geographic area;
+- time validity;
+- altitude/vertical limits;
+- operation/mission type;
+- UAV/operator or other required identity;
+- applicable conditions and limitations.
+
+This produces an authorization-qualified planning constraint state. The restriction is then non-blocking only within the authorized scope. Outside that scope, the original restriction remains hard.
+
+This prevents a general prohibition such as a city, airport-area restriction or other regulatory airspace limitation from unnecessarily blocking route calculation when the operation has actually been authorized. It does not authorize the system to infer or manufacture an exemption.
+
+### Regulatory restriction versus physical obstacle
+
+Authorization may remove or relax an applicable regulatory restriction; it does not remove physical reality.
+
+Physical constraints remain part of the constrained open-space model, including:
+- terrain and mountains;
+- buildings and structures;
+- towers, cranes and other obstacles;
+- required obstacle-clearance margins;
+- UAV-specific climb/descent and performance limits.
+
+Therefore authorization changes regulatory feasibility, but does not remove terrain or obstacle constraints.
+
+The route search must still construct the route inside the physically flyable space.
+
+### Vertical launch and recovery procedure
+
+When an authorized operation starts or ends inside an area that would otherwise be blocked by a general regulatory restriction, the planner may construct a vertical launch / vertical recovery segment when the operation conditions permit it.
+
+The canonical pattern is:
+
+LAUNCH POINT -> VERTICAL CLIMB -> MINIMUM SAFE TRANSITION ALTITUDE -> CRUISE ROUTE
+
+and on recovery:
+
+CRUISE ROUTE -> MINIMUM SAFE APPROACH ALTITUDE -> VERTICAL DESCENT -> RECOVERY POINT
+
+The minimum safe transition/approach altitude is calculated for the actual launch/recovery location and UAV configuration from the applicable terrain, obstacle-clearance, operational, performance and authorization constraints. It is not a universal hard-coded height.
+
+Vertical launch/recovery itself is a constrained route segment and must pass the same deterministic feasibility, performance and safety/authorization gates as the remainder of the route.
+
+If a safe vertical transition cannot be established within the authorized scope and UAV limits, the route is infeasible; the system must not bypass the restriction or obstacle merely to produce a route.
+
+### Calculation and reuse rule
+
+Authorization is an input/dependency of the constrained environment snapshot. A new or changed authorization invalidates only affected spatial feasibility and downstream results.
+
+The Flight Chart displays the underlying restriction together with its authorization-qualified state so the operator can distinguish:
+- general restriction;
+- authorized/non-blocking scope;
+- remaining hard physical constraints;
+- authorization validity/conditions.
+
+
 ## 5. Route candidate result
 
 Each route candidate is a versioned object containing, as applicable:
