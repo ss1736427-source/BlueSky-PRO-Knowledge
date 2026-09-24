@@ -183,6 +183,47 @@ The Flight Chart displays the underlying restriction together with its authoriza
 - authorization validity/conditions.
 
 
+
+## 4.2 Combined restriction and authorization workflow
+
+The authorization-qualified restriction logic is an addition to, not a replacement for, the constrained-open-space planning model.
+
+The complete sequence is:
+
+GENERAL REGULATORY RESTRICTION
+-> IDENTIFY APPLICABLE AUTHORIZATION REQUIREMENT
+-> VALIDATE CURRENT AUTHORIZATION
+-> QUALIFY THE RESTRICTION ONLY WITHIN THE AUTHORIZED SCOPE
+-> CONSTRUCT PHYSICALLY OPEN SPACE
+-> SEARCH ROUTE
+-> RUN READINESS / SAFETY / AUTHORIZATION GATES
+-> READY
+
+If no valid authorization exists where one is required, the affected operation remains NOT READY. Route calculation may be used for planning and preparation where permitted, but the authorization condition remains a readiness blocker.
+
+A valid authorization does not override physical obstacles or other independent constraints. It only changes the regulatory feasibility state covered by that authorization.
+
+The same authorization-qualified environment state shall be consumed by:
+- constrained spatial search;
+- route calculation;
+- Flight Chart visualization;
+- readiness evaluation.
+
+No second or independent authorization/restriction interpretation may be created by the HMI or route optimizer.
+
+### Pilot-facing operational state
+
+The Flight Chart/readiness interface shall clearly distinguish:
+1. RESTRICTED — AUTHORIZATION REQUIRED;
+2. AUTHORIZATION PRESENT — VALIDATING;
+3. AUTHORIZED — OTHER CONSTRAINTS APPLY;
+4. READY only after all mandatory readiness conditions pass.
+
+The pilot confirmation is an operational confirmation step linked to validated authorization evidence. It is not itself the source of authorization.
+
+If authorization expires, is revoked, becomes outside its geographic/time/altitude scope, or fails identity/condition matching, the affected readiness state immediately ceases to qualify as READY and is recalculated.
+
+
 ## 5. Route candidate result
 
 Each route candidate is a versioned object containing, as applicable:
