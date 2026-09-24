@@ -43,6 +43,16 @@ signal workspaceContextRequested(string tool)
         id: toolModel
     }
 
+    // Visible toolbar projection. Hidden tools stay in toolModel so their
+    // relative order is preserved, while the toolbar itself has no gaps.
+    ListModel {
+        id: visibleToolModel
+    }
+
+    property string dragToolKey: ""
+    property int dragSourceIndex: -1
+    property bool dragActive: false
+
     function defaultOrder() {
         return ["UAV", "MAP", "ADMIN", "FPV", "VIRTUAL FLT"]
     }
@@ -131,6 +141,8 @@ signal workspaceContextRequested(string tool)
             })
         }
 
+        rebuildVisibleToolModel()
+
         var requestedActive = settings.activeTool
         if (!contains(order, requestedActive) || !enabled[requestedActive])
             requestedActive = firstEnabled(order, enabled)
@@ -145,6 +157,18 @@ signal workspaceContextRequested(string tool)
                 return order[i]
         }
         return "MAP"
+    }
+
+    function rebuildVisibleToolModel() {
+        visibleToolModel.clear()
+        for (var i = 0; i < toolModel.count; ++i) {
+            var item = toolModel.get(i)
+            if (item.enabled)
+                visibleToolModel.append({
+                    key: item.key,
+                    label: item.label
+                })
+        }
     }
 
     function currentOrder() {
@@ -200,6 +224,8 @@ signal workspaceContextRequested(string tool)
             }
         }
 
+        rebuildVisibleToolModel()
+
         if (!enabled && root.activeTool === key)
             root.activeTool = firstEnabled(currentOrder(), currentEnabled())
 
@@ -218,7 +244,21 @@ signal workspaceContextRequested(string tool)
             return
 
         toolModel.move(from, to, 1)
+        rebuildVisibleToolModel()
         saveConfiguration()
+    }
+
+    function moveVisibleTool(key, targetVisibleIndex) {
+        var from = findToolIndex(key)
+        if (from < 0 || targetVisibleIndex < 0 || targetVisibleIndex >= visibleToolModel.count)
+            return
+
+        var targetKey = visibleToolModel.get(targetVisibleIndex).key
+        var to = findToolIndex(targetKey)
+        if (to < 0 || from === to)
+            return
+
+        moveTool(from, to)
     }
 
     Component.onCompleted: loadConfiguration()
@@ -305,10 +345,10 @@ signal workspaceContextRequested(string tool)
             orientation: ListView.Horizontal
             interactive: false
             spacing: 6
-            model: toolModel
+            model: visibleToolModel
 
             delegate: Rectangle {
-                visible: model.enabled
+                visible: true
                 width: Math.max(76, toolLabel.implicitWidth + 28)
                 height: 38
                 color: root.activeTool === model.key ? "#111F30" : "#0C1725"
@@ -326,7 +366,49 @@ signal workspaceContextRequested(string tool)
 
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: root.activateTool(model.key)
+                    preventStealing: true
+                    property real pressX: 0
+                    property bool moved: false
+
+                    onPressed: {
+                        pressX = mouse.x
+                        moved = false
+                        root.dragToolKey = model.key
+                        root.dragSourceIndex = index
+                        root.dragActive = false
+                    }
+
+                    onPositionChanged: {
+                        if (!pressed)
+                            return
+
+                        var p = mapToItem(toolList, mouse.x, mouse.y)
+                        var delta = Math.abs(p.x - (pressX + mapToItem(toolList, 0, 0).x))
+                        if (delta > 8)
+                            moved = true
+
+                        var target = toolList.indexAt(p.x, p.y)
+                        if (target >= 0 && target !== root.dragSourceIndex) {
+                            root.dragActive = true
+                            root.moveVisibleTool(model.key, target)
+                            root.dragSourceIndex = target
+                        }
+                    }
+
+                    onReleased: {
+                        var wasDragged = moved || root.dragActive
+                        root.dragToolKey = ""
+                        root.dragSourceIndex = -1
+                        root.dragActive = false
+                        if (!wasDragged)
+                            root.activateTool(model.key)
+                    }
+
+                    onCanceled: {
+                        root.dragToolKey = ""
+                        root.dragSourceIndex = -1
+                        root.dragActive = false
+                    }
                 }
             }
         }
