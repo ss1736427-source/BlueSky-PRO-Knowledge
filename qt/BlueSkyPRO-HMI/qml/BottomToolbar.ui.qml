@@ -413,11 +413,11 @@ signal workspaceContextRequested(string tool)
                                 var target = visibleToolModel.count - 1
 
                                 for (var i = 0; i < visibleToolModel.count; ++i) {
-                                    var item = toolRepeater.itemAt(i)
-                                    if (!item)
+                                    if (i === index)
                                         continue
 
-                                    if (i === index)
+                                    var item = toolRepeater.itemAt(i)
+                                    if (!item)
                                         continue
 
                                     var itemCenter = item.x + item.width / 2
@@ -428,12 +428,6 @@ signal workspaceContextRequested(string tool)
                                 }
 
                                 toolDelegate.dragTargetIndex = target
-                                if (target !== index) {
-                                    root.moveVisibleTool(model.key, target)
-                                    toolDelegate.originalIndex = target
-                                    toolDelegate.originalX = toolDelegate.x
-                                    toolDelegate.pressX = p.x
-                                }
                             }
 
                             onReleased: {
@@ -443,10 +437,11 @@ signal workspaceContextRequested(string tool)
                                 // Return control of positioning to the Row.
                                 toolDelegate.x = 0
 
-                                if (!wasDragged)
+                                if (!wasDragged) {
                                     root.activateTool(model.key)
-                                else
-                                    root.saveConfiguration()
+                                } else {
+                                    root.moveVisibleTool(model.key, toolDelegate.dragTargetIndex)
+                                }
                             }
 
                             onCanceled: {
