@@ -362,9 +362,12 @@ signal workspaceContextRequested(string tool)
 
                         property bool dragging: false
                         property real pressX: 0
-                        property real originalX: 0
-                        property int originalIndex: index
+                        property real dragOffsetX: 0
                         property int dragTargetIndex: index
+
+                        transform: Translate {
+                            x: toolDelegate.dragOffsetX
+                        }
 
                         z: dragging ? 100 : 0
 
@@ -385,8 +388,7 @@ signal workspaceContextRequested(string tool)
                             onPressed: {
                                 var p = mapToItem(toolArea, mouse.x, mouse.y)
                                 toolDelegate.pressX = p.x
-                                toolDelegate.originalX = toolDelegate.x
-                                toolDelegate.originalIndex = index
+                                toolDelegate.dragOffsetX = 0
                                 toolDelegate.dragTargetIndex = index
                                 toolDelegate.dragging = false
                             }
@@ -404,8 +406,9 @@ signal workspaceContextRequested(string tool)
                                 if (!toolDelegate.dragging)
                                     return
 
-                                // The button itself follows the pointer.
-                                toolDelegate.x = toolDelegate.originalX + delta
+                                // The button follows the pointer through a transform.
+                                // Row remains the sole owner of the delegate's x position.
+                                toolDelegate.dragOffsetX = delta
 
                                 // Calculate insertion position from the pointer,
                                 // allowing movement across any number of buttons.
@@ -435,7 +438,7 @@ signal workspaceContextRequested(string tool)
                                 toolDelegate.dragging = false
 
                                 // Return control of positioning to the Row.
-                                toolDelegate.x = 0
+                                toolDelegate.dragOffsetX = 0
 
                                 if (!wasDragged) {
                                     root.activateTool(model.key)
@@ -446,7 +449,7 @@ signal workspaceContextRequested(string tool)
 
                             onCanceled: {
                                 toolDelegate.dragging = false
-                                toolDelegate.x = 0
+                                toolDelegate.dragOffsetX = 0
                             }
                         }
                     }
