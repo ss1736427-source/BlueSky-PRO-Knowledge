@@ -9,7 +9,7 @@ ApplicationWindow {
     minimumWidth: 1280
     minimumHeight: 720
     title: "BlueSky PRO"
-    color: "#000000"
+    color: "#050A12"
 
     MainContent {
         anchors.fill: parent

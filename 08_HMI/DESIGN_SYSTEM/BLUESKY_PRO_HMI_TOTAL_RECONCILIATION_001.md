@@ -55,7 +55,10 @@ The panel behavior specification is the canonical consolidation of the following
 
 The current working visual source of truth specifies:
 
-- background: `#000000`;
+- background: `#050A12`;
+- panel surface: `#08111D`;
+- card surface: `#0C1725`;
+- selected / hover surface: `#111F30`;
 - primary text: `#FFFFFF`;
 - secondary text: `#BFBFBF`;
 - service text: `#7F7F7F`;

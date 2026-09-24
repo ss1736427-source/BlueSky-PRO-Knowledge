@@ -12,35 +12,40 @@ This index defines the controlled order of the HMI documentation after the 2026-
    - `BLUESKY_PRO_DESIGN_SYSTEM.md`
    - Colors, typography, visual semantics, component rules.
 
-2. **Screen architecture and panel behavior**
+2. **DS component master**
+   - `BLUESKY_PRO_DS_PANEL_MASTER_001.md`
+   - Reusable panel anatomy, states, tokens, action/warning treatment and workspace variants.
+   - Visual reference: `BLUESKY_PRO_DS_PANEL_MASTER_001.svg`.
+
+3. **Screen architecture and panel behavior**
    - `BLUESKY_PRO_PANEL_BEHAVIOR_SPECIFICATION_001.md`
    - Six-level screen structure, panel responsibilities, states, visibility, collapse/expand, configuration, synchronization and contextual behavior.
 
-3. **Operational screen reference**
+4. **Operational screen reference**
    - `BLUESKY_PRO_SCREEN_REFERENCE.md`
    - Detailed controlled behavior of the Right Panel and local UAV decision context.
 
-4. **Layout and ergonomics**
+5. **Layout and ergonomics**
    - `BLUESKY_PRO_PANEL_LAYOUT.md`
    - Panel classes, map priority, layout variants and UAV-panel configuration.
 
-5. **HMI baseline**
+6. **HMI baseline**
    - `BLUESKY_PRO_HMI_DESIGN_BASELINE.md`
    - Component model, UX priorities and general HMI principles.
 
-6. **Total reconciliation**
+7. **Total reconciliation**
    - `BLUESKY_PRO_HMI_TOTAL_RECONCILIATION_001.md`
    - Reconciled source hierarchy and explicit unresolved conflicts.
 
-7. **UI traceability**
+8. **UI traceability**
    - `BLUESKY_PRO_UI_TRACEABILITY.md`
    - UI-ID allocation and requirement/safety boundary.
 
-8. **Figma / visual handoff**
+9. **Figma / visual handoff**
    - `BLUESKY_PRO_FIGMA_HANDOFF.md`
    - Componentization and Qt 6 + QML handoff.
 
-9. **Assets / tokens**
+10. **Assets / tokens**
    - `BLUESKY_PRO_COLORS.md`
    - `BLUESKY_PRO_TYPOGRAPHY.md`
    - `BLUESKY_PRO_SOURCE_ASSET_REGISTER.md`
@@ -73,6 +78,6 @@ Historical imports, snapshots and legacy material are retained for traceability 
 
 The canonical order for Qt/QML implementation is:
 
-`PANEL BEHAVIOR → SCREEN REFERENCE → DESIGN SYSTEM → PANEL LAYOUT → UI TRACEABILITY → Figma/Qt handoff`
+`PANEL BEHAVIOR → SCREEN REFERENCE → DESIGN SYSTEM → DS PANEL MASTER → PANEL LAYOUT → UI TRACEABILITY → Figma/Qt handoff`
 
 Where documents disagree, preserve the disagreement in the reconciliation record until an explicit project decision resolves it.
