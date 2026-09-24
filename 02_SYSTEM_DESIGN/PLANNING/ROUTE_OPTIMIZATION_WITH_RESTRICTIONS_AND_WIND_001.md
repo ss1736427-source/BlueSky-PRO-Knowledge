@@ -1,7 +1,7 @@
 # BlueSky PRO — Deterministic Route Optimization with Restrictions and Wind
 
 **ID:** PLAN-OPT-001  
-**Status:** DRAFT  
+**Status:** BASELINED  
 **Scope:** Phase B — Flight Planning Core
 
 ## Objective
@@ -23,11 +23,17 @@ The optimizer must not route through a restricted zone merely because doing so i
 
 ## Wind behavior
 
-Wind is an environmental snapshot, never an authorization source. For each candidate segment the optimizer derives a deterministic wind-adjusted traversal metric from the segment geometry, altitude and the referenced wind snapshot. Missing or stale wind input cannot silently become a zero-wind assumption when the selected planning profile requires wind.
+Wind is an environmental snapshot, never an authorization source. For each candidate segment the optimizer derives a deterministic wind-adjusted traversal metric from segment geometry, altitude, estimated traversal time and the referenced wind snapshot.
+
+The default planning objective is lexicographic: hard feasibility first, then minimum geometric distance, then wind-adjusted time/energy among materially comparable routes. An explicitly configured efficiency objective may permit a longer legal route when its wind-adjusted operational cost is lower. The active objective profile, weights and tolerances are versioned inputs.
+
+Wind can also make a candidate infeasible through vehicle-specific limits such as maximum wind, crosswind, minimum ground speed or energy reserve. Such candidates are rejected, not penalized.
+
+Missing or stale wind input cannot silently become a zero-wind assumption when the selected planning profile requires wind.
 
 ## Output
 
-The optimizer returns the selected route plus objective metrics, input snapshot/version references, optimizer ID/version and candidate-selection rationale. It does not mutate readiness, safety, authorization or execution state.
+The optimizer returns the selected route plus objective metrics, input snapshot/version references, optimizer ID/version, objective-profile version and candidate-selection rationale. The result remains a planning artifact and does not mutate readiness, safety, authorization or execution state. It does not mutate readiness, safety, authorization or execution state.
 
 ## Required next implementation blocks
 
