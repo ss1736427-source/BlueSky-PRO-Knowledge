@@ -3,7 +3,16 @@ import QtQuick
 Item {
     id: root
 
-    implicitWidth: 300
+    TextMetrics {
+        id: widestTemplateText
+        font.family: "B612"
+        font.pixelSize: 12
+        font.bold: true
+        text: "Картографирование территории"
+    }
+
+    // Panel width follows the widest visible content, with controlled ergonomic bounds.
+    implicitWidth: Math.max(260, Math.min(420, widestTemplateText.width + 48))
     implicitHeight: 520
 
     property color bg: "#08111D"
