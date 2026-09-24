@@ -5,7 +5,7 @@
 
 ---
 
-## 1. Governing principles
+## 1. Governing principle
 
 > **UNIVERSALITY FOR MARKET EXPANSION:** BlueSky PRO shall be delivered as a ready-to-operate product for the customer's existing UAV fleet and shall integrate with heterogeneous UAVs, autopilots, C2 links, equipment and external aviation systems through a universal integration architecture.
 
@@ -41,6 +41,9 @@ Status terminology:
 - **NOT DONE** — implementation/specification/evidence is still required.
 - **GATE** — cannot be considered complete until its acceptance evidence exists.
 
+---
+
+
 ### 2.1 Current-baseline rule
 
 For all future work:
@@ -67,8 +70,6 @@ Each material calculation result should carry, as applicable:
 The system shall reuse a result when its relevant dependencies are unchanged. Recalculation is required only for the affected result and its downstream dependents.
 
 This rule prevents duplicated terrain, restriction, wind, performance and conflict calculations and is part of the master architecture, not an implementation optimization.
-
----
 
 ## 3. Product lifecycle — one continuous chain
 
@@ -242,11 +243,67 @@ A real fleet member can be represented completely enough for planning, compatibi
 ### Objective
 Provide one stable internal BlueSky interface and adapters for heterogeneous external systems.
 
+### Architecture
+
+```text
+                         BLUE SKY PRO
+                              │
+                    UNIVERSAL INTERNAL API
+                              │
+       ┌──────────────┬───────┼────────┬─────────────┐
+       ▼              ▼       ▼        ▼             ▼
+   AUTOPILOT          C2    EQUIPMENT VIDEO       EXTERNAL
+   ADAPTERS         ADAPTER ADAPTER   ADAPTER      ADAPTERS
+       │              │       │        │             │
+ ArduPilot/PX4/OEM  RF/IP  Cameras   Streams   ATM/Weather/GIS/
+       │                                      Traffic/etc.
+       ▼
+      UAV
+```
+
+### Required external domains
+
+**P0**
+- Autopilot/FCS;
+- MAVLink where applicable;
+- commands;
+- missions;
+- parameters/configuration;
+- normalized vehicle state;
+- C2;
+- safety/failsafe;
+- ATM/airspace/FPL/authorization.
+
+**P1**
+- equipment;
+- video;
+- companion computer;
+- GNSS/RTK;
+- traffic;
+- GIS/terrain;
+- weather;
+- logs;
+- peripheral buses;
+- ground infrastructure.
+
+**P2**
+- maintenance;
+- security;
+- enterprise/customer APIs.
+
 ### Status
 **IN PROGRESS — architecture documented; implementation not complete.**
 
 ### Gate
 At least one representative heterogeneous UAV integration completes the entire connect → mission → flight → log lifecycle; adapter contract is reusable for additional vehicles.
+
+Detailed documents:
+- `AUTOPILOT_INTEGRATION_FRAMEWORK.md`
+- `C2_CONNECTIVITY_FRAMEWORK.md`
+- `VEHICLE_EQUIPMENT_INTEGRATION_FRAMEWORK.md`
+- `ATM_REGULATORY_INTEGRATION_FRAMEWORK.md`
+- `OPERATIONAL_VALIDATION_FRAMEWORK.md`
+- `INTEGRATION_GAP_TRACEABILITY_MATRIX.md`
 
 ---
 
@@ -255,11 +312,66 @@ At least one representative heterogeneous UAV integration completes the entire c
 ### Objective
 BlueSky must operate with different existing autopilots without changing the core mission model.
 
+### Reference integrations
+- ArduPilot;
+- PX4;
+- OEM/proprietary FCS through documented and legally usable interfaces;
+- future FCS through the same adapter contract.
+
+### Required sequence
+
+```text
+CONNECT
+ ↓
+DISCOVER
+ ↓
+IDENTIFY FCS / FIRMWARE / VEHICLE
+ ↓
+CAPABILITY DISCOVERY
+ ↓
+CONFIGURATION SYNC
+ ↓
+HEALTH / PRE-ARM STATE
+ ↓
+MISSION TRANSLATION
+ ↓
+UPLOAD
+ ↓
+READ-BACK
+ ↓
+SEMANTIC VERIFY
+ ↓
+COMMAND / CONTROL
+ ↓
+EXECUTION
+ ↓
+LOG ACQUISITION
+```
+
+### Required adapter functions
+- session/transport;
+- discovery;
+- capability discovery;
+- telemetry normalization;
+- command translation;
+- ACK/result handling;
+- timeout/retry;
+- mission translation;
+- read-back verification;
+- parameter synchronization;
+- safety/failsafe mapping;
+- log transfer;
+- version compatibility;
+- security;
+- automated tests.
+
 ### Status
 **IN PROGRESS.** Architecture exists. Protocol-level implementation, concrete adapters, compatibility matrix and verification evidence remain.
 
 ### Gate
 Mission Planner/QGroundControl-class fundamental connection/configuration/mission/telemetry/log lifecycle is covered for the selected reference autopilot, while BlueSky remains independent of that autopilot.
+
+Mission Planner explicitly covers connection, mission planning, mandatory setup, configuration/tuning, simulation and live data/video; its logs also include telemetry recording and analysis. citeturn0search0turn0search1turn0search2
 
 ---
 
@@ -267,6 +379,20 @@ Mission Planner/QGroundControl-class fundamental connection/configuration/missio
 
 ### Objective
 Make communication transport-independent and resilient.
+
+### Required
+- multiple C2 channels;
+- primary/backup links;
+- link health;
+- latency/bandwidth;
+- degraded state;
+- loss detection;
+- automatic failover;
+- recovery;
+- safe command handling;
+- prioritization;
+- security;
+- audit trail.
 
 ### Status
 **IN PROGRESS — architecture documented; implementation and real-link validation remain.**
@@ -281,6 +407,18 @@ Defined link-loss scenarios behave deterministically in simulation and real hard
 ### Objective
 Treat mission equipment as an integrated operational subsystem rather than an external camera attached to the UAV.
 
+### Required
+- equipment profiles;
+- camera/EO/IR/thermal/LiDAR/gimbal abstractions;
+- commands;
+- status/telemetry;
+- recording state;
+- metadata;
+- time/position association;
+- device compatibility;
+- video transport;
+- mission events.
+
 ### Status
 **IN PROGRESS — framework documented; concrete device adapters and end-to-end validation remain.**
 
@@ -294,6 +432,18 @@ Mission actions can command the selected equipment and resulting data is associa
 ### Objective
 Provide the external data required for safe and optimized planning and flight supervision.
 
+### Required
+- GNSS state and quality;
+- RTK/PPK/NTRIP where applicable;
+- fallback navigation state;
+- maps;
+- DEM/terrain;
+- obstacles/restrictions;
+- weather forecast and actual data;
+- wind profile;
+- traffic/ADS-B sources where applicable;
+- source/freshness/quality metadata.
+
 ### Status
 **IN PROGRESS.** Concepts and interface domains identified; complete source adapters, freshness policies, validation and operational fallback logic remain.
 
@@ -305,7 +455,7 @@ Planning and readiness calculations can distinguish valid, stale, unavailable an
 ## PHASE 9 — Mission planning and optimization
 
 ### Objective
-Convert an operational task into a validated executable mission with minimal repeated calculation.
+Convert an operational task into a validated executable mission.
 
 ### Required
 - mission templates;
@@ -324,57 +474,13 @@ Convert an operational task into a validated executable mission with minimal rep
 - multi-UAV decomposition;
 - collision/separation logic;
 - staggered starts;
-- unified mission/data association;
-- calculation dependency graph and result reuse.
-
-### Canonical calculation sequence
-
-```text
-MISSION / COVERAGE
-        ↓
-CONSTRAINED SPATIAL SEARCH
-  (airspace / NOTAM / terrain /
-   obstacles / altitude / mandatory points)
-        ↓
-ROUTE CANDIDATES
-        ↓
-UAV CAPABILITY / ASSIGNMENT
-        ↓
-WIND + VEHICLE PERFORMANCE
-        ↓
-4D TRAJECTORIES
-        ↓
-MULTI-UAV CONFLICT / SEPARATION
-        ↓
-CANDIDATE COMPARISON / OPTIMIZATION
-        ↓
-SELECTED ROUTE SET
-        ↓
-FLIGHT PROFILE
-        ↓
-FINAL INTEGRITY / CHANGE-IMPACT CHECK
-```
-
-Each stage reuses the authoritative result of the previous stage. No stage independently repeats a calculation already produced at the required level.
-
-### Dependency examples
-
-| Changed input | Recalculate | Reuse |
-|---|---|---|
-| NOTAM/restricted geometry | affected spatial candidates and downstream dependents | unaffected candidates |
-| terrain/obstacle data | affected spatial candidates | unaffected geometry |
-| route altitude | affected route performance and downstream timing | unaffected geometry |
-| wind | wind/performance, 4D trajectory, conflict, comparison | route geometry |
-| UAV configuration | assignment-dependent performance, 4D trajectory, conflict, comparison | unrelated routes |
-| start delay | timing/4D conflict and comparison | spatial geometry, wind solution |
-| objective profile | comparison/selection only | route, wind and conflict results |
-| HMI-only change | nothing | all planning calculations |
+- unified mission/data association.
 
 ### Status
-**SUBSTANTIALLY DEFINED / IN PROGRESS.** Canonical route data model, deterministic constraint validation and route optimization architecture are being consolidated; implementation and verification remain.
+**SUBSTANTIALLY DEFINED / IN PROGRESS.** The planning concept and many operational rules exist; full executable optimization engine and verification remain.
 
 ### Gate
-A mission generated by BlueSky is internally consistent, feasible for the selected fleet and convertible into verified vehicle-specific missions, with deterministic calculation provenance and dependency-aware reuse.
+A mission generated by BlueSky is internally consistent, feasible for the selected fleet and convertible into verified vehicle-specific missions.
 
 ---
 
@@ -406,6 +512,20 @@ Every AI-derived correction has a traceable input, rule/model version, reason an
 ### Objective
 Connect BlueSky's operational mission to applicable airspace and regulatory procedures.
 
+### Required
+- airspace/restriction information;
+- NOTAM/AIP-related sources as applicable;
+- FPL generation;
+- submission;
+- acceptance/rejection;
+- correction loop;
+- authorization;
+- validity;
+- mission/authorization version binding;
+- multi-UAV regulatory relationships;
+- closure/reporting where required;
+- audit trail.
+
 ### Status
 **IN PROGRESS.** Lifecycle is defined; concrete jurisdiction-specific interfaces and production integration remain.
 
@@ -418,6 +538,36 @@ A flight cannot reach READY FOR FLIGHT without the applicable positive regulator
 
 ### Objective
 Move maximum preparation from people to the system while keeping mandatory human responsibilities explicit.
+
+### Required checks
+
+```text
+VEHICLE
+  ↓
+FCS / FIRMWARE
+  ↓
+CONFIGURATION
+  ↓
+C2
+  ↓
+GNSS / NAVIGATION
+  ↓
+BATTERY / ENERGY
+  ↓
+EQUIPMENT
+  ↓
+MISSION
+  ↓
+AIRSPACE / AUTHORIZATION
+  ↓
+WEATHER
+  ↓
+SAFETY / FAILSAFE
+  ↓
+PILOT / TECHNICIAN CHECKS
+  ↓
+READY
+```
 
 ### Status
 **IN PROGRESS.** The desired minimalist division between system/pilot/technician is defined conceptually; complete executable checklist and evidence model remain.
@@ -432,6 +582,17 @@ System automatically produces READY / NOT READY with explicit blocking reasons a
 ### Objective
 Guarantee that the approved mission is the mission loaded into the actual aircraft.
 
+### Required
+- mission package identity/version;
+- capability check;
+- translation;
+- upload;
+- read-back;
+- semantic comparison;
+- authorization binding;
+- release decision;
+- final configuration snapshot.
+
 ### Status
 **IN PROGRESS.** Architecture defined; implementation and test evidence remain.
 
@@ -444,6 +605,21 @@ No flight release without positive mission verification and all mandatory readin
 
 ### Objective
 Operate one or many UAVs with minimum operator workload and clear supervisory control.
+
+### Required
+- telemetry;
+- flight mode;
+- health;
+- battery/energy;
+- C2 state;
+- mission progress;
+- route/profile;
+- alerts;
+- equipment/video;
+- operator commands;
+- multi-UAV coordination;
+- data aggregation;
+- event timeline.
 
 ### Status
 **IN PROGRESS.** UI/operational concepts are substantially defined; real integration and flight validation remain.
@@ -458,6 +634,21 @@ Representative aircraft completes mission under BlueSky supervision with all cri
 ### Objective
 Handle abnormal conditions without ambiguous responsibility between BlueSky and the onboard autopilot.
 
+### Required scenarios
+- C2 loss;
+- telemetry loss;
+- video loss;
+- GNSS degradation/loss;
+- weather deterioration;
+- aircraft health degradation;
+- battery/energy limit;
+- route/airspace conflict;
+- equipment failure;
+- operator intervention;
+- communication recovery;
+- return-to-home / alternate return policy;
+- mission resume/replan where supported.
+
 ### Status
 **IN PROGRESS.** Core philosophy is defined; complete state machines, policies and verification evidence remain.
 
@@ -470,6 +661,16 @@ Every defined contingency has a deterministic owner, trigger, action, timeout an
 
 ### Objective
 Close the operational mission safely and unambiguously.
+
+### Required
+- landing/RTL state;
+- mission completion detection;
+- aircraft state confirmation;
+- C2 confirmation;
+- equipment recording closure;
+- data integrity check;
+- log availability;
+- Flight Record closure trigger.
 
 ### Status
 **IN PROGRESS.**
@@ -484,6 +685,23 @@ Mission cannot be closed as successful without the required completion evidence.
 ### Objective
 Create the authoritative digital record of the flight.
 
+### Required
+- telemetry logs;
+- autopilot logs;
+- mission version;
+- actual trajectory;
+- commands/ACKs;
+- alerts/events;
+- C2 events;
+- equipment/video references;
+- regulatory references;
+- configuration snapshot;
+- software/adapter versions;
+- timestamps;
+- operator actions;
+- anomalies;
+- result/status.
+
 ### Status
 **IN PROGRESS.** Log/Flight Record architecture exists; complete data model, ingestion and replay implementation remain.
 
@@ -497,6 +715,16 @@ A flight can be reconstructed sufficiently for operational review, incident inve
 ### Objective
 Return post-flight information into fleet readiness.
 
+### Required
+- battery cycles/health;
+- engine/resource counters where applicable;
+- component hours/cycles;
+- faults;
+- maintenance actions;
+- inspections;
+- configuration changes;
+- aircraft availability state.
+
 ### Status
 **IN PROGRESS.** Maintenance integration is identified; complete implementation and workflow remain.
 
@@ -509,6 +737,43 @@ Aircraft status for the next mission reflects actual post-flight condition and m
 
 ### Objective
 Prove that BlueSky works as an integrated system, not merely as isolated software modules.
+
+### Validation chain
+
+```text
+REQUIREMENTS
+    ↓
+UNIT TEST
+    ↓
+INTEGRATION TEST
+    ↓
+SIL / SITL
+    ↓
+HIL
+    ↓
+BENCH / GROUND
+    ↓
+REAL UAV
+    ↓
+OPERATIONAL TEST
+    ↓
+RELEASE
+```
+
+### Required
+- automated tests;
+- interface conformance tests;
+- SITL/SIL scenarios;
+- HIL;
+- real UAV tests;
+- C2 loss/recovery tests;
+- mission upload/read-back tests;
+- equipment tests;
+- regulatory workflow tests;
+- log replay;
+- regression suite;
+- requirements traceability;
+- evidence archive.
 
 ### Status
 **NOT DONE — framework documented; evidence-producing validation system must be built.**
@@ -525,13 +790,30 @@ Operational release only after defined requirements and integration tests pass w
 | Product concept / boundary | DONE-DOC | controlled requirements baseline |
 | System architecture | DONE-DOC | architecture review |
 | Universal integration principle | DONE-DOC | enforce in all modules |
+| Autopilot abstraction | IN PROGRESS | API + adapter implementation |
+| ArduPilot integration | IN PROGRESS | reference adapter + SITL + real UAV |
+| PX4 integration | IN PROGRESS | reference adapter + SITL + real UAV |
+| OEM integration | IN PROGRESS | generic adapter contract + first OEM |
+| C2 multi-link | IN PROGRESS | state machine + failover implementation |
+| Vehicle profiles | IN PROGRESS | executable profile/configuration model |
+| Equipment integration | IN PROGRESS | first equipment adapters |
+| Video | IN PROGRESS | transport/recording integration |
+| GNSS/RTK | IN PROGRESS | source adapters + fallback |
+| GIS/terrain | IN PROGRESS | source/version/freshness model |
+| Weather | IN PROGRESS | provider adapters + validation |
+| Traffic | IN PROGRESS | source adapters + operational logic |
+| ATM/FPL/authorization | IN PROGRESS | jurisdiction-specific production adapters |
 | Mission planning | IN PROGRESS | implementation + validation |
-| Optimization | IN PROGRESS | dependency-aware calculation engine + test set |
+| Optimization | IN PROGRESS | calculation engine + test set |
 | AI/Corrections | IN PROGRESS | agent + governance + verification |
 | Pre-flight readiness | IN PROGRESS | executable gates |
 | Flight execution | IN PROGRESS | autopilot/C2 integration |
+| Contingency | IN PROGRESS | complete state machines + tests |
 | Logs / Flight Record | IN PROGRESS | canonical data model + replay |
 | Maintenance | IN PROGRESS | workflow implementation |
+| SIL/SITL | IN PROGRESS | integrated scenarios |
+| HIL | NOT DONE | HIL environment |
+| Real UAV validation | NOT DONE | representative aircraft test program |
 | Regression/evidence system | NOT DONE | automated evidence pipeline |
 | Certification evidence | IN PROGRESS | requirements-to-test traceability |
 
@@ -547,8 +829,6 @@ Operational release only after defined requirements and integration tests pass w
 6. Do not allow AI to bypass deterministic safety gates.
 7. Do not move to certification evidence while the operational lifecycle has unresolved interface ownership.
 8. Do not create separate parallel architectures for different autopilots; use one universal internal contract and adapters.
-9. Do not keep superseded intermediate design variants as active planning inputs.
-10. Do not duplicate a calculation in multiple modules when a versioned result can be reused through the dependency graph.
 
 ---
 
