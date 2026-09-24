@@ -1,39 +1,62 @@
 # BlueSky PRO — Route Calculation & Optimization Specification
 
-**Status:** WORKING BASELINE  
-**Position:** PHASE 8 — Mission Planning / Route Calculation
+**Status:** CURRENT WORKING BASELINE**
+**Position:** PHASE 9 — Mission Planning / Route Calculation and Optimization
 
-## 1. Core principle
+## 1. Governing calculation principle
 
-BlueSky separates **task/coverage planning** from **dynamic flight-parameter calculation**.
+> **Each calculation is performed once at the architectural level where all inputs required for that result are available. The versioned result is reused by all downstream stages. Recalculation occurs only when an input or dependency capable of changing that result changes.**
 
-The optimizer first constructs a feasible route or route set satisfying the mission objective and known constraints. It then distributes the resulting work among compatible UAVs. Current wind is subsequently applied to calculate the actual flight parameters for each assigned route. If current conditions make the solution invalid or materially worse, BlueSky creates a Correction and re-optimizes as required.
+This specification is the current planning baseline. Superseded intermediate planning sequences are not active design inputs.
+
+Planning is therefore dependency-driven rather than a chain of repeated independent checks.
+
+Every material calculation result should carry:
+- input snapshot/version;
+- algorithm/calculation version;
+- dependency hash or equivalent;
+- affected object/segment/candidate IDs;
+- timestamp;
+- provenance/evidence references.
+
+## 2. Canonical planning pipeline
 
 ```text
-TASK / COVERAGE REQUIREMENT
-          ↓
-KNOWN CONSTRAINTS + TERRAIN + AIRSPACE
-          ↓
-BASE ROUTE OPTIMIZATION
-          ↓
-ROUTE VARIANTS
-          ↓
-FLEET / UAV DISTRIBUTION
-          ↓
-CURRENT WIND
-          ↓
-WIND-AWARE FLIGHT CALCULATION
-          ↓
-FINAL ROUTE / PARAMETERS
-          ↓
-VALIDATION
+MISSION / COVERAGE
+        ↓
+CONSTRAINED SPATIAL SEARCH
+  airspace / NOTAM / terrain /
+  obstacles / altitude / mandatory points
+        ↓
+ROUTE CANDIDATES
+        ↓
+UAV CAPABILITY / ASSIGNMENT
+        ↓
+WIND + VEHICLE PERFORMANCE
+        ↓
+4D TRAJECTORIES
+        ↓
+MULTI-UAV CONFLICT / SEPARATION
+        ↓
+CANDIDATE COMPARISON / OPTIMIZATION
+        ↓
+SELECTED ROUTE SET
+        ↓
+FLIGHT PROFILE
+        ↓
+FINAL INTEGRITY / CHANGE-IMPACT CHECK
 ```
 
-## 2. Planning inputs
+### Sequence rule
 
-Stable inputs include mission objective, area/targets, coverage pattern, overlap, mandatory waypoints, terrain/DEM, fixed obstacles, restricted areas, UAV capabilities, payload capabilities, fleet availability, performance limits, battery/resource state and safety margins.
-
-Dynamic inputs include wind by position/altitude, weather, temporary restrictions, traffic information where available, current vehicle state, actual energy consumption and C2 condition.
+1. The route search operates on the constrained spatial environment. Active restricted/prohibited geometry, terrain/obstacle constraints, altitude limits and mandatory-point requirements are incorporated into feasibility during candidate generation.
+2. The result is a set of spatially feasible route candidates; obviously forbidden corridors are not generated as selectable routes.
+3. Compatible UAVs are assigned before wind/performance evaluation because vehicle characteristics affect the resulting trajectory.
+4. Wind and vehicle performance are calculated once for each relevant route/UAV state. This produces ground speed, track, traversal time, energy and the 4D trajectory used downstream.
+5. Multi-UAV conflict/separation is evaluated on those wind-adjusted 4D trajectories using spatial, altitude and temporal overlap.
+6. Only feasible candidates proceed to objective comparison and optimization.
+7. The selected route set is compiled into the flight profile using already calculated trajectory/performance results.
+8. Final validation verifies integrity and material input changes. It does not repeat the entire planning calculation.
 
 ## 3. Coverage-first planning
 
@@ -46,203 +69,227 @@ TASK DECOMPOSITION
      ↓
 COVERAGE CELLS / TRACKS / TARGETS
      ↓
-CONSTRAINT FILTER
+CONSTRAINED SPATIAL SEARCH
      ↓
-ROUTABLE GRAPH
+ROUTE CANDIDATES
 ```
 
 The planner distinguishes required coverage, prohibited areas, mandatory points and sequencing constraints.
 
-## 4. Graph model
+## 4. Constraint graph and route search
 
-Where appropriate, BlueSky represents the feasible environment as a weighted graph. Nodes may represent waypoints, coverage points, turns, altitude layers, launch/recovery points and transitions between coverage cells. Edges represent feasible flight segments.
+Where appropriate, BlueSky represents the feasible environment as a weighted graph.
 
-Edge cost can contain:
+Nodes may represent:
+- waypoints;
+- coverage points;
+- turns;
+- altitude layers;
+- launch/recovery points;
+- transitions between coverage cells.
 
-`distance + time + energy + risk + mission penalty + constraint penalty`
+Edges represent spatially feasible flight segments.
 
-Hard safety and regulatory constraints are feasibility constraints, not merely optional cost weights.
+Hard safety and regulatory constraints are **feasibility conditions**, not optional cost weights. A candidate that violates an applicable hard constraint is not made acceptable by a lower distance, time or energy cost.
 
-## 5. Dijkstra decision
+Dijkstra remains the deterministic reference/fallback search algorithm. A* may be used as an interchangeable acceleration backend where its result is demonstrably equivalent under the same graph and objective contract.
 
-**Dijkstra is retained as the deterministic reference route-search algorithm.**
+The route search stage must not be duplicated by a second independent route generator inside the optimizer.
 
-For a graph with non-negative edge costs, Dijkstra finds the least-cost path under the defined cost model and is deterministic/reproducible. It is therefore valuable as a reference implementation and fallback.
+## 5. Route candidate result
 
-However, Dijkstra alone is not the complete BlueSky optimizer: it does not inherently perform coverage decomposition, multi-UAV assignment, nonlinear energy modelling or dynamic replanning.
+Each route candidate is a versioned object containing, as applicable:
+- mission ID/version;
+- route ID/version;
+- ordered waypoints and segments;
+- spatial feasibility result;
+- constraint/airspace/NOTAM/terrain snapshot references;
+- generator and algorithm versions;
+- calculation input version;
+- dependency identity;
+- provenance.
 
-## 6. Recommended algorithm architecture
+The candidate is reusable by downstream stages until one of its dependencies changes.
 
-Use a **hybrid, deterministic-first architecture**:
+## 6. UAV capability and assignment
 
-```text
-MISSION
-  ↓
-COVERAGE GENERATOR
-  ↓
-CONSTRAINT GRAPH
-  ↓
-ROUTE SEARCH
- ├── Dijkstra — reference / fallback
- └── A* — interchangeable acceleration where valid
-  ↓
-ROUTE CANDIDATES
-  ↓
-MULTI-UAV ALLOCATION
-  ↓
-WIND + FLIGHT-PERFORMANCE MODEL
-  ↓
-ENERGY / TIME EVALUATION
-  ↓
-MULTI-OBJECTIVE OPTIMIZATION
-  ↓
-CORRECTION / LOCAL RE-OPTIMIZATION
-  ↓
-FINAL ROUTES
-```
+Assignment is performed after spatial candidate generation and before wind/performance evaluation.
 
-Current UAV path-planning literature continues to identify Dijkstra and A* as important classical graph-search methods, while hybrid approaches are used when energy, dynamic environments and multi-UAV coordination must also be handled. citeturn0search1turn0search2
+The capability filter considers, as applicable:
+- aircraft capability;
+- payload/equipment capability;
+- endurance/energy/resource state;
+- performance limits;
+- C2 availability;
+- launch/recovery constraints;
+- regulatory constraints;
+- mission requirements.
 
-**Decision:** do not replace Dijkstra with one monolithic AI/metaheuristic algorithm. Keep Dijkstra as the reference result; use A* as an interchangeable search backend where it gives measurable performance improvement. Higher-level optimization remains responsible for coverage, allocation, energy and wind.
+A change in UAV assignment invalidates only calculations dependent on that UAV for the affected candidate; it does not require regeneration of unrelated spatial routes.
 
-## 7. Fleet distribution
+## 7. Wind and vehicle performance
 
-After task decomposition and route candidates:
+Wind is a dynamic planning input. For each assigned route/UAV state, the performance stage combines:
+- route geometry;
+- altitude profile;
+- vehicle configuration;
+- payload;
+- air-relative performance;
+- wind vector by location/altitude;
+- relevant environmental conditions.
 
-```text
-TASK SEGMENTS
-     ↓
-CAPABILITY FILTER
-     ↓
-UAV CANDIDATES
-     ↓
-ASSIGNMENT / BALANCING
-     ↓
-UAV-01 route
-UAV-02 route
-UAV-03 route
-```
-
-Assignment considers payload capability, endurance/energy, performance, battery/resource state, C2 availability, regulatory restrictions, launch/recovery constraints, mission priority and separation requirements.
-
-## 8. Wind calculation
-
-**Wind is applied to the already constructed and distributed baseline solution.**
-
-For every segment and relevant altitude, BlueSky uses the wind vector together with the aircraft air-relative velocity to determine ground velocity and track.
+The output is the single authoritative planning result for downstream trajectory-dependent calculations:
 
 ```text
-AIRCRAFT AIRSPEED VECTOR
-          +
-     WIND VECTOR
-          ↓
-    GROUND VECTOR
-          ↓
- ground speed / track
-          ↓
-     segment time
-          ↓
-    energy estimate
+AIR-RELATIVE PERFORMANCE + WIND
+              ↓
+      GROUND VECTOR / TRACK
+              ↓
+         GROUND SPEED
+              ↓
+        SEGMENT TRAVERSAL TIME
+              ↓
+         ENERGY ESTIMATE
+              ↓
+        4D TRAJECTORY
 ```
 
-The calculation updates heading/track, ground speed, segment time, ETA, energy consumption, remaining reserve and return/contingency feasibility.
+The 4D trajectory contains the temporal information required for multi-UAV conflict/separation analysis.
 
-Wind speed and direction materially affect UAV flight time and energy; recent reviews specifically identify wind as an important factor in energy-aware UAV path planning. citeturn0search4turn0search5
+If wind makes a candidate infeasible because of a hard vehicle/environmental limit, that candidate is rejected or the affected planning state is regenerated. The system does not perform an independent second wind calculation elsewhere.
 
-## 9. Important exception
+## 8. Multi-UAV conflict and separation
 
-Although the agreed sequence applies current wind after baseline route generation, wind may be promoted into the feasibility/optimization layer when it is a **hard constraint**. Example: forecast wind makes a particular corridor impossible for the selected UAV. In that case the route candidate must be rejected or regenerated before final distribution.
+Conflict/separation is a feasibility calculation over the already generated 4D trajectories.
 
-Thus the architecture is:
+Inputs include:
+- spatial trajectory;
+- altitude;
+- time;
+- UAV identity;
+- applicable separation envelope;
+- relevant state uncertainty/tolerance.
 
-**baseline route → wind calculation → feasibility check → correction/re-optimization if necessary.**
+Conflict is a feasibility condition, not a soft optimization penalty.
 
-## 10. Corrections
+Resolution may use:
+- an existing feasible candidate;
+- sequencing/start delay;
+- controlled local replanning.
 
-The baseline route remains the reference mission solution. Updated wind produces a traceable Correction rather than an unexplained route replacement.
+A resolution triggers recalculation only of the dependencies it changes. For example, a start delay changes timing and conflict evaluation; it does not require rebuilding unchanged route geometry.
 
-```text
-BASELINE
-   ↓
-CURRENT WIND
-   ↓
-RECALCULATION
-   ↓
-CORRECTION
-   ↓
-COMPARE
- ├─ within limits → continue
- └─ outside limits → re-optimize
-```
+Physical collision is the limiting case of insufficient separation. Safety-significant separation requirements remain under the established safety/authorization architecture.
 
-The Correction records the reason, input-data version, affected segments and resulting change.
+## 9. Candidate comparison and optimization
 
-## 11. Re-optimization triggers
+Only candidates that have passed all required feasibility stages are compared.
 
-Full or partial re-optimization may be triggered by excessive wind, insufficient energy reserve, new restrictions, changed terrain/obstacle information, UAV state/capability changes, material C2 degradation or traffic/safety conditions.
-
-## 12. Energy model
-
-Energy calculation is a separate service from graph search. The edge evaluator receives vehicle configuration, payload, flight state, weather and segment geometry and returns estimated time and energy cost.
-
-Conceptually:
-
-`E_segment = f(distance, airspeed, ground_speed, altitude, climb/descent, mass, payload, propulsion, wind, temperature, configuration)`
-
-The model supports battery degradation and installed-equipment effects previously defined for BlueSky. Energy-aware UAV research models energy as a function of trajectory, vehicle state and environmental factors including wind. citeturn0search4
-
-## 13. Mission objective
-
-BlueSky does not hard-code one universal optimization objective. Mission templates select the objective profile, for example:
-
+Objective profiles may include:
 - minimum energy;
 - minimum time;
-- maximum coverage;
+- minimum distance;
 - punctual ETA;
-- maximum payload capability;
+- maximum coverage;
+- payload/equipment objective;
 - balanced multi-objective operation.
 
-A representative objective is:
+Hard safety/regulatory constraints cannot be traded away by objective weights.
+
+A representative objective may be:
 
 `J = wE·E + wT·T + wD·D + wR·Risk + wM·MissionPenalty`
 
-Safety/regulatory hard constraints cannot be traded away by reducing a weight.
+The optimizer consumes already calculated distance, time, energy, trajectory and feasibility results. It does not independently recompute them.
 
-## 14. Role of Dijkstra
+For materially comparable candidates, wind-adjusted time/energy can determine the selected solution even when geometric distance is not the only objective. The objective profile and tolerances are versioned.
 
-**Dijkstra:** deterministic graph search, least-cost path under the edge model, reference result and fallback.
+## 10. Correction and local re-optimization
 
-**Coverage generator:** converts mission intent into coverage elements.
+A material input change creates a traceable Correction.
 
-**Fleet allocator:** distributes work between compatible UAVs.
+Examples:
+- new restriction → affected spatial candidates and downstream dependents;
+- terrain change → affected spatial candidates and downstream dependents;
+- wind change → wind/performance, 4D trajectories, conflict and comparison;
+- UAV configuration change → affected assignment/performance/trajectory/conflict/comparison;
+- start delay → timing/conflict/comparison;
+- objective change → comparison only.
 
-**Wind/performance engine:** calculates actual heading, ground speed, time and energy under current conditions.
+The correction engine uses dependency information to invalidate and recompute only affected results.
 
-**Optimizer:** compares feasible variants against the mission objective.
+## 11. Calculation reuse and cache contract
 
-**Correction engine:** responds to changing conditions and preserves traceability.
+Calculation reuse is an architectural requirement, not merely a performance optimization.
 
-## 15. Verification
+A reusable result is valid when:
+- its input snapshot is unchanged;
+- its algorithm/calculation version is unchanged;
+- its dependency set is unchanged;
+- required source/evidence validity remains acceptable.
 
-Required reference scenarios include obstacles, restricted areas, mandatory waypoints, Dijkstra reference paths, wind from principal directions, variable wind by segment/altitude, energy reserve limits, payload-dependent performance, multi-UAV allocation, dynamic correction and deterministic replay/regression.
+A result becomes stale when a relevant dependency changes.
 
-## 16. Gate
+The dependency graph should support at least:
 
-PHASE 8 is complete only when BlueSky can:
+```text
+SPATIAL INPUTS
+   ↓
+ROUTE GEOMETRY / FEASIBILITY
+   ↓
+UAV ASSIGNMENT
+   ↓
+WIND + PERFORMANCE
+   ↓
+4D TRAJECTORY
+   ↓
+CONFLICT / SEPARATION
+   ↓
+CANDIDATE COMPARISON
+   ↓
+SELECTED SOLUTION
+   ↓
+FLIGHT PROFILE
+```
 
-1. convert mission intent into a routable coverage/task structure;
-2. generate a deterministic baseline route or route set;
-3. distribute the task among compatible UAVs;
-4. apply current wind and recalculate flight parameters;
-5. evaluate time and energy feasibility;
-6. issue traceable Corrections;
-7. re-optimize when required;
-8. produce a versioned mission ready for the autopilot integration layer.
+No downstream module should recreate an upstream result solely because it needs the same value.
 
-## 17. Decision record
+## 12. Final integrity validation
 
-**Baseline:** Dijkstra remains the deterministic reference algorithm.
+Final validation checks:
+- object/version identity;
+- dependency consistency;
+- required source freshness;
+- no material input changed without propagation;
+- selected candidate remains feasible;
+- mission/route/profile references are consistent.
 
-**Optimization architecture:** Dijkstra/A* are route-search backends inside a larger optimizer; coverage decomposition, fleet allocation, wind/energy calculation and dynamic correction are separate stages.
+Final validation is a contract/integrity check. It is not a second execution of spatial routing, wind modelling or conflict analysis.
 
-**AI:** may later assist higher-level optimization or Corrections, but must remain behind a defined contract and cannot silently replace the deterministic reference without verification evidence.
+## 13. Verification requirements
+
+Reference scenarios shall include:
+- obstacles and terrain constraints;
+- restricted/prohibited areas;
+- NOTAM validity windows and altitude bands;
+- mandatory waypoints;
+- Dijkstra reference paths;
+- A* equivalence where used;
+- wind from principal directions;
+- variable wind by segment/altitude;
+- wind-driven candidate infeasibility;
+- energy reserve limits;
+- payload/configuration-dependent performance;
+- multi-UAV trajectory conflict;
+- staggered-start resolution;
+- dependency-driven partial recalculation;
+- unchanged-input result reuse;
+- deterministic replay/regression.
+
+## 14. Decision record
+
+**Current baseline:** constrained spatial candidate generation → UAV assignment → single wind/performance calculation → 4D trajectories → multi-UAV conflict/separation → feasible-candidate comparison → selected route set → flight profile → final integrity/change-impact validation.
+
+**Architectural rule:** one calculation, one authoritative result, downstream reuse, dependency-driven invalidation.
+
+**AI:** may later assist candidate generation, comparison or Corrections only through the established proposal/validation/safety/authorization boundaries. AI does not become the authoritative calculation or execution path.
