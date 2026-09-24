@@ -5,12 +5,12 @@ Item {
 
     implicitWidth: 300
 
-    property color bg: "#0A0A0A"
+    property color bg: "#08111D"
     property color text: "#FFFFFF"
     property color secondary: "#BFBFBF"
     property color muted: "#7F7F7F"
     property color cyan: "#32FFFF"
-    property color divider: "#202020"
+    property color divider: "#7F7F7F"
 
     property bool missionVisible: true
     signal hideMissionRequested()
@@ -116,7 +116,7 @@ Item {
         y: 151
         width: parent.width - 32
         height: 34
-        color: "#151515"
+        color: "#0C1725"
         border.color: root.cyan
         border.width: 1
 
