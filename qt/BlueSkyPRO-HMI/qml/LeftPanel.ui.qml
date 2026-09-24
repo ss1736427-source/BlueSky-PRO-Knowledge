@@ -4,8 +4,11 @@ Item {
     id: root
 
     implicitWidth: 300
+    implicitHeight: 520
 
     property color bg: "#08111D"
+    property color card: "#0C1725"
+    property color selectedSurface: "#111F30"
     property color text: "#FFFFFF"
     property color secondary: "#BFBFBF"
     property color muted: "#7F7F7F"
@@ -13,9 +16,24 @@ Item {
     property color divider: "#7F7F7F"
 
     property bool missionVisible: true
+    property bool templatesExpanded: true
+    property int selectedTemplate: 2
+
     signal hideMissionRequested()
     signal restoreMissionRequested()
     signal missionTemplateMenuRequested()
+    signal templateSelected(int index)
+
+    ListModel {
+        id: templateModel
+        ListElement { title: "Landscape Mapping"; subtitle: "Съемка площадей"; glyph: "◆"; accent: "#64FF00" }
+        ListElement { title: "Building Inspection"; subtitle: "Съемка зданий"; glyph: "▦"; accent: "#BFBFBF" }
+        ListElement { title: "3D Mapping"; subtitle: "3D картография"; glyph: "◇"; accent: "#32FFFF" }
+        ListElement { title: "Linear Inspection"; subtitle: "Линейные объекты"; glyph: "⌁"; accent: "#32FFFF" }
+        ListElement { title: "Corridor Mapping"; subtitle: "Съемка коридора"; glyph: "⌁"; accent: "#FFD339" }
+        ListElement { title: "Point of Interest"; subtitle: "Точка интереса"; glyph: "●"; accent: "#FF32FF" }
+        ListElement { title: "Manual Flight"; subtitle: "Ручное планирование"; glyph: "✈"; accent: "#BFBFBF" }
+    }
 
     Rectangle {
         anchors.fill: parent
@@ -30,20 +48,29 @@ Item {
         color: root.divider
     }
 
-    Row {
-        x: 16
-        y: 14
-        spacing: 12
+    // Template panel header — compact, outlined in the same service geometry.
+    Rectangle {
+        x: 10
+        y: 8
+        width: parent.width - 20
+        height: 38
+        color: root.card
+        border.color: root.divider
+        border.width: 1
 
         Text {
-            text: "MISSION CONTEXT"
-            color: root.secondary
+            x: 12
+            anchors.verticalCenter: parent.verticalCenter
+            text: "Mission Templates"
+            color: root.text
             font.family: "B612"
             font.pixelSize: 13
             font.bold: true
         }
 
         Text {
+            x: parent.width - 66
+            anchors.verticalCenter: parent.verticalCenter
             text: "+"
             color: root.cyan
             font.family: "B612 Mono"
@@ -52,129 +79,142 @@ Item {
         }
 
         Text {
+            x: parent.width - 36
+            anchors.verticalCenter: parent.verticalCenter
             text: "≡"
             color: root.secondary
             font.family: "B612 Mono"
             font.pixelSize: 16
         }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: root.missionTemplateMenuRequested()
+        }
     }
 
-    MouseArea {
-        x: 104
-        y: 8
-        width: 26
-        height: 28
-        onClicked: root.missionVisible ? root.missionTemplateMenuRequested() : root.restoreMissionRequested()
+    // Reference-style template list. The selected item uses the controlled
+    // selected surface and cyan structural highlight rather than arbitrary blue.
+    Column {
+        visible: root.missionVisible && root.templatesExpanded
+        x: 10
+        y: 50
+        width: parent.width - 20
+        spacing: 3
+
+        Repeater {
+            model: templateModel
+
+            delegate: Rectangle {
+                required property int index
+                required property string title
+                required property string subtitle
+                required property string glyph
+                required property string accent
+
+                width: parent.width
+                height: 56
+                radius: 3
+                color: index === root.selectedTemplate ? root.selectedSurface : root.card
+                border.color: index === root.selectedTemplate ? root.cyan : root.divider
+                border.width: index === root.selectedTemplate ? 1 : 1
+
+                Rectangle {
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    width: 3
+                    radius: 2
+                    color: index === root.selectedTemplate ? root.cyan : "transparent"
+                }
+
+                Text {
+                    x: 12
+                    width: 38
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: glyph
+                    color: index === root.selectedTemplate ? root.cyan : accent
+                    font.family: "B612 Mono"
+                    font.pixelSize: 23
+                    horizontalAlignment: Text.AlignHCenter
+                }
+
+                Text {
+                    x: 56
+                    y: 10
+                    text: title
+                    color: root.text
+                    font.family: "B612"
+                    font.pixelSize: 12
+                    font.bold: true
+                }
+
+                Text {
+                    x: 56
+                    y: 30
+                    text: subtitle
+                    color: root.secondary
+                    font.family: "B612"
+                    font.pixelSize: 9
+                }
+
+                Text {
+                    visible: index === root.selectedTemplate
+                    x: parent.width - 30
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: "✓"
+                    color: root.cyan
+                    font.family: "B612 Mono"
+                    font.pixelSize: 15
+                    font.bold: true
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        root.selectedTemplate = index
+                        root.templateSelected(index)
+                    }
+                }
+            }
+        }
     }
 
-    Text {
-        visible: root.missionVisible
+    // Compact mission controls remain available below the template context.
+    Column {
+        visible: root.missionVisible && !root.templatesExpanded
         x: 16
-        y: 48
-        text: "BS-260920-A-001"
-        color: root.text
-        font.family: "B612 Mono"
-        font.pixelSize: 16
-        font.bold: true
-    }
-
-    Text {
-        visible: root.missionVisible
-        x: 16
-        y: 70
-        text: "Area Survey"
-        color: root.text
-        font.family: "B612"
-        font.pixelSize: 13
-    }
-
-    Text {
-        visible: root.missionVisible
-        x: 16
-        y: 90
-        text: "4 UAV · BVLOS · wind-aware"
-        color: root.secondary
-        font.family: "B612"
-        font.pixelSize: 11
-    }
-
-    Text {
-        visible: root.missionVisible
-        x: 16
-        y: 126
-        text: "MISSION TEMPLATES"
-        color: root.secondary
-        font.family: "B612"
-        font.pixelSize: 12
-        font.bold: true
-    }
-
-    // Default view contains only the template used by the active task.
-    Rectangle {
-        visible: root.missionVisible
-        x: 16
-        y: 151
+        y: 62
         width: parent.width - 32
-        height: 34
-        color: "#0C1725"
-        border.color: root.cyan
-        border.width: 1
+        spacing: 10
 
         Text {
-            anchors.fill: parent
-            anchors.leftMargin: 12
-            verticalAlignment: Text.AlignVCenter
+            text: "BS-260920-A-001"
+            color: root.text
+            font.family: "B612 Mono"
+            font.pixelSize: 16
+            font.bold: true
+        }
+
+        Text {
             text: "Area Survey"
             color: root.text
             font.family: "B612"
-            font.pixelSize: 12
+            font.pixelSize: 13
+        }
+
+        Text {
+            text: "4 UAV · BVLOS · wind-aware"
+            color: root.secondary
+            font.family: "B612"
+            font.pixelSize: 11
         }
     }
 
     Text {
-        visible: root.missionVisible
+        visible: root.missionVisible && !root.templatesExpanded
         x: 16
-        y: 196
-        text: "+  MORE TEMPLATES"
-        color: root.cyan
-        font.family: "B612 Mono"
-        font.pixelSize: 10
-        font.bold: true
-    }
-
-    MouseArea {
-        visible: root.missionVisible
-        x: 16
-        y: 190
-        width: parent.width - 32
-        height: 24
-        onClicked: root.missionTemplateMenuRequested()
-    }
-
-    Text {
-        visible: root.missionVisible
-        x: 16
-        y: 238
-        text: "HIDE"
-        color: root.cyan
-        font.family: "B612 Mono"
-        font.pixelSize: 11
-        font.bold: true
-    }
-
-    MouseArea {
-        visible: root.missionVisible
-        x: 16
-        y: 232
-        width: 80
-        height: 28
-        onClicked: root.hideMissionRequested()
-    }
-
-    Text {
-        visible: root.missionVisible
-        x: 16
-        y: 278
+        y: 126
         text: "MISSION ID"
         color: root.secondary
         font.family: "B612"
@@ -183,9 +223,9 @@ Item {
     }
 
     Text {
-        visible: root.missionVisible
+        visible: root.missionVisible && !root.templatesExpanded
         x: 16
-        y: 300
+        y: 148
         text: "immutable: BS-260920-A-001"
         color: root.text
         font.family: "B612 Mono"
@@ -193,9 +233,9 @@ Item {
     }
 
     Text {
-        visible: root.missionVisible
+        visible: root.missionVisible && !root.templatesExpanded
         x: 16
-        y: 342
+        y: 190
         text: "PANEL TOOLS"
         color: root.secondary
         font.family: "B612"
@@ -204,9 +244,9 @@ Item {
     }
 
     Text {
-        visible: root.missionVisible
+        visible: root.missionVisible && !root.templatesExpanded
         x: 16
-        y: 366
+        y: 214
         text: "Route · Altitude · Speed · Offset"
         color: root.secondary
         font.family: "B612"
@@ -214,61 +254,49 @@ Item {
     }
 
     Text {
-        visible: root.missionVisible
+        visible: root.missionVisible && !root.templatesExpanded
         x: 16
-        y: 386
+        y: 234
         text: "Weather · Obstacles · Airspace"
         color: root.secondary
         font.family: "B612"
         font.pixelSize: 10
     }
-    Column {
+
+    Text {
         visible: !root.missionVisible
         anchors.horizontalCenter: parent.horizontalCenter
         y: 72
-        spacing: 14
-
-        Text {
-            width: parent.parent.width - 32
-            horizontalAlignment: Text.AlignHCenter
-            text: "MISSION HIDDEN"
-            color: root.secondary
-            font.family: "B612"
-            font.pixelSize: 13
-            font.bold: true
-        }
-
-        Text {
-            width: parent.parent.width - 32
-            horizontalAlignment: Text.AlignHCenter
-            text: "Saved state retained"
-            color: root.muted
-            font.family: "IBM Plex Sans Condensed"
-            font.pixelSize: 11
-        }
-
-        Rectangle {
-            width: 150
-            height: 32
-            color: "transparent"
-            border.color: root.cyan
-            border.width: 1
-
-            Text {
-                anchors.fill: parent
-                text: "+  RESTORE"
-                color: root.cyan
-                font.family: "B612 Mono"
-                font.pixelSize: 10
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: root.restoreMissionRequested()
-            }
-        }
+        text: "MISSION HIDDEN"
+        color: root.secondary
+        font.family: "B612"
+        font.pixelSize: 13
+        font.bold: true
     }
 
+    Rectangle {
+        visible: !root.missionVisible
+        anchors.horizontalCenter: parent.horizontalCenter
+        y: 110
+        width: 150
+        height: 32
+        color: "transparent"
+        border.color: root.cyan
+        border.width: 1
+
+        Text {
+            anchors.fill: parent
+            text: "+  RESTORE"
+            color: root.cyan
+            font.family: "B612 Mono"
+            font.pixelSize: 10
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: root.restoreMissionRequested()
+        }
+    }
 }
