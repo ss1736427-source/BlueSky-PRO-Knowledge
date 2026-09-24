@@ -54,6 +54,11 @@ add_executable(orchestrator_rejection_reason_test
 )
 target_link_libraries(orchestrator_rejection_reason_test PRIVATE bluesky_planning)
 
+add_executable(route_model_contract_test
+    model/route_model_contract_test.cpp
+)
+target_link_libraries(route_model_contract_test PRIVATE bluesky_planning)
+
 add_executable(mission_model_contract_test
     model/mission_model_contract_test.cpp
 )
@@ -132,6 +137,7 @@ add_test(NAME orchestrator_route_validation_test COMMAND orchestrator_route_vali
 add_test(NAME orchestrator_determinism_test COMMAND orchestrator_determinism_test)
 add_test(NAME orchestrator_objective_test COMMAND orchestrator_objective_test)
 add_test(NAME orchestrator_rejection_reason_test COMMAND orchestrator_rejection_reason_test)
+add_test(NAME route_model_contract_test COMMAND route_model_contract_test)
 add_test(NAME mission_model_contract_test COMMAND mission_model_contract_test)
 add_test(NAME vehicle_equipment_capability_contract_test COMMAND vehicle_equipment_capability_contract_test)
 add_test(NAME universal_adapter_contract_test COMMAND universal_adapter_contract_test)
