@@ -571,16 +571,30 @@ signal workspaceContextRequested(string tool)
                 border.width: 1
 
 
-                Text {
+                // Compact touch-friendly switch. Green = enabled, dark = disabled.
+                Rectangle {
+                    id: enabledSwitch
                     x: 12
                     anchors.verticalCenter: parent.verticalCenter
-                    text: model.enabled ? "☑" : "☐"
-                    color: model.enabled ? root.cyan : root.secondary
-                    font.pixelSize: 16
+                    width: 38
+                    height: 20
+                    radius: 10
+                    color: model.enabled ? "#64FF00" : "#0C1725"
+                    border.color: model.enabled ? "#64FF00" : "#7F7F7F"
+                    border.width: 1
+
+                    Rectangle {
+                        width: 16
+                        height: 16
+                        radius: 8
+                        anchors.verticalCenter: parent.verticalCenter
+                        x: model.enabled ? parent.width - width - 2 : 2
+                        color: model.enabled ? "#050A12" : "#BFBFBF"
+                    }
                 }
 
                 Text {
-                    x: 42
+                    x: 62
                     anchors.verticalCenter: parent.verticalCenter
                     text: model.label
                     color: root.text
@@ -600,7 +614,7 @@ signal workspaceContextRequested(string tool)
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        if (mouse.x < 36)
+                        if (mouse.x < 58)
                             root.setToolEnabled(model.key, !model.enabled)
                     }
 
