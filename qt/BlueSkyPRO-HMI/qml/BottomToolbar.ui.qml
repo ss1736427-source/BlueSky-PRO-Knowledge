@@ -338,77 +338,121 @@ signal workspaceContextRequested(string tool)
             }
         }
 
-        ListView {
-            id: toolList
+        Item {
+            id: toolArea
             width: Math.max(1, toolbarRow.width - 76 - 76 - 76 - 18 - toolsButton.width)
             height: 40
-            orientation: ListView.Horizontal
-            interactive: false
-            spacing: 6
-            model: visibleToolModel
 
-            delegate: Rectangle {
-                visible: true
-                width: Math.max(76, toolLabel.implicitWidth + 28)
-                height: 38
-                color: root.activeTool === model.key ? "#111F30" : "#0C1725"
-                border.color: root.activeTool === model.key ? root.cyan : root.divider
-                border.width: 1
+            Row {
+                id: visibleToolRow
+                anchors.fill: parent
+                spacing: 6
 
-                Text {
-                    id: toolLabel
-                    anchors.centerIn: parent
-                    text: model.label
-                    color: root.activeTool === model.key ? root.cyan : root.secondary
-                    font.family: "B612 Mono"
-                    font.pixelSize: 10
-                }
+                Repeater {
+                    model: visibleToolModel
 
-                MouseArea {
-                    anchors.fill: parent
-                    preventStealing: true
-                    property real pressToolbarX: 0
-                    property bool moved: false
+                    delegate: Rectangle {
+                        id: toolDelegate
+                        width: Math.max(76, toolLabel.implicitWidth + 28)
+                        height: 38
+                        color: root.activeTool === model.key ? "#111F30" : "#0C1725"
+                        border.color: root.activeTool === model.key ? root.cyan : root.divider
+                        border.width: 1
 
-                    onPressed: {
-                        var pressPoint = mapToItem(toolList, mouse.x, mouse.y)
-                        pressToolbarX = pressPoint.x
-                        moved = false
-                        root.dragToolKey = model.key
-                        root.dragSourceIndex = index
-                        root.dragActive = false
-                    }
+                        property bool dragging: false
+                        property real pressX: 0
+                        property real originalX: 0
+                        property int originalIndex: index
+                        property int dragTargetIndex: index
 
-                    onPositionChanged: {
-                        if (!pressed)
-                            return
+                        z: dragging ? 100 : 0
 
-                        var p = mapToItem(toolList, mouse.x, mouse.y)
-                        var delta = Math.abs(p.x - pressToolbarX)
-                        if (delta > 8)
-                            moved = true
-
-                        var target = toolList.indexAt(p.x, p.y)
-                        if (target >= 0 && target !== root.dragSourceIndex) {
-                            root.dragActive = true
-                            root.moveVisibleTool(model.key, target)
-                            root.dragSourceIndex = target
+                        Text {
+                            id: toolLabel
+                            anchors.centerIn: parent
+                            text: model.label
+                            color: root.activeTool === model.key ? root.cyan : root.secondary
+                            font.family: "B612 Mono"
+                            font.pixelSize: 10
                         }
-                    }
 
-                    onReleased: {
-                        var wasDragged = moved || root.dragActive
-                        root.dragToolKey = ""
-                        root.dragSourceIndex = -1
-                        root.dragActive = false
-                        if (!wasDragged)
-                            root.activateTool(model.key)
-                    }
+                        MouseArea {
+                            anchors.fill: parent
+                            preventStealing: true
+                            hoverEnabled: true
 
-                    onCanceled: {
-                        root.dragToolKey = ""
-                        root.dragSourceIndex = -1
-                        root.dragActive = false
+                            onPressed: {
+                                var p = mapToItem(toolArea, mouse.x, mouse.y)
+                                toolDelegate.pressX = p.x
+                                toolDelegate.originalX = toolDelegate.x
+                                toolDelegate.originalIndex = index
+                                toolDelegate.dragTargetIndex = index
+                                toolDelegate.dragging = false
+                            }
+
+                            onPositionChanged: {
+                                if (!pressed)
+                                    return
+
+                                var p = mapToItem(toolArea, mouse.x, mouse.y)
+                                var delta = p.x - toolDelegate.pressX
+
+                                if (!toolDelegate.dragging && Math.abs(delta) > 8)
+                                    toolDelegate.dragging = true
+
+                                if (!toolDelegate.dragging)
+                                    return
+
+                                // The button itself follows the pointer.
+                                toolDelegate.x = toolDelegate.originalX + delta
+
+                                // Calculate insertion position from the pointer,
+                                // allowing movement across any number of buttons.
+                                var centerX = p.x
+                                var target = visibleToolModel.count - 1
+
+                                for (var i = 0; i < visibleToolModel.count; ++i) {
+                                    var item = visibleToolRow.itemAt
+                                    if (!item)
+                                        continue
+
+                                    if (i === index)
+                                        continue
+
+                                    var itemCenter = item.x + item.width / 2
+                                    if (centerX < itemCenter) {
+                                        target = i
+                                        break
+                                    }
+                                }
+
+                                toolDelegate.dragTargetIndex = target
+                                if (target !== index) {
+                                    root.moveVisibleTool(model.key, target)
+                                    toolDelegate.originalIndex = target
+                                    toolDelegate.originalX = toolDelegate.x
+                                    toolDelegate.pressX = p.x
+                                }
+                            }
+
+                            onReleased: {
+                                var wasDragged = toolDelegate.dragging
+                                toolDelegate.dragging = false
+
+                                // Return control of positioning to the Row.
+                                toolDelegate.x = 0
+
+                                if (!wasDragged)
+                                    root.activateTool(model.key)
+                                else
+                                    root.saveConfiguration()
+                            }
+
+                            onCanceled: {
+                                toolDelegate.dragging = false
+                                toolDelegate.x = 0
+                            }
+                        }
                     }
                 }
             }
