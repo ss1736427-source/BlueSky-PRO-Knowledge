@@ -5,28 +5,34 @@
 
 ## 1. Core principle
 
+**Canonical planning pipeline:** BlueSky performs each required evaluation once at the stage where its required inputs exist. Spatial/hard constraints are resolved before route comparison; wind converts route candidates into time-dependent trajectories; multi-UAV conflict/separation is evaluated on those 4D trajectories; candidate comparison is performed only on candidates that remain feasible. Final validation verifies the selected result and changed-input impact rather than repeating the same calculations.
+
 BlueSky separates **task/coverage planning** from **dynamic flight-parameter calculation**.
 
-The optimizer constructs feasible route candidates from the mission objective and hard constraints, including active airspace/NOTAM restrictions, terrain and obstacle geometry. Wind is not merely a post-processing correction: when a wind snapshot is available and the mission profile requires wind-aware planning, wind participates in candidate edge costs and route selection. The selected route therefore minimizes the configured route objective while accounting for wind-adjusted ground speed, time and energy. A subsequent flight-parameter calculation verifies the selected route against the detailed vehicle-performance model. If conditions make the solution infeasible or materially worse, BlueSky creates a traceable Correction and re-optimizes.
+The planner generates route candidates using deterministic search algorithms and resolves spatial hard constraints before comparison. Candidates are assigned to compatible UAVs, then wind/performance evaluation converts them into time-dependent trajectories with ground speed, time and energy. Multi-UAV conflict/separation is evaluated on these 4D trajectories. Only candidates that remain feasible are compared and the route set is selected. Final validation checks result integrity and material input changes; it does not blindly repeat the complete planning pipeline.
 
 ```text
 TASK / COVERAGE REQUIREMENT
           ↓
 KNOWN CONSTRAINTS + TERRAIN + AIRSPACE / NOTAM
           ↓
-FEASIBLE SEARCH SPACE
+ROUTE SEARCH / CANDIDATE GENERATION
           ↓
-ROUTE SEARCH + WIND-AWARE EDGE COST
+SPATIAL HARD-CONSTRAINT FILTER
           ↓
-ROUTE VARIANTS / DETOURS
+ROUTE CANDIDATES
           ↓
-FLEET / UAV DISTRIBUTION
+UAV CAPABILITY / FLEET ALLOCATION
           ↓
-VEHICLE-SPECIFIC WIND + PERFORMANCE CALCULATION
+WIND + VEHICLE PERFORMANCE → 4D TRAJECTORIES
           ↓
-FINAL ROUTE / PARAMETERS
+MULTI-UAV CONFLICT / SEPARATION CHECK
           ↓
-VALIDATION
+CANDIDATE COMPARISON / OBJECTIVE
+          ↓
+SELECTED ROUTE SET
+          ↓
+FINAL INTEGRITY / CHANGE-IMPACT VALIDATION
 ```
 
 ## 2. Planning inputs
@@ -90,11 +96,11 @@ ROUTE SEARCH
   ↓
 ROUTE CANDIDATES
   ↓
-MULTI-UAV ALLOCATION
+MULTI-UAV ALLOCATION / CAPABILITY FILTER
   ↓
-WIND + FLIGHT-PERFORMANCE MODEL
+WIND + FLIGHT-PERFORMANCE → 4D TRAJECTORIES
   ↓
-ENERGY / TIME EVALUATION
+CONFLICT / SEPARATION CHECK
   ↓
 MULTI-OBJECTIVE OPTIMIZATION
   ↓
@@ -107,9 +113,9 @@ Current UAV path-planning literature continues to identify Dijkstra and A* as im
 
 **Decision:** do not replace Dijkstra with one monolithic AI/metaheuristic algorithm. Keep Dijkstra as the reference result; use A* as an interchangeable search backend where it gives measurable performance improvement. Higher-level optimization remains responsible for coverage, allocation, energy and wind.
 
-## 7. Fleet distribution
+## 7. Fleet distribution and candidate ownership
 
-After task decomposition and route candidates:
+After spatial route candidate generation and before 4D conflict evaluation:
 
 ```text
 TASK SEGMENTS
@@ -125,19 +131,19 @@ UAV-02 route
 UAV-03 route
 ```
 
-Assignment considers payload capability, endurance/energy, performance, battery/resource state, C2 availability, regulatory restrictions, launch/recovery constraints, mission priority and separation requirements.
+Assignment considers payload capability, endurance/energy, performance, battery/resource state, C2 availability, regulatory restrictions, launch/recovery constraints and mission priority. Separation is evaluated later on the resulting 4D trajectories, once wind/performance has established timing.
 
-## 8. Wind-aware route optimization
+## 8. Wind-aware trajectory evaluation
 
 **Wind participates in route selection when wind-aware planning is enabled.**
 
-The optimizer evaluates the wind vector along candidate segments before selecting the final route. For each candidate segment and relevant altitude/time, it resolves the wind vector against the vehicle airspeed/performance model to estimate ground speed, traversal time and energy. A longer geometric detour can therefore be selected when it has materially better wind-adjusted operational cost under the active objective profile.
+The evaluator resolves the wind vector along each candidate segment against the assigned UAV's airspeed/performance model and produces ground speed, traversal time and energy. This creates the 4D trajectory needed for multi-UAV conflict/separation evaluation. Wind therefore affects candidate feasibility and comparison without requiring a second independent flight-parameter calculation for the same data.
 
 The baseline route remains a deterministic reference. Wind-aware optimization produces a traceable candidate/variant rather than silently replacing the baseline.
 
-## 9. Wind calculation
+## 9. Selected-route profile
 
-After candidate selection, the detailed vehicle-performance calculation verifies the selected route.
+The selected route is compiled into the Flight Profile using the already calculated 4D trajectory inputs. No second independent wind calculation is performed unless the source data, UAV configuration or route materially changes.
 
 For every segment and relevant altitude, BlueSky uses the wind vector together with the aircraft air-relative velocity to determine ground velocity and track.
 
@@ -159,7 +165,15 @@ The calculation updates heading/track, ground speed, segment time, ETA, energy c
 
 Wind speed and direction materially affect UAV flight time and energy; recent reviews specifically identify wind as an important factor in energy-aware UAV path planning. citeturn0search4turn0search5
 
-## 10. Wind as feasibility constraint
+## 10. Multi-UAV conflict and separation
+
+Multi-UAV conflict is evaluated on the wind-adjusted 4D trajectories after route candidates are assigned to compatible UAVs. The check uses spatial separation, altitude separation and temporal overlap. A conflict is a violation of the configured separation envelope; physical collision is the limiting case.
+
+The conflict result is a feasibility result, not a soft optimization penalty for safety-critical separation. Conflict resolution may use the existing candidate set, sequencing/start delay or controlled re-planning. A second conflict calculation is required only when a correction materially changes geometry, speed, altitude or timing.
+
+This keeps the algorithm non-redundant: route geometry is checked once, wind/performance is calculated once, and the resulting 4D trajectories are checked for conflicts once per candidate state.
+
+## 11. Wind as feasibility constraint
 
 Wind may also be a hard feasibility condition. Examples include maximum allowable wind, crosswind/headwind limits, minimum achievable ground speed, energy-reserve limits, or vehicle-specific operating envelopes. A candidate violating such a condition is rejected before route selection.
 
