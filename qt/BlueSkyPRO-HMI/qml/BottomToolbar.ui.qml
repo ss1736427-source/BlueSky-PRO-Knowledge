@@ -349,6 +349,7 @@ signal workspaceContextRequested(string tool)
                 spacing: 6
 
                 Repeater {
+                    id: toolRepeater
                     model: visibleToolModel
 
                     delegate: Rectangle {
@@ -412,7 +413,7 @@ signal workspaceContextRequested(string tool)
                                 var target = visibleToolModel.count - 1
 
                                 for (var i = 0; i < visibleToolModel.count; ++i) {
-                                    var item = visibleToolRow.itemAt
+                                    var item = toolRepeater.itemAt(i)
                                     if (!item)
                                         continue
 
