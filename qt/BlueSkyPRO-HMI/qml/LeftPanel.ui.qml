@@ -26,13 +26,13 @@ Item {
 
     ListModel {
         id: templateModel
-        ListElement { title: "Landscape Mapping"; subtitle: "Съемка площадей"; glyph: "◆"; accent: "#64FF00" }
-        ListElement { title: "Building Inspection"; subtitle: "Съемка зданий"; glyph: "▦"; accent: "#BFBFBF" }
-        ListElement { title: "3D Mapping"; subtitle: "3D картография"; glyph: "◇"; accent: "#32FFFF" }
-        ListElement { title: "Linear Inspection"; subtitle: "Линейные объекты"; glyph: "⌁"; accent: "#32FFFF" }
-        ListElement { title: "Corridor Mapping"; subtitle: "Съемка коридора"; glyph: "⌁"; accent: "#FFD339" }
-        ListElement { title: "Point of Interest"; subtitle: "Точка интереса"; glyph: "●"; accent: "#FF32FF" }
-        ListElement { title: "Manual Flight"; subtitle: "Ручное планирование"; glyph: "✈"; accent: "#BFBFBF" }
+        ListElement { title: "Landscape Mapping"; subtitle: ""; accent: "#64FF00" }
+        ListElement { title: "Building Inspection"; subtitle: ""; accent: "#BFBFBF" }
+        ListElement { title: "3D Mapping"; subtitle: ""; accent: "#32FFFF" }
+        ListElement { title: "Linear Inspection"; subtitle: ""; accent: "#32FFFF" }
+        ListElement { title: "Corridor Mapping"; subtitle: ""; accent: "#FFD339" }
+        ListElement { title: "Point of Interest"; subtitle: ""; accent: "#FF32FF" }
+        ListElement { title: "Manual Flight"; subtitle: ""; accent: "#BFBFBF" }
     }
 
     Rectangle {
@@ -109,7 +109,6 @@ Item {
                 required property int index
                 required property string title
                 required property string subtitle
-                required property string glyph
                 required property string accent
 
                 width: parent.width
@@ -129,33 +128,13 @@ Item {
                 }
 
                 Text {
-                    x: 12
-                    width: 38
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: glyph
-                    color: index === root.selectedTemplate ? root.cyan : accent
-                    font.family: "B612 Mono"
-                    font.pixelSize: 23
-                    horizontalAlignment: Text.AlignHCenter
-                }
-
-                Text {
-                    x: 56
-                    y: 10
+                    x: 16
+                    y: 19
                     text: title
                     color: root.text
                     font.family: "B612"
                     font.pixelSize: 12
                     font.bold: true
-                }
-
-                Text {
-                    x: 56
-                    y: 30
-                    text: subtitle
-                    color: root.secondary
-                    font.family: "B612"
-                    font.pixelSize: 9
                 }
 
                 Text {
