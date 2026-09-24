@@ -12,10 +12,17 @@ Item {
     property color muted: "#7F7F7F"
     property color divider: "#202020"
     property bool missionVisible: true
+    signal mapDoubleClicked()
 
     Rectangle {
         anchors.fill: parent
         color: root.bg
+
+        MouseArea {
+            anchors.fill: parent
+            acceptedButtons: Qt.LeftButton
+            onDoubleClicked: root.mapDoubleClicked()
+        }
     }
 
     Text {
