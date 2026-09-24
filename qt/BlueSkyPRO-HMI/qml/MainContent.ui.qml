@@ -8,7 +8,7 @@ Item {
     // BlueSky PRO — Qt Design Studio working screen.
     // Visual composition only. Core / Safety remain authoritative.
     property int headerHeight: 86
-    property int leftWidth: 300
+    property int leftWidth: leftPanel.implicitWidth
     property int rightWidth: 340
     property int uavHeight: 82
     property int toolbarHeight: 54
