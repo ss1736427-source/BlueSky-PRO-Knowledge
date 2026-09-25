@@ -302,8 +302,12 @@ Conflict is a feasibility condition, not a soft optimization penalty.
 
 Resolution may use:
 - an existing feasible candidate;
-- sequencing/start delay;
+- sequencing/start delay, with a maximum ground-based collision-resolution correction window of 5 seconds;
 - controlled local replanning.
+
+For intersecting routes, the intersection point is defined by the route geometry; it is not created as a separate calculated planning point. When a calculated 4D collision exists at that intersection, it must be resolved on the ground before the affected UAVs start. The start-time correction uses the minimum necessary delay up to 5 seconds, followed by a 4D conflict recheck. If the collision remains, the established vertical trajectory correction rule is applied and the result is checked again. An unresolved collision remains a hard planning/readiness blocker.
+
+The 5-second value is a maximum planning correction window, not a mandatory delay and not a regulatory separation requirement.
 
 A resolution triggers recalculation only of the dependencies it changes. For example, a start delay changes timing and conflict evaluation; it does not require rebuilding unchanged route geometry.
 
