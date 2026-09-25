@@ -86,7 +86,7 @@ MultiUavConflictResult MultiUavConflictDetector::evaluate(
         for(size_t ai=1;ai<ts[i].points.size();++ai) for(size_t bj=1;bj<ts[j].points.size();++bj){
             const auto&a0=ts[i].points[ai-1], a1=ts[i].points[ai], b0=ts[j].points[bj-1], b1=ts[j].points[bj];
             const double lo=std::max(a0.elapsed_time_s,b0.elapsed_time_s);
-            const double hi=std::min(a1.elapsed_time_s,b1.elapsed_time_s)+tol;
+            const double hi=std::min(a1.elapsed_time_s,b1.elapsed_time_s);
             if(hi<lo) continue;
             double hit=0.0;
             if(intervalConflict(a0,a1,b0,b1,lo,hi,hsep,vsep,hit)){
