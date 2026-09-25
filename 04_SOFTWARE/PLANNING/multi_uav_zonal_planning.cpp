@@ -67,6 +67,45 @@ ZonalPlanningResult MultiUavZonalPlanner::partition(
         return result;
     }
 
+    // The baseline partitions the polygon by vertical longitude cuts. Each
+    // source polygon edge is clipped into the corresponding longitude slab.
+    // This keeps zones inside the supplied mission area instead of expanding
+    // the area to its bounding rectangle.
+    const auto clipLeft = [](const std::vector<GeoPoint>& polygon, double x) {
+        std::vector<GeoPoint> out;
+        if (polygon.empty()) return out;
+        for (std::size_t i = 0; i < polygon.size(); ++i) {
+            const auto& a = polygon[i];
+            const auto& b = polygon[(i + 1) % polygon.size()];
+            const bool ina = a.longitude_deg >= x;
+            const bool inb = b.longitude_deg >= x;
+            if (ina != inb) {
+                const double t = (x - a.longitude_deg) /
+                                  (b.longitude_deg - a.longitude_deg);
+                out.push_back({a.latitude_deg + t * (b.latitude_deg - a.latitude_deg), x});
+            }
+            if (inb) out.push_back(b);
+        }
+        return out;
+    };
+    const auto clipRight = [](const std::vector<GeoPoint>& polygon, double x) {
+        std::vector<GeoPoint> out;
+        if (polygon.empty()) return out;
+        for (std::size_t i = 0; i < polygon.size(); ++i) {
+            const auto& a = polygon[i];
+            const auto& b = polygon[(i + 1) % polygon.size()];
+            const bool ina = a.longitude_deg <= x;
+            const bool inb = b.longitude_deg <= x;
+            if (ina != inb) {
+                const double t = (x - a.longitude_deg) /
+                                  (b.longitude_deg - a.longitude_deg);
+                out.push_back({a.latitude_deg + t * (b.latitude_deg - a.latitude_deg), x});
+            }
+            if (inb) out.push_back(b);
+        }
+        return out;
+    };
+
     const auto n = unique_uavs.size();
     const double width = (max_lon - min_lon) / static_cast<double>(n);
     result.zones.reserve(n);
