@@ -33,3 +33,8 @@ Each corrected trajectory retains its original dependency identity and appends a
 ## Architecture
 
 4D TRAJECTORIES → CONFLICT DETECTION → CONFLICT RESOLUTION → CONFLICT RECHECK → CANDIDATE COMPARISON → SELECTED ROUTE SET → FLIGHT PROFILE → FINAL INTEGRITY → READY
+
+
+## Right/left determination
+
+For a same-altitude conflict, right/left is determined by the **signed course angle from the LZP (Line of Intended Path / planned course)** to the line of sight from the UAV to the conflicting UAV at the calculated conflict time. Positive clockwise course angle denotes the other UAV on the right; negative denotes the other UAV on the left. A zero/ambiguous angle is not guessed and remains unresolved.
