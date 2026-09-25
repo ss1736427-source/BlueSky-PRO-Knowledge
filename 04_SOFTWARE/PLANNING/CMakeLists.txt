@@ -18,6 +18,7 @@ add_library(bluesky_planning
     compiler/mission_compiler.cpp
     wind_performance_trajectory.cpp
     multi_uav_conflict.cpp
+    multi_uav_sequencing.cpp
 )
 
 target_include_directories(bluesky_planning PUBLIC
@@ -60,6 +61,11 @@ add_executable(multi_uav_conflict_test
     multi_uav_conflict_test.cpp
 )
 target_link_libraries(multi_uav_conflict_test PRIVATE bluesky_planning)
+
+add_executable(multi_uav_sequencing_test
+    multi_uav_sequencing_test.cpp
+)
+target_link_libraries(multi_uav_sequencing_test PRIVATE bluesky_planning)
 
 add_executable(wind_performance_trajectory_test
     wind_performance_trajectory_test.cpp
@@ -162,6 +168,7 @@ add_test(NAME orchestrator_determinism_test COMMAND orchestrator_determinism_tes
 add_test(NAME orchestrator_objective_test COMMAND orchestrator_objective_test)
 add_test(NAME orchestrator_rejection_reason_test COMMAND orchestrator_rejection_reason_test)
 add_test(NAME multi_uav_conflict_test COMMAND multi_uav_conflict_test)
+add_test(NAME multi_uav_sequencing_test COMMAND multi_uav_sequencing_test)
 add_test(NAME wind_performance_trajectory_test COMMAND wind_performance_trajectory_test)
 add_test(NAME route_constraint_validator_test COMMAND route_constraint_validator_test)
 add_test(NAME authorization_readiness_gate_test COMMAND authorization_readiness_gate_test)
