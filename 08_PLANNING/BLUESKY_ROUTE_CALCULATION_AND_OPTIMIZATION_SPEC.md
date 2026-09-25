@@ -286,6 +286,30 @@ The 4D trajectory contains the temporal information required for multi-UAV confl
 
 If wind makes a candidate infeasible because of a hard vehicle/environmental limit, that candidate is rejected or the affected planning state is regenerated. The system does not perform an independent second wind calculation elsewhere.
 
+
+
+### 8.0 Spatial zoning and trajectory deconfliction priority
+
+For multi-UAV mission route generation, the planner shall first attempt **zonal spatial deconfliction**: divide the mission operating area or applicable route space into non-overlapping operational zones/sectors and assign each UAV a distinct permitted zone/sector so that its planned trajectory remains inside its own zone.
+
+The objective is to prevent trajectory intersection at the route-generation stage rather than resolving an intersection after routes have already been generated.
+
+Priority is:
+
+1. **ZONE-FIRST:** generate compatible non-overlapping zones/sectors for the participating UAVs;
+2. **ROUTE-IN-ZONE:** generate each UAV route only inside its assigned zone/sector, subject to all existing spatial, regulatory, terrain, obstacle, altitude and mission constraints;
+3. **4D VERIFY:** calculate wind/performance-adjusted trajectories and verify that the resulting trajectories remain conflict-free;
+4. **CONFLICT-RESOLUTION FALLBACK:** if clean zoning cannot be constructed while preserving mission feasibility/coverage, invoke the established ground-only multi-UAV conflict-resolution policy (start delay up to 5 s, then deterministic vertical correction where applicable);
+5. unresolved conflict remains a hard planning/readiness blocker.
+
+A zone/sector is a planning construct, not an authorization or a physical airspace permission. It cannot override regulatory restrictions, authorization scope, terrain, obstacles, UAV performance or safety constraints.
+
+The zone assignment and its boundaries are versioned planning results with dependency identity. A change to mission geometry, participating UAVs, constraints or relevant environment invalidates only affected zone assignments and downstream routes.
+
+The system should prefer **clean spatial separation** over temporal or vertical conflict resolution. Conflict resolution is therefore a fallback for cases where non-overlapping zonal planning is infeasible or would violate higher-priority mission constraints.
+
+The same rule applies to multi-UAV coverage, reconnaissance, mapping, inspection, transit/repositioning and other missions where multiple UAV routes are planned as one coordinated operation.
+
 ## 8. Multi-UAV conflict and separation
 
 Conflict/separation is a feasibility calculation over the already generated 4D trajectories.
