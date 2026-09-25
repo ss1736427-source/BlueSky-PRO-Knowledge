@@ -102,7 +102,6 @@ target_link_libraries(multi_uav_zonal_planning_test PRIVATE bluesky_planning)
 
 add_executable(zonal_route_graph_test zonal_route_graph_test.cpp)
 target_link_libraries(zonal_route_graph_test PRIVATE bluesky_planning)
-target_link_libraries(final_planning_integrity_test PRIVATE bluesky_planning)
 
 add_executable(wind_performance_trajectory_test
     wind_performance_trajectory_test.cpp
