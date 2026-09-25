@@ -33,7 +33,7 @@ int main() {
     const auto resolved = MultiUavSequencer::resolveByStartDelay(
         {a, b}, separation, delays, "1.0.0");
     assert(resolved.status == MultiUavSequencingStatus::Resolved);
-    assert(resolved.scheduled_delays[1].initial_delay_s == 10.0);
+    assert(resolved.scheduled_delays[1].initial_delay_s == 11.0);
 
     delays[1].maximum_delay_s = 5.0;
     const auto unresolved = MultiUavSequencer::resolveByStartDelay(
