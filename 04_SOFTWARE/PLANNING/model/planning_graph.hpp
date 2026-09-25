@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include "route_model.hpp"
 #include <string>
 #include <vector>
 
@@ -10,6 +11,8 @@ struct PlanningNode {
     std::string id;
     double x{0.0};
     double y{0.0};
+    GeoPoint position;
+    double altitude_m{0.0};
 };
 
 struct PlanningGraphEdge {
