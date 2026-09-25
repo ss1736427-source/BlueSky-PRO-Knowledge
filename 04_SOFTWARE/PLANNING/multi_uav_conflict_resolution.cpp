@@ -57,12 +57,6 @@ bool interpolate(const TrajectoryResult& t, double time, TrajectoryPoint4D& out)
     return false;
 }
 
-bool sameAltitudeConflict(const TrajectoryResult& a, const TrajectoryResult& b,
-                          double time, double vertical_sep) {
-    TrajectoryPoint4D pa, pb;
-    return interpolate(a, time, pa) && interpolate(b, time, pb) &&
-           std::abs(pa.altitude_m - pb.altitude_m) <= std::max(0.0, vertical_sep);
-}
 
 const MultiUavResolutionInput* inputFor(
     const std::vector<MultiUavResolutionInput>& inputs, const std::string& id) {
@@ -178,12 +172,6 @@ MultiUavResolutionResult MultiUavConflictResolver::resolve(
     const auto* bsep = separationFor(separation, conflict.uav_b);
     const double vsep = std::max(asep ? asep->minimum_vertical_separation_m : 0.0,
                                  bsep ? bsep->minimum_vertical_separation_m : 0.0);
-    if (!sameAltitudeConflict(result.trajectories[0], result.trajectories[1], conflict.time_s, vsep)) {
-        result.residual_conflicts = initial.findings;
-        result.status = MultiUavResolutionStatus::Unresolved;
-        return result;
-    }
-
     std::size_t ia = result.trajectories.size();
     std::size_t ib = result.trajectories.size();
     for (std::size_t i = 0; i < result.trajectories.size(); ++i) {
@@ -205,6 +193,12 @@ MultiUavResolutionResult MultiUavConflictResolver::resolve(
         result.status = MultiUavResolutionStatus::Unresolved;
         result.findings.push_back({MultiUavResolutionFindingCode::AmbiguousCourseSide, "", MultiUavResolutionDirection::Up,
                                    conflict.time_s, "course side cannot be determined"});
+        return result;
+    }
+
+    if (std::abs(pa.altitude_m - pb.altitude_m) > vsep + kEps) {
+        result.residual_conflicts = initial.findings;
+        result.status = MultiUavResolutionStatus::Unresolved;
         return result;
     }
 
