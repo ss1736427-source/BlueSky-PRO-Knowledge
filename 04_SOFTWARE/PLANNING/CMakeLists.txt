@@ -19,6 +19,7 @@ add_library(bluesky_planning
     wind_performance_trajectory.cpp
     multi_uav_conflict.cpp
     multi_uav_sequencing.cpp
+    multi_uav_conflict_resolution.cpp
     candidate_comparison.cpp
     selected_route_set.cpp
     flight_profile.cpp
@@ -71,6 +72,11 @@ add_executable(multi_uav_sequencing_test
     multi_uav_sequencing_test.cpp
 )
 target_link_libraries(multi_uav_sequencing_test PRIVATE bluesky_planning)
+
+add_executable(multi_uav_conflict_resolution_test
+    multi_uav_conflict_resolution_test.cpp
+)
+target_link_libraries(multi_uav_conflict_resolution_test PRIVATE bluesky_planning)
 
 add_executable(candidate_comparison_test
     candidate_comparison_test.cpp
@@ -191,6 +197,7 @@ add_test(NAME orchestrator_objective_test COMMAND orchestrator_objective_test)
 add_test(NAME orchestrator_rejection_reason_test COMMAND orchestrator_rejection_reason_test)
 add_test(NAME multi_uav_conflict_test COMMAND multi_uav_conflict_test)
 add_test(NAME multi_uav_sequencing_test COMMAND multi_uav_sequencing_test)
+add_test(NAME multi_uav_conflict_resolution_test COMMAND multi_uav_conflict_resolution_test)
 add_test(NAME candidate_comparison_test COMMAND candidate_comparison_test)
 add_test(NAME selected_route_set_test COMMAND selected_route_set_test)
 add_test(NAME flight_profile_test COMMAND flight_profile_test)
