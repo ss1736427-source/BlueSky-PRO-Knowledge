@@ -7,7 +7,7 @@ int main() {
     CandidateSolution energy{};
     energy.candidate_id = "A";
     energy.solver_version = "1";
-    energy.feasibility = true;
+    energy.feasibility = Feasibility::Feasible;
     energy.estimated_time_s = 100.0;
     energy.estimated_energy_wh = 80.0;
     energy.estimated_reserve_wh = 40.0;
@@ -20,7 +20,7 @@ int main() {
 
     CandidateSolution rejected = energy;
     rejected.candidate_id = "C";
-    rejected.feasibility = false;
+    rejected.feasibility = Feasibility::Infeasible;
 
     CandidateComparisonInput input{{energy, fast, rejected}, {"energy", "time"}, "INPUT-1"};
     const auto r = CandidateComparator::compare(input, "1.0.0");
