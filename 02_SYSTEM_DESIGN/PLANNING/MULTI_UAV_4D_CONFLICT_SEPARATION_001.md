@@ -31,3 +31,8 @@ The detector:
 - does not change readiness/safety state.
 
 Conflict resolution is a separate planning operation. Candidate sequencing or local replanning must produce a new versioned result and then re-run only affected downstream calculations.
+
+
+## Continuous separation
+
+Conflict evaluation is performed continuously over overlapping linear trajectory segments in time. For each segment pair, the algorithm evaluates the interval satisfying the vertical-separation condition and finds the minimum horizontal separation within that interval. Waypoint sampling alone is not sufficient as a safety boundary.
