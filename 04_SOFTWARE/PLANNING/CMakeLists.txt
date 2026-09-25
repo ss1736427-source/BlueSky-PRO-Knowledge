@@ -60,6 +60,12 @@ add_executable(route_constraint_validator_test
 )
 target_link_libraries(route_constraint_validator_test PRIVATE bluesky_planning)
 
+add_executable(authorization_readiness_gate_test
+    authorization_readiness_gate_test.cpp
+    authorization_readiness_gate.cpp
+)
+target_link_libraries(authorization_readiness_gate_test PRIVATE bluesky_planning)
+
 add_executable(route_model_contract_test
     model/route_model_contract_test.cpp
 )
@@ -144,6 +150,7 @@ add_test(NAME orchestrator_determinism_test COMMAND orchestrator_determinism_tes
 add_test(NAME orchestrator_objective_test COMMAND orchestrator_objective_test)
 add_test(NAME orchestrator_rejection_reason_test COMMAND orchestrator_rejection_reason_test)
 add_test(NAME route_constraint_validator_test COMMAND route_constraint_validator_test)
+add_test(NAME authorization_readiness_gate_test COMMAND authorization_readiness_gate_test)
 add_test(NAME route_model_contract_test COMMAND route_model_contract_test)
 add_test(NAME mission_model_contract_test COMMAND mission_model_contract_test)
 add_test(NAME vehicle_equipment_capability_contract_test COMMAND vehicle_equipment_capability_contract_test)
