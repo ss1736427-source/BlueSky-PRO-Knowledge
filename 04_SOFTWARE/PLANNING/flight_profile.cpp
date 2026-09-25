@@ -10,9 +10,9 @@ FlightProfile FlightProfileBuilder::build(const SelectedRouteSet& selected,
     result.mission_version = selected.mission_version;
     result.profile_id = profile_id;
     result.source_candidate_id = selected.candidate_id;
-    result.route_version = route.route_version;
+    result.route_version = route.lineage.route_version;
     result.calculation_input_version = route.lineage.calculation_input_version;
-    result.dependency_identity = selected.source_dependency_identity + "|" + route.lineage.dependency_identity;
+    result.dependency_identity = selected.source_dependency_identity + "|" + route.lineage.route_id + "|" + route.lineage.route_version + "|" + route.lineage.calculation_input_version;
     result.points.reserve(route.waypoints.size());
     double time = 0.0;
     for (const auto& wp : route.waypoints) {
