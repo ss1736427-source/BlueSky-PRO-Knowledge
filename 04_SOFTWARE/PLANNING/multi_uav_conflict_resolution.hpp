@@ -11,6 +11,7 @@ enum class MultiUavResolutionStatus { Resolved, Infeasible, Unresolved };
 enum class MultiUavResolutionDirection { Up, Down };
 
 enum class MultiUavResolutionFindingCode {
+    StartDelayApplied,
     SameAltitudeConflict,
     RightOfWayAssignment,
     VerticalResolutionApplied,
