@@ -1,4 +1,5 @@
 #include "multi_uav_conflict_resolution.hpp"
+#include "multi_uav_sequencing.hpp"
 #include <algorithm>
 #include <cmath>
 #include <iomanip>
@@ -57,6 +58,27 @@ bool interpolate(const TrajectoryResult& t, double time, TrajectoryPoint4D& out)
     return false;
 }
 
+
+std::vector<TrajectoryResult> applyStartDelays(
+    const std::vector<TrajectoryResult>& trajectories,
+    const std::vector<MultiUavStartDelayInput>& delays) {
+    std::vector<TrajectoryResult> result = trajectories;
+    for (auto& trajectory : result) {
+        double delay = 0.0;
+        for (const auto& item : delays) {
+            if (item.uav_id == trajectory.uav_id) {
+                delay = item.initial_delay_s;
+                break;
+            }
+        }
+        if (delay <= kEps) continue;
+        for (auto& point : trajectory.points) point.elapsed_time_s += delay;
+        std::ostringstream dep;
+        dep << trajectory.dependency_identity << "|START_DELAY:" << std::setprecision(17) << delay;
+        trajectory.dependency_identity = dep.str();
+    }
+    return result;
+}
 
 const MultiUavResolutionInput* inputFor(
     const std::vector<MultiUavResolutionInput>& inputs, const std::string& id) {
@@ -179,6 +201,41 @@ MultiUavResolutionResult MultiUavConflictResolver::resolve(
     if (initial.status == MultiUavConflictStatus::Clear) {
         result.status = MultiUavResolutionStatus::Resolved;
         return result;
+    }
+
+    // First correction stage: resolve the calculated collision by the minimum
+    // necessary ground start delay, bounded by the fixed 5 s planning window.
+    std::vector<MultiUavStartDelayInput> delay_inputs;
+    delay_inputs.reserve(result.trajectories.size());
+    for (const auto& t : result.trajectories) {
+        delay_inputs.push_back({t.uav_id, 0.0, 1.0, 5.0});
+    }
+    const auto sequencing = MultiUavSequencer::resolveByStartDelay(
+        result.trajectories, separation, delay_inputs, calculation_version + ".start_delay");
+    if (sequencing.status == MultiUavSequencingStatus::Resolved) {
+        result.trajectories = applyStartDelays(result.trajectories, sequencing.scheduled_delays);
+        bool applied = false;
+        for (const auto& d : sequencing.scheduled_delays) {
+            if (d.initial_delay_s > kEps) {
+                applied = true;
+                result.findings.push_back({MultiUavResolutionFindingCode::StartDelayApplied, d.uav_id,
+                                           MultiUavResolutionDirection::Up, d.initial_delay_s,
+                                           "minimum ground start delay applied within 5 s collision-resolution window"});
+            }
+        }
+        if (applied) {
+            result.dependency_identity += "|START_DELAY_WINDOW:5";
+            result.status = MultiUavResolutionStatus::Resolved;
+            return result;
+        }
+    }
+    if (sequencing.status == MultiUavSequencingStatus::Unresolved &&
+        sequencing.unresolved_conflicts.empty()) {
+        result.status = MultiUavResolutionStatus::Unresolved;
+        return result;
+    }
+    if (sequencing.status == MultiUavSequencingStatus::Unresolved) {
+        result.trajectories = applyStartDelays(result.trajectories, sequencing.scheduled_delays);
     }
     if (initial.findings.empty()) {
         result.status = MultiUavResolutionStatus::Unresolved;
