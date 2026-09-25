@@ -96,6 +96,134 @@ Dijkstra remains the deterministic reference/fallback search algorithm. A* may b
 
 The route search stage must not be duplicated by a second independent route generator inside the optimizer.
 
+
+## 4.1 Authorized exception to general regulatory restrictions
+
+A general regulatory restriction is not treated as an unconditional spatial block when the mission has a current, explicit and scope-matching authorization from the competent authority (for example, an ATC/airspace authority and/or local self-government authority where such authorization is applicable).
+
+The authorization must be resolved before constrained spatial search and must explicitly cover, as applicable:
+- geographic area;
+- time validity;
+- altitude/vertical limits;
+- operation/mission type;
+- UAV/operator or other required identity;
+- applicable conditions and limitations.
+
+This produces an authorization-qualified planning constraint state. The restriction is then non-blocking only within the authorized scope. Outside that scope, the original restriction remains hard.
+
+This prevents a general prohibition such as a city, airport-area restriction or other regulatory airspace limitation from unnecessarily blocking route calculation when the operation has actually been authorized. It does not authorize the system to infer or manufacture an exemption.
+
+### Regulatory restriction versus physical obstacle
+
+Authorization may remove or relax an applicable regulatory restriction; it does not remove physical reality.
+
+Physical constraints remain part of the constrained open-space model, including:
+- terrain and mountains;
+- buildings and structures;
+- towers, cranes and other obstacles;
+- required obstacle-clearance margins;
+- UAV-specific climb/descent and performance limits.
+
+Therefore authorization changes regulatory feasibility, but does not remove terrain or obstacle constraints.
+
+The route search must still construct the route inside the physically flyable space.
+
+### Vertical launch and recovery procedure
+
+When an authorized operation starts or ends inside an area that would otherwise be blocked by a general regulatory restriction, the planner may construct a vertical launch / vertical recovery segment when the operation conditions permit it.
+
+The canonical pattern is:
+
+LAUNCH POINT -> VERTICAL CLIMB -> MINIMUM SAFE TRANSITION ALTITUDE -> CRUISE ROUTE
+
+and on recovery:
+
+CRUISE ROUTE -> MINIMUM SAFE APPROACH ALTITUDE -> VERTICAL DESCENT -> RECOVERY POINT
+
+The minimum safe transition/approach altitude is calculated for the actual launch/recovery location and UAV configuration from the applicable terrain, obstacle-clearance, operational, performance and authorization constraints. It is not a universal hard-coded height.
+
+Vertical launch/recovery itself is a constrained route segment and must pass the same deterministic feasibility, performance and safety/authorization gates as the remainder of the route.
+
+If a safe vertical transition cannot be established within the authorized scope and UAV limits, the route is infeasible; the system must not bypass the restriction or obstacle merely to produce a route.
+
+
+### Pilot authorization confirmation and READY transition
+
+When the planned launch or route is located within a general regulatory restriction, the Flight Chart and readiness workflow shall present the pilot with a clear operational notification that the operation is inside a restricted area.
+
+The notification shall identify:
+- the applicable restriction;
+- the authority/authorization type required;
+- the geographic and time scope;
+- relevant altitude and operating conditions;
+- the evidence or authorization reference that must be confirmed.
+
+The system shall not treat the pilot's acknowledgement alone as authorization. The pilot confirmation must reference an actual authorization record or validated authorization evidence that has passed the applicable deterministic authorization/readiness checks.
+
+Before confirmation, the regulatory condition remains a readiness blocker:
+
+RESTRICTED AREA -> AUTHORIZATION REQUIRED -> NOT READY
+
+After a valid, current, scope-matching authorization is confirmed and all other readiness conditions pass:
+
+RESTRICTED AREA + VALID AUTHORIZATION -> READY
+
+A change, expiry, invalidation or scope mismatch of the authorization immediately invalidates the authorization-qualified readiness state and returns the affected operation to the applicable REVIEW/BLOCK state.
+
+This confirmation is an operational readiness step. It does not alter the underlying regulatory source, does not grant permission by itself, and does not bypass safety, physical obstacle, insurance, technical, weather or other mandatory readiness gates.
+
+### Calculation and reuse rule
+
+Authorization is an input/dependency of the constrained environment snapshot. A new or changed authorization invalidates only affected spatial feasibility and downstream results.
+
+The Flight Chart displays the underlying restriction together with its authorization-qualified state so the operator can distinguish:
+- general restriction;
+- authorized/non-blocking scope;
+- remaining hard physical constraints;
+- authorization validity/conditions.
+
+
+
+## 4.2 Combined restriction and authorization workflow
+
+The authorization-qualified restriction logic is an addition to, not a replacement for, the constrained-open-space planning model.
+
+The complete sequence is:
+
+GENERAL REGULATORY RESTRICTION
+-> IDENTIFY APPLICABLE AUTHORIZATION REQUIREMENT
+-> VALIDATE CURRENT AUTHORIZATION
+-> QUALIFY THE RESTRICTION ONLY WITHIN THE AUTHORIZED SCOPE
+-> CONSTRUCT PHYSICALLY OPEN SPACE
+-> SEARCH ROUTE
+-> RUN READINESS / SAFETY / AUTHORIZATION GATES
+-> READY
+
+If no valid authorization exists where one is required, the affected operation remains NOT READY. Route calculation may be used for planning and preparation where permitted, but the authorization condition remains a readiness blocker.
+
+A valid authorization does not override physical obstacles or other independent constraints. It only changes the regulatory feasibility state covered by that authorization.
+
+The same authorization-qualified environment state shall be consumed by:
+- constrained spatial search;
+- route calculation;
+- Flight Chart visualization;
+- readiness evaluation.
+
+No second or independent authorization/restriction interpretation may be created by the HMI or route optimizer.
+
+### Pilot-facing operational state
+
+The Flight Chart/readiness interface shall clearly distinguish:
+1. RESTRICTED — AUTHORIZATION REQUIRED;
+2. AUTHORIZATION PRESENT — VALIDATING;
+3. AUTHORIZED — OTHER CONSTRAINTS APPLY;
+4. READY only after all mandatory readiness conditions pass.
+
+The pilot confirmation is an operational confirmation step linked to validated authorization evidence. It is not itself the source of authorization.
+
+If authorization expires, is revoked, becomes outside its geographic/time/altitude scope, or fails identity/condition matching, the affected readiness state immediately ceases to qualify as READY and is recalculated.
+
+
 ## 5. Route candidate result
 
 Each route candidate is a versioned object containing, as applicable:
