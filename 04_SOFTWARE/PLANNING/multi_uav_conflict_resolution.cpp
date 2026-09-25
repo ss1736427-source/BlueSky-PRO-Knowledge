@@ -85,13 +85,31 @@ bool courseVectorAt(const TrajectoryResult& t, double time, Vec2& v) {
     return false;
 }
 
-// Positive cross(v, r) means the other aircraft is left of this aircraft's course.
-// Negative means right. For a crossing pair, each aircraft must produce opposite
-// side assignments; otherwise the rule is geometrically ambiguous.
-int sideOfOther(const Vec2& course, const Vec2& relative) {
-    const double cross = course.north * relative.east - course.east * relative.north;
-    if (std::abs(cross) <= kEps) return 0;
-    return cross > 0.0 ? 1 : -1; // 1 = other left, -1 = other right
+// The right/left decision is calculated from the signed course angle:
+// the angle from the UAV's LZP (planned course vector) to the line of sight
+// from that UAV to the other UAV. Positive clockwise angle = right; negative
+// angle = left. This is deliberately expressed as an angle, not inferred from
+// an unrelated world-axis convention.
+double normalizeAngleDeg(double angle) {
+    while (angle > 180.0) angle -= 360.0;
+    while (angle <= -180.0) angle += 360.0;
+    return angle;
+}
+
+double courseAngleFromLzpDeg(const Vec2& lzp_course, const Vec2& relative) {
+    const double course_norm = norm(lzp_course);
+    const double relative_norm = norm(relative);
+    if (course_norm <= kEps || relative_norm <= kEps) return 0.0;
+    const double dot = lzp_course.north * relative.north +
+                       lzp_course.east * relative.east;
+    const double cross = lzp_course.north * relative.east -
+                         lzp_course.east * relative.north;
+    return normalizeAngleDeg(std::atan2(cross, dot) * 180.0 / kPi);
+}
+
+int sideFromCourseAngle(double angle_deg) {
+    if (std::abs(angle_deg) <= kEps) return 0;
+    return angle_deg > 0.0 ? -1 : 1; // -1 = other right, 1 = other left
 }
 
 bool applyOffset(TrajectoryResult& t, double start, double end, double offset) {
@@ -203,13 +221,15 @@ MultiUavResolutionResult MultiUavConflictResolver::resolve(
     }
 
     const auto rel_ab = localDelta(pa.position, pb.position);
-    const int side_b_from_a = sideOfOther(va, rel_ab);
+    const double angle_b_from_a_deg = courseAngleFromLzpDeg(va, rel_ab);
+    const int side_b_from_a = sideFromCourseAngle(angle_b_from_a_deg);
     const auto rel_ba = localDelta(pb.position, pa.position);
-    const int side_a_from_b = sideOfOther(vb, rel_ba);
+    const double angle_a_from_b_deg = courseAngleFromLzpDeg(vb, rel_ba);
+    const int side_a_from_b = sideFromCourseAngle(angle_a_from_b_deg);
     if (side_b_from_a == 0 || side_a_from_b == 0 || side_b_from_a == side_a_from_b) {
         result.status = MultiUavResolutionStatus::Unresolved;
         result.findings.push_back({MultiUavResolutionFindingCode::AmbiguousCourseSide, "", MultiUavResolutionDirection::Up,
-                                   conflict.time_s, "right/left course geometry is ambiguous"});
+                                   conflict.time_s, "right/left course side is ambiguous from signed course angle relative to LZP"});
         return result;
     }
 
