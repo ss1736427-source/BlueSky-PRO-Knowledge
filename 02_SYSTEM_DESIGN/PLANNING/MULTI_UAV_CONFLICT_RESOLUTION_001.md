@@ -38,3 +38,14 @@ Each corrected trajectory retains its original dependency identity and appends a
 ## Right/left determination
 
 For a same-altitude conflict, right/left is determined by the **signed course angle from the LZP (Line of Intended Path / planned course)** to the line of sight from the UAV to the conflicting UAV at the calculated conflict time. Positive clockwise course angle denotes the other UAV on the right; negative denotes the other UAV on the left. A zero/ambiguous angle is not guessed and remains unresolved.
+
+
+## Route intersection and collision-resolution timing
+
+A route intersection point is an existing point defined by the route geometry; the resolver does not create or calculate a new intersection point as a separate planning object.
+
+When routes intersect at that defined point, the planner checks whether the affected 4D trajectories create a collision. If a collision exists, it is resolved on the ground before any affected UAV starts.
+
+The maximum permitted start-time correction for resolving a calculated collision is **5 seconds**. The resolver shall use the minimum delay required to remove the conflict, with the configured upper bound of 5 s. After every timing correction, the affected 4D conflict result is recalculated. If the collision remains, the deterministic vertical trajectory correction is applied according to the established right/left LZP rule, followed by another 4D conflict check.
+
+The 5-second value is a maximum planning correction window, not a mandatory delay and not a regulatory separation requirement.
