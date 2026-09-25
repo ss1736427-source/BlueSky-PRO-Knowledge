@@ -14,13 +14,16 @@ bool inside(XY p,const std::vector<XY>&v){bool in=false;if(v.size()<3)return fal
 double dist(XY p,XY a,XY b){double dx=b.x-a.x,dy=b.y-a.y,d=dx*dx+dy*dy;if(d==0)return std::hypot(p.x-a.x,p.y-a.y);double t=std::max(0.0,std::min(1.0,((p.x-a.x)*dx+(p.y-a.y)*dy)/d));return std::hypot(p.x-(a.x+t*dx),p.y-(a.y+t*dy));}
 bool hit(const SpatialRestriction&r,const SpatialEdge&e){
  if(!r.active)return false;
- if(e.altitude_m<r.minimum_altitude_m||(r.maximum_altitude_m>0&&e.altitude_m>r.maximum_altitude_m))return false;
+ const double edge_min = std::isnan(e.altitude_min_m) ? e.altitude_m : e.altitude_min_m;
+ double edge_max = std::isnan(e.altitude_max_m) ? e.altitude_m : e.altitude_max_m;
+ if (edge_min > edge_max) std::swap(edge_min, edge_max);
+ if(edge_max<r.minimum_altitude_m||(r.maximum_altitude_m>0&&edge_min>r.maximum_altitude_m))return false;
  double lat=(e.from.latitude_deg+e.to.latitude_deg)*0.5;XY a=project(e.from,lat),b=project(e.to,lat);
  if(r.geometry_type==RestrictionGeometryType::Circle)return dist(project(r.center,lat),a,b)<=r.radius_m;
  if(r.polygon.size()<3)return false;std::vector<XY>p;for(auto&g:r.polygon)p.push_back(project(g,lat));
  if(inside(a,p)||inside(b,p))return true;for(size_t i=0;i<p.size();++i)if(inter(a,b,p[i],p[(i+1)%p.size()]))return true;return false;
 }
-std::string dep(const ConstrainedEnvironmentSnapshot&e){std::hash<std::string>h;std::string s=e.snapshot_id+"|"+e.snapshot_version+"|"+e.calculation_input_version;for(auto&r:e.restrictions)s+="|"+r.restriction_id+"|"+r.source_id+"|"+r.snapshot_version+"|"+std::to_string(r.minimum_altitude_m)+"|"+std::to_string(r.maximum_altitude_m);return std::to_string(h(s));}
+std::string dep(const ConstrainedEnvironmentSnapshot&e){std::hash<std::string>h;std::string s=e.snapshot_id+"|"+e.snapshot_version+"|"+e.calculation_input_version;for(auto&r:e.restrictions){s+="|"+r.restriction_id+"|"+r.source_id+"|"+r.snapshot_version+"|"+std::to_string(static_cast<int>(r.geometry_type))+"|"+std::to_string(r.active)+"|"+std::to_string(r.minimum_altitude_m)+"|"+std::to_string(r.maximum_altitude_m);for(auto&p:r.polygon)s+="|"+std::to_string(p.latitude_deg)+"|"+std::to_string(p.longitude_deg);s+="|C|"+std::to_string(r.center.latitude_deg)+"|"+std::to_string(r.center.longitude_deg)+"|"+std::to_string(r.radius_m);}return std::to_string(h(s));}
 OpenSpaceResult init(const ConstrainedEnvironmentSnapshot&e){return {true,e.snapshot_id,e.snapshot_version,e.calculation_input_version,dep(e),{}};}
 }
 OpenSpaceResult ConstrainedOpenSpace::evaluateSegment(const ConstrainedEnvironmentSnapshot&e,const SpatialEdge&edge){
@@ -30,7 +33,7 @@ OpenSpaceResult ConstrainedOpenSpace::evaluateSegment(const ConstrainedEnvironme
 }
 OpenSpaceResult ConstrainedOpenSpace::evaluateRoute(const ConstrainedEnvironmentSnapshot&e,const Route&route){
  auto r=init(e);if(!e.complete){r.allowed=false;r.blocking_restriction_ids.push_back("ENVIRONMENT_INCOMPLETE");return r;}
- for(const auto&s:route.segments){auto a=std::find_if(route.waypoints.begin(),route.waypoints.end(),[&](const auto&w){return w.waypoint_id==s.from_waypoint_id;});auto b=std::find_if(route.waypoints.begin(),route.waypoints.end(),[&](const auto&w){return w.waypoint_id==s.to_waypoint_id;});if(a==route.waypoints.end()||b==route.waypoints.end())continue;auto x=evaluateSegment(e,{a->position,b->position,(a->altitude_m+b->altitude_m)*0.5});r.blocking_restriction_ids.insert(r.blocking_restriction_ids.end(),x.blocking_restriction_ids.begin(),x.blocking_restriction_ids.end());}
+ for(const auto&s:route.segments){auto a=std::find_if(route.waypoints.begin(),route.waypoints.end(),[&](const auto&w){return w.waypoint_id==s.from_waypoint_id;});auto b=std::find_if(route.waypoints.begin(),route.waypoints.end(),[&](const auto&w){return w.waypoint_id==s.to_waypoint_id;});if(a==route.waypoints.end()||b==route.waypoints.end())continue;const double min_alt=std::min(a->altitude_m,b->altitude_m); const double max_alt=std::max(a->altitude_m,b->altitude_m); auto x=evaluateSegment(e,{a->position,b->position,(min_alt+max_alt)*0.5,min_alt,max_alt});r.blocking_restriction_ids.insert(r.blocking_restriction_ids.end(),x.blocking_restriction_ids.begin(),x.blocking_restriction_ids.end());}
  std::sort(r.blocking_restriction_ids.begin(),r.blocking_restriction_ids.end());r.blocking_restriction_ids.erase(std::unique(r.blocking_restriction_ids.begin(),r.blocking_restriction_ids.end()),r.blocking_restriction_ids.end());r.allowed=r.blocking_restriction_ids.empty();return r;
 }
 }
