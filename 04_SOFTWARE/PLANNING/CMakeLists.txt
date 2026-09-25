@@ -25,6 +25,8 @@ add_library(bluesky_planning
     flight_profile.cpp
     vehicle_mission_compiler.cpp
     final_planning_integrity.cpp
+    multi_uav_zonal_planning.cpp
+    zonal_route_graph.cpp
 )
 
 target_include_directories(bluesky_planning PUBLIC
@@ -93,6 +95,13 @@ add_executable(vehicle_mission_compiler_test vehicle_mission_compiler_test.cpp)
 target_link_libraries(vehicle_mission_compiler_test PRIVATE bluesky_planning)
 
 add_executable(final_planning_integrity_test final_planning_integrity_test.cpp)
+target_link_libraries(final_planning_integrity_test PRIVATE bluesky_planning)
+
+add_executable(multi_uav_zonal_planning_test multi_uav_zonal_planning_test.cpp)
+target_link_libraries(multi_uav_zonal_planning_test PRIVATE bluesky_planning)
+
+add_executable(zonal_route_graph_test zonal_route_graph_test.cpp)
+target_link_libraries(zonal_route_graph_test PRIVATE bluesky_planning)
 target_link_libraries(final_planning_integrity_test PRIVATE bluesky_planning)
 
 add_executable(wind_performance_trajectory_test
@@ -203,6 +212,8 @@ add_test(NAME selected_route_set_test COMMAND selected_route_set_test)
 add_test(NAME flight_profile_test COMMAND flight_profile_test)
 add_test(NAME vehicle_mission_compiler_test COMMAND vehicle_mission_compiler_test)
 add_test(NAME final_planning_integrity_test COMMAND final_planning_integrity_test)
+add_test(NAME multi_uav_zonal_planning_test COMMAND multi_uav_zonal_planning_test)
+add_test(NAME zonal_route_graph_test COMMAND zonal_route_graph_test)
 add_test(NAME wind_performance_trajectory_test COMMAND wind_performance_trajectory_test)
 add_test(NAME route_constraint_validator_test COMMAND route_constraint_validator_test)
 add_test(NAME authorization_readiness_gate_test COMMAND authorization_readiness_gate_test)
