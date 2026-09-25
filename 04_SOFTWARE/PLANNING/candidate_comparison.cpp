@@ -33,7 +33,7 @@ CandidateComparisonResult CandidateComparator::compare(
     result.dependency_identity = version + "|" + input.calculation_input_version;
     std::vector<CandidateSolution> feasible;
     for (const auto& c : input.candidates) {
-        if (c.feasibility) feasible.push_back(c);
+        if (c.feasibility == Feasibility::Feasible) feasible.push_back(c);
         else result.rejected_candidate_ids.push_back(c.candidate_id);
         result.dependency_identity += "|" + c.candidate_id + ":" + c.solver_version;
     }
