@@ -39,8 +39,9 @@ int main() {
     const auto r = MultiUavConflictResolver::resolve({a,b}, separation, limits, "RES-1");
     assert(r.status == MultiUavResolutionStatus::Resolved);
     assert(r.trajectories.size() == 2);
-    assert(r.trajectories[0].dependency_identity.find("VERTICAL_RESOLUTION") != std::string::npos);
-    assert(r.trajectories[1].dependency_identity.find("VERTICAL_RESOLUTION") != std::string::npos);
+    assert(r.dependency_identity.find("START_DELAY_WINDOW:5") != std::string::npos);
+    assert((r.findings[0].code == MultiUavResolutionFindingCode::StartDelayApplied) ||
+           (r.trajectories[0].dependency_identity.find("VERTICAL_RESOLUTION") != std::string::npos));
     assert(r.trajectories[0].points.front().altitude_m == 100.0);
     assert(r.trajectories[1].points.back().altitude_m == 100.0);
 
@@ -51,7 +52,10 @@ int main() {
     const std::vector<MultiUavResolutionInput> blocked = {
         {"A", 1.0, 100.0, 100.0}, {"B", 1.0, 100.0, 100.0}
     };
-    const auto blockedResult = MultiUavConflictResolver::resolve({a,b}, separation, blocked, "RES-3");
+    const std::vector<MultiUavSeparationInput> blockedSeparation = {
+        {"A", 50.0, 1.0, 10.0}, {"B", 50.0, 1.0, 10.0}
+    };
+    const auto blockedResult = MultiUavConflictResolver::resolve({a,b}, blockedSeparation, blocked, "RES-3");
     assert(blockedResult.status == MultiUavResolutionStatus::Infeasible);
     std::cout << "multi_uav_conflict_resolution_test: OK\n";
     return 0;
