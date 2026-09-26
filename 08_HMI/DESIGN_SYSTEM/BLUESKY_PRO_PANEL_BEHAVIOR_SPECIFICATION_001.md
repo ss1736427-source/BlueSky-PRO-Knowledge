@@ -262,6 +262,14 @@ Serious/critical warnings may also appear as a large alert over the map. The eve
 - The HMI action is a workflow trigger, not proof that validation succeeded. Readiness and safety state must be set only from authoritative core results.
 - The current Flight Chart is a structural placeholder. Its completion signal is an integration point; actual completion detection and dispatch into the planning core require the map editor/core implementation.
 
+### Manual validation review artifact
+
+The controlled Qt Design Studio preview and review steps are recorded in:
+08_HMI/DESIGN_SYSTEM/BLUESKY_PRO_MANUAL_MISSION_VALIDATION_CHECKPOINT_001.md
+
+Standalone preview project:
+qt/BlueSkyPRO-HMI/BlueSkyPRO-ManualValidation-DesignStudio.qmlproject
+
 ### Automatic validation
 
 Relevant readiness-affecting changes trigger automatic revalidation, including route/WP, UAV/configuration, battery/resource, equipment, weather/forecast, restrictions/NOTAM and other relevant inputs.
