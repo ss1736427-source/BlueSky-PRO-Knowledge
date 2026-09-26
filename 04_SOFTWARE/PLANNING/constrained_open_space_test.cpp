@@ -1,6 +1,8 @@
 #include "constrained_open_space.hpp"
 
 #include <cassert>
+#include <cmath>
+#include <limits>
 #include <string>
 using namespace bluesky::planning;
 
@@ -24,6 +26,37 @@ int main() {
     const auto open = ConstrainedOpenSpace::evaluateSegment(
         environment, {{58.99, 29.99}, {58.995, 29.995}, 100});
     assert(open.allowed);
+
+    // Invalid route coordinates and altitudes must fail closed.
+    const double nan = std::numeric_limits<double>::quiet_NaN();
+    const double infinity = std::numeric_limits<double>::infinity();
+    const auto nan_coordinate = ConstrainedOpenSpace::evaluateSegment(
+        environment, {{nan, 30.0}, {59.005, 30.005}, 100});
+    assert(!nan_coordinate.allowed);
+    assert(nan_coordinate.blocking_restriction_ids.front() == "INVALID_ROUTE_EDGE");
+
+    const auto out_of_range_coordinate = ConstrainedOpenSpace::evaluateSegment(
+        environment, {{91.0, 30.0}, {59.005, 30.005}, 100});
+    assert(!out_of_range_coordinate.allowed);
+    assert(out_of_range_coordinate.blocking_restriction_ids.front() == "INVALID_ROUTE_EDGE");
+
+    const auto infinite_altitude = ConstrainedOpenSpace::evaluateSegment(
+        environment, {{58.995, 29.995}, {59.005, 30.005}, infinity});
+    assert(!infinite_altitude.allowed);
+    assert(infinite_altitude.blocking_restriction_ids.front() == "INVALID_ROUTE_EDGE");
+
+    const auto nan_altitude_envelope = ConstrainedOpenSpace::evaluateSegment(
+        environment, {{58.995, 29.995}, {59.005, 30.005}, 100, nan, 120});
+    assert(!nan_altitude_envelope.allowed);
+    assert(nan_altitude_envelope.blocking_restriction_ids.front() == "INVALID_ROUTE_EDGE");
+
+    auto invalid_altitude_environment = environment;
+    invalid_altitude_environment.restrictions[0].minimum_altitude_m = nan;
+    const auto invalid_restriction_altitude = ConstrainedOpenSpace::evaluateSegment(
+        invalid_altitude_environment, crossing);
+    assert(!invalid_restriction_altitude.allowed);
+    assert(invalid_restriction_altitude.blocking_restriction_ids.front() ==
+           "INVALID_RESTRICTION_GEOMETRY:NOTAM-1");
 
     // Invalid active restriction geometry must fail closed rather than disappear.
     auto invalid_polygon_environment = environment;
