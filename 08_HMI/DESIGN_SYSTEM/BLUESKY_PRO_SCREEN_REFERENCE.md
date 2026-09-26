@@ -1,5 +1,9 @@
 # BlueSky PRO — Current Screen Reference
 
+## Left Panel — «Миссии»
+
+The left panel is titled **Миссии**. It provides access to mission templates, the active mission context, and mission creation. The title is Russian-language UI text; the component name `LeftPanel` remains unchanged in QML.
+
 Status: WORKING REFERENCE
 
 ## Right Panel — operational control, checklist, warnings and validation — controlled intermediate state
