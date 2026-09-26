@@ -3,7 +3,7 @@
 Item {
     id: root
 
-    // Top Header тАФ composition workbench variant for Qt Design Studio.
+    // Top Header — composition workbench variant for Qt Design Studio.
     // Design Studio workbench size only; runtime width remains adaptive through parent anchors.
     implicitWidth: 1920
     implicitHeight: root.headerHeight
@@ -23,14 +23,14 @@ Item {
     property int borderRadius: 4
 
     property string etd: "10:30"
-    property string tot: "тАФ"
-    property string trip: "тАФ"
+    property string tot: "—"
+    property string trip: "—"
     property string eta: "11:48"
     property bool ready: true
     property bool warningActive: true
     property string operatorLabel: "OPERATOR"
 
-    // Adjustable composition parameters тАФ working values, not frozen tokens.
+    // Adjustable composition parameters — working values, not frozen tokens.
     property int anchorWidth: 164
     property int centralSectorWidth: 112
     property int sectorGap: 0
@@ -61,7 +61,7 @@ Item {
         border.width: 0
     }
 
-    // LEFT ANCHOR тАФ width is a composition parameter and contains the scalable logo.
+    // LEFT ANCHOR — width is a composition parameter and contains the scalable logo.
     Item {
         id: logoBlock
         width: root.anchorWidth
@@ -89,7 +89,7 @@ Item {
         }
     }
 
-    // RIGHT ANCHOR тАФ outer geometry is intentionally identical to LOGO anchor.
+    // RIGHT ANCHOR — outer geometry is intentionally identical to LOGO anchor.
     Item {
         id: operatorBlock
         width: root.anchorWidth
@@ -125,7 +125,7 @@ Item {
 
                     Text {
                         anchors.centerIn: parent
-                        text: "тЧП"
+                        text: "OP"
                         color: root.secondary
                         font.pixelSize: Math.round(root.operatorIconSize * 0.42)
                     }
@@ -144,7 +144,7 @@ Item {
         }
     }
 
-    // CENTRAL COMPOSITION тАФ fills the adaptive space between equal-width anchors.
+    // CENTRAL COMPOSITION — fills the adaptive space between equal-width anchors.
     // Six equal sectors preserve the geometric center between TRIP and ETA.
     Item {
         id: centralComposition
@@ -223,7 +223,7 @@ Item {
             width: parent.width / 6
             height: parent.height
             title: "WARNING"
-            value: root.warningActive ? "!" : "тАФ"
+            value: root.warningActive ? "!" : "—"
             valueColor: root.warningActive ? root.amber : root.muted
             headingSize: root.headingSize
             valueSize: root.valueSize
@@ -232,7 +232,7 @@ Item {
         }
     }
 
-    // Structural dividers тАФ one physical device pixel each.
+    // Structural dividers — one physical device pixel each.
     // Coordinates and width are snapped to the display pixel grid.
     Rectangle {
         x: Math.round((centralComposition.x) * root.devicePixelRatio) / root.devicePixelRatio
