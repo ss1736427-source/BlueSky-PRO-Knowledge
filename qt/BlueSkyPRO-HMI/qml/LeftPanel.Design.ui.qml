@@ -87,7 +87,7 @@ Item {
         Text {
             x: 10
             anchors.verticalCenter: parent.verticalCenter
-            text: "BS-260924-A-001"
+            text: "BS-260920-A-001"
             color: root.text
             font.family: "B612 Mono"
             font.pixelSize: 11
@@ -97,7 +97,7 @@ Item {
         Text {
             x: parent.width - 66
             anchors.verticalCenter: parent.verticalCenter
-            text: "HIDE"
+            text: "СКРЫТЬ"
             color: root.secondary
             font.family: "B612 Mono"
             font.pixelSize: 10
@@ -126,7 +126,7 @@ Item {
         Text {
             x: 12
             y: 10
-            text: "PANEL TOOLS"
+            text: "ИНСТРУМЕНТЫ ПАНЕЛИ"
             color: root.secondary
             font.family: "Noto Sans"
             font.pixelSize: 10
@@ -139,7 +139,7 @@ Item {
             spacing: 8
 
             Text {
-                text: (root.analysisVisible ? "✓ " : "○ ") + "Mission Analysis"
+                text: (root.analysisVisible ? "✓ " : "○ ") + "Анализ миссии"
                 color: root.analysisVisible ? root.cyan : root.secondary
                 font.family: "Noto Sans"
                 font.pixelSize: 10
@@ -149,7 +149,7 @@ Item {
                 }
             }
             Text {
-                text: (root.instrumentsVisible ? "✓ " : "○ ") + "Instruments"
+                text: (root.instrumentsVisible ? "✓ " : "○ ") + "Приборы"
                 color: root.instrumentsVisible ? root.cyan : root.secondary
                 font.family: "Noto Sans"
                 font.pixelSize: 10
@@ -159,7 +159,7 @@ Item {
                 }
             }
             Text {
-                text: (root.atcVisible ? "✓ " : "○ ") + "ATC / Communication"
+                text: (root.atcVisible ? "✓ " : "○ ") + "УВД / Связь"
                 color: root.atcVisible ? root.cyan : root.secondary
                 font.family: "Noto Sans"
                 font.pixelSize: 10
@@ -169,7 +169,7 @@ Item {
                 }
             }
             Text {
-                text: (root.diagnosticsVisible ? "✓ " : "○ ") + "Extended Diagnostics"
+                text: (root.diagnosticsVisible ? "✓ " : "○ ") + "Расширенная диагностика"
                 color: root.diagnosticsVisible ? root.cyan : root.secondary
                 font.family: "Noto Sans"
                 font.pixelSize: 10
@@ -255,7 +255,7 @@ Item {
 
         Text {
             anchors.horizontalCenter: parent.horizontalCenter
-            text: "MISSION HIDDEN"
+            text: "МИССИЯ СКРЫТА"
             color: root.secondary
             font.family: "Noto Sans"
             font.pixelSize: 13
@@ -271,7 +271,7 @@ Item {
 
             Text {
                 anchors.fill: parent
-                text: "+ RESTORE"
+                text: "+ ВОССТАНОВИТЬ"
                 color: root.cyan
                 font.family: "B612 Mono"
                 font.pixelSize: 10
