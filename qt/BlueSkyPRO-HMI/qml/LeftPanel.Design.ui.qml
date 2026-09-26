@@ -16,6 +16,32 @@ Item {
 
     property bool missionVisible: true
     property bool missionCreationMode: false
+    property var missionTemplateIndices: [2]
+    property var manualTemplateSelection: []
+
+    onMissionCreationModeChanged: {
+        if (missionCreationMode)
+            manualTemplateSelection = []
+    }
+
+    function templateIsVisible(index) {
+        return missionCreationMode || missionTemplateIndices.indexOf(index) >= 0
+    }
+
+    function templateIsSelected(index) {
+        return missionCreationMode
+            ? manualTemplateSelection.indexOf(index) >= 0
+            : missionTemplateIndices.indexOf(index) >= 0
+    }
+
+    function toggleManualTemplate(index) {
+        var next = manualTemplateSelection.slice()
+        var position = next.indexOf(index)
+        if (position >= 0) next.splice(position, 1)
+        else next.push(index)
+        manualTemplateSelection = next
+        selectedTemplate = index
+    }
     property bool missionIdExpanded: false
     property bool panelConfigOpen: false
     property int selectedTemplate: 2
@@ -271,7 +297,7 @@ Item {
                 border.width: 1
 
                 Rectangle {
-                    visible: index === root.selectedTemplate
+                    visible: root.templateIsSelected(index)
                     anchors.left: parent.left
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
@@ -302,7 +328,7 @@ Item {
 
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: root.selectedTemplate = index
+                    onClicked: {\n                        if (root.missionCreationMode) root.toggleManualTemplate(index)\n                        else root.selectedTemplate = index\n                    }
                 }
             }
         }
