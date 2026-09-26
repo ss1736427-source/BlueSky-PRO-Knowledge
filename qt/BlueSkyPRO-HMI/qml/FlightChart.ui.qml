@@ -13,7 +13,9 @@ Item {
     property color divider: "#202020"
     property bool missionVisible: true
     property bool manualCreationMode: false
-    signal mapDoubleClicked()
+    // The map/mission editor sets this only when the composed mission is complete.
+    property bool manualCompositionComplete: false
+    signal manualCompositionCompleted()\n    signal mapDoubleClicked()
 
     Rectangle {
         anchors.fill: parent
