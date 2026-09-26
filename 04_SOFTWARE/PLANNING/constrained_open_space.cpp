@@ -83,6 +83,12 @@ bool validCoordinate(const GeoPoint& point) {
 }
 
 bool validRestriction(const SpatialRestriction& restriction) {
+    if (!std::isfinite(restriction.minimum_altitude_m) ||
+        !std::isfinite(restriction.maximum_altitude_m) ||
+        (restriction.maximum_altitude_m > 0.0 &&
+         restriction.maximum_altitude_m < restriction.minimum_altitude_m)) {
+        return false;
+    }
     if (restriction.geometry_type == RestrictionGeometryType::Circle) {
         return validCoordinate(restriction.center) &&
                std::isfinite(restriction.radius_m) && restriction.radius_m >= 0.0;
@@ -91,6 +97,18 @@ bool validRestriction(const SpatialRestriction& restriction) {
         restriction.polygon.size() < 3) return false;
     return std::all_of(restriction.polygon.begin(), restriction.polygon.end(),
                        validCoordinate);
+}
+
+bool validEdge(const SpatialEdge& edge) {
+    if (!validCoordinate(edge.from) || !validCoordinate(edge.to) ||
+        !std::isfinite(edge.altitude_m)) {
+        return false;
+    }
+    const double minimum = std::isnan(edge.altitude_min_m)
+        ? edge.altitude_m : edge.altitude_min_m;
+    const double maximum = std::isnan(edge.altitude_max_m)
+        ? edge.altitude_m : edge.altitude_max_m;
+    return std::isfinite(minimum) && std::isfinite(maximum);
 }
 
 bool intersects(const SpatialRestriction& restriction, const SpatialEdge& edge) {
@@ -182,6 +200,10 @@ OpenSpaceResult ConstrainedOpenSpace::evaluateSegment(
     auto result = makeResult(environment);
     if (!environment.complete) {
         reject(result, "ENVIRONMENT_INCOMPLETE");
+        return result;
+    }
+    if (!validEdge(edge)) {
+        reject(result, "INVALID_ROUTE_EDGE");
         return result;
     }
     for (const auto& restriction : environment.restrictions) {
