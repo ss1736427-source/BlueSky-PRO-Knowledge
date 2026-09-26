@@ -106,6 +106,12 @@ add_executable(route_constraint_validator_test
 )
 target_link_libraries(route_constraint_validator_test PRIVATE bluesky_planning)
 
+add_executable(notam_prohibited_zone_validator_test
+    notam_prohibited_zone_validator_test.cpp
+    notam_prohibited_zone_validator.cpp
+)
+target_link_libraries(notam_prohibited_zone_validator_test PRIVATE bluesky_planning)
+
 add_executable(authorization_readiness_gate_test
     authorization_readiness_gate_test.cpp
     authorization_readiness_gate.cpp
@@ -205,6 +211,7 @@ add_test(NAME vehicle_mission_compiler_test COMMAND vehicle_mission_compiler_tes
 add_test(NAME final_planning_integrity_test COMMAND final_planning_integrity_test)
 add_test(NAME wind_performance_trajectory_test COMMAND wind_performance_trajectory_test)
 add_test(NAME route_constraint_validator_test COMMAND route_constraint_validator_test)
+add_test(NAME notam_prohibited_zone_validator_test COMMAND notam_prohibited_zone_validator_test)
 add_test(NAME authorization_readiness_gate_test COMMAND authorization_readiness_gate_test)
 add_test(NAME route_model_contract_test COMMAND route_model_contract_test)
 add_test(NAME mission_model_contract_test COMMAND mission_model_contract_test)
