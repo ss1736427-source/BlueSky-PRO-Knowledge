@@ -132,9 +132,11 @@ Individual UAV telemetry is not duplicated into the aggregate mission header.
 
 ### Mission context
 
-- Display the mission identifier as one compact label: `Миссия № <Mission ID>`.
-- Keep the `СКРЫТЬ` action as a separate, right-aligned control in its current position on the same row.
-- The label and action must not overlap; preserve the current row geometry unless the available panel width requires responsive truncation.
+- Show a compact mission identifier using only type and sequence: `A-001` (automatic) or `M-001` (manual); omit the `№` symbol and the `BS`/date prefix in collapsed display.
+- Clicking the compact identifier toggles the full immutable ID, e.g. `BS-260920-A-001`; clicking again returns to compact form.
+- Show a concise, single-line mission-purpose summary derived from the operator's aggregated task description. The UI receives this summary from the mission/task aggregation layer; it must not invent task details.
+- Keep `СКРЫТЬ` as a separate, right-aligned action in its existing position on the first row.
+- Truncate the summary with an ellipsis when needed; the identifier and `СКРЫТЬ` action must remain legible and must not overlap.
 
 `СКРЫТЬ`:
 - automatically saves current mission state first;
