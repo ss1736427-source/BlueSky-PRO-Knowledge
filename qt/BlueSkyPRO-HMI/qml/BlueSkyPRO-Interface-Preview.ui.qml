@@ -18,6 +18,7 @@ Item {
     property color green: "#64FF00"
     property color amber: "#FFD339"
     property color red: "#FF1E14"
+    property bool rightPanelOpen: true
 
     Rectangle {
         anchors.fill: parent
@@ -76,10 +77,11 @@ Item {
     Rectangle {
         x: parent.width - 340; y: 86; width: 340; height: parent.height - 86 - 136
         color: root.panel
+        visible: root.rightPanelOpen
     }
 
     Rectangle { x: 299; y: 86; width: 1; height: parent.height - 86 - 136; color: root.muted }
-    Rectangle { x: parent.width - 340; y: 86; width: 1; height: parent.height - 86 - 136; color: root.muted }
+    Rectangle { x: parent.width - 340; y: 86; width: 1; height: parent.height - 86 - 136; color: root.muted; visible: root.rightPanelOpen }
 
     Text { x: 18; y: 106; text: "MISSION CONTEXT"; color: root.secondary; font.family: "B612"; font.pixelSize: 13; font.bold: true }
     Text { x: 18; y: 142; text: "BS-260920-A-001"; color: root.text; font.family: "B612 Mono"; font.pixelSize: 16; font.bold: true }
@@ -104,14 +106,14 @@ Item {
     Text { x: 390; y: 360; width: parent.width - 780; text: "FLIGHT CHART"; color: root.secondary; font.family: "B612"; font.pixelSize: 18; font.bold: true; horizontalAlignment: Text.AlignHCenter }
     Text { x: 390; y: 394; width: parent.width - 780; text: "PRIMARY MAP WORKSPACE"; color: root.muted; font.family: "B612 Mono"; font.pixelSize: 10; horizontalAlignment: Text.AlignHCenter }
 
-    Text { x: parent.width - 322; y: 106; text: "MISSION ACTIONS"; color: root.secondary; font.family: "B612"; font.pixelSize: 13; font.bold: true }
-    Text { x: parent.width - 322; y: 142; text: "CHECKLIST 5/8"; color: root.text; font.family: "B612 Mono"; font.pixelSize: 12 }
-    Text { x: parent.width - 322; y: 174; text: "⚠ CORRECTIONS REQUIRED"; color: root.amber; font.family: "B612 Mono"; font.pixelSize: 10 }
-    Text { x: parent.width - 322; y: 206; text: "MISSION NOT READY"; color: root.amber; font.family: "B612"; font.pixelSize: 13; font.bold: true }
-    Rectangle { x: parent.width - 322; y: 246; width: 250; height: 42; color: root.card; border.color: root.muted; border.width: 1 }
-    Text { x: parent.width - 322; y: 259; width: 250; text: "SEND FLIGHT PLAN"; color: root.text; font.family: "B612 Mono"; font.pixelSize: 11; horizontalAlignment: Text.AlignHCenter }
-    Rectangle { x: parent.width - 322; y: 304; width: 250; height: 42; color: root.card; border.color: root.red; border.width: 1 }
-    Text { x: parent.width - 322; y: 317; width: 250; text: "START MISSION"; color: root.red; font.family: "B612 Mono"; font.pixelSize: 11; horizontalAlignment: Text.AlignHCenter }
+    Text { x: parent.width - 322; y: 106; text: "MISSION ACTIONS"; color: root.secondary; font.family: "B612"; font.pixelSize: 13; font.bold: true; visible: root.rightPanelOpen }
+    Text { x: parent.width - 322; y: 142; text: "CHECKLIST 5/8"; color: root.text; font.family: "B612 Mono"; font.pixelSize: 12; visible: root.rightPanelOpen }
+    Text { x: parent.width - 322; y: 174; text: "⚠ CORRECTIONS REQUIRED"; color: root.amber; font.family: "B612 Mono"; font.pixelSize: 10; visible: root.rightPanelOpen }
+    Text { x: parent.width - 322; y: 206; text: "MISSION NOT READY"; color: root.amber; font.family: "B612"; font.pixelSize: 13; font.bold: true; visible: root.rightPanelOpen }
+    Rectangle { x: parent.width - 322; y: 246; width: 250; height: 42; color: root.card; border.color: root.muted; border.width: 1; visible: root.rightPanelOpen }
+    Text { x: parent.width - 322; y: 259; width: 250; text: "SEND FLIGHT PLAN"; color: root.text; font.family: "B612 Mono"; font.pixelSize: 11; horizontalAlignment: Text.AlignHCenter; visible: root.rightPanelOpen }
+    Rectangle { x: parent.width - 322; y: 304; width: 250; height: 42; color: root.card; border.color: root.red; border.width: 1; visible: root.rightPanelOpen }
+    Text { x: parent.width - 322; y: 317; width: 250; text: "START MISSION"; color: root.red; font.family: "B612 Mono"; font.pixelSize: 11; horizontalAlignment: Text.AlignHCenter; visible: root.rightPanelOpen }
 
     // UAV STATUS
     Rectangle { x: 0; y: parent.height - 136; width: parent.width; height: 82; color: root.panel; border.color: root.muted; border.width: 1 }
@@ -147,7 +149,8 @@ Item {
     Text { x: 618; y: parent.height - 34; width: 150; text: "VIRTUAL FLT"; color: root.text; font.family: "B612 Mono"; font.pixelSize: 13; font.bold: true; horizontalAlignment: Text.AlignHCenter }
 
     Rectangle { x: 1370; y: parent.height - 45; width: 108; height: 38; color: root.card; border.color: root.muted; border.width: 1 }
-    Text { x: 1370; y: parent.height - 34; width: 108; text: "RIGHT ▶"; color: root.text; font.family: "B612 Mono"; font.pixelSize: 13; font.bold: true; horizontalAlignment: Text.AlignHCenter }
+    Text { x: 1370; y: parent.height - 34; width: 108; height: 20; text: root.rightPanelOpen ? "RIGHT ▶" : "RIGHT ◀"; color: root.text; font.family: "B612 Mono"; font.pixelSize: 13; font.bold: true; horizontalAlignment: Text.AlignHCenter }
+    MouseArea { x: 1370; y: parent.height - 45; width: 108; height: 38; onClicked: root.rightPanelOpen = !root.rightPanelOpen }
 
     Rectangle { x: 1498; y: parent.height - 45; width: 1; height: 38; color: root.cyan }
     Text { x: 1520; y: parent.height - 34; width: 72; text: "HH:MM"; color: root.text; font.family: "B612 Mono"; font.pixelSize: 13; font.bold: true; horizontalAlignment: Text.AlignHCenter }
