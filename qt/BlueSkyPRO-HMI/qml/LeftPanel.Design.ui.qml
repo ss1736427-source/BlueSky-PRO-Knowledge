@@ -42,7 +42,7 @@ Item {
         Text {
             x: 12
             anchors.verticalCenter: parent.verticalCenter
-            text: "Mission Templates"
+            text: "Миссии"
             color: root.text
             font.family: "B612"
             font.pixelSize: 14
