@@ -309,6 +309,16 @@ Successful validation + required confirmation:
 - use dynamic breathing green outline;
 - after confirmation remove the control.
 
+### Manual mission validation preview
+
+The manual-creation validation behavior has a dedicated review project:
+
+- Project: qt/BlueSkyPRO-HMI/BlueSkyPRO-ManualValidation-DesignStudio.qmlproject
+- Entry screen: qt/BlueSkyPRO-HMI/qml/RightPanel.Validation.Design.ui.qml
+- Behavior checkpoint: 08_HMI/DESIGN_SYSTEM/BLUESKY_PRO_MANUAL_MISSION_VALIDATION_CHECKPOINT_001.md
+
+The preview instantiates the real RightPanel component. Its test-only “ЗАВЕРШИТЬ СБОРКУ (ТЕСТ)” control simulates completion from the map editor. Verify that the validation button is initially pulsing but disabled, becomes actionable after simulated completion, and disappears after one click. The preview does not run the planning core.
+
 ### Start Mission
 
 Not green by default.
