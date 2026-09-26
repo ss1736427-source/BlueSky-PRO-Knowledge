@@ -22,6 +22,7 @@ Item {
     readonly property bool manualValidationStarted: missionState === "VALIDATING"
     property bool warningActive: true
     property int selectedUavIndex: -1
+    property bool contextOverlayOpen: false
     readonly property var selectedUav: selectedUavIndex >= 0 && selectedUavIndex < uavStatus.uavModel.length ? uavStatus.uavModel[selectedUavIndex] : null
     readonly property string selectedUavId: selectedUav ? selectedUav.id : "NO UAV SELECTED"
     property string uavDecision: ""
@@ -139,7 +140,14 @@ Item {
         id: uavStatus
         visible: root.uavPanelOpen
         selectedIndex: root.selectedUavIndex
-        onUavSelected: root.selectedUavIndex = index
+        onUavSelected: {
+            root.selectedUavIndex = index
+            root.contextOverlayOpen = false
+        }
+        onUavDoubleClicked: {
+            root.selectedUavIndex = index
+            root.contextOverlayOpen = true
+        }
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: bottomToolbar.top
@@ -161,14 +169,15 @@ Item {
 
     ContextOverlay {
         id: contextOverlay
-        visible: root.selectedUavIndex >= 0
+        visible: root.contextOverlayOpen && root.selectedUavIndex >= 0
         uavIndex: root.selectedUavIndex
         uavId: root.selectedUavId
-        anchors.right: rightPanel.left
+        x: Math.max(0, Math.min(root.width - width,
+                                root.width * (root.selectedUavIndex + 0.5) / uavStatus.uavModel.length - width / 2))
         anchors.bottom: uavStatus.top
         width: 360
         height: 122
         onDecisionRequested: root.uavDecisionRequested(decision, uavIndex)
-        onContextClosed: root.selectedUavIndex = -1
+        onContextClosed: root.contextOverlayOpen = false
     }
 }
