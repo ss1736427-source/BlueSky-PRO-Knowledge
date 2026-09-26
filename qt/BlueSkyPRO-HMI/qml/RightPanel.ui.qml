@@ -151,7 +151,6 @@ Item {
         enabled: root.manualCompositionComplete
         cursorShape: enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
         onClicked: {
-            root.manualValidationStarted = true
             root.validateManualMissionRequested()
         }
     }
