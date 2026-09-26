@@ -378,7 +378,7 @@ Item {
         visible: root.missionVisible && !root.templatesExpanded
         x: 16
         y: 250
-        text: "Analysis  |  Instruments  |  ATC  |  Diagnostics"
+        text: "Анализ  |  Приборы  |  УВД  |  Диагностика"
         color: root.secondary
         font.family: "Noto Sans"
         font.pixelSize: 10
