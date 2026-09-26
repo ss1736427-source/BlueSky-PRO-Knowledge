@@ -167,7 +167,7 @@ Item {
         Text {
             x: parent.width - 66
             anchors.verticalCenter: parent.verticalCenter
-            text: "HIDE"
+            text: "СКРЫТЬ"
             color: root.secondary
             font.family: "B612 Mono"
             font.pixelSize: 10
@@ -197,7 +197,7 @@ Item {
         Text {
             x: 12
             y: 10
-            text: "PANEL TOOLS"
+            text: "ИНСТРУМЕНТЫ ПАНЕЛИ"
             color: root.secondary
             font.family: "Noto Sans"
             font.pixelSize: 10
@@ -212,10 +212,10 @@ Item {
 
             Repeater {
                 model: [
-                    { "label": "Mission Analysis", "key": "analysis", "enabled": root.analysisVisible },
-                    { "label": "Instruments", "key": "instruments", "enabled": root.instrumentsVisible },
-                    { "label": "ATC / Communication", "key": "atc", "enabled": root.atcVisible },
-                    { "label": "Extended Diagnostics", "key": "diagnostics", "enabled": root.diagnosticsVisible }
+                    { "label": "Анализ миссии", "key": "analysis", "enabled": root.analysisVisible },
+                    { "label": "Приборы", "key": "instruments", "enabled": root.instrumentsVisible },
+                    { "label": "УВД / Связь", "key": "atc", "enabled": root.atcVisible },
+                    { "label": "Расширенная диагностика", "key": "diagnostics", "enabled": root.diagnosticsVisible }
                 ]
 
                 delegate: Text {
@@ -328,14 +328,14 @@ Item {
         }
 
         Text {
-            text: "Area Survey"
+            text: "Обследование территории"
             color: root.text
             font.family: "Noto Sans"
             font.pixelSize: 13
         }
 
         Text {
-            text: "4 UAV  |  BVLOS  |  wind-aware"
+            text: "4 БПЛА  |  BVLOS  |  учёт ветра"
             color: root.secondary
             font.family: "Noto Sans"
             font.pixelSize: 11
@@ -346,7 +346,7 @@ Item {
         visible: root.missionVisible && !root.templatesExpanded && !root.panelConfigOpen
         x: 16
         y: 162
-        text: "MISSION ID  |  immutable"
+        text: "ID МИССИИ  |  неизменяемый"
         color: root.secondary
         font.family: "Noto Sans"
         font.pixelSize: 11
@@ -367,7 +367,7 @@ Item {
         visible: root.missionVisible && !root.templatesExpanded
         x: 16
         y: 226
-        text: "PANEL TOOLS"
+        text: "ИНСТРУМЕНТЫ ПАНЕЛИ"
         color: root.secondary
         font.family: "Noto Sans"
         font.pixelSize: 11
@@ -398,7 +398,7 @@ Item {
         visible: !root.missionVisible
         anchors.horizontalCenter: parent.horizontalCenter
         y: 72
-        text: "MISSION HIDDEN"
+        text: "МИССИЯ СКРЫТА"
         color: root.secondary
         font.family: "Noto Sans"
         font.pixelSize: 13
@@ -417,7 +417,7 @@ Item {
 
         Text {
             anchors.fill: parent
-            text: "+  RESTORE"
+            text: "+  ВОССТАНОВИТЬ"
             color: root.cyan
             font.family: "B612 Mono"
             font.pixelSize: 10
