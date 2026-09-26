@@ -32,6 +32,16 @@ Zoning must respect the same constrained-open-space environment as ordinary rout
 
 Zone assignment is a versioned planning result. Changes invalidate only affected zones and their downstream routes/trajectories/conflict results. Unaffected zones remain reusable under the calculation-reuse baseline.
 
+## Mission composition entry point
+
+Automatic and manual mission creation converge on the same planning pipeline.
+
+- **Automatic path:** user task → system derives/assigns applicable templates → composed mission/coverage.
+- **Manual path:** operator selects one or more templates → each contributes a planning scaffold on the Flight Chart → operator combines and edits the scaffolds into one mission composition.
+- **Convergence:** the resulting mission/coverage enters the same constrained-open-space, zoning, UAV assignment, in-zone routing, wind/performance, 4D trajectory verification and conflict-resolution flow.
+
+The only intended difference is the template-selection stage: system-selected for automatic creation, operator-selected for manual creation. Manual composition does not bypass any downstream constraint, validation, safety gate or approval. Template scaffolds are planning inputs and must be reconciled into one coherent mission before downstream planning.
+
 ## Architecture
 
 MISSION/COVERAGE → CONSTRAINED OPEN SPACE → ZONE PARTITION → UAV ZONE ASSIGNMENT → ROUTE-IN-ZONE → 4D TRAJECTORY → 4D VERIFY → CONFLICT RESOLUTION FALLBACK → CANDIDATE COMPARISON
