@@ -53,6 +53,36 @@ Item {
     property bool templatesExpanded: true
     property bool panelConfigOpen: false
     property int selectedTemplate: 2
+    // Indices assigned to the current automatic mission; manual mode starts with no template selected.
+    property var missionTemplateIndices: [2]
+    property var manualTemplateSelection: []
+
+    onMissionCreationModeChanged: {
+        if (missionCreationMode)
+            manualTemplateSelection = []
+    }
+
+    function templateIsVisible(index) {
+        return missionCreationMode || missionTemplateIndices.indexOf(index) >= 0
+    }
+
+    function templateIsSelected(index) {
+        return missionCreationMode
+            ? manualTemplateSelection.indexOf(index) >= 0
+            : missionTemplateIndices.indexOf(index) >= 0
+    }
+
+    function toggleManualTemplate(index) {
+        var next = manualTemplateSelection.slice()
+        var position = next.indexOf(index)
+        if (position >= 0)
+            next.splice(position, 1)
+        else
+            next.push(index)
+        manualTemplateSelection = next
+        selectedTemplate = index
+        templateSelected(index)
+    }
     property bool analysisVisible: true
     property bool instrumentsVisible: false
     property bool atcVisible: false
@@ -322,12 +352,13 @@ Item {
                 required property string subtitle
                 required property string accent
 
+                visible: root.templateIsVisible(index)
                 width: parent.width
-                height: 56
+                height: visible ? 56 : 0
                 radius: 3
-                color: index === root.selectedTemplate ? root.selectedSurface : root.card
-                border.color: index === root.selectedTemplate ? root.cyan : root.divider
-                border.width: index === root.selectedTemplate ? 1 : 1
+                color: root.templateIsSelected(index) ? root.selectedSurface : root.card
+                border.color: root.templateIsSelected(index) ? root.cyan : root.divider
+                border.width: 1
 
                 Rectangle {
                     anchors.left: parent.left
@@ -335,7 +366,7 @@ Item {
                     anchors.bottom: parent.bottom
                     width: 3
                     radius: 2
-                    color: index === root.selectedTemplate ? root.cyan : "transparent"
+                    color: root.templateIsSelected(index) ? root.cyan : "transparent"
                 }
 
                 Text {
@@ -349,7 +380,7 @@ Item {
                 }
 
                 Text {
-                    visible: index === root.selectedTemplate
+                    visible: root.templateIsSelected(index)
                     x: parent.width - 30
                     anchors.verticalCenter: parent.verticalCenter
                     text: "✓"
@@ -362,8 +393,12 @@ Item {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        root.selectedTemplate = index
-                        root.templateSelected(index)
+                        if (root.missionCreationMode)
+                            root.toggleManualTemplate(index)
+                        else {
+                            root.selectedTemplate = index
+                            root.templateSelected(index)
+                        }
                     }
                 }
             }
