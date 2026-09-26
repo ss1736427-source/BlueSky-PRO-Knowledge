@@ -440,8 +440,8 @@ SAFETY_REQUIREMENTS_TRACEABILITY.md
 This baseline establishes the safety structure and preliminary requirements. It does not replace formal safety assessment or authority-approved certification requirements.
 
 
-## C2 в„–142 вЂ” CONTROLLED INTEGRATION
-Source: РџСЂРёРєР°Р· РњРёРЅС‚СЂР°РЅСЃР° Р РѕСЃСЃРёРё РѕС‚ 24.04.2025 в„–142.
+## C2 № 142 — CONTROLLED INTEGRATION
+Source: Приказ Минтранса России от 24.04.2025 № 142.
 Integration record: C2-WP142-CLAUSE-RECON-001.
 Status: WORKING / NOT BASELINED.
 
