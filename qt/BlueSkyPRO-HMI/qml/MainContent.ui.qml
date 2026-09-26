@@ -73,7 +73,7 @@ Item {
             missionTemplateIndices: root.missionTemplateIndices
             onHideMissionRequested: root.missionState = "HIDDEN"
             onRestoreMissionRequested: root.missionState = "AUTO"
-            onCreateMissionRequested: {\n                root.missionState = "MANUAL"\n                root.manualCompositionComplete = false\n                root.manualValidationStarted = false\n            }
+            onCreateMissionRequested: root.missionState = "MANUAL", root.manualCompositionComplete = false, root.manualValidationStarted = false
         }
 
         FlightChart {
