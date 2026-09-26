@@ -44,8 +44,8 @@ int main() {
            incomplete.blocking_restriction_ids.front() == "ENVIRONMENT_INCOMPLETE");
     environment.complete = true;
 
-    const auto first = ConstrainedOpenSpace::evaluateSegment(environment, open.allowed
-        ? SpatialEdge{{58.99, 29.99}, {58.995, 29.995}, 100} : crossing);
+    const auto first = ConstrainedOpenSpace::evaluateSegment(
+        environment, {{58.99, 29.99}, {58.995, 29.995}, 100});
     const auto second = ConstrainedOpenSpace::evaluateSegment(environment,
         {{58.99, 29.99}, {58.995, 29.995}, 100});
     assert(first.dependency_identity == second.dependency_identity);
