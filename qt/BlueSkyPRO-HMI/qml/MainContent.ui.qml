@@ -17,7 +17,14 @@ Item {
     property string missionState: "AUTO" // AUTO, HIDDEN, MANUAL
     readonly property bool missionVisible: missionState === "AUTO"
     readonly property bool missionCreationMode: missionState === "MANUAL"
-    property bool missionReady: false\n    property bool manualCompositionComplete: false\n    property bool manualValidationStarted: false\n    signal manualMissionValidationRequested()
+    property bool missionReady: false
+    property bool manualCompositionComplete: false
+    property bool manualValidationStarted: false
+    signal manualMissionValidationRequested()
+    onManualMissionValidationRequested: root.journalAppendRequested("MANUAL_MISSION_VALIDATION_REQUESTED", root.missionId, -1, "Manual template composition submitted to common planning pipeline")
+    property bool manualCompositionComplete: false
+    property bool manualValidationStarted: false
+    signal manualMissionValidationRequested()
     property bool warningActive: true
     property int selectedUavIndex: -1
     property string uavDecision: ""
@@ -84,7 +91,9 @@ Item {
             anchors.bottom: parent.bottom
             missionVisible: root.missionVisible
             manualCreationMode: root.missionCreationMode
+            manualCompositionComplete: root.manualCompositionComplete
             visible: root.activeTool === "MAP"
+            onManualCompositionCompleted: root.manualCompositionComplete = true
             onMapDoubleClicked: root.leftPanelOpen = false
         }
 
@@ -118,6 +127,10 @@ Item {
             width: root.rightPanelOpen ? root.rightWidth : 0
             missionReady: root.missionReady
             warningActive: root.warningActive
+            manualCreationMode: root.missionCreationMode
+            manualCompositionComplete: root.manualCompositionComplete
+            manualValidationStarted: root.manualValidationStarted
+            onValidateManualMissionRequested: root.manualValidationStarted = true, root.manualMissionValidationRequested()
             onStartMissionRequested: root.leftPanelOpen = false
         }
     }
