@@ -57,6 +57,8 @@ Item {
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.bottom: parent.bottom
+            // TopHeader owns the shared horizontal separator.
+            showTopBorder: false
             width: root.leftPanelOpen ? root.leftWidth : 0
             missionVisible: root.missionVisible
             missionId: root.missionId
