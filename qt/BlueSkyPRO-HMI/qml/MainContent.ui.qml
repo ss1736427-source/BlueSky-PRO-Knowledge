@@ -164,7 +164,11 @@ Item {
         rightOpen: root.rightPanelOpen
         onLeftPanelToggleRequested: root.leftPanelOpen = !root.leftPanelOpen
         onRightPanelToggleRequested: root.rightPanelOpen = !root.rightPanelOpen
-        onToolActivated: root.workspaceContextRequested(tool)
+        onToolActivated: {
+            if (tool !== "UAV")
+                root.contextOverlayOpen = false
+            root.workspaceContextRequested(tool)
+        }
     }
 
     ContextOverlay {
