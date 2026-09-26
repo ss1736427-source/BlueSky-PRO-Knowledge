@@ -132,6 +132,29 @@ int main() {
     assert(malformed.blocking_restriction_ids.front() ==
            "ROUTE_SEGMENT_MISSING_WAYPOINT:SEG-1");
 
+    Route nan_altitude_route;
+    nan_altitude_route.waypoints = {
+        {"A", {58.99, 29.99}, 100, false},
+        {"B", {58.995, 29.995}, nan, false}
+    };
+    nan_altitude_route.segments.push_back({"SEG-NAN-ALT", "A", "B", 10, 5});
+    const auto nan_altitude = ConstrainedOpenSpace::evaluateRoute(environment, nan_altitude_route);
+    assert(!nan_altitude.allowed);
+    assert(nan_altitude.blocking_restriction_ids.front() ==
+           "INVALID_ROUTE_WAYPOINT_ALTITUDE:SEG-NAN-ALT");
+
+    Route infinite_altitude_route;
+    infinite_altitude_route.waypoints = {
+        {"A", {58.99, 29.99}, 100, false},
+        {"B", {58.995, 29.995}, infinity, false}
+    };
+    infinite_altitude_route.segments.push_back({"SEG-INF-ALT", "A", "B", 10, 5});
+    const auto infinite_waypoint_altitude =
+        ConstrainedOpenSpace::evaluateRoute(environment, infinite_altitude_route);
+    assert(!infinite_waypoint_altitude.allowed);
+    assert(infinite_waypoint_altitude.blocking_restriction_ids.front() ==
+           "INVALID_ROUTE_WAYPOINT_ALTITUDE:SEG-INF-ALT");
+
     Route valid_route;
     valid_route.waypoints = {
         {"A", {58.99, 29.99}, 100, false},
