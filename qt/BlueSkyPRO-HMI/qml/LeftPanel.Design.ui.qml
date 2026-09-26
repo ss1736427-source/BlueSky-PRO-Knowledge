@@ -92,6 +92,14 @@ Item {
             font.family: "B612 Mono"
             font.pixelSize: 18
             font.bold: true
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    root.missionVisible = true
+                    root.missionCreationMode = false
+                }
+            }
         }
 
         Text {
