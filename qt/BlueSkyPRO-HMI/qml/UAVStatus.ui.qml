@@ -83,7 +83,7 @@ Item {
         width: 260
         height: 254
         title: "UAV PANEL SETTINGS"
-        tools: ["UAV Selection", "Control / C2", "Navigation", "Energy", "Payload / Equipment", "Maintenance", "Diagnostics", "Displayed Parameters"]
+        tools: ["UAV Selection", "Control / C2", "UAV Configuration", "Navigation", "Energy", "Payload / Equipment", "Maintenance", "Diagnostics", "Displayed Parameters"]
         onClosed: open = false
     }
 }
