@@ -103,7 +103,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         width: 88
         height: 38
-        color: "#0A0A0A"
+        color: "#0C1725"
         border.color: root.divider
         border.width: 1
 
@@ -183,7 +183,7 @@ Item {
                         root.moveTool(parent.dragStartIndex, target)
                         root.activateTool(model.tool)
                     }
-                    onClicked: root.toolRequested(model.tool)
+                    onClicked: root.activateTool(model.tool)
                 }
             }
         }
