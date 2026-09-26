@@ -15,7 +15,8 @@ Item {
     property bool manualCreationMode: false
     // The map/mission editor sets this only when the composed mission is complete.
     property bool manualCompositionComplete: false
-    signal manualCompositionCompleted()\n    signal mapDoubleClicked()
+    signal manualCompositionCompleted()
+    signal mapDoubleClicked()
 
     Rectangle {
         anchors.fill: parent
