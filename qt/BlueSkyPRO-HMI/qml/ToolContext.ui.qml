@@ -6,7 +6,6 @@ Item {
     property string contextName: "UAV"
     property string contextSubtitle: ""
     property var sections: []
-    property bool fpvManual: false
     property int selectedUavIndex: -1
     property string selectedUavId: "NO UAV SELECTED"
 
@@ -55,8 +54,8 @@ Item {
         Text {
             x: 18
             y: 14
-            text: root.selectedUavId + "   " + (root.fpvManual ? "MANUAL ● ACTIVE" : "AUTO")
-            color: root.fpvManual ? "#64FF00" : "#FFFFFF"
+            text: root.selectedUavId + "   CONTROL STATE: UNAVAILABLE"
+            color: "#FFD339"
             font.family: "B612 Mono"
             font.pixelSize: 13
             font.bold: true
@@ -80,8 +79,8 @@ Item {
             }
         }
 
-        Text { x: 18; y: 174; text: "ALT 82 m     SPD 18 m/s     HDG 274°     BAT 67%"; color: "#BFBFBF"; font.family: "B612 Mono"; font.pixelSize: 10 }
-        Text { x: 18; y: 196; text: "C2  ● CONNECTED     VIDEO  ● CONNECTED     RC  ● " + (root.fpvManual ? "ACTIVE" : "READY"); color: "#BFBFBF"; font.family: "B612 Mono"; font.pixelSize: 10 }
+        Text { x: 18; y: 174; text: "TELEMETRY: NOT CONNECTED"; color: "#FFD339"; font.family: "B612 Mono"; font.pixelSize: 10 }
+        Text { x: 18; y: 196; text: "C2: UNKNOWN     VIDEO: UNKNOWN     RC: UNKNOWN"; color: "#BFBFBF"; font.family: "B612 Mono"; font.pixelSize: 10 }
 
         Rectangle {
             x: parent.width - 190
@@ -89,13 +88,13 @@ Item {
             width: 172
             height: 42
             color: "transparent"
-            border.color: root.fpvManual ? "#64FF00" : "#32FFFF"
+            border.color: "#FFD339"
             border.width: 1
 
             Text {
                 anchors.fill: parent
-                text: root.fpvManual ? "RETURN TO AUTO" : "READY FOR CONTROL"
-                color: root.fpvManual ? "#64FF00" : "#32FFFF"
+                text: "CONTROL TRANSFER UNAVAILABLE"
+                color: "#FFD339"
                 font.family: "B612 Mono"
                 font.pixelSize: 10
                 font.bold: true
@@ -103,16 +102,12 @@ Item {
                 verticalAlignment: Text.AlignVCenter
             }
 
-            MouseArea {
-                anchors.fill: parent
-                onClicked: root.fpvManual = !root.fpvManual
-            }
         }
 
         Text {
             x: 18
             y: 226
-            text: root.fpvManual ? "Pilot control active" : "Control transfer requires pilot confirmation"
+            text: "Prototype display only — no control link"
             color: "#7F7F7F"
             font.family: "B612"
             font.pixelSize: 10
