@@ -22,17 +22,12 @@ Item {
     property string lastJournalEvent: ""
     property string missionId: "BS-260920-A-001"
     property string journalStatus: "READY"
-    property string activeTool: "MAP"
+    property string activeTool: bottomToolbar.activeTool
     signal journalEvent(string eventType, int uavIndex, string decision)
     signal journalAppendRequested(string eventType, string missionId, int uavIndex, string decision)
     signal uavDecisionRequested(string decision, int uavIndex)
     signal workspaceContextRequested(string context)
-    property string workspaceContext: "MAP"
-
-    Component.onCompleted: {
-        root.activeTool = bottomToolbar.activeTool
-        root.workspaceContext = bottomToolbar.activeTool
-    }
+    property string workspaceContext: bottomToolbar.activeTool
 
     Rectangle {
         anchors.fill: parent
@@ -65,15 +60,9 @@ Item {
             width: root.leftPanelOpen ? root.leftWidth : 0
             missionVisible: root.missionVisible
             missionId: root.missionId
-            onHideMissionRequested: {
-                root.lastJournalEvent = root.missionId + "  |  MISSION_STATE_SAVE_REQUESTED"
-                root.missionVisible = false
-            }
+            onHideMissionRequested: root.missionVisible = false
             onRestoreMissionRequested: root.missionVisible = true
-            onCreateMissionRequested: {
-                root.lastJournalEvent = "CREATE_MISSION_REQUESTED"
-                root.missionVisible = true
-            }
+            onCreateMissionRequested: root.missionVisible = true
         }
 
         FlightChart {
@@ -140,11 +129,7 @@ Item {
         rightOpen: root.rightPanelOpen
         onLeftPanelToggleRequested: root.leftPanelOpen = !root.leftPanelOpen
         onRightPanelToggleRequested: root.rightPanelOpen = !root.rightPanelOpen
-        onToolActivated: {
-            root.activeTool = tool
-            root.workspaceContext = tool
-            root.workspaceContextRequested(tool)
-        }
+        onToolActivated: root.workspaceContextRequested(tool)
     }
 
     ContextOverlay {
@@ -155,15 +140,7 @@ Item {
         anchors.bottom: uavStatus.top
         width: 360
         height: 122
-        onDecisionRequested: {
-            root.uavDecision = decision
-            root.lastJournalEvent = root.missionId + "  |  UAV-" + (uavIndex + 1) + "  |  " + decision
-            root.journalEvent("UAV_DECISION", uavIndex, decision)
-            root.journalAppendRequested("UAV_DECISION", root.missionId, uavIndex, decision)
-            root.journalStatus = "EVENT EMITTED"
-            root.uavDecisionRequested(decision, uavIndex)
-            root.selectedUavIndex = -1
-        }
+        onDecisionRequested: root.uavDecisionRequested(decision, uavIndex)
         onContextClosed: root.selectedUavIndex = -1
     }
 }
