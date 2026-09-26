@@ -22,6 +22,8 @@ Item {
     readonly property bool manualValidationStarted: missionState === "VALIDATING"
     property bool warningActive: true
     property int selectedUavIndex: -1
+    readonly property var selectedUav: selectedUavIndex >= 0 && selectedUavIndex < uavStatus.uavModel.length ? uavStatus.uavModel[selectedUavIndex] : null
+    readonly property string selectedUavId: selectedUav ? selectedUav.id : "NO UAV SELECTED"
     property string uavDecision: ""
     property string lastJournalEvent: ""
     property string missionId: "BS-260920-A-001"
@@ -101,6 +103,7 @@ Item {
             visible: root.activeTool !== "MAP"
             contextName: root.activeTool
             selectedUavIndex: root.selectedUavIndex
+            selectedUavId: root.selectedUavId
             contextSubtitle: root.activeTool === "UAV" ? "SELECT UAV / CONTROL / C2 / CONFIGURATION" : root.activeTool === "ADMIN" ? "SYSTEM ADMINISTRATION / ENGINEER / TECHNICIAN" : root.activeTool === "FPV" ? "VIDEO + FLIGHT DATA + CONTROL TRANSFER" : "SIMULATION / VIRTUAL UAV"
             sections: root.activeTool === "UAV"
                       ? ["UAV SELECTION", "CONTROL / C2", "UAV CONFIGURATION", "NAVIGATION", "ENERGY", "PAYLOAD / EQUIPMENT", "MAINTENANCE", "DIAGNOSTICS"]
@@ -157,6 +160,7 @@ Item {
         id: contextOverlay
         visible: root.selectedUavIndex >= 0
         uavIndex: root.selectedUavIndex
+        uavId: root.selectedUavId
         anchors.right: rightPanel.left
         anchors.bottom: uavStatus.top
         width: 360
