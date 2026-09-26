@@ -16,7 +16,7 @@ Item {
         font.family: "Noto Sans"
         font.pixelSize: 13
         font.bold: true
-        text: "Mission Templates"
+        text: "Миссии"
     }
 
     // Width is driven by the widest visible content and the fixed right-side header controls.
@@ -93,7 +93,7 @@ Item {
             x: 12
             anchors.verticalCenter: parent.verticalCenter
             rightPadding: 70
-            text: "Mission Templates"
+            text: "Миссии"
             color: root.text
             font.family: "B612"
             font.pixelSize: 14
