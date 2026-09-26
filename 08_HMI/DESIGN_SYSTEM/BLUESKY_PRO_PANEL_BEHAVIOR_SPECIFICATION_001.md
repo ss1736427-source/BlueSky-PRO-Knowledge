@@ -130,6 +130,14 @@ Individual UAV telemetry is not duplicated into the aggregate mission header.
 - selecting a hidden template makes it visible and active/highlighted;
 - new tools/templates are appended at the bottom.
 
+### Mission creation action
+
+- A dedicated `СОЗДАТЬ МИССИЮ` button is pinned to the bottom of the Left Panel, filled with controlled green `#64FF00`, with centered dark text.
+- The button remains in the same bottom position when the current mission is hidden; hiding the mission hides its context, not this action.
+- Activating it collapses the previous mission context and switches the workspace map to a clean manual-creation state. The previous mission is not deleted.
+- During creation mode, the template list remains available for selection. The active creation is marked as manual (`M`); its immutable full ID is assigned by the mission-creation/core layer when the mission record is created.
+- The fixed button is not a template item and must not appear in or reorder with the template list.
+
 ### Mission context
 
 - Show a compact mission identifier using only type and sequence: `A-001` (automatic) or `M-001` (manual); omit the `№` symbol and the `BS`/date prefix in collapsed display.
@@ -140,8 +148,8 @@ Individual UAV telemetry is not duplicated into the aggregate mission header.
 
 `СКРЫТЬ`:
 - automatically saves current mission state first;
-- hides the current mission from Flight Chart;
-- clears the active panel list;
+- hides the current mission from Flight Chart and collapses its panel context;
+- keeps the bottom-pinned `СОЗДАТЬ МИССИЮ` action visible and fixed;
 - deletes no data.
 
 `+`:
