@@ -5,7 +5,7 @@ Item {
     width: 1920
     height: 1080
 
-    // BlueSky PRO тАФ Qt Design Studio working screen.
+    // BlueSky PRO — Qt Design Studio working screen.
     // Visual composition only. Core / Safety remain authoritative.
     property int headerHeight: 86
     property int leftWidth: leftPanel.implicitWidth
@@ -66,7 +66,7 @@ Item {
             missionVisible: root.missionVisible
             missionId: root.missionId
             onHideMissionRequested: {
-                root.lastJournalEvent = root.missionId + " ┬╖ MISSION_STATE_SAVE_REQUESTED"
+                root.lastJournalEvent = root.missionId + "  |  MISSION_STATE_SAVE_REQUESTED"
                 root.missionVisible = false
             }
             onRestoreMissionRequested: root.missionVisible = true
@@ -153,7 +153,7 @@ Item {
         height: 122
         onDecisionRequested: {
             root.uavDecision = decision
-            root.lastJournalEvent = root.missionId + " ┬╖ UAV-" + (uavIndex + 1) + " ┬╖ " + decision
+            root.lastJournalEvent = root.missionId + "  |  UAV-" + (uavIndex + 1) + "  |  " + decision
             root.journalEvent("UAV_DECISION", uavIndex, decision)
             root.journalAppendRequested("UAV_DECISION", root.missionId, uavIndex, decision)
             root.journalStatus = "EVENT EMITTED"
