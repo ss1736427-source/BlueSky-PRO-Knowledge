@@ -144,6 +144,21 @@ The display-unit preference must not change the internal calculation unit.
 
 Panels, cards, headers, controls, telemetry blocks and navigation elements are separate components. Layout must support controlled repositioning and resizing.
 
+### Panel junctions — single-stroke rule
+
+**When two panels meet, their shared boundary is drawn once, never as two overlapping outlines.** This rule applies to every horizontal and vertical junction, including panel-to-panel, panel-to-workspace, workspace-to-status, and workspace-to-toolbar joins.
+
+- Assign each shared edge one owner (one component draws the separator).
+- The adjacent component suppresses its duplicate edge on that same boundary.
+- Keep the shared stroke aligned to the controlled 1 px structural line; do not create a 2 px seam by stacking borders.
+- Preserve the rule when panels are resized, collapsed, restored, or rearranged.
+- At T-junctions and corners, join strokes cleanly without doubled pixels or gaps.
+- Standalone outer edges remain visible where they do not coincide with another panel's edge.
+
+### Panel title bars
+
+Panel names use a dedicated title-bar treatment: controlled panel/selected surface, clear title typography, and a single structural outline/accent consistent with the BlueSky PRO palette. The title bar is visually distinct from content cards; its controls remain aligned within the same bar. Do not add a second overlapping border where the title bar meets the panel frame.
+
 ## Logo rule
 
 Use the supplied BlueSky PRO master asset. Do not redraw, simplify, recolor or replace the logo without an explicit project decision.
