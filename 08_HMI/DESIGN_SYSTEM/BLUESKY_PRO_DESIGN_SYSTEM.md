@@ -148,6 +148,15 @@ Panels, cards, headers, controls, telemetry blocks and navigation elements are s
 
 Use the supplied BlueSky PRO master asset. Do not redraw, simplify, recolor or replace the logo without an explicit project decision.
 
+## Qt Design Studio / QML implementation rule
+
+- `.ui.qml` is declarative visual structure. Do not place imperative JavaScript blocks in it.
+- Do not use block bodies such as `Component.onCompleted: { ... }` or multi-statement handlers in `.ui.qml`.
+- Keep visual properties, anchors, declarative bindings and only those simple handlers supported by Qt Design Studio in `.ui.qml`.
+- Move imperative behavior and state orchestration to a separate `.qml` component; use properties and signals to connect it to the visual layer.
+- Before committing a `.ui.qml` change, verify that Qt Design Studio opens it without UI-file errors.
+- This rule is mandatory and is detailed in `BLUESKY_PRO_QT_DESIGN_STUDIO_WORKBOOK_001.md`, section 13.
+
 ## Change control
 
 Any new color, font, spacing, line width or component geometry becomes part of this baseline only after explicit approval.
