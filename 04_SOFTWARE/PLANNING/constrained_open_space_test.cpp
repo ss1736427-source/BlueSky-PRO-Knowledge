@@ -45,10 +45,10 @@ int main() {
     assert(!infinite_altitude.allowed);
     assert(infinite_altitude.blocking_restriction_ids.front() == "INVALID_ROUTE_EDGE");
 
-    const auto nan_altitude_envelope = ConstrainedOpenSpace::evaluateSegment(
-        environment, {{58.995, 29.995}, {59.005, 30.005}, 100, nan, 120});
-    assert(!nan_altitude_envelope.allowed);
-    assert(nan_altitude_envelope.blocking_restriction_ids.front() == "INVALID_ROUTE_EDGE");
+    const auto infinite_altitude_envelope = ConstrainedOpenSpace::evaluateSegment(
+        environment, {{58.995, 29.995}, {59.005, 30.005}, 100, infinity, 120});
+    assert(!infinite_altitude_envelope.allowed);
+    assert(infinite_altitude_envelope.blocking_restriction_ids.front() == "INVALID_ROUTE_EDGE");
 
     auto invalid_altitude_environment = environment;
     invalid_altitude_environment.restrictions[0].minimum_altitude_m = nan;
