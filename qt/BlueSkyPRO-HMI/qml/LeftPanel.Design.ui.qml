@@ -15,6 +15,7 @@ Item {
     property color divider: "#7F7F7F"
 
     property bool missionVisible: true
+    property bool missionIdExpanded: false
     property bool panelConfigOpen: false
     property int selectedTemplate: 2
     property bool analysisVisible: true
@@ -114,17 +115,33 @@ Item {
         x: 10
         y: 50
         width: parent.width - 20
-        height: 36
+        height: 54
         color: root.card
 
         Text {
             x: 10
             anchors.verticalCenter: parent.verticalCenter
-            text: "Миссия № BS-260920-A-001"
+            text: root.missionIdExpanded ? "BS-260920-A-001" : "A-001"
             color: root.text
             font.family: "B612 Mono"
             font.pixelSize: 11
             font.bold: true
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: root.missionIdExpanded = !root.missionIdExpanded
+            }
+        }
+
+        Text {
+            x: 10
+            y: 31
+            width: parent.width - 104
+            elide: Text.ElideRight
+            text: "3D картография территории"
+            color: root.secondary
+            font.family: "Noto Sans"
+            font.pixelSize: 10
         }
 
         Text {
@@ -148,7 +165,7 @@ Item {
     Rectangle {
         visible: root.panelConfigOpen && root.missionVisible
         x: 10
-        y: 90
+        y: 108
         width: parent.width - 20
         height: 154
         color: root.selectedSurface
