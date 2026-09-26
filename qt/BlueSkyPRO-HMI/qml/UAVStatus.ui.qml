@@ -4,6 +4,7 @@ Item {
     id: root
 
     signal uavSelected(int index)
+    property int selectedIndex: -1
 
     implicitHeight: 82
 
@@ -43,8 +44,8 @@ Item {
                 width: (parent.width - Math.max(0, root.uavModel.length - 1) * 8) / Math.max(1, root.uavModel.length)
                 height: 62
                 color: "#0A0A0A"
-                border.color: modelData.state === "CHECK" ? root.amber : root.divider
-                border.width: 1
+                border.color: index === root.selectedIndex ? "#32FFFF" : modelData.state === "CHECK" ? root.amber : root.divider
+                border.width: index === root.selectedIndex ? 2 : 1
 
                 Text {
                     anchors.fill: parent
