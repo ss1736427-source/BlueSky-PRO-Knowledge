@@ -4,6 +4,7 @@ Item {
     id: root
 
     signal uavSelected(int index)
+    signal uavDoubleClicked(int index)
     property int selectedIndex: -1
 
     implicitHeight: 82
@@ -62,6 +63,7 @@ Item {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: root.uavSelected(index)
+                    onDoubleClicked: root.uavDoubleClicked(index)
                 }
             }
         }
