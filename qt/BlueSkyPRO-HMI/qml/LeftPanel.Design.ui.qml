@@ -41,7 +41,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             text: "Mission Templates"
             color: root.text
-            font.family: "B612"
+            font.family: "Noto Sans"
             font.pixelSize: 13
             font.bold: true
         }
@@ -125,7 +125,7 @@ Item {
             y: 10
             text: "PANEL TOOLS"
             color: root.secondary
-            font.family: "B612"
+            font.family: "Noto Sans"
             font.pixelSize: 10
             font.bold: true
         }
@@ -138,7 +138,7 @@ Item {
             Text {
                 text: (root.analysisVisible ? "✓ " : "○ ") + "Mission Analysis"
                 color: root.analysisVisible ? root.cyan : root.secondary
-                font.family: "B612"
+                font.family: "Noto Sans"
                 font.pixelSize: 10
                 MouseArea {
                     anchors.fill: parent
@@ -148,7 +148,7 @@ Item {
             Text {
                 text: (root.instrumentsVisible ? "✓ " : "○ ") + "Instruments"
                 color: root.instrumentsVisible ? root.cyan : root.secondary
-                font.family: "B612"
+                font.family: "Noto Sans"
                 font.pixelSize: 10
                 MouseArea {
                     anchors.fill: parent
@@ -158,7 +158,7 @@ Item {
             Text {
                 text: (root.atcVisible ? "✓ " : "○ ") + "ATC / Communication"
                 color: root.atcVisible ? root.cyan : root.secondary
-                font.family: "B612"
+                font.family: "Noto Sans"
                 font.pixelSize: 10
                 MouseArea {
                     anchors.fill: parent
@@ -168,7 +168,7 @@ Item {
             Text {
                 text: (root.diagnosticsVisible ? "✓ " : "○ ") + "Extended Diagnostics"
                 color: root.diagnosticsVisible ? root.cyan : root.secondary
-                font.family: "B612"
+                font.family: "Noto Sans"
                 font.pixelSize: 10
                 MouseArea {
                     anchors.fill: parent
@@ -220,7 +220,7 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     text: modelData
                     color: root.text
-                    font.family: "B612"
+                    font.family: "Noto Sans"
                     font.pixelSize: 12
                     font.bold: true
                 }
@@ -254,7 +254,7 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             text: "MISSION HIDDEN"
             color: root.secondary
-            font.family: "B612"
+            font.family: "Noto Sans"
             font.pixelSize: 13
             font.bold: true
         }
