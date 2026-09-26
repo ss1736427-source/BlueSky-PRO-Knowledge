@@ -181,7 +181,6 @@ Item {
                         }
                         target = Math.max(0, Math.min(toolModel.count - 1, target))
                         root.moveTool(parent.dragStartIndex, target)
-                        root.activateTool(model.tool)
                     }
                     onClicked: root.activateTool(model.tool)
                 }
