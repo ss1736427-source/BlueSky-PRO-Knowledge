@@ -82,6 +82,40 @@ void testPx4ReplayRejectsIncompleteSnapshot() {
     assert(!normalized_state_usable(state));
 }
 
+void testLatestUnhealthyHeartbeatOverridesEarlierHealthyHeartbeat() {
+    std::vector<DecodedMavlinkMessage> messages;
+
+    auto healthy = base(MavlinkDialect::ArduPilot, MavlinkMessageKind::Heartbeat, 1000);
+    healthy.flight_mode = "AUTO";
+    messages.push_back(healthy);
+
+    auto pos = base(MavlinkDialect::ArduPilot, MavlinkMessageKind::GlobalPositionInt, 1100);
+    pos.latitude_deg = 60.1;
+    pos.longitude_deg = 24.9;
+    pos.altitude_m = 82.0;
+    pos.ground_speed_mps = 18.0;
+    pos.heading_deg = 91.0;
+    messages.push_back(pos);
+
+    auto att = base(MavlinkDialect::ArduPilot, MavlinkMessageKind::Attitude, 1200);
+    att.roll_rad = 0.01;
+    att.pitch_rad = -0.02;
+    att.yaw_rad = 1.58;
+    messages.push_back(att);
+
+    auto unhealthy = base(MavlinkDialect::ArduPilot, MavlinkMessageKind::Heartbeat, 1300);
+    unhealthy.healthy = false;
+    unhealthy.flight_mode = "AUTO";
+    messages.push_back(unhealthy);
+
+    const auto replay = MavlinkTelemetryReplayAssembler::assemble("AP-HEALTH-DEGRADE", messages);
+    assert(replay.samples.size() == 1);
+    const auto state = MavlinkTelemetryMapping::replayLastUsable(replay);
+    assert(!state.c2_state_valid);
+    assert(!state.vehicle_state_valid);
+    assert(!normalized_state_usable(state));
+}
+
 void testInvalidMessageIsExcluded() {
     std::vector<DecodedMavlinkMessage> messages;
     auto invalid = base(MavlinkDialect::PX4, MavlinkMessageKind::Heartbeat, 1000);
@@ -97,6 +131,7 @@ void testInvalidMessageIsExcluded() {
 int main() {
     testArduPilotReplayBuildsUsableSnapshot();
     testPx4ReplayRejectsIncompleteSnapshot();
+    testLatestUnhealthyHeartbeatOverridesEarlierHealthyHeartbeat();
     testInvalidMessageIsExcluded();
     std::cout << "mavlink_telemetry_replay_assembler_test: PASS\n";
     return 0;
