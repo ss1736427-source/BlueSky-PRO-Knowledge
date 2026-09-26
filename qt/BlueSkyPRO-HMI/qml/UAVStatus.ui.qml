@@ -8,12 +8,12 @@ Item {
 
     implicitHeight: 82
 
-    property color bg: "#000000"
+    property color bg: "#08111D"
     property color text: "#FFFFFF"
     property color secondary: "#BFBFBF"
     property color green: "#64FF00"
     property color amber: "#FFD339"
-    property color divider: "#202020"
+    property color divider: "#111F30"
 
     // Visual working model. Final parameter set remains configurable per UAV panel.
     property var uavModel: [
@@ -43,7 +43,7 @@ Item {
             delegate: Rectangle {
                 width: (parent.width - Math.max(0, root.uavModel.length - 1) * 8) / Math.max(1, root.uavModel.length)
                 height: 62
-                color: "#0A0A0A"
+                color: "#0C1725"
                 border.color: index === root.selectedIndex ? "#32FFFF" : modelData.state === "CHECK" ? root.amber : root.divider
                 border.width: index === root.selectedIndex ? 2 : 1
 
