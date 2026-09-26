@@ -38,8 +38,13 @@ MavlinkTelemetryReplay MavlinkTelemetryReplayAssembler::assemble(
         current.received_timestamp_ms =
             std::max(current.received_timestamp_ms, sample.received_timestamp_ms);
 
-        current.heartbeat_present |= sample.heartbeat_present;
-        current.heartbeat_healthy |= sample.heartbeat_healthy;
+        // Health is state, not an accumulating capability: the latest heartbeat
+        // for this identity must be able to report degradation.
+        if (sample.heartbeat_present) {
+            current.heartbeat_present = true;
+            current.heartbeat_healthy = sample.heartbeat_healthy;
+            if (sample.flight_mode) current.flight_mode = sample.flight_mode;
+        }
         current.position_valid |= sample.position_valid;
         current.navigation_valid |= sample.navigation_valid;
         current.attitude_valid |= sample.attitude_valid;
@@ -56,7 +61,6 @@ MavlinkTelemetryReplay MavlinkTelemetryReplayAssembler::assemble(
         if (sample.pitch_rad) current.pitch_rad = sample.pitch_rad;
         if (sample.yaw_rad) current.yaw_rad = sample.yaw_rad;
         if (sample.battery_percent) current.battery_percent = sample.battery_percent;
-        if (sample.flight_mode) current.flight_mode = sample.flight_mode;
         if (sample.mission_state) current.mission_state = sample.mission_state;
     }
 
