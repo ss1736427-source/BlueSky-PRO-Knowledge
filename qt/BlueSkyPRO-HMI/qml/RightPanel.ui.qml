@@ -26,7 +26,8 @@ Item {
     property bool missionReady: false
     property bool warningActive: true
     property real validationPulse: 1.0
-    signal startMissionRequested()\n    signal validateManualMissionRequested()
+    signal startMissionRequested()
+    signal validateManualMissionRequested()
 
     Rectangle {
         anchors.fill: parent
@@ -123,17 +124,19 @@ Item {
         width: parent.width - 32
         height: 38
         color: "transparent"
-        border.color: Qt.rgba(root.green.r, root.green.g, root.green.b, root.validationPulse)\n        opacity: root.manualCreationMode && !root.manualCompositionComplete ? 0.55 : 1.0
+        border.color: Qt.rgba(root.green.r, root.green.g, root.green.b, root.validationPulse)
+        opacity: root.manualCreationMode && !root.manualCompositionComplete ? 0.55 : 1.0
         border.width: 1
     }
 
     Text {
-        visible: root.validationConfirmationRequired
+        visible: !root.manualCreationMode && root.validationConfirmationRequired
         x: 16
         y: 286
         width: parent.width - 32
         height: 38
-        text: root.manualCreationMode ? "ВАЛИДАЦИЯ МИССИИ" : "VALIDATE MISSION"\n        opacity: root.manualCreationMode && !root.manualCompositionComplete ? 0.65 : 1.0
+        text: root.manualCreationMode ? "ВАЛИДАЦИЯ МИССИИ" : "VALIDATE MISSION"
+        opacity: root.manualCreationMode && !root.manualCompositionComplete ? 0.65 : 1.0
         color: root.green
         font.family: "B612"
         font.pixelSize: 12
@@ -150,9 +153,7 @@ Item {
         height: 38
         enabled: root.manualCompositionComplete
         cursorShape: enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
-        onClicked: {
-            root.validateManualMissionRequested()
-        }
+        onClicked: root.validateManualMissionRequested()
     }
 
     SequentialAnimation on validationPulse {
