@@ -25,8 +25,41 @@ Item {
     Rectangle {
         anchors.fill: parent
         color: root.bg
-        border.color: root.cyan
-        border.width: 1
+    }
+
+    // The neighboring header owns this shared top seam; draw it once here
+    // as the seam reference, not as a second panel outline.
+    Rectangle {
+        x: 0
+        y: 0
+        width: parent.width
+        height: 1
+        color: root.cyan
+        antialiasing: false
+    }
+    Rectangle {
+        x: 0
+        y: 1
+        width: 1
+        height: parent.height - 1
+        color: root.cyan
+        antialiasing: false
+    }
+    Rectangle {
+        x: parent.width - 1
+        y: 1
+        width: 1
+        height: parent.height - 1
+        color: root.cyan
+        antialiasing: false
+    }
+    Rectangle {
+        x: 0
+        y: parent.height - 1
+        width: parent.width
+        height: 1
+        color: root.cyan
+        antialiasing: false
     }
 
     // Panel title bar: selected surface, cyan outline, controlled typography.
