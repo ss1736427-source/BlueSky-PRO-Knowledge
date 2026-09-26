@@ -101,6 +101,14 @@ The DS working screen shall be organized as:
 7. secondary analysis
 8. settings / diagnostics
 
+## Mission template interaction contract
+
+- In an existing automatic mission, show only the templates used by that mission; do not expose unrelated templates in the active mission composition list.
+- In manual creation mode, show the available template catalogue and allow multi-selection.
+- Each chosen template is intended to add its own scaffold to the Flight Chart; the operator combines these into one mission before submitting it to planning.
+- Both paths converge on the same core planning pipeline. Only the template-selection stage differs (automatic assignment versus operator selection).
+- The current Flight Chart is still a structural placeholder; visual scaffold placement and actual mission composition require the dedicated map/mission-core implementation. Do not represent the current UI selection as completed map geometry.
+
 ## 6. TOP / HEADER PANEL
 
 Permanent, compact.
