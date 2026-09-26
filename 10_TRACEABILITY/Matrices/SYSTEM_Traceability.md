@@ -1,6 +1,6 @@
 # SYSTEM Traceability
 
-## SYSTEM РІвЂ вЂ™ SYS
+## SYSTEM → SYS
 
 ```dataview
 TABLE id, title, derives_from, criticality, verification_method
@@ -9,22 +9,12 @@ WHERE type = "system_requirement"
 SORT id ASC
 ```
 
-## ARCH РІвЂ вЂ™ SYS
+## ARCH → SYS
 
 ```dataview
 TABLE id, title, type, status
 FROM "01_ARCHITECTURE"
 WHERE type = "architecture"
-SORT id ASC
-```
-
-## HUB Core Requirements
-
-```dataview
-TABLE id, title, criticality, verification_method
-FROM "02_SYSTEM/Requirements"
-WHERE type = "system_requirement"
-AND contains(derives_from, "[[ARCH-025]]")
 SORT id ASC
 ```
 
@@ -77,8 +67,3 @@ WHERE type = "system_requirement"
 AND contains(derives_from, [[ARCH-029]])
 SORT id ASC
 ```
-
-```
-
-
-
