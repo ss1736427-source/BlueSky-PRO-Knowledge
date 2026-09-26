@@ -132,7 +132,11 @@ Individual UAV telemetry is not duplicated into the aggregate mission header.
 
 ### Mission context
 
-`HIDE`:
+- Display the mission identifier as one compact label: `Миссия № <Mission ID>`.
+- Keep the `СКРЫТЬ` action as a separate, right-aligned control in its current position on the same row.
+- The label and action must not overlap; preserve the current row geometry unless the available panel width requires responsive truncation.
+
+`СКРЫТЬ`:
 - automatically saves current mission state first;
 - hides the current mission from Flight Chart;
 - clears the active panel list;
