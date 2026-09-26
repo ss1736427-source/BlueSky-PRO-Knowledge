@@ -136,6 +136,7 @@ Item {
 
     UAVStatus {
         id: uavStatus
+        selectedIndex: root.selectedUavIndex
         onUavSelected: root.selectedUavIndex = index
         anchors.left: parent.left
         anchors.right: parent.right
