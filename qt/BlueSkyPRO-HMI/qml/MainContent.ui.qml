@@ -14,8 +14,9 @@ Item {
     property int toolbarHeight: 54
     property bool leftPanelOpen: true
     property bool rightPanelOpen: true
-    property bool missionVisible: true
-    property bool missionCreationMode: false
+    property string missionState: "AUTO" // AUTO, HIDDEN, MANUAL
+    readonly property bool missionVisible: missionState === "AUTO"
+    readonly property bool missionCreationMode: missionState === "MANUAL"
     property bool missionReady: false
     property bool warningActive: true
     property int selectedUavIndex: -1
@@ -67,9 +68,9 @@ Item {
             missionCreationMode: root.missionCreationMode
             missionId: root.missionId
             missionSummary: root.missionSummary
-            onHideMissionRequested: { root.missionVisible = false; root.missionCreationMode = false }
-            onRestoreMissionRequested: { root.missionVisible = true; root.missionCreationMode = false }
-            onCreateMissionRequested: { root.missionVisible = false; root.missionCreationMode = true }
+            onHideMissionRequested: root.missionState = "HIDDEN"
+            onRestoreMissionRequested: root.missionState = "AUTO"
+            onCreateMissionRequested: root.missionState = "MANUAL"
         }
 
         FlightChart {
