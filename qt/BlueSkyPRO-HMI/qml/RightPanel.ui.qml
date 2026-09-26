@@ -38,17 +38,17 @@ Item {
     Text {
         x: 16
         y: 14
-        text: "CHECKLIST 5/8 тЬУ"
+        text: "CHECKLIST 5/8 ✓"
         color: root.text
         font.family: "B612"
         font.pixelSize: 16
         font.bold: true
     }
 
-    Text { x: 16; y: 43; text: "тЬУ Mission definition"; color: root.green; font.family: "B612"; font.pixelSize: 12 }
-    Text { x: 16; y: 64; text: "тЬУ UAV allocation"; color: root.green; font.family: "B612"; font.pixelSize: 12 }
-    Text { x: 16; y: 85; text: "тЬУ C2 availability"; color: root.green; font.family: "B612"; font.pixelSize: 12 }
-    Text { x: 16; y: 106; text: "тЪа Weather revalidation"; color: root.amber; font.family: "B612"; font.pixelSize: 12 }
+    Text { x: 16; y: 43; text: "✓ Mission definition"; color: root.green; font.family: "B612"; font.pixelSize: 12 }
+    Text { x: 16; y: 64; text: "✓ UAV allocation"; color: root.green; font.family: "B612"; font.pixelSize: 12 }
+    Text { x: 16; y: 85; text: "✓ C2 availability"; color: root.green; font.family: "B612"; font.pixelSize: 12 }
+    Text { x: 16; y: 106; text: "⚠ Weather revalidation"; color: root.amber; font.family: "B612"; font.pixelSize: 12 }
 
     Rectangle {
         x: 16
