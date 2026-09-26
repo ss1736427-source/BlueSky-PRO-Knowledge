@@ -1,18 +1,18 @@
-# Flight Planner � Certification Dashboard
+# Flight Planner — панель сертификации
 
-## ����������
+## Требования
 
 ```dataview
 TABLE
-    type AS "���",
-    status AS "������",
-    criticality AS "�����������"
+    type AS "Тип",
+    status AS "Статус",
+    criticality AS "Критичность"
 FROM ""
 WHERE contains(type, "requirement")
 SORT id ASC
 ```
 
-## ���������� ��� �����������
+## Требования без метода верификации
 
 ```dataview
 TABLE
@@ -24,7 +24,7 @@ WHERE contains(type, "requirement")
 AND verification_method = null
 ```
 
-## �������� ��������
+## Открытые аномалии
 
 ```dataview
 TABLE
@@ -37,7 +37,7 @@ AND status != "closed"
 SORT severity DESC
 ```
 
-## �����
+## Испытания
 
 ```dataview
 TABLE
@@ -47,5 +47,3 @@ FROM "09_VERIFICATION/Test_Cases"
 WHERE type = "test_case"
 SORT id ASC
 ```
-
-
