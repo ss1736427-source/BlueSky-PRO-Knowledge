@@ -7,6 +7,8 @@ Item {
     property string contextSubtitle: ""
     property var sections: []
     property bool fpvManual: false
+    property int selectedUavIndex: -1
+    readonly property string selectedUavId: selectedUavIndex >= 0 ? "UAV-" + ("0" + (selectedUavIndex + 1)).slice(-2) : "NO UAV SELECTED"
 
     Rectangle {
         anchors.fill: parent
@@ -16,7 +18,7 @@ Item {
     Text {
         x: 24
         y: 22
-        text: root.contextName
+        text: root.contextName === "UAV" ? "UAV  /  " + root.selectedUavId : root.contextName
         color: "#FFFFFF"
         font.family: "B612"
         font.pixelSize: 20
