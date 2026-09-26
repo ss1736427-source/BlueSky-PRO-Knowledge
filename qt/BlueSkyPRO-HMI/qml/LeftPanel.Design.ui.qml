@@ -17,7 +17,6 @@ Item {
     property string missionState: "AUTO"
     readonly property bool missionVisible: missionState === "AUTO"
     readonly property bool missionCreationMode: missionState === "MANUAL"
-    property int selectedTemplate: 2
     property bool missionIdExpanded: false
     property bool panelConfigOpen: false
     property int selectedTemplate: 2
