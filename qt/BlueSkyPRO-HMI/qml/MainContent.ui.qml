@@ -22,6 +22,7 @@ Item {
     property bool manualValidationStarted: false
     signal manualMissionValidationRequested()
     onManualMissionValidationRequested: root.journalAppendRequested("MANUAL_MISSION_VALIDATION_REQUESTED", root.missionId, -1, "Manual template composition submitted to common planning pipeline")
+    onManualValidationStartedChanged: root.manualValidationStarted ? root.manualMissionValidationRequested() : undefined
     property bool warningActive: true
     property int selectedUavIndex: -1
     property string uavDecision: ""
@@ -127,7 +128,7 @@ Item {
             manualCreationMode: root.missionCreationMode
             manualCompositionComplete: root.manualCompositionComplete
             manualValidationStarted: root.manualValidationStarted
-            onValidateManualMissionRequested: root.manualValidationStarted = true, root.manualMissionValidationRequested()
+            onValidateManualMissionRequested: root.manualValidationStarted = true
             onStartMissionRequested: root.leftPanelOpen = false
         }
     }
