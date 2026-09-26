@@ -78,15 +78,16 @@ Item {
         radius: 1
     }
 
-    // Template panel header — compact, outlined in the same service geometry.
+    // Panel title bar: distinct hierarchy within the panel, using the
+    // controlled selected surface and one cyan outline.
     Rectangle {
         x: 10
         y: 8
         width: parent.width - 20
         height: 38
-        color: root.card
-        border.color: "transparent"
-        border.width: 0
+        color: root.selectedSurface
+        border.color: root.cyan
+        border.width: 1
 
         Text {
             x: 12
@@ -94,8 +95,8 @@ Item {
             rightPadding: 70
             text: "Mission Templates"
             color: root.text
-            font.family: "Noto Sans"
-            font.pixelSize: 13
+            font.family: "B612"
+            font.pixelSize: 14
             font.bold: true
         }
 
