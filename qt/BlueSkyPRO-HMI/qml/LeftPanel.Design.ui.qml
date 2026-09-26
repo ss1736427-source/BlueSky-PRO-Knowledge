@@ -120,7 +120,7 @@ Item {
         Text {
             x: 10
             anchors.verticalCenter: parent.verticalCenter
-            text: "BS-260920-A-001"
+            text: "Миссия № BS-260920-A-001"
             color: root.text
             font.family: "B612 Mono"
             font.pixelSize: 11
