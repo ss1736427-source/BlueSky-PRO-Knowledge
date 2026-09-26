@@ -197,7 +197,9 @@ Item {
 
         Text {
             x: 10
-            anchors.verticalCenter: parent.verticalCenter
+            y: 4
+            width: parent.width - 104
+            elide: Text.ElideRight
             text: root.missionIdExpanded ? root.missionId : root.missionShortId
             color: root.text
             font.family: "B612 Mono"
@@ -223,7 +225,7 @@ Item {
 
         Text {
             x: parent.width - 66
-            anchors.verticalCenter: parent.verticalCenter
+            y: 4
             text: "СКРЫТЬ"
             color: root.secondary
             font.family: "B612 Mono"
