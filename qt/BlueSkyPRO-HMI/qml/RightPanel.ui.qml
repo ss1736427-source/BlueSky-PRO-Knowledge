@@ -130,7 +130,7 @@ Item {
     }
 
     Text {
-        visible: !root.manualCreationMode && root.validationConfirmationRequired
+        visible: root.manualCreationMode ? !root.manualValidationStarted : root.validationConfirmationRequired
         x: 16
         y: 286
         width: parent.width - 32
