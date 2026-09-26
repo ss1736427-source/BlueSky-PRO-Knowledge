@@ -1,43 +1,46 @@
 # ARCH-OPS-053 — Manual / Override Authority Boundary
 
-**Status:** CONTROLLED IMPLEMENTATION PREPARATION — AUTHORITY POLICY DECISION REQUIRED  
+**Status:** IMPLEMENTED — CI PENDING FOR IMPLEMENTATION COMMITS  
 **Evidence boundary:** `SIL_BOUNDARY_ONLY`
 
-## Purpose
+## Approved policy basis
 
-Define the explicit authority gate between BlueSky supervisory actions, RC/manual control, and onboard autopilot failsafe/recovery behavior.
+The user approved the authority-state × command-class matrix as the implementation basis.
 
-## Existing authority states
+## Deterministic command-admission matrix
 
-The Universal Autopilot API defines:
+| Authority state | Admission rule |
+|---|---|
+| `AUTONOMOUS_MISSION` | Admit `MissionManagement` only |
+| `GUIDED_MANUAL_SUPERVISED` | Admit `Supervisory` only when explicitly approved |
+| `FAILSAFE` | Reject external commands; onboard failsafe retains authority |
+| `RETURN_RECOVERY` | Admit `RecoveryNonInterfering` only when explicitly approved |
+| `EMERGENCY_ABORT` | Admit `EmergencyAbort` only when explicitly approved |
+| `COMMUNICATION_LOST` | Reject all commands |
+| Unknown state | Reject all commands |
 
-- `AUTONOMOUS_MISSION`
-- `GUIDED_MANUAL_SUPERVISED`
-- `FAILSAFE`
-- `RETURN_RECOVERY`
-- `EMERGENCY_ABORT`
-- `COMMUNICATION_LOST`
+All command classes not explicitly admitted by the current state are rejected. Low-level actuation and manual-control commands are not admitted by this gate.
 
-The onboard flight controller retains real-time stabilization and onboard failsafe authority. Loss of BlueSky connectivity does not transfer flight-control authority to BlueSky or another ground component.
+## Implementation
 
-## Required policy decision
+- `core/manual_override_authority_gate.hpp`
+- `core/manual_override_authority_gate.cpp`
+- `core/manual_override_authority_gate_test.cpp`
+- Registered as `manual_override_authority_gate_test` in CMake/CTest.
 
-Before implementing command admission, the project must approve a deterministic matrix mapping each authority state to permitted command classes and rejection behavior.
+The gate returns a deterministic admit/reject result with a reason. This is an admission boundary only; it does not dispatch commands or implement vendor-specific RC/autopilot behavior.
 
-The implementation must not infer:
-- whether BlueSky supervisory commands remain admissible during guided/manual control;
-- which commands, if any, are admissible during return/recovery;
-- whether emergency-abort requests are accepted in each state and how they map to autopilot-native actions;
-- precedence when RC/manual input, BlueSky supervision, and onboard failsafe indications conflict.
+## Safety invariants
 
-## Non-negotiable fail-safe boundaries
+- Loss of BlueSky communication does not transfer flight-control authority.
+- Onboard stabilization and failsafe behavior remain authoritative.
+- Unknown authority state never authorizes a command.
+- Failsafe state rejects external commands.
+- Explicit approval is required for supervisory, recovery, and emergency-abort command classes.
+- No low-level actuator commands or vendor-specific RC semantics are introduced.
 
-- `COMMUNICATION_LOST` never implies transfer of flight-control authority.
-- BlueSky does not replace onboard stabilization or failsafe behavior.
-- Unknown or contradictory authority state must not authorize a command.
-- Every decision and rejection must be deterministic and auditable.
-- No vendor-specific RC switch semantics or low-level actuator commands are introduced by this slice.
+## Verification status
 
-## Next step
+SIL-oriented deterministic unit tests are registered. CI has not yet been observed for the implementation commits; do not mark this slice CI-verified until a workflow run succeeds on the resulting code commit.
 
-Obtain approval for the authority-state × command-class matrix. Then implement the gate and SIL tests against that approved matrix. Until then, ARCH-OPS-053 remains specified but not implemented.
+This implementation does not establish HIL, real-UAV, operational, or certification verification.
