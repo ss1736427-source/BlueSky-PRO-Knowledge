@@ -14,8 +14,9 @@ Item {
     property color cyan: "#32FFFF"
     property color divider: "#7F7F7F"
 
-    property bool missionVisible: true
-    property bool missionCreationMode: false
+    property string missionState: "AUTO"
+    readonly property bool missionVisible: missionState === "AUTO"
+    readonly property bool missionCreationMode: missionState === "MANUAL"
     property int selectedTemplate: 2
     property bool missionIdExpanded: false
     property bool panelConfigOpen: false
@@ -96,10 +97,7 @@ Item {
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: {
-                    root.missionVisible = true
-                    root.missionCreationMode = false
-                }
+                onClicked: root.missionState = "AUTO"
             }
         }
 
@@ -171,7 +169,7 @@ Item {
             x: parent.width - 82
             width: 72
             height: parent.height
-            onClicked: root.missionVisible = false
+            onClicked: root.missionState = "HIDDEN"
         }
     }
 
@@ -334,11 +332,7 @@ Item {
 
         MouseArea {
             anchors.fill: parent
-            onClicked: {
-                root.missionVisible = false
-                root.missionCreationMode = true
-                root.missionIdExpanded = false
-            }
+            onClicked: root.missionState = "MANUAL"
         }
     }
 
