@@ -1,4 +1,4 @@
-import QtQuick
+﻿import QtQuick
 import Qt.labs.settings
 
 Item {
@@ -377,7 +377,7 @@ signal workspaceContextRequested(string tool)
 
             Text {
                 anchors.centerIn: parent
-                text: "LEFT ◀"
+                text: "LEFT тЧА"
                 color: root.leftOpen ? root.cyan : root.secondary
                 font.family: "B612 Mono"
                 font.pixelSize: 10
@@ -522,7 +522,7 @@ signal workspaceContextRequested(string tool)
 
             Text {
                 anchors.centerIn: parent
-                text: "RIGHT ▶"
+                text: "RIGHT тЦ╢"
                 color: root.rightOpen ? root.cyan : root.secondary
                 font.family: "B612 Mono"
                 font.pixelSize: 10
@@ -563,7 +563,7 @@ signal workspaceContextRequested(string tool)
 
             Text {
                 anchors.centerIn: parent
-                text: "☰"
+                text: "тШ░"
                 color: toolsPopup.visible ? root.cyan : root.secondary
                 font.family: "B612 Mono"
                 font.pixelSize: 10
@@ -611,7 +611,7 @@ signal workspaceContextRequested(string tool)
         Text {
             x: 16
             y: 34
-            text: "ENABLE / DISABLE · ORDER"
+            text: "ENABLE / DISABLE ┬╖ ORDER"
             color: root.secondary
             font.family: "B612 Mono"
             font.pixelSize: 8
@@ -675,7 +675,7 @@ signal workspaceContextRequested(string tool)
                     anchors.right: parent.right
                     anchors.rightMargin: 12
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "⋮⋮"
+                    text: "тЛотЛо"
                     color: root.secondary
                     font.pixelSize: 14
                 }

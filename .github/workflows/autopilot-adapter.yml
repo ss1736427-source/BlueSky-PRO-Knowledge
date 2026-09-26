@@ -7,11 +7,13 @@ on:
       - '04_SOFTWARE/AUTOPILOT_ADAPTER/**'
       - '04_SOFTWARE/PLANNING/model/**'
       - '03_FLEET/BLUESKY_*ADAPTER*'
+      - '04_SOFTWARE/INSURANCE/**'
       - '.github/workflows/autopilot-adapter.yml'
   pull_request:
     paths:
       - '04_SOFTWARE/AUTOPILOT_ADAPTER/**'
       - '04_SOFTWARE/PLANNING/model/**'
+      - '04_SOFTWARE/INSURANCE/**'
       - '03_FLEET/BLUESKY_*ADAPTER*'
       - '.github/workflows/autopilot-adapter.yml'
 

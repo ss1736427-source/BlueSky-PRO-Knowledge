@@ -13,6 +13,14 @@ The customer shall not be required to develop the integrations personally.
 
 Universality is an architectural property of the entire product, not a feature limited to autopilot support.
 
+> **SINGLE CURRENT RESULT / PROCESS EVOLUTION:** BlueSky PRO development is a continuous controlled evolution. When a requirement, algorithm, architecture or document is corrected and consolidated, the corrected result becomes the only current working baseline for subsequent development. Intermediate superseded variants are not development references.
+
+> **MINIMUM RECALCULATION / NO DUPLICATION:** Every calculation is performed once at the architectural level where all inputs required for that result are available. Its versioned result is reused by downstream stages. A calculation is repeated only when an input or dependency capable of changing its result has changed.
+
+> **DEPENDENCY-DRIVEN RECALCULATION:** Changes propagate only through the affected dependency graph. Unaffected calculations and candidates remain reusable.
+
+These principles apply to requirements, architecture, planning algorithms, validation, AI orchestration, safety, readiness, execution and evidence.
+
 ---
 
 ## 2. What this document controls
@@ -34,6 +42,34 @@ Status terminology:
 - **GATE** — cannot be considered complete until its acceptance evidence exists.
 
 ---
+
+
+### 2.1 Current-baseline rule
+
+For all future work:
+
+1. use the latest corrected and consolidated document/result as the source of truth;
+2. do not reintroduce superseded intermediate variants;
+3. when a correction changes an earlier decision, update the governing document and dependent specifications together;
+4. downstream implementation must use only the corrected contract;
+5. historical commits/PRs remain audit history, not active design alternatives.
+
+### 2.2 Calculation reuse rule
+
+Planning and optimization shall use a dependency-aware calculation graph.
+
+Each material calculation result should carry, as applicable:
+
+- input snapshot/version;
+- calculation/algorithm version;
+- dependency hash or equivalent identity;
+- affected object/segment/candidate identifiers;
+- calculation timestamp;
+- provenance/evidence references.
+
+The system shall reuse a result when its relevant dependencies are unchanged. Recalculation is required only for the affected result and its downstream dependents.
+
+This rule prevents duplicated terrain, restriction, wind, performance and conflict calculations and is part of the master architecture, not an implementation optimization.
 
 ## 3. Product lifecycle — one continuous chain
 

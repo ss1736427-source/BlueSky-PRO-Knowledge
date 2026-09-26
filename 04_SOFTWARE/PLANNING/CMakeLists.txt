@@ -16,6 +16,15 @@ add_library(bluesky_planning
     benchmarks/solver_benchmark_runner.cpp
     adapter/universal_adapter_registry.cpp
     compiler/mission_compiler.cpp
+    wind_performance_trajectory.cpp
+    multi_uav_conflict.cpp
+    multi_uav_sequencing.cpp
+    multi_uav_conflict_resolution.cpp
+    candidate_comparison.cpp
+    selected_route_set.cpp
+    flight_profile.cpp
+    vehicle_mission_compiler.cpp
+    final_planning_integrity.cpp
 )
 
 target_include_directories(bluesky_planning PUBLIC
@@ -53,6 +62,60 @@ add_executable(orchestrator_rejection_reason_test
     orchestrator/algorithm_orchestrator_rejection_reason_test.cpp
 )
 target_link_libraries(orchestrator_rejection_reason_test PRIVATE bluesky_planning)
+
+add_executable(multi_uav_conflict_test
+    multi_uav_conflict_test.cpp
+)
+target_link_libraries(multi_uav_conflict_test PRIVATE bluesky_planning)
+
+add_executable(multi_uav_sequencing_test
+    multi_uav_sequencing_test.cpp
+)
+target_link_libraries(multi_uav_sequencing_test PRIVATE bluesky_planning)
+
+add_executable(multi_uav_conflict_resolution_test
+    multi_uav_conflict_resolution_test.cpp
+)
+target_link_libraries(multi_uav_conflict_resolution_test PRIVATE bluesky_planning)
+
+add_executable(candidate_comparison_test
+    candidate_comparison_test.cpp
+)
+target_link_libraries(candidate_comparison_test PRIVATE bluesky_planning)
+
+add_executable(selected_route_set_test selected_route_set_test.cpp)
+target_link_libraries(selected_route_set_test PRIVATE bluesky_planning)
+
+add_executable(flight_profile_test flight_profile_test.cpp)
+target_link_libraries(flight_profile_test PRIVATE bluesky_planning)
+
+add_executable(vehicle_mission_compiler_test vehicle_mission_compiler_test.cpp)
+target_link_libraries(vehicle_mission_compiler_test PRIVATE bluesky_planning)
+
+add_executable(final_planning_integrity_test final_planning_integrity_test.cpp)
+target_link_libraries(final_planning_integrity_test PRIVATE bluesky_planning)
+
+add_executable(wind_performance_trajectory_test
+    wind_performance_trajectory_test.cpp
+)
+target_link_libraries(wind_performance_trajectory_test PRIVATE bluesky_planning)
+
+add_executable(route_constraint_validator_test
+    route_constraint_validator_test.cpp
+    route_constraint_validator.cpp
+)
+target_link_libraries(route_constraint_validator_test PRIVATE bluesky_planning)
+
+add_executable(authorization_readiness_gate_test
+    authorization_readiness_gate_test.cpp
+    authorization_readiness_gate.cpp
+)
+target_link_libraries(authorization_readiness_gate_test PRIVATE bluesky_planning)
+
+add_executable(route_model_contract_test
+    model/route_model_contract_test.cpp
+)
+target_link_libraries(route_model_contract_test PRIVATE bluesky_planning)
 
 add_executable(mission_model_contract_test
     model/mission_model_contract_test.cpp
@@ -132,6 +195,18 @@ add_test(NAME orchestrator_route_validation_test COMMAND orchestrator_route_vali
 add_test(NAME orchestrator_determinism_test COMMAND orchestrator_determinism_test)
 add_test(NAME orchestrator_objective_test COMMAND orchestrator_objective_test)
 add_test(NAME orchestrator_rejection_reason_test COMMAND orchestrator_rejection_reason_test)
+add_test(NAME multi_uav_conflict_test COMMAND multi_uav_conflict_test)
+add_test(NAME multi_uav_sequencing_test COMMAND multi_uav_sequencing_test)
+add_test(NAME multi_uav_conflict_resolution_test COMMAND multi_uav_conflict_resolution_test)
+add_test(NAME candidate_comparison_test COMMAND candidate_comparison_test)
+add_test(NAME selected_route_set_test COMMAND selected_route_set_test)
+add_test(NAME flight_profile_test COMMAND flight_profile_test)
+add_test(NAME vehicle_mission_compiler_test COMMAND vehicle_mission_compiler_test)
+add_test(NAME final_planning_integrity_test COMMAND final_planning_integrity_test)
+add_test(NAME wind_performance_trajectory_test COMMAND wind_performance_trajectory_test)
+add_test(NAME route_constraint_validator_test COMMAND route_constraint_validator_test)
+add_test(NAME authorization_readiness_gate_test COMMAND authorization_readiness_gate_test)
+add_test(NAME route_model_contract_test COMMAND route_model_contract_test)
 add_test(NAME mission_model_contract_test COMMAND mission_model_contract_test)
 add_test(NAME vehicle_equipment_capability_contract_test COMMAND vehicle_equipment_capability_contract_test)
 add_test(NAME universal_adapter_contract_test COMMAND universal_adapter_contract_test)

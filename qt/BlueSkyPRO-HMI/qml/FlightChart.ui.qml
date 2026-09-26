@@ -1,4 +1,4 @@
-import QtQuick
+﻿import QtQuick
 
 Item {
     id: root
@@ -97,4 +97,25 @@ Item {
         font.pixelSize: 12
     }
 
+
+    PanelSettingsButton {
+        id: panelSettings
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.margins: 10
+        z: 400
+        onClicked: panelSettingsPopup.open = !panelSettingsPopup.open
+    }
+
+    PanelSettingsPopup {
+        id: panelSettingsPopup
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.topMargin: 44
+        width: 260
+        height: 254
+        title: "MAP SETTINGS"
+        tools: ["Base Map", "Airspace / Restrictions", "NOTAM", "Weather Layers", "Route / Waypoints", "UAV Display", "Planned / Actual Track", "Map Interaction"]
+        onClosed: open = false
+    }
 }

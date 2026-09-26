@@ -1,11 +1,11 @@
-import QtQuick
+﻿import QtQuick
 
 Item {
     id: root
     width: 1920
     height: 1080
 
-    // BlueSky PRO — Qt Design Studio working screen.
+    // BlueSky PRO тАФ Qt Design Studio working screen.
     // Visual composition only. Core / Safety remain authoritative.
     property int headerHeight: 86
     property int leftWidth: leftPanel.implicitWidth
@@ -22,11 +22,17 @@ Item {
     property string lastJournalEvent: ""
     property string missionId: "BS-260920-A-001"
     property string journalStatus: "READY"
+    property string activeTool: "MAP"
     signal journalEvent(string eventType, int uavIndex, string decision)
     signal journalAppendRequested(string eventType, string missionId, int uavIndex, string decision)
     signal uavDecisionRequested(string decision, int uavIndex)
     signal workspaceContextRequested(string context)
     property string workspaceContext: "MAP"
+
+    Component.onCompleted: {
+        root.activeTool = bottomToolbar.activeTool
+        root.workspaceContext = bottomToolbar.activeTool
+    }
 
     Rectangle {
         anchors.fill: parent
@@ -60,7 +66,7 @@ Item {
             missionVisible: root.missionVisible
             missionId: root.missionId
             onHideMissionRequested: {
-                root.lastJournalEvent = root.missionId + " · MISSION_STATE_SAVE_REQUESTED"
+                root.lastJournalEvent = root.missionId + " ┬╖ MISSION_STATE_SAVE_REQUESTED"
                 root.missionVisible = false
             }
             onRestoreMissionRequested: root.missionVisible = true
@@ -77,7 +83,26 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             missionVisible: root.missionVisible
+            visible: root.activeTool === "MAP"
             onMapDoubleClicked: root.leftPanelOpen = false
+        }
+
+        ToolContext {
+            id: toolContext
+            anchors.left: leftPanel.right
+            anchors.right: rightPanel.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            visible: root.activeTool !== "MAP"
+            contextName: root.activeTool
+            contextSubtitle: root.activeTool === "UAV" ? "SELECT UAV / CONTROL / C2 / CONFIGURATION" : root.activeTool === "ADMIN" ? "SYSTEM ADMINISTRATION / ENGINEER / TECHNICIAN" : root.activeTool === "FPV" ? "VIDEO + FLIGHT DATA + CONTROL TRANSFER" : "SIMULATION / VIRTUAL UAV"
+            sections: root.activeTool === "UAV"
+                      ? ["UAV SELECTION", "CONTROL / C2", "UAV CONFIGURATION", "NAVIGATION", "ENERGY", "PAYLOAD / EQUIPMENT", "MAINTENANCE", "DIAGNOSTICS"]
+                      : root.activeTool === "ADMIN"
+                      ? ["USERS", "ROLES & ACCESS", "SYSTEM SETTINGS", "INTEGRATIONS", "DATA & SYNC", "DOCUMENTS", "AUDIT LOG"]
+                      : root.activeTool === "FPV"
+                      ? ["UAV SELECTION", "CONTROL STATION", "CONTROL MAPPING", "C2 / VIDEO STATE", "MANUAL CONTROL", "RETURN TO AUTO"]
+                      : ["VIRTUAL UAV", "SIMULATION", "ENVIRONMENT", "SCENARIOS", "PLANNED / SIMULATED / ACTUAL", "RESULTS"]
         }
 
         RightPanel {
@@ -112,6 +137,7 @@ Item {
         onLeftPanelToggleRequested: root.leftPanelOpen = !root.leftPanelOpen
         onRightPanelToggleRequested: root.rightPanelOpen = !root.rightPanelOpen
         onToolActivated: {
+            root.activeTool = tool
             root.workspaceContext = tool
             root.workspaceContextRequested(tool)
         }
@@ -127,7 +153,7 @@ Item {
         height: 122
         onDecisionRequested: {
             root.uavDecision = decision
-            root.lastJournalEvent = root.missionId + " · UAV-" + (uavIndex + 1) + " · " + decision
+            root.lastJournalEvent = root.missionId + " ┬╖ UAV-" + (uavIndex + 1) + " ┬╖ " + decision
             root.journalEvent("UAV_DECISION", uavIndex, decision)
             root.journalAppendRequested("UAV_DECISION", root.missionId, uavIndex, decision)
             root.journalStatus = "EVENT EMITTED"

@@ -1,4 +1,4 @@
-import QtQuick
+﻿import QtQuick
 
 Item {
     id: root
@@ -8,7 +8,7 @@ Item {
         font.family: "B612"
         font.pixelSize: 12
         font.bold: true
-        text: "Картографирование территории"
+        text: "╨Ъ╨░╤А╤В╨╛╨│╤А╨░╤Д╨╕╤А╨╛╨▓╨░╨╜╨╕╨╡ ╤В╨╡╤А╤А╨╕╤В╨╛╤А╨╕╨╕"
     }
 
     TextMetrics {
@@ -55,13 +55,13 @@ Item {
 
     ListModel {
         id: templateModel
-        ListElement { title: "Картографирование территории"; subtitle: ""; accent: "#64FF00" }
-        ListElement { title: "Обследование зданий"; subtitle: ""; accent: "#BFBFBF" }
-        ListElement { title: "3D картография"; subtitle: ""; accent: "#32FFFF" }
-        ListElement { title: "Линейное обследование"; subtitle: ""; accent: "#32FFFF" }
-        ListElement { title: "Картографирование коридора"; subtitle: ""; accent: "#FFD339" }
-        ListElement { title: "Точка интереса"; subtitle: ""; accent: "#FF32FF" }
-        ListElement { title: "Создать миссию"; subtitle: ""; accent: "#BFBFBF" }
+        ListElement { title: "╨Ъ╨░╤А╤В╨╛╨│╤А╨░╤Д╨╕╤А╨╛╨▓╨░╨╜╨╕╨╡ ╤В╨╡╤А╤А╨╕╤В╨╛╤А╨╕╨╕"; subtitle: ""; accent: "#64FF00" }
+        ListElement { title: "╨Ю╨▒╤Б╨╗╨╡╨┤╨╛╨▓╨░╨╜╨╕╨╡ ╨╖╨┤╨░╨╜╨╕╨╣"; subtitle: ""; accent: "#BFBFBF" }
+        ListElement { title: "3D ╨║╨░╤А╤В╨╛╨│╤А╨░╤Д╨╕╤П"; subtitle: ""; accent: "#32FFFF" }
+        ListElement { title: "╨Ы╨╕╨╜╨╡╨╣╨╜╨╛╨╡ ╨╛╨▒╤Б╨╗╨╡╨┤╨╛╨▓╨░╨╜╨╕╨╡"; subtitle: ""; accent: "#32FFFF" }
+        ListElement { title: "╨Ъ╨░╤А╤В╨╛╨│╤А╨░╤Д╨╕╤А╨╛╨▓╨░╨╜╨╕╨╡ ╨║╨╛╤А╨╕╨┤╨╛╤А╨░"; subtitle: ""; accent: "#FFD339" }
+        ListElement { title: "╨в╨╛╤З╨║╨░ ╨╕╨╜╤В╨╡╤А╨╡╤Б╨░"; subtitle: ""; accent: "#FF32FF" }
+        ListElement { title: "╨б╨╛╨╖╨┤╨░╤В╤М ╨╝╨╕╤Б╤Б╨╕╤О"; subtitle: ""; accent: "#BFBFBF" }
     }
 
     Rectangle {
@@ -78,7 +78,7 @@ Item {
         radius: 1
     }
 
-    // Template panel header — compact, outlined in the same service geometry.
+    // Template panel header тАФ compact, outlined in the same service geometry.
     Rectangle {
         x: 10
         y: 8
@@ -126,7 +126,7 @@ Item {
             Text {
                 width: 18
                 horizontalAlignment: Text.AlignHCenter
-                text: "≡"
+                text: "тЙб"
                 color: root.panelConfigOpen ? root.cyan : root.secondary
                 font.family: "B612 Mono"
                 font.pixelSize: 16
@@ -220,7 +220,7 @@ Item {
                 delegate: Text {
                     required property var modelData
                     width: parent.width
-                    text: (modelData.enabled ? "✓ " : "○ ") + modelData.label
+                    text: (modelData.enabled ? "тЬУ " : "тЧЛ ") + modelData.label
                     color: modelData.enabled ? root.cyan : root.secondary
                     font.family: "B612"
                     font.pixelSize: 10
@@ -290,7 +290,7 @@ Item {
                     visible: index === root.selectedTemplate
                     x: parent.width - 30
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "✓"
+                    text: "тЬУ"
                     color: root.cyan
                     font.family: "B612 Mono"
                     font.pixelSize: 15
@@ -334,7 +334,7 @@ Item {
         }
 
         Text {
-            text: "4 UAV · BVLOS · wind-aware"
+            text: "4 UAV ┬╖ BVLOS ┬╖ wind-aware"
             color: root.secondary
             font.family: "B612"
             font.pixelSize: 11
@@ -345,7 +345,7 @@ Item {
         visible: root.missionVisible && !root.templatesExpanded && !root.panelConfigOpen
         x: 16
         y: 162
-        text: "MISSION ID · immutable"
+        text: "MISSION ID ┬╖ immutable"
         color: root.secondary
         font.family: "B612"
         font.pixelSize: 11
@@ -377,7 +377,7 @@ Item {
         visible: root.missionVisible && !root.templatesExpanded
         x: 16
         y: 250
-        text: "Analysis · Instruments · ATC · Diagnostics"
+        text: "Analysis ┬╖ Instruments ┬╖ ATC ┬╖ Diagnostics"
         color: root.secondary
         font.family: "B612"
         font.pixelSize: 10
@@ -387,7 +387,7 @@ Item {
         visible: root.missionVisible && !root.templatesExpanded
         x: 16
         y: 270
-        text: "Weather · Obstacles · Airspace"
+        text: "Weather ┬╖ Obstacles ┬╖ Airspace"
         color: root.secondary
         font.family: "B612"
         font.pixelSize: 10
