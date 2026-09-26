@@ -42,6 +42,12 @@ Item {
 
     property bool missionVisible: true
     property string missionId: "BS-260920-A-001"
+    property string missionSummary: "3D картография территории"
+    property bool missionIdExpanded: false
+    readonly property string missionShortId: {
+        var parts = missionId.split("-")
+        return parts.length >= 4 ? parts[2] + "-" + parts[3] : missionId
+    }
     property bool templatesExpanded: true
     property bool panelConfigOpen: false
     property int selectedTemplate: 2
@@ -184,7 +190,7 @@ Item {
         x: 10
         y: 50
         width: parent.width - 20
-        height: 36
+        height: 54
         color: root.card
         border.color: "transparent"
         border.width: 0
@@ -192,11 +198,27 @@ Item {
         Text {
             x: 10
             anchors.verticalCenter: parent.verticalCenter
-            text: "Миссия № " + root.missionId
+            text: root.missionIdExpanded ? root.missionId : root.missionShortId
             color: root.text
             font.family: "B612 Mono"
             font.pixelSize: 11
             font.bold: true
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: root.missionIdExpanded = !root.missionIdExpanded
+            }
+        }
+
+        Text {
+            x: 10
+            y: 31
+            width: parent.width - 104
+            elide: Text.ElideRight
+            text: root.missionSummary
+            color: root.secondary
+            font.family: "Noto Sans"
+            font.pixelSize: 10
         }
 
         Text {
@@ -281,7 +303,7 @@ Item {
     Column {
         visible: root.missionVisible && root.templatesExpanded && !root.panelConfigOpen
         x: 10
-        y: root.missionVisible ? 92 : 50
+        y: root.missionVisible ? 110 : 50
         width: parent.width - 20
         height: Math.max(0, parent.height - y - 10)
         spacing: 3
@@ -355,7 +377,7 @@ Item {
         spacing: 10
 
         Text {
-            text: root.missionId
+            text: root.missionIdExpanded ? root.missionId : root.missionShortId
             color: root.text
             font.family: "B612 Mono"
             font.pixelSize: 16
