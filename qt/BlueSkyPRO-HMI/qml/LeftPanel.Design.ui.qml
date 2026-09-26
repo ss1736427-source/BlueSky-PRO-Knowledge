@@ -115,13 +115,14 @@ Item {
         x: 10
         y: 50
         width: parent.width - 20
-        height: 54
+        height: 36
         color: root.card
 
         Text {
+            id: missionIdLabel
             x: 10
-            y: 4
-            width: parent.width - 104
+            width: root.missionIdExpanded ? 142 : 48
+            anchors.verticalCenter: parent.verticalCenter
             elide: Text.ElideRight
             text: root.missionIdExpanded ? "BS-260920-A-001" : "A-001"
             color: root.text
@@ -136,9 +137,9 @@ Item {
         }
 
         Text {
-            x: 10
-            y: 31
-            width: parent.width - 104
+            x: missionIdLabel.x + missionIdLabel.width + 8
+            width: Math.max(0, parent.width - x - 88)
+            anchors.verticalCenter: parent.verticalCenter
             elide: Text.ElideRight
             text: "3D картография территории"
             color: root.secondary
@@ -148,7 +149,7 @@ Item {
 
         Text {
             x: parent.width - 66
-            y: 4
+            anchors.verticalCenter: parent.verticalCenter
             text: "СКРЫТЬ"
             color: root.secondary
             font.family: "B612 Mono"
