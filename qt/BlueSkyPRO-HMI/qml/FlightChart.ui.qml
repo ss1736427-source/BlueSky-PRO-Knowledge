@@ -12,6 +12,7 @@ Item {
     property color muted: "#7F7F7F"
     property color divider: "#202020"
     property bool missionVisible: true
+    property bool manualCreationMode: false
     signal mapDoubleClicked()
 
     Rectangle {
@@ -89,12 +90,25 @@ Item {
         }
     }
     Text {
-        visible: !root.missionVisible
+        visible: !root.missionVisible && !root.manualCreationMode
         anchors.centerIn: parent
-        text: "NO ACTIVE MISSION"
+        text: "НЕТ АКТИВНОЙ МИССИИ"
         color: root.muted
         font.family: "B612 Mono"
         font.pixelSize: 12
+    }
+
+
+
+    Text {
+        visible: root.manualCreationMode
+        anchors.horizontalCenter: parent.horizontalCenter
+        y: 24
+        text: "РУЧНОЕ СОЗДАНИЕ МИССИИ · M"
+        color: "#64FF00"
+        font.family: "B612 Mono"
+        font.pixelSize: 12
+        font.bold: true
     }
 
 
