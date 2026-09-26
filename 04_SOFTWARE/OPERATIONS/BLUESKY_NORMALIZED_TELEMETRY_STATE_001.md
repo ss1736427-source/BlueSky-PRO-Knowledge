@@ -47,6 +47,23 @@ No numerical freshness or safety thresholds are defined here; those belong to th
 
 `normalized_state_requires_refresh()` identifies stale, delayed, and missing snapshots for runtime coordination.
 
+## Replay aggregation constraint — GAP
+
+The current normalized snapshot exposes one source timestamp and one receipt timestamp for the snapshot, while MAVLink replay assembly combines fields received in separate messages. The current sample contract does not carry field-specific timestamps or an explicit coherence window.
+
+Consequently, a replay assembler must not treat the maximum snapshot timestamps as proof that every retained field was observed at that time. A field may have been retained from an earlier message while the aggregate timestamp advances.
+
+**Status: OPEN — contract and verification required before operational integration.** Define the ordering basis for replay messages, per-field timestamp/validity semantics (or an equivalent bounded-coherence rule), and behavior for out-of-order or delayed messages. Do not introduce numerical age/coherence thresholds in this document; they require an applicable runtime contract and verified configuration.
+
+Required verification cases should cover at least:
+
+- a newer message of one type following older position or battery data;
+- out-of-order messages for the same vehicle/source identity;
+- delayed data that must not make an older field appear current;
+- preservation of the existing heartbeat-degradation behavior.
+
+Until this gap is closed, replay aggregation is deterministic fixture logic only and is not evidence of current, coherent live telemetry.
+
 ## Traceability
 
 This contract closes the structural implementation gap for normalized vehicle state while preserving the existing distinction between planned state and actual vehicle/autopilot state. Adapter-specific telemetry mappings and replay/integration verification remain pending.
