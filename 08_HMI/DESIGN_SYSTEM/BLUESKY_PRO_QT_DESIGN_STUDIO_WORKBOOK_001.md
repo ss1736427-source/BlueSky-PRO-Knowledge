@@ -407,13 +407,45 @@ Each component should be independently previewable.
 
 Separate visual structure from application logic.
 
+### 13.1 Strict Qt Design Studio file boundary
+
+**`.ui.qml` files are declarative visual files, not general-purpose JavaScript files.**
+
+Allowed in `.ui.qml`:
+- visual items, components, properties and anchors;
+- static values and declarative property bindings;
+- supported visual states and transitions;
+- simple supported signal-handler expressions where Qt Design Studio accepts them.
+
+**Do not put imperative JavaScript blocks in `.ui.qml`.** In particular, do not use:
+- `Component.onCompleted: { ... }` blocks;
+- multi-statement signal handlers such as `onClicked: { ... }`;
+- local variables, loops, conditionals or function declarations embedded as behavior;
+- application state mutation that requires an imperative block.
+
+Put behavior that requires JavaScript blocks in a separate `.qml` controller/runtime component, and expose the needed state and signals to the visual `.ui.qml` component through properties and signals. Keep the visual file editable in Qt Design Studio.
+
+When a behavior must be expressed as a single supported expression, keep it expression-only; do not expand it into a block for convenience.
+
+### 13.2 File responsibilities
+
 Prefer:
 
-- `.ui.qml` — visual/component layout;
-- `.qml` — behavior/state where required;
+- `.ui.qml` — visual/component layout and declarative bindings;
+- `.qml` — behavior, state transitions and imperative orchestration;
 - C++ / application services — data, calculations, integration and safety-relevant logic.
 
 Do not put flight calculations or safety authority into visual components.
+
+### 13.3 Required validation before committing
+
+For every edited `.ui.qml` file:
+1. Check that no imperative JavaScript blocks were introduced.
+2. Open the file in Qt Design Studio's 2D/visual editor.
+3. Confirm the document opens without M22xx UI-file errors.
+4. If logic requires a block, move it to a `.qml` file instead of suppressing or bypassing the editor error.
+
+**Incident record:** Qt Design Studio rejected a `Component.onCompleted` JavaScript block in `MainContent.ui.qml` with error M223. The corrective rule above is now mandatory for subsequent HMI changes.
 
 ## 14. States to design in DS
 
