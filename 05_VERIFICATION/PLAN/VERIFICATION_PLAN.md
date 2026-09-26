@@ -700,8 +700,8 @@ Each verification case shall be linked to the applicable requirement or design c
 
 
 
-## C2 в„–142 вЂ” CONTROLLED INTEGRATION
-Source: РџСЂРёРєР°Р· РњРёРЅС‚СЂР°РЅСЃР° Р РѕСЃСЃРёРё РѕС‚ 24.04.2025 в„–142.
+## C2 № 142 — CONTROLLED INTEGRATION
+Source: Приказ Минтранса России от 24.04.2025 № 142.
 Integration record: C2-WP142-CLAUSE-RECON-001.
 Status: WORKING / NOT BASELINED.
 
