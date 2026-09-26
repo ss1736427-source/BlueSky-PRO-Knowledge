@@ -19,10 +19,7 @@ Item {
     readonly property bool missionCreationMode: missionState === "MANUAL"
     property bool missionReady: false
     property bool manualCompositionComplete: false
-    property bool manualValidationStarted: false
-    signal manualMissionValidationRequested()
-    onManualMissionValidationRequested: root.journalAppendRequested("MANUAL_MISSION_VALIDATION_REQUESTED", root.missionId, -1, "Manual template composition submitted to common planning pipeline")
-    onManualValidationStartedChanged: root.manualValidationStarted ? root.manualMissionValidationRequested() : undefined
+    readonly property bool manualValidationStarted: missionState === "VALIDATING"
     property bool warningActive: true
     property int selectedUavIndex: -1
     property string uavDecision: ""
@@ -78,7 +75,7 @@ Item {
             missionTemplateIndices: root.missionTemplateIndices
             onHideMissionRequested: root.missionState = "HIDDEN"
             onRestoreMissionRequested: root.missionState = "AUTO"
-            onCreateMissionRequested: root.missionState = "MANUAL", root.manualCompositionComplete = false, root.manualValidationStarted = false
+            onCreateMissionRequested: root.missionState = "MANUAL"
         }
 
         FlightChart {
@@ -128,7 +125,7 @@ Item {
             manualCreationMode: root.missionCreationMode
             manualCompositionComplete: root.manualCompositionComplete
             manualValidationStarted: root.manualValidationStarted
-            onValidateManualMissionRequested: root.manualValidationStarted = true
+            onValidateManualMissionRequested: root.missionState = "VALIDATING"
             onStartMissionRequested: root.leftPanelOpen = false
         }
     }
