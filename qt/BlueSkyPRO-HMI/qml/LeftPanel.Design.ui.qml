@@ -29,20 +29,23 @@ Item {
         border.width: 1
     }
 
+    // Panel title bar: selected surface, cyan outline, controlled typography.
     Rectangle {
         x: 10
         y: 8
         width: parent.width - 20
         height: 38
-        color: root.card
+        color: root.selectedSurface
+        border.color: root.cyan
+        border.width: 1
 
         Text {
             x: 12
             anchors.verticalCenter: parent.verticalCenter
             text: "Mission Templates"
             color: root.text
-            font.family: "Noto Sans"
-            font.pixelSize: 13
+            font.family: "B612"
+            font.pixelSize: 14
             font.bold: true
         }
 
