@@ -20,10 +20,13 @@ Item {
 
     // Contextual validation is not shown until automatic revalidation succeeds.
     property bool validationConfirmationRequired: false
+    property bool manualCreationMode: false
+    property bool manualCompositionComplete: false
+    property bool manualValidationStarted: false
     property bool missionReady: false
     property bool warningActive: true
     property real validationPulse: 1.0
-    signal startMissionRequested()
+    signal startMissionRequested()\n    signal validateManualMissionRequested()
 
     Rectangle {
         anchors.fill: parent
@@ -114,13 +117,13 @@ Item {
     }
 
     Rectangle {
-        visible: root.validationConfirmationRequired
+        visible: root.validationConfirmationRequired || (root.manualCreationMode && !root.manualValidationStarted)
         x: 16
         y: 286
         width: parent.width - 32
         height: 38
         color: "transparent"
-        border.color: Qt.rgba(root.green.r, root.green.g, root.green.b, root.validationPulse)
+        border.color: Qt.rgba(root.green.r, root.green.g, root.green.b, root.validationPulse)\n        opacity: root.manualCreationMode && !root.manualCompositionComplete ? 0.55 : 1.0
         border.width: 1
     }
 
@@ -130,7 +133,7 @@ Item {
         y: 286
         width: parent.width - 32
         height: 38
-        text: "VALIDATE MISSION"
+        text: root.manualCreationMode ? "ВАЛИДАЦИЯ МИССИИ" : "VALIDATE MISSION"\n        opacity: root.manualCreationMode && !root.manualCompositionComplete ? 0.65 : 1.0
         color: root.green
         font.family: "B612"
         font.pixelSize: 12
@@ -139,8 +142,22 @@ Item {
         verticalAlignment: Text.AlignVCenter
     }
 
+    MouseArea {
+        visible: root.manualCreationMode && !root.manualValidationStarted
+        x: 16
+        y: 286
+        width: parent.width - 32
+        height: 38
+        enabled: root.manualCompositionComplete
+        cursorShape: enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
+        onClicked: {
+            root.manualValidationStarted = true
+            root.validateManualMissionRequested()
+        }
+    }
+
     SequentialAnimation on validationPulse {
-        running: root.validationConfirmationRequired
+        running: root.validationConfirmationRequired || (root.manualCreationMode && !root.manualValidationStarted)
         loops: Animation.Infinite
         NumberAnimation { from: 0.35; to: 1.0; duration: 650; easing.type: Easing.InOutSine }
         NumberAnimation { from: 1.0; to: 0.35; duration: 650; easing.type: Easing.InOutSine }
