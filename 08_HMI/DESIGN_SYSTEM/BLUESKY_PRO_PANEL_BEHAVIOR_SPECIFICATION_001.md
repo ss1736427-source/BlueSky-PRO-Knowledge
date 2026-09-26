@@ -117,7 +117,7 @@ Individual UAV telemetry is not duplicated into the aggregate mission header.
 
 ### Role
 
-**Миссии** — mission context, template selection and mission creation.
+**Миссии** — контекст миссии, выбор шаблона и создание миссии. Видимые подписи панели и её инструментов отображаются на русском языке.
 
 ### Behavior
 
