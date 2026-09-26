@@ -447,6 +447,18 @@ For every edited `.ui.qml` file:
 
 **Incident record:** Qt Design Studio rejected a `Component.onCompleted` JavaScript block in `MainContent.ui.qml` with error M223. The corrective rule above is now mandatory for subsequent HMI changes.
 
+### 13.4 Applied remediation — behavior-heavy components
+
+Imperative behavior was moved out of visual UI files into same-name runtime components:
+
+- `BottomToolbar.ui.qml` → `BottomToolbar.qml` (persistent settings, enable/disable, reorder, activation);
+- `LeftPanel.ui.qml` → `LeftPanel.qml` (mission/template actions and panel configuration);
+- `PanelSettingsPopup.ui.qml` → `PanelSettingsPopup.qml` (panel-tool configuration behavior).
+
+The visual/design counterparts remain separate where available. The QML project includes the `qml` directory, so the runtime components remain discoverable by the project.
+
+**Validation scope:** repository scan of the `qt/BlueSkyPRO-HMI/qml` directory found no remaining imperative JavaScript block patterns in files ending in `.ui.qml` after these moves. This is a source-level check; the files must still be opened in the local Qt Design Studio to confirm editor acceptance.
+
 ## 14. States to design in DS
 
 Every interactive component should be checked for applicable states:
