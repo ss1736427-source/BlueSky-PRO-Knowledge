@@ -134,9 +134,9 @@ Individual UAV telemetry is not duplicated into the aggregate mission header.
 
 - Show a compact mission identifier using only type and sequence: `A-001` (automatic) or `M-001` (manual); omit the `№` symbol and the `BS`/date prefix in collapsed display.
 - Clicking the compact identifier toggles the full immutable ID, e.g. `BS-260920-A-001`; clicking again returns to compact form.
-- Show a concise, single-line mission-purpose summary derived from the operator's aggregated task description. The UI receives this summary from the mission/task aggregation layer; it must not invent task details.
-- Keep `СКРЫТЬ` as a separate, right-aligned action in its existing position on the first row.
-- Truncate the summary with an ellipsis when needed; the identifier and `СКРЫТЬ` action must remain legible and must not overlap.
+- Place the compact mission ID and concise mission-purpose summary on one horizontal line. Keep `СКРЫТЬ` as a separate, right-aligned action on that same line.
+- The summary is derived from the operator's aggregated task description and supplied by the mission/task aggregation layer; the UI must not invent task details.
+- Truncate the summary with an ellipsis when needed. Expanding the full ID may reduce the summary's available width, but the ID and `СКРЫТЬ` action must remain legible and must not overlap.
 
 `СКРЫТЬ`:
 - automatically saves current mission state first;
