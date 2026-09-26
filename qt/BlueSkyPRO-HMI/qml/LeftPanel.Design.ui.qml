@@ -301,7 +301,7 @@ Item {
 
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: {\n                        if (root.missionCreationMode) root.toggleManualTemplate(index)\n                        else root.selectedTemplate = index\n                    }
+                    onClicked: root.selectedTemplate = index
                 }
             }
         }
