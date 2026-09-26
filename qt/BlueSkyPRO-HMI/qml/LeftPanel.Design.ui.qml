@@ -300,44 +300,6 @@ Item {
         }
     }
 
-    Column {
-        visible: !root.missionVisible && !root.missionCreationMode
-        anchors.horizontalCenter: parent.horizontalCenter
-        y: 72
-        spacing: 22
-
-        Text {
-            anchors.horizontalCenter: parent.horizontalCenter
-            text: "МИССИЯ СКРЫТА"
-            color: root.secondary
-            font.family: "Noto Sans"
-            font.pixelSize: 13
-            font.bold: true
-        }
-
-        Rectangle {
-            width: 150
-            height: 32
-            color: "transparent"
-            border.color: root.cyan
-            border.width: 1
-
-            Text {
-                anchors.fill: parent
-                text: "+ ВОССТАНОВИТЬ"
-                color: root.cyan
-                font.family: "B612 Mono"
-                font.pixelSize: 10
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: root.missionVisible = true
-            }
-        }
-    }
     Rectangle {
         id: createMissionButton
         x: 10
@@ -352,7 +314,7 @@ Item {
 
         Text {
             anchors.fill: parent
-            text: root.missionCreationMode ? "СОЗДАНИЕ МИССИИ · M" : "СОЗДАТЬ МИССИЮ"
+            text: "СОЗДАТЬ МИССИЮ"
             color: "#050A12"
             font.family: "B612"
             font.pixelSize: 12
