@@ -192,7 +192,7 @@ Item {
         Text {
             x: 10
             anchors.verticalCenter: parent.verticalCenter
-            text: root.missionId
+            text: "Миссия № " + root.missionId
             color: root.text
             font.family: "B612 Mono"
             font.pixelSize: 11
