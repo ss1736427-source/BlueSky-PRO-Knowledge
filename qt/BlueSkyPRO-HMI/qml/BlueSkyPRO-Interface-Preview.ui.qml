@@ -83,7 +83,7 @@ Item {
     Rectangle { x: 299; y: 86; width: 1; height: parent.height - 86 - 136; color: root.muted }
     Rectangle { x: parent.width - 340; y: 86; width: 1; height: parent.height - 86 - 136; color: root.muted; visible: root.rightPanelOpen }
 
-    Text { x: 18; y: 106; text: "MISSION CONTEXT"; color: root.secondary; font.family: "B612"; font.pixelSize: 13; font.bold: true }
+    Text { x: 18; y: 106; text: "Миссиия"; color: root.secondary; font.family: "B612"; font.pixelSize: 13; font.bold: true }
     Text { x: 18; y: 142; text: "BS-260920-A-001"; color: root.text; font.family: "B612 Mono"; font.pixelSize: 16; font.bold: true }
     Text { x: 18; y: 168; text: "Area Survey"; color: root.text; font.family: "B612"; font.pixelSize: 13 }
     Text { x: 18; y: 194; text: "4 UAV · BVLOS · wind-aware"; color: root.secondary; font.family: "B612"; font.pixelSize: 11 }
