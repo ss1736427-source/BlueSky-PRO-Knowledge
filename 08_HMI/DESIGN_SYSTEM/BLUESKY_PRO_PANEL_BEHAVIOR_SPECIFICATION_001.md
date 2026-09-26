@@ -133,7 +133,7 @@ Individual UAV telemetry is not duplicated into the aggregate mission header.
 ### Mission creation action
 
 - A dedicated `СОЗДАТЬ МИССИЮ` button is pinned to the bottom of the Left Panel, filled with controlled green `#64FF00`, with centered dark text.
-- The button remains in the same bottom position when the current mission is hidden; hiding the mission hides its context, not this action.
+- The button remains in the same bottom position when the current mission is hidden; hiding the mission hides its context and template list, not this action. Do not show an extra hidden-state placeholder or restore button in the panel body; the title-bar `+` remains the restore control.
 - Activating it collapses the previous mission context and switches the workspace map to a clean manual-creation state. The previous mission is not deleted.
 - During creation mode, the template list remains available for selection. The active creation is marked as manual (`M`); its immutable full ID is assigned by the mission-creation/core layer when the mission record is created.
 - The fixed button is not a template item and must not appear in or reorder with the template list.
