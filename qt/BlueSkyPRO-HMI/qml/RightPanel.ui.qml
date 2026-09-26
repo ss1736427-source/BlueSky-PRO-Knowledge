@@ -117,7 +117,7 @@ Item {
     }
 
     Rectangle {
-        visible: root.validationConfirmationRequired || (root.manualCreationMode && !root.manualValidationStarted)
+        visible: root.manualCreationMode ? !root.manualValidationStarted : root.validationConfirmationRequired
         x: 16
         y: 286
         width: parent.width - 32
@@ -156,7 +156,7 @@ Item {
     }
 
     SequentialAnimation on validationPulse {
-        running: root.validationConfirmationRequired || (root.manualCreationMode && !root.manualValidationStarted)
+        running: root.manualCreationMode ? !root.manualValidationStarted : root.validationConfirmationRequired
         loops: Animation.Infinite
         NumberAnimation { from: 0.35; to: 1.0; duration: 650; easing.type: Easing.InOutSine }
         NumberAnimation { from: 1.0; to: 0.35; duration: 650; easing.type: Easing.InOutSine }
