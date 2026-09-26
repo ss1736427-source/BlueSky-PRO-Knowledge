@@ -245,6 +245,11 @@ OpenSpaceResult ConstrainedOpenSpace::evaluateRoute(
             continue;
         }
 
+        if (!std::isfinite(from->altitude_m) || !std::isfinite(to->altitude_m)) {
+            reject(result, "INVALID_ROUTE_WAYPOINT_ALTITUDE:" + segment.segment_id);
+            continue;
+        }
+
         const double min_altitude = std::min(from->altitude_m, to->altitude_m);
         const double max_altitude = std::max(from->altitude_m, to->altitude_m);
         auto segment_result = evaluateSegment(environment,
