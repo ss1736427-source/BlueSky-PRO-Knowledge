@@ -15,6 +15,7 @@ Item {
     property color divider: "#7F7F7F"
 
     property bool missionVisible: true
+    property bool missionCreationMode: false
     property bool missionIdExpanded: false
     property bool panelConfigOpen: false
     property int selectedTemplate: 2
@@ -235,7 +236,7 @@ Item {
     }
 
     Column {
-        visible: root.missionVisible && !root.panelConfigOpen
+        visible: (root.missionVisible || root.missionCreationMode) && !root.panelConfigOpen
         x: 10
         y: 92
         width: parent.width - 20
@@ -248,8 +249,7 @@ Item {
                 "3D картография",
                 "Линейное обследование",
                 "Картографирование коридора",
-                "Точка интереса",
-                "Создать миссию"
+                "Точка интереса"
             ]
 
             delegate: Rectangle {
@@ -301,7 +301,7 @@ Item {
     }
 
     Column {
-        visible: !root.missionVisible
+        visible: !root.missionVisible && !root.missionCreationMode
         anchors.horizontalCenter: parent.horizontalCenter
         y: 72
         spacing: 22
@@ -338,4 +338,37 @@ Item {
             }
         }
     }
+    Rectangle {
+        id: createMissionButton
+        x: 10
+        y: parent.height - height - 12
+        width: parent.width - 20
+        height: 44
+        radius: 2
+        color: "#64FF00"
+        border.color: "#64FF00"
+        border.width: 1
+        z: 30
+
+        Text {
+            anchors.fill: parent
+            text: root.missionCreationMode ? "СОЗДАНИЕ МИССИИ · M" : "СОЗДАТЬ МИССИЮ"
+            color: "#050A12"
+            font.family: "B612"
+            font.pixelSize: 12
+            font.bold: true
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                root.missionVisible = false
+                root.missionCreationMode = true
+                root.missionIdExpanded = false
+            }
+        }
+    }
+
 }
