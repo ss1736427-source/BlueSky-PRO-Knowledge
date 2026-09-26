@@ -40,7 +40,7 @@ Item {
         border.width: 1
         Text {
             anchors.centerIn: parent
-            text: "тЧА LEFT"
+            text: "LEFT"
             color: root.primaryColor
             font.family: "B612 Mono"
             font.pixelSize: 16
@@ -148,7 +148,7 @@ Item {
         border.width: 1
         Text {
             anchors.centerIn: parent
-            text: "RIGHT тЦ╢"
+            text: "RIGHT"
             color: root.primaryColor
             font.family: "B612 Mono"
             font.pixelSize: 16
@@ -188,7 +188,7 @@ Item {
         color: "transparent"
         Text {
             anchors.centerIn: parent
-            text: "тШ░"
+            text: "TOOLS"
             color: root.primaryColor
             font.family: "B612 Mono"
             font.pixelSize: 16
@@ -199,7 +199,7 @@ Item {
     Text {
         x: 24
         y: 80
-        text: "DS / BOTTOM TOOLBAR / 001 тАФ FIXED ANCHORS + CONFIGURABLE WORKSPACE CONTEXTS"
+        text: "DS / BOTTOM TOOLBAR / 001 — FIXED ANCHORS + CONFIGURABLE WORKSPACE CONTEXTS"
         color: root.serviceColor
         font.family: "IBM Plex Sans Condensed"
         font.pixelSize: 9
