@@ -21,6 +21,8 @@ Item {
     property string uavDecision: ""
     property string lastJournalEvent: ""
     property string missionId: "BS-260920-A-001"
+    // Populated by the mission/task aggregation layer; current value is a design-preview example.
+    property string missionSummary: "3D картография территории"
     property string journalStatus: "READY"
     property string activeTool: bottomToolbar.activeTool
     signal journalEvent(string eventType, int uavIndex, string decision)
@@ -57,9 +59,12 @@ Item {
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.bottom: parent.bottom
+            // TopHeader owns the shared horizontal separator.
+            showTopBorder: false
             width: root.leftPanelOpen ? root.leftWidth : 0
             missionVisible: root.missionVisible
             missionId: root.missionId
+            missionSummary: root.missionSummary
             onHideMissionRequested: root.missionVisible = false
             onRestoreMissionRequested: root.missionVisible = true
             onCreateMissionRequested: root.missionVisible = true

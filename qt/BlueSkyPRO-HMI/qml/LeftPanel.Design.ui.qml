@@ -15,6 +15,7 @@ Item {
     property color divider: "#7F7F7F"
 
     property bool missionVisible: true
+    property bool missionIdExpanded: false
     property bool panelConfigOpen: false
     property int selectedTemplate: 2
     property bool analysisVisible: true
@@ -25,8 +26,41 @@ Item {
     Rectangle {
         anchors.fill: parent
         color: root.bg
-        border.color: root.cyan
-        border.width: 1
+    }
+
+    // The neighboring header owns this shared top seam; draw it once here
+    // as the seam reference, not as a second panel outline.
+    Rectangle {
+        x: 0
+        y: 0
+        width: parent.width
+        height: 1
+        color: root.cyan
+        antialiasing: false
+    }
+    Rectangle {
+        x: 0
+        y: 1
+        width: 1
+        height: parent.height - 1
+        color: root.cyan
+        antialiasing: false
+    }
+    Rectangle {
+        x: parent.width - 1
+        y: 1
+        width: 1
+        height: parent.height - 1
+        color: root.cyan
+        antialiasing: false
+    }
+    Rectangle {
+        x: 0
+        y: parent.height - 1
+        width: parent.width
+        height: 1
+        color: root.cyan
+        antialiasing: false
     }
 
     // Panel title bar: selected surface, cyan outline, controlled typography.
@@ -85,13 +119,32 @@ Item {
         color: root.card
 
         Text {
+            id: missionIdLabel
             x: 10
+            width: root.missionIdExpanded ? 142 : 48
             anchors.verticalCenter: parent.verticalCenter
-            text: "BS-260920-A-001"
+            elide: Text.ElideRight
+            text: root.missionIdExpanded ? "BS-260920-A-001" : "A-001"
             color: root.text
             font.family: "B612 Mono"
             font.pixelSize: 11
             font.bold: true
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: root.missionIdExpanded = !root.missionIdExpanded
+            }
+        }
+
+        Text {
+            x: missionIdLabel.x + missionIdLabel.width + 8
+            width: Math.max(0, parent.width - x - 88)
+            anchors.verticalCenter: parent.verticalCenter
+            elide: Text.ElideRight
+            text: "3D картография территории"
+            color: root.secondary
+            font.family: "Noto Sans"
+            font.pixelSize: 10
         }
 
         Text {
@@ -115,7 +168,7 @@ Item {
     Rectangle {
         visible: root.panelConfigOpen && root.missionVisible
         x: 10
-        y: 90
+        y: 108
         width: parent.width - 20
         height: 154
         color: root.selectedSurface
