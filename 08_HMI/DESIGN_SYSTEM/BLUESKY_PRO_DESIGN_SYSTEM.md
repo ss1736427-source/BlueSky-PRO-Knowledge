@@ -149,7 +149,9 @@ Panels, cards, headers, controls, telemetry blocks and navigation elements are s
 **When two panels meet, their shared boundary is drawn once, never as two overlapping outlines.** This rule applies to every horizontal and vertical junction, including panel-to-panel, panel-to-workspace, workspace-to-status, and workspace-to-toolbar joins.
 
 - Assign each shared edge one owner (one component draws the separator).
-- The adjacent component suppresses its duplicate edge on that same boundary.
+- Components expose per-edge visibility controls (showTopBorder, showRightBorder, showBottomBorder, showLeftBorder) wherever a panel frame can meet another panel.
+- The adjacent component suppresses its duplicate edge on that same boundary; set its corresponding edge control to false.
+- In the main composition, TopHeader owns the horizontal seam immediately below the header; LeftPanel suppresses its top edge when docked directly below it.
 - Keep the shared stroke aligned to the controlled 1 px structural line; do not create a 2 px seam by stacking borders.
 - Preserve the rule when panels are resized, collapsed, restored, or rearranged.
 - At T-junctions and corners, join strokes cleanly without doubled pixels or gaps.
