@@ -82,7 +82,7 @@ Item {
         manualTemplateSelection = next
         selectedTemplate = index
         templateSelected(index)
-        manualTemplateSelectionChanged(manualTemplateSelection)
+        manualTemplateSelectionCommitted(manualTemplateSelection)
     }
     property bool analysisVisible: true
     property bool instrumentsVisible: false
@@ -93,7 +93,7 @@ Item {
     signal restoreMissionRequested()
     signal missionTemplateMenuRequested()
     signal templateSelected(int index)
-    signal manualTemplateSelectionChanged(var indices)
+    signal manualTemplateSelectionCommitted(var indices)
     signal createMissionRequested()
     signal panelConfigurationChanged()
     signal missionHidden()
