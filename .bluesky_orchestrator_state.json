@@ -1,12 +1,12 @@
 {
-  "last_main_sha": "fa2378b0610377bca7cdae1af77adac48011506f",
+  "last_main_sha": "c864355b2da255e48c600c2c052526c1639311cd",
   "verified_sha": "5310fd9683b6b198917b4cb65253aabc9607b812",
-  "decision_required": false,
+  "decision_required": true,
   "ci_required": true,
-  "current_work_package": "Phase 5 Universal Autopilot Integration — manual / override authority boundary",
-  "checkpoint": "PH4-INT-027 CLOSED; G0-08 SAFETY RECONCILIATION IMPLEMENTED AND CI VERIFIED AT 5310fd9683b6b198917b4cb65253aabc9607b812; ARCH-OPS-053 NEXT",
+  "current_work_package": "Phase 5 Universal Autopilot Integration — manual / override authority policy",
+  "checkpoint": "G0-08 SAFETY RECONCILIATION IMPLEMENTED; CI PASS AT 5310fd9683b6b198917b4cb65253aabc9607b812; ARCH-OPS-053 SPECIFIED; AUTHORITY MATRIX AWAITS APPROVAL",
   "real_execution": "DEFERRED",
   "quantitative_c2_basis": "DEFERRED",
   "current_ci_status": "PASS_FOR_VERIFIED_SHA",
-  "next_deterministic_action": "Implement the minimal deterministic ARCH-OPS-053 authority gate and SIL tests without vendor-specific RC semantics or changing onboard failsafe authority; then verify the resulting exact code commit through CI."
+  "next_deterministic_action": "Await approval of the ARCH-OPS-053 authority-state by command-class matrix. Do not implement command admission semantics until the matrix is approved. Then implement the gate and SIL tests and verify the resulting code commit through CI."
 }
