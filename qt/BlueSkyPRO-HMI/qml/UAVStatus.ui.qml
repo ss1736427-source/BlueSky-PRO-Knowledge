@@ -16,10 +16,10 @@ Item {
 
     // Visual working model. Final parameter set remains configurable per UAV panel.
     property var uavModel: [
-        { id: "UAV-01", state: "READY", battery: "96%", detail: "C2 OK ┬╖ HGT 80 m" },
-        { id: "UAV-02", state: "READY", battery: "94%", detail: "C2 OK ┬╖ HGT 80 m" },
+        { id: "UAV-01", state: "READY", battery: "96%", detail: "C2 OK  |  HGT 80 m" },
+        { id: "UAV-02", state: "READY", battery: "94%", detail: "C2 OK  |  HGT 80 m" },
         { id: "UAV-03", state: "CHECK", battery: "91%", detail: "correction pending" },
-        { id: "UAV-04", state: "READY", battery: "95%", detail: "C2 OK ┬╖ HGT 80 m" }
+        { id: "UAV-04", state: "READY", battery: "95%", detail: "C2 OK  |  HGT 80 m" }
     ]
 
     Rectangle {
@@ -50,7 +50,7 @@ Item {
                     anchors.fill: parent
                     anchors.margins: 10
                     text: modelData.id + "  " + modelData.state
-                          + "\nBAT " + modelData.battery + " ┬╖ " + modelData.detail
+                          + "\nBAT " + modelData.battery + "  |  " + modelData.detail
                     color: modelData.state === "CHECK" ? root.amber : root.text
                     font.family: "B612 Mono"
                     font.pixelSize: 10
