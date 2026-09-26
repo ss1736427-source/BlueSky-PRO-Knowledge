@@ -25,6 +25,36 @@ int main() {
         environment, {{58.99, 29.99}, {58.995, 29.995}, 100});
     assert(open.allowed);
 
+    // Invalid active restriction geometry must fail closed rather than disappear.
+    auto invalid_polygon_environment = environment;
+    invalid_polygon_environment.restrictions[0].polygon = {{59, 30}, {59.01, 30.01}};
+    const auto invalid_polygon = ConstrainedOpenSpace::evaluateSegment(
+        invalid_polygon_environment, crossing);
+    assert(!invalid_polygon.allowed);
+    assert(invalid_polygon.blocking_restriction_ids.front() ==
+           "INVALID_RESTRICTION_GEOMETRY:NOTAM-1");
+
+    auto invalid_circle_environment = environment;
+    auto circle = restriction;
+    circle.geometry_type = RestrictionGeometryType::Circle;
+    circle.center = {59.0, 30.0};
+    circle.radius_m = -1.0;
+    invalid_circle_environment.restrictions[0] = circle;
+    const auto invalid_circle = ConstrainedOpenSpace::evaluateSegment(
+        invalid_circle_environment, crossing);
+    assert(!invalid_circle.allowed);
+    assert(invalid_circle.blocking_restriction_ids.front() ==
+           "INVALID_RESTRICTION_GEOMETRY:NOTAM-1");
+
+    auto circle_environment = environment;
+    circle.geometry_type = RestrictionGeometryType::Circle;
+    circle.center = {59.0, 30.0};
+    circle.radius_m = 500.0;
+    circle_environment.restrictions[0] = circle;
+    const auto circle_blocked = ConstrainedOpenSpace::evaluateSegment(
+        circle_environment, crossing);
+    assert(!circle_blocked.allowed);
+
     restriction.minimum_altitude_m = 150;
     environment.restrictions[0] = restriction;
     assert(ConstrainedOpenSpace::evaluateSegment(environment, crossing).allowed);
