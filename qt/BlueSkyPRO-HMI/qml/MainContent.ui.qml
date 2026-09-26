@@ -33,6 +33,7 @@ Item {
     property var missionTemplateIndices: [2]
     property string journalStatus: "READY"
     property string activeTool: bottomToolbar.activeTool
+    readonly property bool uavPanelOpen: activeTool === "UAV"
     signal journalEvent(string eventType, int uavIndex, string decision)
     signal journalAppendRequested(string eventType, string missionId, int uavIndex, string decision)
     signal uavDecisionRequested(string decision, int uavIndex)
@@ -60,7 +61,7 @@ Item {
         anchors.top: topHeader.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.bottom: uavStatus.top
+        anchors.bottom: root.uavPanelOpen ? uavStatus.top : bottomToolbar.top
 
         LeftPanel {
             id: leftPanel
@@ -136,6 +137,7 @@ Item {
 
     UAVStatus {
         id: uavStatus
+        visible: root.uavPanelOpen
         selectedIndex: root.selectedUavIndex
         onUavSelected: root.selectedUavIndex = index
         anchors.left: parent.left
