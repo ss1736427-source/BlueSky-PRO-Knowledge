@@ -117,7 +117,7 @@ Individual UAV telemetry is not duplicated into the aggregate mission header.
 
 ### Role
 
-Mission context and Mission Templates.
+**Миссии** — mission context, template selection and mission creation.
 
 ### Behavior
 
@@ -125,7 +125,7 @@ Mission context and Mission Templates.
 - same control closes/collapses it;
 - toolbar control state follows actual panel state;
 - panel remains compact and content-sized;
-- default list shows templates currently used by the active task;
+- the panel title is `Миссии`; the list provides mission-template selection and creation;
 - other available templates remain accessible through the existing list/menu;
 - selecting a hidden template makes it visible and active/highlighted;
 - new tools/templates are appended at the bottom.
