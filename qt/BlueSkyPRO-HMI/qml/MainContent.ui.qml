@@ -15,6 +15,7 @@ Item {
     property bool leftPanelOpen: true
     property bool rightPanelOpen: true
     property bool missionVisible: true
+    property bool missionCreationMode: false
     property bool missionReady: false
     property bool warningActive: true
     property int selectedUavIndex: -1
@@ -63,11 +64,12 @@ Item {
             showTopBorder: false
             width: root.leftPanelOpen ? root.leftWidth : 0
             missionVisible: root.missionVisible
+            missionCreationMode: root.missionCreationMode
             missionId: root.missionId
             missionSummary: root.missionSummary
-            onHideMissionRequested: root.missionVisible = false
-            onRestoreMissionRequested: root.missionVisible = true
-            onCreateMissionRequested: root.missionVisible = true
+            onHideMissionRequested: { root.missionVisible = false; root.missionCreationMode = false }
+            onRestoreMissionRequested: { root.missionVisible = true; root.missionCreationMode = false }
+            onCreateMissionRequested: { root.missionVisible = false; root.missionCreationMode = true }
         }
 
         FlightChart {
@@ -77,6 +79,7 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             missionVisible: root.missionVisible
+            manualCreationMode: root.missionCreationMode
             visible: root.activeTool === "MAP"
             onMapDoubleClicked: root.leftPanelOpen = false
         }
