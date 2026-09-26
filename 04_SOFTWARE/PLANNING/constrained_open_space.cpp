@@ -76,6 +76,23 @@ bool altitudeOverlaps(const SpatialRestriction& restriction, const SpatialEdge& 
               edge_min > restriction.maximum_altitude_m));
 }
 
+bool validCoordinate(const GeoPoint& point) {
+    return std::isfinite(point.latitude_deg) && std::isfinite(point.longitude_deg) &&
+           point.latitude_deg >= -90.0 && point.latitude_deg <= 90.0 &&
+           point.longitude_deg >= -180.0 && point.longitude_deg <= 180.0;
+}
+
+bool validRestriction(const SpatialRestriction& restriction) {
+    if (restriction.geometry_type == RestrictionGeometryType::Circle) {
+        return validCoordinate(restriction.center) &&
+               std::isfinite(restriction.radius_m) && restriction.radius_m >= 0.0;
+    }
+    if (restriction.geometry_type != RestrictionGeometryType::Polygon ||
+        restriction.polygon.size() < 3) return false;
+    return std::all_of(restriction.polygon.begin(), restriction.polygon.end(),
+                       validCoordinate);
+}
+
 bool intersects(const SpatialRestriction& restriction, const SpatialEdge& edge) {
     if (!restriction.active || !altitudeOverlaps(restriction, edge)) return false;
 
@@ -168,6 +185,10 @@ OpenSpaceResult ConstrainedOpenSpace::evaluateSegment(
         return result;
     }
     for (const auto& restriction : environment.restrictions) {
+        if (restriction.active && !validRestriction(restriction)) {
+            reject(result, "INVALID_RESTRICTION_GEOMETRY:" + restriction.restriction_id);
+            return result;
+        }
         if (intersects(restriction, edge)) {
             result.blocking_restriction_ids.push_back(restriction.restriction_id);
         }
