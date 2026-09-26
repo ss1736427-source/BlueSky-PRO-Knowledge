@@ -251,6 +251,17 @@ Closing the visual warning does not erase the event.
 
 Serious/critical warnings may also appear as a large alert over the map. The event remains in the Journal/Audit trail.
 
+### Manual mission validation
+
+- When manual mission creation starts, the Right Panel displays a dedicated pulsing green `ВАЛИДАЦИЯ МИССИИ` action.
+- The action remains visible while the operator assembles the mission from selected template scaffolds on the Flight Chart.
+- It is not actionable until the map/mission editor reports that the combined composition is complete.
+- The operator must explicitly press the action. This emits a manual-validation request to the common planning workflow.
+- Once the request is dispatched, the action immediately disappears and is not offered again for that creation pass.
+- The request enters the same downstream planning, validation, constraints, route/performance, trajectory/conflict and readiness process as an automatically composed mission. Only template selection differs.
+- The HMI action is a workflow trigger, not proof that validation succeeded. Readiness and safety state must be set only from authoritative core results.
+- The current Flight Chart is a structural placeholder. Its completion signal is an integration point; actual completion detection and dispatch into the planning core require the map editor/core implementation.
+
 ### Automatic validation
 
 Relevant readiness-affecting changes trigger automatic revalidation, including route/WP, UAV/configuration, battery/resource, equipment, weather/forecast, restrictions/NOTAM and other relevant inputs.
