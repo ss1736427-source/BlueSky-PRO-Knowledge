@@ -35,6 +35,11 @@ Item {
     property color cyan: "#32FFFF"
     property color divider: "#7F7F7F"
 
+    property bool showTopBorder: true
+    property bool showRightBorder: true
+    property bool showBottomBorder: true
+    property bool showLeftBorder: true
+
     property bool missionVisible: true
     property string missionId: "BS-260920-A-001"
     property bool templatesExpanded: true
@@ -69,13 +74,43 @@ Item {
         color: root.bg
     }
 
-    // Full panel frame follows the interface structural-stroke language.
+    // Edge ownership is configurable. When a neighboring component already
+    // draws a shared separator, disable this edge to prevent a doubled stroke.
     Rectangle {
-        anchors.fill: parent
-        color: "transparent"
-        border.color: root.cyan
-        border.width: 1
-        radius: 1
+        visible: root.showTopBorder
+        x: 0
+        y: 0
+        width: parent.width
+        height: 1
+        color: root.cyan
+        antialiasing: false
+    }
+    Rectangle {
+        visible: root.showRightBorder
+        x: parent.width - 1
+        y: 0
+        width: 1
+        height: parent.height
+        color: root.cyan
+        antialiasing: false
+    }
+    Rectangle {
+        visible: root.showBottomBorder
+        x: 0
+        y: parent.height - 1
+        width: parent.width
+        height: 1
+        color: root.cyan
+        antialiasing: false
+    }
+    Rectangle {
+        visible: root.showLeftBorder
+        x: 0
+        y: 0
+        width: 1
+        height: parent.height
+        color: root.cyan
+        antialiasing: false
     }
 
     // Panel title bar: distinct hierarchy within the panel, using the
