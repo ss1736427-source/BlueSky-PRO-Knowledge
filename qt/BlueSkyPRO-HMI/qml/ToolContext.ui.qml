@@ -55,7 +55,7 @@ Item {
         Text {
             x: 18
             y: 14
-            text: "UAV-03   " + (root.fpvManual ? "MANUAL ● ACTIVE" : "AUTO")
+            text: root.selectedUavId + "   " + (root.fpvManual ? "MANUAL ● ACTIVE" : "AUTO")
             color: root.fpvManual ? "#64FF00" : "#FFFFFF"
             font.family: "B612 Mono"
             font.pixelSize: 13
