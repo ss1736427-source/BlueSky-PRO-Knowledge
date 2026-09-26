@@ -1,6 +1,7 @@
 #pragma once
 
 #include "model/route_model.hpp"
+#include "route_constraint_validator.hpp"
 #include <cstdint>
 #include <string>
 #include <vector>
