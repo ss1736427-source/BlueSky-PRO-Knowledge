@@ -110,6 +110,10 @@ Item {
             anchors.right: parent.right
             anchors.top: parent.top
             anchors.bottom: parent.bottom
+            // A zero-width panel does not clip its children: hide the whole
+            // component when collapsed so buttons/text/popups cannot leak
+            // into the Flight Chart.
+            visible: root.rightPanelOpen
             width: root.rightPanelOpen ? root.rightWidth : 0
             missionReady: root.missionReady
             warningActive: root.warningActive
