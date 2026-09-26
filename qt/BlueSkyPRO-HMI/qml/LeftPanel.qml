@@ -190,15 +190,16 @@ Item {
         x: 10
         y: 50
         width: parent.width - 20
-        height: 54
+        height: 36
         color: root.card
         border.color: "transparent"
         border.width: 0
 
         Text {
+            id: missionIdLabel
             x: 10
-            y: 4
-            width: parent.width - 104
+            width: root.missionIdExpanded ? 142 : 48
+            anchors.verticalCenter: parent.verticalCenter
             elide: Text.ElideRight
             text: root.missionIdExpanded ? root.missionId : root.missionShortId
             color: root.text
@@ -213,9 +214,9 @@ Item {
         }
 
         Text {
-            x: 10
-            y: 31
-            width: parent.width - 104
+            x: missionIdLabel.x + missionIdLabel.width + 8
+            width: Math.max(0, parent.width - x - 88)
+            anchors.verticalCenter: parent.verticalCenter
             elide: Text.ElideRight
             text: root.missionSummary
             color: root.secondary
@@ -225,7 +226,7 @@ Item {
 
         Text {
             x: parent.width - 66
-            y: 4
+            anchors.verticalCenter: parent.verticalCenter
             text: "СКРЫТЬ"
             color: root.secondary
             font.family: "B612 Mono"
