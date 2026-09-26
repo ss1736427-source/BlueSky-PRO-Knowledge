@@ -58,6 +58,16 @@ FINAL INTEGRITY / CHANGE-IMPACT CHECK
 7. The selected route set is compiled into the flight profile using already calculated trajectory/performance results.
 8. Final validation verifies integrity and material input changes. It does not repeat the entire planning calculation.
 
+## 2.3 Flight Chart as the visual representation of the planning environment
+
+The Flight Chart is the primary planning instrument and shall display the same current environment snapshot used by constrained spatial search.
+
+The map shall visually represent, as applicable, NOTAM, airspace restrictions, terrain/obstacles, altitude-dependent and time-dependent restrictions and other hard spatial constraints. The visualization is presentation of the canonical environment model; it does not create a second restriction dataset or perform an independent planning calculation.
+
+The operator must be able to visually understand the relationship between the open space, restrictions and the route being constructed. Selecting a restriction may expose its identity, source, validity, altitude limits and snapshot/version.
+
+If the displayed environment becomes stale, the Flight Chart shall indicate that state rather than silently presenting it as current.
+
 ## 3. Coverage-first planning
 
 For survey, mapping, inspection and similar tasks:
