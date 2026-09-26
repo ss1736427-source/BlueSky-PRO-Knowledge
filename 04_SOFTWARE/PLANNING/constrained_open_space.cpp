@@ -1,39 +1,222 @@
 #include "constrained_open_space.hpp"
+
 #include <algorithm>
 #include <cmath>
-#include <functional>
+#include <cstdint>
+#include <iomanip>
+#include <limits>
+#include <sstream>
+#include <string>
+#include <vector>
+
 namespace bluesky::planning {
 namespace {
-constexpr double kM=111320.0;
-struct XY{double x;double y;};
-XY project(const GeoPoint&p,double lat){return {p.longitude_deg*kM*std::cos(lat*3.141592653589793/180.0),p.latitude_deg*kM};}
-double cross(XY a,XY b,XY c){return (b.x-a.x)*(c.y-a.y)-(b.y-a.y)*(c.x-a.x);}
-bool on(XY a,XY b,XY p){constexpr double e=1e-7;return std::abs(cross(a,b,p))<e&&p.x>=std::min(a.x,b.x)-e&&p.x<=std::max(a.x,b.x)+e&&p.y>=std::min(a.y,b.y)-e&&p.y<=std::max(a.y,b.y)+e;}
-bool inter(XY a,XY b,XY c,XY d){double x=cross(a,b,c),y=cross(a,b,d),z=cross(c,d,a),w=cross(c,d,b);if(((x>0&&y<0)||(x<0&&y>0))&&((z>0&&w<0)||(z<0&&w>0)))return true;return on(a,b,c)||on(a,b,d)||on(c,d,a)||on(c,d,b);}
-bool inside(XY p,const std::vector<XY>&v){bool in=false;if(v.size()<3)return false;for(size_t i=0,j=v.size()-1;i<v.size();j=i){if((v[i].y>p.y)!=(v[j].y>p.y)){double x=v[j].x+(p.y-v[j].y)*(v[i].x-v[j].x)/(v[i].y-v[j].y);if(p.x<x)in=!in;}}return in;}
-double dist(XY p,XY a,XY b){double dx=b.x-a.x,dy=b.y-a.y,d=dx*dx+dy*dy;if(d==0)return std::hypot(p.x-a.x,p.y-a.y);double t=std::max(0.0,std::min(1.0,((p.x-a.x)*dx+(p.y-a.y)*dy)/d));return std::hypot(p.x-(a.x+t*dx),p.y-(a.y+t*dy));}
-bool hit(const SpatialRestriction&r,const SpatialEdge&e){
- if(!r.active)return false;
- const double edge_min = std::isnan(e.altitude_min_m) ? e.altitude_m : e.altitude_min_m;
- double edge_max = std::isnan(e.altitude_max_m) ? e.altitude_m : e.altitude_max_m;
- if (edge_min > edge_max) std::swap(edge_min, edge_max);
- if(edge_max<r.minimum_altitude_m||(r.maximum_altitude_m>0&&edge_min>r.maximum_altitude_m))return false;
- double lat=(e.from.latitude_deg+e.to.latitude_deg)*0.5;XY a=project(e.from,lat),b=project(e.to,lat);
- if(r.geometry_type==RestrictionGeometryType::Circle)return dist(project(r.center,lat),a,b)<=r.radius_m;
- if(r.polygon.size()<3)return false;std::vector<XY>p;for(auto&g:r.polygon)p.push_back(project(g,lat));
- if(inside(a,p)||inside(b,p))return true;for(size_t i=0;i<p.size();++i)if(inter(a,b,p[i],p[(i+1)%p.size()]))return true;return false;
+constexpr double kMetersPerDegree = 111320.0;
+constexpr double kPi = 3.14159265358979323846;
+
+struct XY { double x; double y; };
+
+XY project(const GeoPoint& p, double reference_latitude) {
+    return {p.longitude_deg * kMetersPerDegree *
+                std::cos(reference_latitude * kPi / 180.0),
+            p.latitude_deg * kMetersPerDegree};
 }
-std::string dep(const ConstrainedEnvironmentSnapshot&e){std::hash<std::string>h;std::string s=e.snapshot_id+"|"+e.snapshot_version+"|"+e.calculation_input_version;for(auto&r:e.restrictions){s+="|"+r.restriction_id+"|"+r.source_id+"|"+r.snapshot_version+"|"+std::to_string(static_cast<int>(r.geometry_type))+"|"+std::to_string(r.active)+"|"+std::to_string(r.minimum_altitude_m)+"|"+std::to_string(r.maximum_altitude_m);for(auto&p:r.polygon)s+="|"+std::to_string(p.latitude_deg)+"|"+std::to_string(p.longitude_deg);s+="|C|"+std::to_string(r.center.latitude_deg)+"|"+std::to_string(r.center.longitude_deg)+"|"+std::to_string(r.radius_m);}return std::to_string(h(s));}
-OpenSpaceResult init(const ConstrainedEnvironmentSnapshot&e){return {true,e.snapshot_id,e.snapshot_version,e.calculation_input_version,dep(e),{}};}
+
+double cross(XY a, XY b, XY c) {
+    return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
 }
-OpenSpaceResult ConstrainedOpenSpace::evaluateSegment(const ConstrainedEnvironmentSnapshot&e,const SpatialEdge&edge){
- auto r=init(e);if(!e.complete){r.allowed=false;r.blocking_restriction_ids.push_back("ENVIRONMENT_INCOMPLETE");return r;}
- for(const auto&x:e.restrictions)if(hit(x,edge))r.blocking_restriction_ids.push_back(x.restriction_id);
- r.allowed=r.blocking_restriction_ids.empty();return r;
+
+bool onSegment(XY a, XY b, XY p) {
+    constexpr double epsilon = 1e-7;
+    return std::abs(cross(a, b, p)) < epsilon &&
+           p.x >= std::min(a.x, b.x) - epsilon &&
+           p.x <= std::max(a.x, b.x) + epsilon &&
+           p.y >= std::min(a.y, b.y) - epsilon &&
+           p.y <= std::max(a.y, b.y) + epsilon;
 }
-OpenSpaceResult ConstrainedOpenSpace::evaluateRoute(const ConstrainedEnvironmentSnapshot&e,const Route&route){
- auto r=init(e);if(!e.complete){r.allowed=false;r.blocking_restriction_ids.push_back("ENVIRONMENT_INCOMPLETE");return r;}
- for(const auto&s:route.segments){auto a=std::find_if(route.waypoints.begin(),route.waypoints.end(),[&](const auto&w){return w.waypoint_id==s.from_waypoint_id;});auto b=std::find_if(route.waypoints.begin(),route.waypoints.end(),[&](const auto&w){return w.waypoint_id==s.to_waypoint_id;});if(a==route.waypoints.end()||b==route.waypoints.end())continue;const double min_alt=std::min(a->altitude_m,b->altitude_m); const double max_alt=std::max(a->altitude_m,b->altitude_m); auto x=evaluateSegment(e,{a->position,b->position,(min_alt+max_alt)*0.5,min_alt,max_alt});r.blocking_restriction_ids.insert(r.blocking_restriction_ids.end(),x.blocking_restriction_ids.begin(),x.blocking_restriction_ids.end());}
- std::sort(r.blocking_restriction_ids.begin(),r.blocking_restriction_ids.end());r.blocking_restriction_ids.erase(std::unique(r.blocking_restriction_ids.begin(),r.blocking_restriction_ids.end()),r.blocking_restriction_ids.end());r.allowed=r.blocking_restriction_ids.empty();return r;
+
+bool segmentsIntersect(XY a, XY b, XY c, XY d) {
+    const double x = cross(a, b, c), y = cross(a, b, d);
+    const double z = cross(c, d, a), w = cross(c, d, b);
+    if (((x > 0 && y < 0) || (x < 0 && y > 0)) &&
+        ((z > 0 && w < 0) || (z < 0 && w > 0))) return true;
+    return onSegment(a, b, c) || onSegment(a, b, d) ||
+           onSegment(c, d, a) || onSegment(c, d, b);
 }
+
+bool insidePolygon(XY p, const std::vector<XY>& vertices) {
+    if (vertices.size() < 3) return false;
+    bool inside = false;
+    for (std::size_t i = 0, j = vertices.size() - 1; i < vertices.size(); j = i++) {
+        if ((vertices[i].y > p.y) != (vertices[j].y > p.y)) {
+            const double x = vertices[j].x +
+                (p.y - vertices[j].y) * (vertices[i].x - vertices[j].x) /
+                (vertices[i].y - vertices[j].y);
+            if (p.x < x) inside = !inside;
+        }
+    }
+    return inside;
 }
+
+double pointToSegmentDistance(XY p, XY a, XY b) {
+    const double dx = b.x - a.x, dy = b.y - a.y;
+    const double length_squared = dx * dx + dy * dy;
+    if (length_squared == 0.0) return std::hypot(p.x - a.x, p.y - a.y);
+    const double t = std::max(0.0, std::min(1.0,
+        ((p.x - a.x) * dx + (p.y - a.y) * dy) / length_squared));
+    return std::hypot(p.x - (a.x + t * dx), p.y - (a.y + t * dy));
+}
+
+bool altitudeOverlaps(const SpatialRestriction& restriction, const SpatialEdge& edge) {
+    double edge_min = std::isnan(edge.altitude_min_m) ? edge.altitude_m : edge.altitude_min_m;
+    double edge_max = std::isnan(edge.altitude_max_m) ? edge.altitude_m : edge.altitude_max_m;
+    if (edge_min > edge_max) std::swap(edge_min, edge_max);
+    return !(edge_max < restriction.minimum_altitude_m ||
+             (restriction.maximum_altitude_m > 0.0 &&
+              edge_min > restriction.maximum_altitude_m));
+}
+
+bool intersects(const SpatialRestriction& restriction, const SpatialEdge& edge) {
+    if (!restriction.active || !altitudeOverlaps(restriction, edge)) return false;
+
+    const double latitude = (edge.from.latitude_deg + edge.to.latitude_deg) * 0.5;
+    const XY a = project(edge.from, latitude), b = project(edge.to, latitude);
+    if (restriction.geometry_type == RestrictionGeometryType::Circle) {
+        return pointToSegmentDistance(project(restriction.center, latitude), a, b)
+               <= restriction.radius_m;
+    }
+
+    if (restriction.polygon.size() < 3) return false;
+    std::vector<XY> polygon;
+    polygon.reserve(restriction.polygon.size());
+    for (const auto& point : restriction.polygon) polygon.push_back(project(point, latitude));
+    if (insidePolygon(a, polygon) || insidePolygon(b, polygon)) return true;
+    for (std::size_t i = 0; i < polygon.size(); ++i) {
+        if (segmentsIntersect(a, b, polygon[i], polygon[(i + 1) % polygon.size()])) return true;
+    }
+    return false;
+}
+
+std::string canonicalDouble(double value) {
+    if (std::isnan(value)) return "nan";
+    if (std::isinf(value)) return value < 0 ? "-inf" : "+inf";
+    std::ostringstream stream;
+    stream << std::setprecision(std::numeric_limits<double>::max_digits10) << value;
+    return stream.str();
+}
+
+void appendPoint(std::ostringstream& out, const GeoPoint& point) {
+    out << canonicalDouble(point.latitude_deg) << ',' << canonicalDouble(point.longitude_deg);
+}
+
+std::string dependencyIdentity(const ConstrainedEnvironmentSnapshot& environment) {
+    std::vector<std::string> restriction_keys;
+    restriction_keys.reserve(environment.restrictions.size());
+    for (const auto& restriction : environment.restrictions) {
+        std::ostringstream key;
+        key << restriction.restriction_id << '|' << restriction.source_id << '|'
+            << restriction.snapshot_version << '|'
+            << static_cast<int>(restriction.geometry_type) << '|'
+            << restriction.active << '|'
+            << canonicalDouble(restriction.minimum_altitude_m) << '|'
+            << canonicalDouble(restriction.maximum_altitude_m) << '|'
+            << canonicalDouble(restriction.radius_m) << "|C|";
+        appendPoint(key, restriction.center);
+        key << "|P|";
+        for (const auto& point : restriction.polygon) {
+            appendPoint(key, point);
+            key << ';';
+        }
+        restriction_keys.push_back(key.str());
+    }
+    std::sort(restriction_keys.begin(), restriction_keys.end());
+
+    std::ostringstream canonical;
+    canonical << environment.snapshot_id << '|' << environment.snapshot_version << '|'
+              << environment.calculation_input_version << '|'
+              << environment.complete;
+    for (const auto& key : restriction_keys) canonical << "\n" << key;
+
+    // Fixed FNV-1a 64-bit hash; unlike std::hash, this is stable across standard-library
+    // implementations. The canonical input uses max_digits10 for floating-point values.
+    std::uint64_t hash = UINT64_C(14695981039346656037);
+    for (const unsigned char byte : canonical.str()) {
+        hash ^= byte;
+        hash *= UINT64_C(1099511628211);
+    }
+    std::ostringstream result;
+    result << std::hex << std::setfill('0') << std::setw(16) << hash;
+    return result.str();
+}
+
+OpenSpaceResult makeResult(const ConstrainedEnvironmentSnapshot& environment) {
+    return {true, environment.snapshot_id, environment.snapshot_version,
+            environment.calculation_input_version, dependencyIdentity(environment), {}};
+}
+
+void reject(OpenSpaceResult& result, const std::string& reason) {
+    result.allowed = false;
+    result.blocking_restriction_ids.push_back(reason);
+}
+} // namespace
+
+OpenSpaceResult ConstrainedOpenSpace::evaluateSegment(
+    const ConstrainedEnvironmentSnapshot& environment, const SpatialEdge& edge) {
+    auto result = makeResult(environment);
+    if (!environment.complete) {
+        reject(result, "ENVIRONMENT_INCOMPLETE");
+        return result;
+    }
+    for (const auto& restriction : environment.restrictions) {
+        if (intersects(restriction, edge)) {
+            result.blocking_restriction_ids.push_back(restriction.restriction_id);
+        }
+    }
+    std::sort(result.blocking_restriction_ids.begin(), result.blocking_restriction_ids.end());
+    result.blocking_restriction_ids.erase(
+        std::unique(result.blocking_restriction_ids.begin(), result.blocking_restriction_ids.end()),
+        result.blocking_restriction_ids.end());
+    result.allowed = result.blocking_restriction_ids.empty();
+    return result;
+}
+
+OpenSpaceResult ConstrainedOpenSpace::evaluateRoute(
+    const ConstrainedEnvironmentSnapshot& environment, const Route& route) {
+    auto result = makeResult(environment);
+    if (!environment.complete) {
+        reject(result, "ENVIRONMENT_INCOMPLETE");
+        return result;
+    }
+    if (route.segments.empty()) {
+        reject(result, "ROUTE_HAS_NO_SEGMENTS");
+        return result;
+    }
+
+    for (const auto& segment : route.segments) {
+        const auto from = std::find_if(route.waypoints.begin(), route.waypoints.end(),
+            [&](const auto& waypoint) { return waypoint.waypoint_id == segment.from_waypoint_id; });
+        const auto to = std::find_if(route.waypoints.begin(), route.waypoints.end(),
+            [&](const auto& waypoint) { return waypoint.waypoint_id == segment.to_waypoint_id; });
+        if (from == route.waypoints.end() || to == route.waypoints.end()) {
+            reject(result, "ROUTE_SEGMENT_MISSING_WAYPOINT:" + segment.segment_id);
+            continue;
+        }
+
+        const double min_altitude = std::min(from->altitude_m, to->altitude_m);
+        const double max_altitude = std::max(from->altitude_m, to->altitude_m);
+        auto segment_result = evaluateSegment(environment,
+            {from->position, to->position, (min_altitude + max_altitude) * 0.5,
+             min_altitude, max_altitude});
+        result.blocking_restriction_ids.insert(result.blocking_restriction_ids.end(),
+            segment_result.blocking_restriction_ids.begin(),
+            segment_result.blocking_restriction_ids.end());
+    }
+
+    std::sort(result.blocking_restriction_ids.begin(), result.blocking_restriction_ids.end());
+    result.blocking_restriction_ids.erase(
+        std::unique(result.blocking_restriction_ids.begin(), result.blocking_restriction_ids.end()),
+        result.blocking_restriction_ids.end());
+    result.allowed = result.blocking_restriction_ids.empty();
+    return result;
+}
+} // namespace bluesky::planning
