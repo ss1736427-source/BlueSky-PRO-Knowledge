@@ -9,7 +9,8 @@ static Route route() {
     r.lineage.route_version = "1";
     r.environment.airspace_snapshot_id = "NOTAM-SNAP-1";
     r.constraints.avoid_restricted_areas = true;
-    r.waypoints = {{"WP-1", {60.0, 25.0}, 100.0, true}, {"WP-2", {60.01, 25.01}, 100.0, false}};
+    r.waypoints = {{"WP-1", {60.0, 25.0}, 100.0, true},
+                   {"WP-2", {60.01, 25.01}, 100.0, false}};
     return r;
 }
 
@@ -37,6 +38,24 @@ int main() {
     auto allowed = NotamProhibitedZoneValidator::validate(r, s);
     assert(allowed.status == RouteValidationStatus::Allowed);
 
+    auto mismatched = s;
+    mismatched.snapshot_id = "NOTAM-SNAP-OTHER";
+    auto mismatch_result = NotamProhibitedZoneValidator::validate(r, mismatched);
+    assert(mismatch_result.status == RouteValidationStatus::Rejected);
+    assert(mismatch_result.findings.front().code == NotamValidationCode::SnapshotNotValid);
+
+    auto invalid_zone = s;
+    invalid_zone.zones.front().radius_m = -1.0;
+    auto invalid_result = NotamProhibitedZoneValidator::validate(r, invalid_zone);
+    assert(invalid_result.status == RouteValidationStatus::Rejected);
+    assert(invalid_result.findings.front().code == NotamValidationCode::SnapshotNotValid);
+
+    r.waypoints.front().position = {91.0, 25.0};
+    auto invalid_waypoint = NotamProhibitedZoneValidator::validate(r, s);
+    assert(invalid_waypoint.status == RouteValidationStatus::Rejected);
+    assert(invalid_waypoint.findings.front().code == NotamValidationCode::SnapshotNotValid);
+
+    r = route();
     r.environment.airspace_snapshot_id.clear();
     auto missing = NotamProhibitedZoneValidator::validate(r, s);
     assert(missing.status == RouteValidationStatus::Rejected);
