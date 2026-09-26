@@ -6,8 +6,9 @@ Item {
     width: 1280
     height: 760
 
-    property bool compositionComplete: false
-    property bool validationStarted: false
+    property int testPhase: 0
+    readonly property bool compositionComplete: testPhase >= 1
+    readonly property bool validationStarted: testPhase >= 2
     property bool missionReady: false
 
     Rectangle {
@@ -44,7 +45,7 @@ Item {
         manualValidationStarted: root.validationStarted
         missionReady: root.missionReady
         warningActive: true
-        onValidateManualMissionRequested: root.validationStarted = true
+        onValidateManualMissionRequested: root.testPhase = 2
     }
 
     Rectangle {
@@ -110,7 +111,7 @@ Item {
         MouseArea {
             anchors.fill: parent
             enabled: !root.compositionComplete && !root.validationStarted
-            onClicked: root.compositionComplete = true
+            onClicked: root.testPhase = 1
         }
     }
 
@@ -135,7 +136,7 @@ Item {
 
         MouseArea {
             anchors.fill: parent
-            onClicked: root.compositionComplete = false, root.validationStarted = false, root.missionReady = false
+            onClicked: root.testPhase = 0
         }
     }
 
