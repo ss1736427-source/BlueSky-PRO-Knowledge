@@ -41,6 +41,8 @@ Item {
     property bool showLeftBorder: true
 
     property bool missionVisible: true
+    property bool missionCreationMode: false
+    readonly property string newMissionType: "M"
     property string missionId: "BS-260920-A-001"
     property string missionSummary: "3D картография территории"
     property bool missionIdExpanded: false
@@ -72,7 +74,6 @@ Item {
         ListElement { title: "Линейное обследование"; subtitle: ""; accent: "#32FFFF" }
         ListElement { title: "Картографирование коридора"; subtitle: ""; accent: "#FFD339" }
         ListElement { title: "Точка интереса"; subtitle: ""; accent: "#FF32FF" }
-        ListElement { title: "Создать миссию"; subtitle: ""; accent: "#BFBFBF" }
     }
 
     Rectangle {
@@ -244,7 +245,7 @@ Item {
 
     // Panel configuration is presentation-only and independent of Bottom Toolbar configuration.
     Rectangle {
-        visible: root.panelConfigOpen
+        visible: root.panelConfigOpen && root.missionVisible
         x: 10
         y: 90
         width: parent.width - 20
@@ -304,11 +305,11 @@ Item {
     // Reference-style template list. The selected item uses the controlled
     // selected surface and cyan structural highlight rather than arbitrary blue.
     Column {
-        visible: root.missionVisible && root.templatesExpanded && !root.panelConfigOpen
+        visible: (root.missionVisible || root.missionCreationMode) && root.templatesExpanded && !root.panelConfigOpen
         x: 10
         y: root.missionVisible ? 110 : 50
         width: parent.width - 20
-        height: Math.max(0, parent.height - y - 10)
+        height: Math.max(0, parent.height - y - createMissionButton.height - 20)
         spacing: 3
         clip: true
 
@@ -363,8 +364,6 @@ Item {
                     onClicked: {
                         root.selectedTemplate = index
                         root.templateSelected(index)
-                        if (index === templateModel.count - 1)
-                            root.createMissionRequested()
                     }
                 }
             }
@@ -455,7 +454,7 @@ Item {
     }
 
     Text {
-        visible: !root.missionVisible
+        visible: !root.missionVisible && !root.missionCreationMode
         anchors.horizontalCenter: parent.horizontalCenter
         y: 72
         text: "МИССИЯ СКРЫТА"
@@ -466,7 +465,7 @@ Item {
     }
 
     Rectangle {
-        visible: !root.missionVisible
+        visible: !root.missionVisible && !root.missionCreationMode
         anchors.horizontalCenter: parent.horizontalCenter
         y: 110
         width: 150
@@ -490,4 +489,39 @@ Item {
             onClicked: root.restoreMissionRequested()
         }
     }
+    // Fixed primary action: remains at the bottom in every mission-panel state.
+    Rectangle {
+        id: createMissionButton
+        x: 10
+        y: parent.height - height - 12
+        width: parent.width - 20
+        height: 44
+        radius: 2
+        color: "#64FF00"
+        border.color: "#64FF00"
+        border.width: 1
+        z: 30
+
+        Text {
+            anchors.fill: parent
+            text: root.missionCreationMode ? "СОЗДАНИЕ МИССИИ · M" : "СОЗДАТЬ МИССИЮ"
+            color: "#050A12"
+            font.family: "B612"
+            font.pixelSize: 12
+            font.bold: true
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                root.missionVisible = false
+                root.missionCreationMode = true
+                root.missionIdExpanded = false
+                root.createMissionRequested()
+            }
+        }
+    }
+
 }
