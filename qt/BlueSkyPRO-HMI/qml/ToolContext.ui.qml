@@ -8,7 +8,7 @@ Item {
     property var sections: []
     property bool fpvManual: false
     property int selectedUavIndex: -1
-    readonly property string selectedUavId: selectedUavIndex >= 0 ? "UAV-" + ("0" + (selectedUavIndex + 1)).slice(-2) : "NO UAV SELECTED"
+    property string selectedUavId: "NO UAV SELECTED"
 
     Rectangle {
         anchors.fill: parent
