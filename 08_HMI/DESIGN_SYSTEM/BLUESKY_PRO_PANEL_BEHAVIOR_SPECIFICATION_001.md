@@ -130,6 +130,17 @@ Individual UAV telemetry is not duplicated into the aggregate mission header.
 - selecting a hidden template makes it visible and active/highlighted;
 - new tools/templates are appended at the bottom.
 
+### Mission template visibility and selection
+
+- **Automatic mission:** show the mission context and only the templates actually assigned to that mission. Hide all other available templates from the active mission view. This makes the mission composition immediately legible.
+- **Manual mission creation:** show the available template catalogue. The operator may select one template or combine several templates.
+- Each selected template contributes its own planning scaffold to the Flight Chart. The operator combines/edits these scaffolds on the map into one mission composition.
+- After the operator completes the combined composition, submit it to the same core mission-planning pipeline used for an automatically composed mission.
+- The only replaced stage is **automatic template selection/assignment**: manual creation uses the operator's explicit template selection instead. All subsequent planning, constraint checks, routing, wind/performance calculations, 4D trajectory verification, conflict resolution, readiness and safety gates remain the same.
+- Manual selection does not bypass validation, authorization, feasibility checks or operator approval. A selected template is an input to planning, not permission to fly.
+- In manual creation mode, selection is multi-select. The UI must distinguish selected templates from merely available templates.
+- Do not display the full catalogue as if every template were part of an existing automatic mission.
+
 ### Mission creation action
 
 - A dedicated `СОЗДАТЬ МИССИЮ` button is pinned to the bottom of the Left Panel, filled with controlled green `#64FF00`, with centered dark text.
