@@ -17,7 +17,7 @@ Item {
     property string missionState: "AUTO" // AUTO, HIDDEN, MANUAL
     readonly property bool missionVisible: missionState === "AUTO"
     readonly property bool missionCreationMode: missionState === "MANUAL"
-    property bool missionReady: false
+    property bool missionReady: false\n    property bool manualCompositionComplete: false\n    property bool manualValidationStarted: false\n    signal manualMissionValidationRequested()
     property bool warningActive: true
     property int selectedUavIndex: -1
     property string uavDecision: ""
@@ -73,7 +73,7 @@ Item {
             missionTemplateIndices: root.missionTemplateIndices
             onHideMissionRequested: root.missionState = "HIDDEN"
             onRestoreMissionRequested: root.missionState = "AUTO"
-            onCreateMissionRequested: root.missionState = "MANUAL"
+            onCreateMissionRequested: {\n                root.missionState = "MANUAL"\n                root.manualCompositionComplete = false\n                root.manualValidationStarted = false\n            }
         }
 
         FlightChart {
