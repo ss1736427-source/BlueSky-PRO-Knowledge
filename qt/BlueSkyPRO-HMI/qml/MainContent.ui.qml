@@ -25,6 +25,8 @@ Item {
     property string missionId: "BS-260920-A-001"
     // Populated by the mission/task aggregation layer; current value is a design-preview example.
     property string missionSummary: "3D картография территории"
+    // Example current automatic mission composition; supplied by mission/task aggregation in production.
+    property var missionTemplateIndices: [2]
     property string journalStatus: "READY"
     property string activeTool: bottomToolbar.activeTool
     signal journalEvent(string eventType, int uavIndex, string decision)
@@ -68,6 +70,7 @@ Item {
             missionCreationMode: root.missionCreationMode
             missionId: root.missionId
             missionSummary: root.missionSummary
+            missionTemplateIndices: root.missionTemplateIndices
             onHideMissionRequested: root.missionState = "HIDDEN"
             onRestoreMissionRequested: root.missionState = "AUTO"
             onCreateMissionRequested: root.missionState = "MANUAL"
