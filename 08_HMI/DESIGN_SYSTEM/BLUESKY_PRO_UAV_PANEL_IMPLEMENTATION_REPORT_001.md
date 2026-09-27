@@ -204,3 +204,8 @@ The countdown is held at the configured maximum before departure. Each UAV model
 - Fleet cards are laid out in responsive columns. A single card is centered in the available space. With multiple cards, each row is centered as a group around the workspace center; an incomplete final row is centered independently.
 - Card width adapts to the available space and column count, with a 240 px target minimum and 420 px maximum. When the workspace is narrower than the target minimum, cards shrink to fit rather than overflow.
 - The layout recalculates its column count and card dimensions as the available workspace changes. Preview verification at narrow, medium, and wide window sizes remains required.
+
+
+### Fleet layout anchor correction — 2026-09-27
+
+The previous preview showed fleet-card content stacked at the far left because `UAVFleetPanel` was a root-level item attempting to anchor to `LeftPanel` and `RightPanel`, which are children of `workspace`. Those items were not valid anchor siblings, so the intended horizontal constraints did not resolve. `UAVFleetPanel` has now been moved inside `workspace`, alongside both side panels. Its left/right anchors now target sibling panels, and it is vertically centered in the workspace. This corrects the coordinate-space/anchor issue behind the misaligned preview.
