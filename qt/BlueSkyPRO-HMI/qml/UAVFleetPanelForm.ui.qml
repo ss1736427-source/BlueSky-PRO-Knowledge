@@ -45,6 +45,31 @@ Item {
     property color amber: "#FFD339"
     property color red: "#FF1E14"
     property color divider: "#29435B"
+    // Reference point for normal cruise engine load; adjust to the aircraft profile.
+    property real engineCruisePercent: 60
+
+    function blendColor(fromColor, toColor, amount) {
+        var t = Math.max(0, Math.min(1, amount))
+        return Qt.rgba(fromColor.r + (toColor.r - fromColor.r) * t,
+                       fromColor.g + (toColor.g - fromColor.g) * t,
+                       fromColor.b + (toColor.b - fromColor.b) * t, 1)
+    }
+
+    function engineLoadColor(value) {
+        var p = Math.max(0, Math.min(100, Number(value)))
+        var gray = Qt.color("#7F8994")
+        var blue = Qt.color("#39A9FF")
+        var green = Qt.color("#64D98A")
+        var red = Qt.color("#FF3B35")
+        var cruise = Math.max(1, Math.min(99, root.engineCruisePercent))
+        if (p <= 0)
+            return gray
+        if (p < cruise * 0.5)
+            return blendColor(gray, blue, p / (cruise * 0.5))
+        if (p < cruise)
+            return blendColor(blue, green, (p - cruise * 0.5) / (cruise * 0.5))
+        return blendColor(green, red, (p - cruise) / (100 - cruise))
+    }
 
     signal uavSelected(int index)
     signal uavDoubleClicked(int index)
@@ -69,7 +94,7 @@ Item {
         property int minCardWidth: 280
         property int columnCount: Math.max(1, Math.floor((width + gap) / (minCardWidth + gap)))
         property real cardWidth: (width - (columnCount - 1) * gap) / columnCount
-        property real cardHeight: Math.min(root.height - 12, 48 + root.maxParameterRows * 20)
+        property real cardHeight: Math.min(root.height - 12, 66 + root.maxParameterRows * 24)
         columns: columnCount
         spacing: gap
         width: root.width - 20
@@ -110,8 +135,8 @@ Item {
                     spacing: 7
 
                     Image {
-                        width: 20
-                        height: 20
+                        width: 16
+                        height: 16
                         source: "icons8-menu-24.svg"
                         fillMode: Image.PreserveAspectFit
                         smooth: true
@@ -220,7 +245,7 @@ Item {
                     x: parent.width * 0.45
                     y: 38
                     width: parent.width * 0.53
-                    height: root.maxParameterRows * 20
+                    height: root.maxParameterRows * 24
                     spacing: 0
 
                     Repeater {
@@ -228,11 +253,12 @@ Item {
                         delegate: Item {
                             required property var modelData
                             width: metricColumn.width
-                            height: 20
+                            height: 24
 
                             Text {
                                 anchors.left: parent.left
-                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.top: parent.top
+                                anchors.topMargin: 1
                                 text: modelData.label
                                 color: root.secondary
                                 font.family: "IBM Plex Sans Condensed"
@@ -241,7 +267,8 @@ Item {
 
                             Text {
                                 anchors.right: parent.right
-                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.top: parent.top
+                                anchors.topMargin: 1
                                 text: modelData.value
                                 color: root.text
                                 font.family: "B612"
@@ -252,28 +279,19 @@ Item {
                             Rectangle {
                                 visible: modelData.key === "ENG"
                                 x: 0
-                                anchors.verticalCenter: parent.verticalCenter
+                                y: parent.height - 3
                                 width: parent.width
-                                height: 4
-                                radius: 2
+                                height: 2
+                                radius: 1
                                 color: "#20384A"
-                                Repeater {
-                                    model: 5
-                                    delegate: Rectangle {
-                                        required property int index
-                                        x: (parent.width - 1) * index / 4
-                                        width: 1
-                                        height: parent.height
-                                        color: "#527087"
-                                    }
-                                }
+
                                 Rectangle {
-                                    x: Math.max(0, Math.min(parent.width - 2,
-                                        (parent.width - 2) * cardRoot.modelData.engine / 100))
-                                    width: 2
-                                    height: parent.height + 5
-                                    y: -2
-                                    color: root.green
+                                    x: 0
+                                    y: 0
+                                    width: parent.width * Math.max(0, Math.min(100, Number(cardRoot.modelData.engine))) / 100
+                                    height: parent.height
+                                    radius: 1
+                                    color: root.engineLoadColor(cardRoot.modelData.engine)
                                 }
                             }
                         }
