@@ -48,6 +48,23 @@ Item {
     // Reference point for normal cruise engine load; adjust to the aircraft profile.
     property real engineCruisePercent: 60
 
+    function formatMissionTime(value) {
+        var total = Math.max(0, Math.floor(Number(value) || 0))
+        var hours = Math.floor(total / 3600)
+        var minutes = Math.floor((total % 3600) / 60)
+        var seconds = total % 60
+        function twoDigits(n) { return n < 10 ? "0" + n : "" + n }
+        return hours > 0
+                ? twoDigits(hours) + ":" + twoDigits(minutes) + ":" + twoDigits(seconds)
+                : twoDigits(minutes) + ":" + twoDigits(seconds)
+    }
+
+    function missionProgress(data) {
+        var total = Math.max(1, Number(data.missionTotalSeconds) || 1)
+        var remaining = Math.max(0, Number(data.missionRemainingSeconds) || 0)
+        return Math.max(0, Math.min(1, 1 - remaining / total))
+    }
+
     function blendColor(fromColor, toColor, amount) {
         var t = Math.max(0, Math.min(1, amount))
         return Qt.rgba(fromColor.r + (toColor.r - fromColor.r) * t,
@@ -182,7 +199,7 @@ Item {
                     x: 8
                     y: 38
                     width: parent.width * 0.40
-                    height: parent.height - 66
+                    height: parent.height - 84
 
                     // Local illustrative asset selected by aircraft class.
                     Image {
@@ -319,21 +336,22 @@ Item {
                 }
 
                 Text {
+                    id: missionRemainingLabel
                     x: 12
-                    y: parent.height - 40
-                    width: parent.width * 0.43
-                    text: ""
-                    color: root.text
+                    y: parent.height - 23
+                    width: parent.width - 24
+                    text: root.formatMissionTime(modelData.missionRemainingSeconds)
+                    color: root.secondary
                     font.family: "B612 Mono"
-                    font.pixelSize: 17
-                    font.bold: true
-                    horizontalAlignment: Text.AlignHCenter
+                    font.pixelSize: 10
+                    horizontalAlignment: Text.AlignLeft
+                    verticalAlignment: Text.AlignVCenter
                 }
 
                 Text {
                     id: aircraftStateLabel
                     x: aircraftArea.x
-                    y: parent.height - 24
+                    y: parent.height - 42
                     width: aircraftArea.width
                     text: modelData.state === "STBY" ? "STBY"
                           : modelData.state === "READY" ? "READY"
@@ -348,15 +366,24 @@ Item {
                     elide: Text.ElideRight
                 }
 
+                // Mission completion indicator: a 0.5 px full-width track and progress fill.
                 Rectangle {
-                    x: 12
-                    y: parent.height - 4
-                    width: parent.width - 20
-                    height: 0.7
+                    id: missionProgressTrack
+                    x: 0
+                    y: parent.height - 0.5
+                    width: parent.width
+                    height: 0.5
                     radius: 0
-                    color: modelData.state === "COMPLETED" ? root.muted
-                           : modelData.state === "READY" ? root.green
-                           : modelData.state === "WARNING" ? root.red : root.amber
+                    color: root.divider
+
+                    Rectangle {
+                        x: 0
+                        y: 0
+                        width: parent.width * root.missionProgress(cardRoot.modelData)
+                        height: parent.height
+                        radius: 0
+                        color: cardRoot.modelData.state === "WARNING" ? root.red : root.green
+                    }
                 }
 
                 MouseArea {
