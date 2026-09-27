@@ -366,15 +366,18 @@ Item {
                     elide: Text.ElideRight
                 }
 
-                // Mission completion indicator: a 0.5 px full-width track and progress fill.
+                // Mission completion indicator: anchored to the card's bottom edge.
+                // Keep the track visible at 0% progress; the fill grows as the mission completes.
                 Rectangle {
                     id: missionProgressTrack
                     x: 0
-                    y: parent.height - 0.5
+                    anchors.bottom: parent.bottom
                     width: parent.width
                     height: 0.5
+                    z: 10
                     radius: 0
-                    color: root.divider
+                    antialiasing: false
+                    color: "#7890A3"
 
                     Rectangle {
                         x: 0
@@ -382,6 +385,7 @@ Item {
                         width: parent.width * root.missionProgress(cardRoot.modelData)
                         height: parent.height
                         radius: 0
+                        antialiasing: false
                         color: cardRoot.modelData.state === "WARNING" ? root.red : root.green
                     }
                 }
