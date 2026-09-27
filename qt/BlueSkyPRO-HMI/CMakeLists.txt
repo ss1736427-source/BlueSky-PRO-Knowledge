@@ -30,7 +30,8 @@ qt_add_qml_module(appBlueSkyPRO
         qml/LeftPanel.qml
         qml/FlightChart.ui.qml
         qml/RightPanel.ui.qml
-        qml/UAVStatus.ui.qml
+        qml/UAVFleetPanel.qml
+        qml/UAVFleetPanelForm.ui.qml
         qml/BottomToolbar.qml
         qml/ContextOverlay.ui.qml
         qml/Theme.qml
