@@ -137,45 +137,55 @@ Item {
                     width: parent.width * 0.43
                     height: parent.height - 122
 
-                    // Neutral placeholder; production uses the local image assigned in UAV configuration.
-                    Item {
+                    // Square image well. Production binds a local configured UAV image here.
+                    Rectangle {
+                        id: aircraftImageFrame
                         anchors.centerIn: parent
-                        width: Math.min(parent.width * 0.88, parent.height * 0.72)
-                        height: width * 0.62
+                        width: Math.min(parent.width - 8, parent.height - 8, 160)
+                        height: width
+                        radius: 3
+                        color: "#08111D"
+                        border.color: root.divider
+                        border.width: 1
 
-                        Rectangle {
-                            anchors.centerIn: parent
-                            width: parent.width * 0.38
-                            height: parent.height * 0.24
-                            radius: 5
-                            color: "#DCE8F4"
-                            rotation: -3
-                        }
-                        Rectangle {
-                            anchors.centerIn: parent
-                            width: parent.width * 0.94
-                            height: 4
-                            radius: 2
-                            color: "#B9CDE0"
-                            rotation: -3
-                        }
-                        Repeater {
-                            model: 4
-                            delegate: Rectangle {
-                                required property int index
-                                width: parent.width * 0.16
-                                height: width
-                                radius: width / 2
-                                color: "transparent"
-                                border.color: "#B9CDE0"
-                                border.width: 2
-                                x: index % 2 === 0 ? parent.width * 0.08 : parent.width * 0.76
-                                y: index < 2 ? parent.height * 0.08 : parent.height * 0.68
-                                Rectangle {
-                                    anchors.centerIn: parent
-                                    width: parent.width * 1.35
-                                    height: 2
-                                    color: "#7F9BB5"
+                        Item {
+                            anchors.fill: parent
+                            anchors.margins: 12
+
+                            Rectangle {
+                                anchors.centerIn: parent
+                                width: parent.width * 0.38
+                                height: parent.height * 0.24
+                                radius: 5
+                                color: "#DCE8F4"
+                                rotation: -3
+                            }
+                            Rectangle {
+                                anchors.centerIn: parent
+                                width: parent.width * 0.94
+                                height: 4
+                                radius: 2
+                                color: "#B9CDE0"
+                                rotation: -3
+                            }
+                            Repeater {
+                                model: 4
+                                delegate: Rectangle {
+                                    required property int index
+                                    width: parent.width * 0.16
+                                    height: width
+                                    radius: width / 2
+                                    color: "transparent"
+                                    border.color: "#B9CDE0"
+                                    border.width: 2
+                                    x: index % 2 === 0 ? parent.width * 0.08 : parent.width * 0.76
+                                    y: index < 2 ? parent.height * 0.08 : parent.height * 0.68
+                                    Rectangle {
+                                        anchors.centerIn: parent
+                                        width: parent.width * 1.35
+                                        height: 2
+                                        color: "#7F9BB5"
+                                    }
                                 }
                             }
                         }
@@ -232,10 +242,22 @@ Item {
                                 height: 5
                                 radius: 2
                                 color: "#20384A"
+                                Repeater {
+                                    model: 5
+                                    delegate: Rectangle {
+                                        required property int index
+                                        x: (parent.width - 1) * index / 4
+                                        width: 1
+                                        height: parent.height
+                                        color: "#527087"
+                                    }
+                                }
                                 Rectangle {
-                                    width: parent.width * Math.max(0, Math.min(1, cardRoot.modelData.engine / 100))
-                                    height: parent.height
-                                    radius: 2
+                                    x: Math.max(0, Math.min(parent.width - 2,
+                                        (parent.width - 2) * cardRoot.modelData.engine / 100))
+                                    width: 2
+                                    height: parent.height + 5
+                                    y: -2
                                     color: root.green
                                 }
                             }
