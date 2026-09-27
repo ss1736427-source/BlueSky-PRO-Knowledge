@@ -60,10 +60,10 @@ Item {
     Grid {
         id: cardGrid
         property int gap: 12
-        property int minCardWidth: 320
+        property int minCardWidth: 280
         property int columnCount: Math.max(1, Math.floor((width + gap) / (minCardWidth + gap)))
         property real cardWidth: (width - (columnCount - 1) * gap) / columnCount
-        property real cardHeight: Math.min(root.height - 12, 90 + root.maxParameterRows * 24)
+        property real cardHeight: Math.min(root.height - 12, 48 + root.maxParameterRows * 20)
         columns: columnCount
         spacing: gap
         width: root.width - 20
@@ -97,61 +97,61 @@ Item {
 
                 Row {
                     id: cardHeader
-                    x: 12
-                    y: 10
-                    width: parent.width - 24
-                    height: 28
-                    spacing: 10
+                    x: 10
+                    y: 5
+                    width: parent.width - 20
+                    height: 24
+                    spacing: 7
 
                     Image {
-                        width: 24
-                        height: 24
+                        width: 20
+                        height: 20
                         source: "icons8-menu-24.svg"
                         fillMode: Image.PreserveAspectFit
                         smooth: true
                     }
 
                     Text {
-                        width: parent.width - 40
+                        width: parent.width - 34
                         anchors.verticalCenter: parent.verticalCenter
-                        text: modelData.modelName + "  ·  " + modelData.sequence
+                        text: modelData.modelName + "  ·  " + modelData.id
                         color: root.secondary
                         font.family: "IBM Plex Sans Condensed"
-                        font.pixelSize: 14
+                        font.pixelSize: Math.max(10, Math.min(13, cardRoot.width / 34))
                         font.bold: true
                         elide: Text.ElideRight
                     }
                 }
 
                 MouseArea {
-                    x: 8
-                    y: 6
-                    width: 34
-                    height: 34
+                    x: 6
+                    y: 3
+                    width: 30
+                    height: 28
                     z: 5
                     onClicked: root.settingsRequested(index)
                 }
 
                 Rectangle {
-                    x: 12
-                    y: 40
-                    width: parent.width - 24
+                    x: 10
+                    y: 32
+                    width: parent.width - 20
                     height: 1
                     color: root.divider
                 }
 
                 Item {
                     id: aircraftArea
-                    x: 12
-                    y: 48
-                    width: parent.width * 0.43
-                    height: parent.height - 88
+                    x: 8
+                    y: 38
+                    width: parent.width * 0.40
+                    height: parent.height - 66
 
                     // Square image well. Production binds a local configured UAV image here.
                     Rectangle {
                         id: aircraftImageFrame
                         anchors.centerIn: parent
-                        width: Math.min(parent.width - 8, parent.height - 8, 160)
+                        width: Math.min(parent.width - 8, parent.height - 8, 110)
                         height: width
                         radius: 0
                         color: "transparent"
@@ -202,19 +202,19 @@ Item {
                 }
 
                 Rectangle {
-                    x: parent.width * 0.47
-                    y: 48
+                    x: parent.width * 0.43
+                    y: 38
                     width: 1
-                    height: parent.height - 90
+                    height: parent.height - 64
                     color: root.divider
                 }
 
                 Column {
                     id: metricColumn
-                    x: parent.width * 0.51
-                    y: 48
-                    width: parent.width * 0.46
-                    height: root.maxParameterRows * 24
+                    x: parent.width * 0.45
+                    y: 38
+                    width: parent.width * 0.53
+                    height: root.maxParameterRows * 20
                     spacing: 0
 
                     Repeater {
@@ -222,7 +222,7 @@ Item {
                         delegate: Item {
                             required property var modelData
                             width: metricColumn.width
-                            height: 24
+                            height: 20
 
                             Text {
                                 anchors.left: parent.left
@@ -230,7 +230,7 @@ Item {
                                 text: modelData.label
                                 color: root.secondary
                                 font.family: "IBM Plex Sans Condensed"
-                                font.pixelSize: 13
+                                font.pixelSize: Math.max(10, Math.min(12, cardRoot.width / 38))
                             }
 
                             Text {
@@ -239,7 +239,7 @@ Item {
                                 text: modelData.value
                                 color: root.text
                                 font.family: "B612"
-                                font.pixelSize: 14
+                                font.pixelSize: Math.max(11, Math.min(13, cardRoot.width / 35))
                                 horizontalAlignment: Text.AlignRight
                             }
 
@@ -276,9 +276,9 @@ Item {
 
                 Flow {
                     id: smartToolsFlow
-                    x: parent.width * 0.51
-                    y: parent.height - 60
-                    width: parent.width * 0.46
+                    x: parent.width * 0.45
+                    y: parent.height - 48
+                    width: parent.width * 0.53
                     height: 28
                     spacing: 4
                     visible: cardRoot.modelData.smartTools.length > 0
@@ -316,9 +316,9 @@ Item {
                 }
 
                 Text {
-                    x: parent.width * 0.51
-                    y: parent.height - 22
-                    width: parent.width * 0.46
+                    x: parent.width * 0.45
+                    y: parent.height - 24
+                    width: parent.width * 0.53
                     text: root.expandedUavIndex === cardRoot.index
                           ? root.expandedParameterLabel + "  " + root.expandedParameterValue : ""
                     color: root.text
@@ -332,7 +332,7 @@ Item {
                     x: 12
                     y: parent.height - 40
                     width: parent.width * 0.43
-                    text: modelData.id
+                    text: ""
                     color: root.text
                     font.family: "B612 Mono"
                     font.pixelSize: 17
@@ -342,7 +342,7 @@ Item {
 
                 Text {
                     x: 12
-                    y: parent.height - 30
+                    y: parent.height - 24
                     width: parent.width * 0.43
                     text: modelData.state + "  ·  " + modelData.progress
                     color: modelData.state === "READY" ? root.green
@@ -355,8 +355,8 @@ Item {
 
                 Rectangle {
                     x: 12
-                    y: parent.height - 7
-                    width: parent.width - 24
+                    y: parent.height - 4
+                    width: parent.width - 20
                     height: 0.7
                     radius: 0
                     color: modelData.state === "COMPLETED" ? root.muted
@@ -383,16 +383,17 @@ Item {
         id: settingsPopup
         visible: root.settingsOpen
         z: 500
-        x: Math.max(10, parent.width - width - 16)
-        y: 44
-        width: 330
-        height: Math.min(parent.height - 60, 430)
+        width: Math.min(parent.width - 24, Math.max(380, settingsTitle.implicitWidth + 96))
+        height: Math.min(620, Math.max(360, parent.height * 2))
+        x: Math.max(12, parent.width - width - 16)
+        y: parent.height - height - 8
         radius: 4
         color: "#08111D"
         border.color: root.cyan
         border.width: 1
 
         Text {
+            id: settingsTitle
             x: 14
             y: 12
             width: parent.width - 52
@@ -446,7 +447,7 @@ Item {
                     delegate: Rectangle {
                         required property var modelData
                         width: settingsColumn.width
-                        height: 30
+                        height: 42
                         color: root.settingsParameters.indexOf(modelData.key) >= 0 ? root.selectedSurface : "transparent"
 
                         MouseArea {
@@ -463,7 +464,7 @@ Item {
                             text: (root.settingsParameters.indexOf(modelData.key) >= 0 ? "☑  " : "☐  ") + modelData.label
                             color: root.settingsParameters.indexOf(modelData.key) >= 0 ? root.text : root.secondary
                             font.family: "B612"
-                            font.pixelSize: 11
+                            font.pixelSize: 13
                         }
 
                         Text {
