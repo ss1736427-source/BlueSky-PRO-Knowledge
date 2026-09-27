@@ -188,3 +188,11 @@ Before mission start, the green indicator is full width (remaining time equals t
 ### Countdown start condition
 
 The countdown is held at the configured maximum before departure. Each UAV model has `missionStarted: false` initially; the 1-second timer decrements `missionRemainingSeconds` only after `missionStarted` becomes `true`. The mission-start workflow must set this flag at actual departure/start-of-mission. In the current Design Studio mock, no flight-start control is wired, so the countdown remains at its maximum until connected to that event.
+
+
+### Right-panel symmetry and shared seams — 2026-09-27
+
+- `RightPanel.ui.qml` now uses the same `#08111D` surface as `LeftPanel.qml`, with matching cyan (`#32FFFF`) outer outline and `#7F7F7F` internal divider tone.
+- `MainContent.ui.qml` binds `rightWidth` to `leftWidth`, so both side panels use the same width.
+- Right-panel top and bottom borders are disabled in the main composition. The full-width TopHeader bottom stroke and BottomToolbar top stroke own those shared seams, matching the left-panel arrangement and avoiding doubled horizontal lines.
+- The right panel retains its left and right vertical cyan edges. Confirm final appearance in Qt Design Studio Preview after pulling the branch.
