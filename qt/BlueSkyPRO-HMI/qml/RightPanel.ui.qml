@@ -8,7 +8,7 @@ Item {
     clip: true
     implicitWidth: 340
 
-    property color bg: "#0A0A0A"
+    property color bg: "#08111D"
     property color text: "#FFFFFF"
     property color secondary: "#BFBFBF"
     property color muted: "#7F7F7F"
@@ -16,7 +16,13 @@ Item {
     property color amber: "#FFD339"
     property color red: "#FF1E14"
     property color cyan: "#32FFFF"
-    property color divider: "#202020"
+    property color divider: "#7F7F7F"
+
+    // Match LeftPanel outline; shared top/bottom seams are owned by header/toolbar.
+    property bool showTopBorder: true
+    property bool showRightBorder: true
+    property bool showBottomBorder: true
+    property bool showLeftBorder: true
 
     // Contextual validation is not shown until automatic revalidation succeeds.
     property bool validationConfirmationRequired: false
@@ -34,12 +40,43 @@ Item {
         color: root.bg
     }
 
+    // Edge ownership mirrors LeftPanel. MainContent disables the top and bottom
+    // edges so TopHeader and BottomToolbar each provide one continuous shared line.
     Rectangle {
-        anchors.left: parent.left
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
+        visible: root.showTopBorder
+        x: 0
+        y: 0
+        width: parent.width
+        height: 1
+        color: root.cyan
+        antialiasing: false
+    }
+    Rectangle {
+        visible: root.showRightBorder
+        x: parent.width - 1
+        y: 0
         width: 1
-        color: root.divider
+        height: parent.height
+        color: root.cyan
+        antialiasing: false
+    }
+    Rectangle {
+        visible: root.showBottomBorder
+        x: 0
+        y: parent.height - 1
+        width: parent.width
+        height: 1
+        color: root.cyan
+        antialiasing: false
+    }
+    Rectangle {
+        visible: root.showLeftBorder
+        x: 0
+        y: 0
+        width: 1
+        height: parent.height
+        color: root.cyan
+        antialiasing: false
     }
 
     Text {
