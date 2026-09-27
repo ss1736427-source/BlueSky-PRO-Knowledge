@@ -54,7 +54,7 @@ signal workspaceContextRequested(string tool)
     property bool dragActive: false
 
     function defaultOrder() {
-        return ["UAV", "MAP", "ADMIN", "FPV", "VIRTUAL FLT"]
+        return ["MAP", "ADMIN", "VIRTUAL FLT", "FPV", "UAV"]
     }
 
     function defaultEnabled() {
@@ -89,6 +89,21 @@ signal workspaceContextRequested(string tool)
             if (!contains(result, defaults[j]))
                 result.push(defaults[j])
         }
+
+        // Migrate the previous default/current toolbar order so VIRTUAL FLT
+        // occupies the middle slot in the five-tool layout.
+        var previousDefault = ["UAV", "MAP", "ADMIN", "FPV", "VIRTUAL FLT"]
+        var previousDisplayed = ["MAP", "ADMIN", "FPV", "VIRTUAL FLT", "UAV"]
+        var matchesPreviousDefault = result.length === previousDefault.length
+        var matchesPreviousDisplayed = result.length === previousDisplayed.length
+        for (var k = 0; k < result.length; ++k) {
+            if (result[k] !== previousDefault[k])
+                matchesPreviousDefault = false
+            if (result[k] !== previousDisplayed[k])
+                matchesPreviousDisplayed = false
+        }
+        if (matchesPreviousDefault || matchesPreviousDisplayed)
+            result = defaults.slice(0)
 
         return result
     }
@@ -406,12 +421,9 @@ signal workspaceContextRequested(string tool)
                 function widthAt(i) {
                     if (i < 0 || i >= visibleToolModel.count)
                         return 0
-                    // Use the real delegate width, not an estimated label width.
-                    var delegate = toolRepeater.itemAt(i)
-                    if (delegate)
-                        return delegate.width
-                    var label = String(visibleToolModel.get(i).label)
-                    return Math.max(76, label.length * 6.2 + 28)
+                    // Uniform button width guarantees stable, equal gaps
+                    // while delegates are dragged and after the order changes.
+                    return 100
                 }
 
                 function xForTool(i) {
@@ -451,7 +463,7 @@ signal workspaceContextRequested(string tool)
 
                     delegate: Rectangle {
                         id: toolDelegate
-                        width: Math.max(76, toolLabel.implicitWidth + 28)
+                        width: 100
                         x: (visibleToolModel.count % 2 === 1
                             && index === Math.floor(visibleToolModel.count / 2))
                             ? (visibleToolRow.width - width) / 2
