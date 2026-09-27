@@ -11,7 +11,6 @@ Item {
     property int leftWidth: leftPanel.implicitWidth
     property int rightWidth: 340
     property int toolbarHeight: 54
-    property int uavPanelHeight: 270
     property bool leftPanelOpen: true
     property bool rightPanelOpen: true
     property string missionState: "AUTO" // AUTO, HIDDEN, MANUAL
@@ -155,7 +154,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: bottomToolbar.top
-        height: Math.min(root.uavPanelHeight, root.height - root.headerHeight - root.toolbarHeight)
+        height: Math.min(uavStatus.preferredHeight, root.height - root.headerHeight - root.toolbarHeight)
     }
 
     BottomToolbar {
