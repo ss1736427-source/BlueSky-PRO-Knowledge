@@ -71,6 +71,8 @@ Item {
             anchors.bottom: parent.bottom
             // TopHeader owns the shared horizontal separator.
             showTopBorder: false
+            // BottomToolbar owns the shared seam; avoid drawing a second line here.
+            showBottomBorder: false
             width: root.leftPanelOpen ? root.leftWidth : 0
             missionVisible: root.missionVisible
             missionCreationMode: root.missionCreationMode
