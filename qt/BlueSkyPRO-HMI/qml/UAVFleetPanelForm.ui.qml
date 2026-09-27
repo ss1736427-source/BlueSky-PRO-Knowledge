@@ -7,6 +7,9 @@ Item {
     property int selectedIndex: -1
     property int settingsIndex: -1
     property var settingsParameters: ["ALT", "SPD", "BAT", "ENG"]
+    property int expandedUavIndex: -1
+    property string expandedParameterLabel: ""
+    property string expandedParameterValue: ""
     property var availableParameterOptions: []
     property bool settingsOpen: false
     property int dragIndex: -1
@@ -37,6 +40,7 @@ Item {
     signal dragStarted(int index, real x, real y)
     signal dragMoved(int index, real x, real y)
     signal dragFinished(int index)
+    signal smartToolRequested(int index, string parameter)
     signal parameterToggleRequested(string parameter)
     signal parameterMoveRequested(string parameter, int direction)
     signal applyToAllRequested()
@@ -53,7 +57,7 @@ Item {
         property int minCardWidth: 320
         property int columnCount: Math.max(1, Math.floor((width + gap) / (minCardWidth + gap)))
         property real cardWidth: (width - (columnCount - 1) * gap) / columnCount
-        property real cardHeight: Math.min(360, Math.max(310, root.height * 0.40))
+        property real cardHeight: Math.min(380, Math.max(340, root.height * 0.44))
         columns: columnCount
         spacing: gap
         width: root.width - 20
@@ -196,7 +200,7 @@ Item {
                     x: parent.width * 0.47
                     y: 60
                     width: 1
-                    height: parent.height - 120
+                    height: parent.height - 170
                     color: root.divider
                 }
 
@@ -205,15 +209,15 @@ Item {
                     x: parent.width * 0.51
                     y: 60
                     width: parent.width * 0.46
-                    height: parent.height - 120
+                    height: parent.height - 170
                     spacing: 0
 
                     Repeater {
-                        model: modelData.displayParameters
+                        model: modelData.primaryParameters
                         delegate: Item {
                             required property var modelData
                             width: metricColumn.width
-                            height: metricColumn.height / Math.max(1, cardRoot.modelData.displayParameters.length)
+                            height: metricColumn.height / Math.max(1, cardRoot.modelData.primaryParameters.length)
 
                             Text {
                                 anchors.left: parent.left
@@ -263,6 +267,60 @@ Item {
                             }
                         }
                     }
+                }
+
+                Flow {
+                    id: smartToolsFlow
+                    x: parent.width * 0.51
+                    y: parent.height - 92
+                    width: parent.width * 0.46
+                    height: 42
+                    spacing: 4
+                    visible: cardRoot.modelData.smartTools.length > 0
+
+                    Repeater {
+                        model: cardRoot.modelData.smartTools
+                        delegate: Rectangle {
+                            required property var modelData
+                            width: Math.max(54, smartToolLabel.implicitWidth + 14)
+                            height: 23
+                            radius: 3
+                            color: root.expandedUavIndex === cardRoot.index
+                                   && root.expandedParameterLabel === modelData.label
+                                   ? root.selectedSurface : "#08111D"
+                            border.color: root.expandedUavIndex === cardRoot.index
+                                          && root.expandedParameterLabel === modelData.label
+                                          ? root.cyan : root.divider
+                            border.width: 1
+
+                            Text {
+                                id: smartToolLabel
+                                anchors.centerIn: parent
+                                text: modelData.label
+                                color: root.secondary
+                                font.family: "B612 Mono"
+                                font.pixelSize: 9
+                            }
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: root.smartToolRequested(cardRoot.index, modelData.key)
+                            }
+                        }
+                    }
+                }
+
+                Text {
+                    x: parent.width * 0.51
+                    y: parent.height - 48
+                    width: parent.width * 0.46
+                    text: root.expandedUavIndex === cardRoot.index
+                          ? root.expandedParameterLabel + "  " + root.expandedParameterValue : ""
+                    color: root.text
+                    font.family: "B612 Mono"
+                    font.pixelSize: 11
+                    elide: Text.ElideRight
+                    visible: root.expandedUavIndex === cardRoot.index
                 }
 
                 Text {
