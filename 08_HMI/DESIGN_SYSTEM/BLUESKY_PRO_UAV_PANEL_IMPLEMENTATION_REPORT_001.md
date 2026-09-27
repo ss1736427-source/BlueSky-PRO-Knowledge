@@ -225,3 +225,13 @@ The previous preview showed fleet-card content stacked at the far left because `
 - Side-panel visibility is controlled only by the respective `leftPanelOpen` and `rightPanelOpen` states, not by the active tool.
 - The fleet cards remain constrained to the central area between the side panels; the available card width therefore reflects whether either side panel is open.
 - Verify in Qt Design Studio Preview that LEFT and RIGHT remain visible when UAV is active and still respond to their own toolbar toggles.
+
+
+### Selectable UAV cards and movable parameter panel — 2026-09-27
+
+- Clicking a UAV card selects it; the selected card is shown with the existing cyan selection outline. Opening that card's settings also selects it.
+- The parameter panel reads and edits the configuration for the currently selected UAV. Changing selection while the panel is open retargets the settings to the newly selected UAV. The explicit “apply to all” action remains separate.
+- The parameter panel can be dragged by its title/header area. Dragging is constrained to the workspace bounds.
+- The last panel position is persisted through `Qt.labs.settings` and reused on subsequent openings and application launches.
+- The fleet overlay now occupies the full central workspace while the card grid remains bottom-anchored. This gives the settings panel a workspace-sized coordinate area without changing the card strip placement.
+- Verify card selection, per-UAV parameter isolation, drag bounds, and position persistence in Qt Design Studio / application runtime.
