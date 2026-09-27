@@ -23,6 +23,12 @@ Item {
             count = Math.max(count, root.displayModel[i].primaryParameters.length)
         return count
     }
+    readonly property real settingsPopupPreferredWidth: {
+        var desired = 380
+        for (var i = 0; i < root.availableParameterOptions.length; ++i)
+            desired = Math.max(desired, String(root.availableParameterOptions[i].label).length * 7.2 + 112)
+        return Math.min(root.width - 24, desired)
+    }
     property int gridColumns: cardGrid.columnCount
     property real gridCardWidth: cardGrid.cardWidth
     property real gridCardHeight: cardGrid.cardHeight
@@ -383,7 +389,7 @@ Item {
         id: settingsPopup
         visible: root.settingsOpen
         z: 500
-        width: Math.min(parent.width - 24, Math.max(380, settingsTitle.implicitWidth + 96))
+        width: root.settingsPopupPreferredWidth
         height: Math.min(620, Math.max(360, parent.height * 2))
         x: Math.max(12, parent.width - width - 16)
         y: parent.height - height - 8
