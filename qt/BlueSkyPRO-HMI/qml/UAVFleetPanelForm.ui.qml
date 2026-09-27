@@ -17,6 +17,12 @@ Item {
     property real dragOffsetY: 0
     property int dragTargetIndex: -1
 
+    readonly property int maxParameterRows: {
+        var count = 4
+        for (var i = 0; i < root.displayModel.length; ++i)
+            count = Math.max(count, root.displayModel[i].primaryParameters.length)
+        return count
+    }
     property int gridColumns: cardGrid.columnCount
     property real gridCardWidth: cardGrid.cardWidth
     property real gridCardHeight: cardGrid.cardHeight
@@ -57,7 +63,7 @@ Item {
         property int minCardWidth: 320
         property int columnCount: Math.max(1, Math.floor((width + gap) / (minCardWidth + gap)))
         property real cardWidth: (width - (columnCount - 1) * gap) / columnCount
-        property real cardHeight: Math.min(250, Math.max(232, root.height * 0.92))
+        property real cardHeight: Math.min(root.height - 12, 90 + root.maxParameterRows * 24)
         columns: columnCount
         spacing: gap
         width: root.width - 20
@@ -94,7 +100,7 @@ Item {
                     x: 12
                     y: 10
                     width: parent.width - 24
-                    height: 30
+                    height: 28
                     spacing: 10
 
                     Image {
@@ -110,8 +116,8 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         text: modelData.modelName + "  ·  " + modelData.sequence
                         color: root.secondary
-                        font.family: "B612"
-                        font.pixelSize: 13
+                        font.family: "IBM Plex Sans Condensed"
+                        font.pixelSize: 14
                         font.bold: true
                         elide: Text.ElideRight
                     }
@@ -128,7 +134,7 @@ Item {
 
                 Rectangle {
                     x: 12
-                    y: 48
+                    y: 40
                     width: parent.width - 24
                     height: 1
                     color: root.divider
@@ -137,9 +143,9 @@ Item {
                 Item {
                     id: aircraftArea
                     x: 12
-                    y: 60
+                    y: 48
                     width: parent.width * 0.43
-                    height: parent.height - 122
+                    height: parent.height - 88
 
                     // Square image well. Production binds a local configured UAV image here.
                     Rectangle {
@@ -147,10 +153,9 @@ Item {
                         anchors.centerIn: parent
                         width: Math.min(parent.width - 8, parent.height - 8, 160)
                         height: width
-                        radius: 3
-                        color: "#08111D"
-                        border.color: root.divider
-                        border.width: 1
+                        radius: 0
+                        color: "transparent"
+                        border.width: 0
 
                         Item {
                             anchors.fill: parent
@@ -198,18 +203,18 @@ Item {
 
                 Rectangle {
                     x: parent.width * 0.47
-                    y: 60
+                    y: 48
                     width: 1
-                    height: parent.height - 170
+                    height: parent.height - 90
                     color: root.divider
                 }
 
                 Column {
                     id: metricColumn
                     x: parent.width * 0.51
-                    y: 60
+                    y: 48
                     width: parent.width * 0.46
-                    height: parent.height - 170
+                    height: root.maxParameterRows * 24
                     spacing: 0
 
                     Repeater {
@@ -217,33 +222,33 @@ Item {
                         delegate: Item {
                             required property var modelData
                             width: metricColumn.width
-                            height: metricColumn.height / Math.max(1, cardRoot.modelData.primaryParameters.length)
+                            height: 24
 
                             Text {
                                 anchors.left: parent.left
-                                anchors.top: parent.top
+                                anchors.verticalCenter: parent.verticalCenter
                                 text: modelData.label
                                 color: root.secondary
-                                font.family: "B612 Mono"
-                                font.pixelSize: 12
+                                font.family: "IBM Plex Sans Condensed"
+                                font.pixelSize: 13
                             }
 
                             Text {
                                 anchors.right: parent.right
-                                anchors.top: parent.top
+                                anchors.verticalCenter: parent.verticalCenter
                                 text: modelData.value
                                 color: root.text
-                                font.family: "B612 Mono"
-                                font.pixelSize: 13
+                                font.family: "B612"
+                                font.pixelSize: 14
                                 horizontalAlignment: Text.AlignRight
                             }
 
                             Rectangle {
                                 visible: modelData.key === "ENG"
                                 x: 0
-                                y: 22
+                                anchors.verticalCenter: parent.verticalCenter
                                 width: parent.width
-                                height: 5
+                                height: 4
                                 radius: 2
                                 color: "#20384A"
                                 Repeater {
@@ -272,9 +277,9 @@ Item {
                 Flow {
                     id: smartToolsFlow
                     x: parent.width * 0.51
-                    y: parent.height - 92
+                    y: parent.height - 60
                     width: parent.width * 0.46
-                    height: 42
+                    height: 28
                     spacing: 4
                     visible: cardRoot.modelData.smartTools.length > 0
 
@@ -312,20 +317,20 @@ Item {
 
                 Text {
                     x: parent.width * 0.51
-                    y: parent.height - 48
+                    y: parent.height - 22
                     width: parent.width * 0.46
                     text: root.expandedUavIndex === cardRoot.index
                           ? root.expandedParameterLabel + "  " + root.expandedParameterValue : ""
                     color: root.text
                     font.family: "B612 Mono"
-                    font.pixelSize: 11
+                    font.pixelSize: 12
                     elide: Text.ElideRight
                     visible: root.expandedUavIndex === cardRoot.index
                 }
 
                 Text {
                     x: 12
-                    y: parent.height - 54
+                    y: parent.height - 40
                     width: parent.width * 0.43
                     text: modelData.id
                     color: root.text
@@ -350,10 +355,10 @@ Item {
 
                 Rectangle {
                     x: 12
-                    y: parent.height - 12
+                    y: parent.height - 7
                     width: parent.width - 24
-                    height: 5
-                    radius: 2
+                    height: 0.7
+                    radius: 0
                     color: modelData.state === "COMPLETED" ? root.muted
                            : modelData.state === "READY" ? root.green
                            : modelData.state === "WARNING" ? root.red : root.amber
