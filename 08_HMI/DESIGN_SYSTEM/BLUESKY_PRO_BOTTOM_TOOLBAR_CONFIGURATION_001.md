@@ -163,4 +163,4 @@ Working Design System reference aligned with the controlled HMI implementation. 
 - When the visible tool count is odd, the middle tool button is anchored by its own center to the exact center of the available toolbar tool area.
 - Remaining buttons are laid out outward to the left and right, preserving their order and spacing.
 - For an even number of tools, the complete group remains centered as a group.
-- Tool widths are calculated from labels; verify spacing and centering in Qt Design Studio, especially for longer labels and after drag-reordering.
+- Position calculations use each rendered button's actual delegate width (with a label-based fallback before delegates are available), avoiding spacing drift from estimated text widths. Verify in Qt Design Studio after drag-reordering and when the visible tool set changes.
