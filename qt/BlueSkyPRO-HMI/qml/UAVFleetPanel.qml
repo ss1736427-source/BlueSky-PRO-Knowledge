@@ -148,8 +148,11 @@ Item {
         var at = next.indexOf(parameter)
         if (at >= 0)
             next.splice(at, 1)
-        else
+        else {
+            if (next.length >= 8)
+                return
             next.push(parameter)
+        }
         var configs = Object.assign({}, root.parameterConfigs)
         configs[root.uavModel[index].id] = next
         root.parameterConfigs = configs
