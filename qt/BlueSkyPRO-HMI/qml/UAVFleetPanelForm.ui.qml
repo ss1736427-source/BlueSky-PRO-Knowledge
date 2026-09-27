@@ -366,18 +366,18 @@ Item {
                     elide: Text.ElideRight
                 }
 
-                // Mission completion indicator: anchored to the card's bottom edge.
-                // Keep the track visible at 0% progress; the fill grows as the mission completes.
+                // Half-pixel mission indicator, inset from the card border so it is not covered.
+                // Antialiasing preserves fractional-pixel coverage; the brighter track stays visible at 0%.
                 Rectangle {
                     id: missionProgressTrack
                     x: 0
-                    anchors.bottom: parent.bottom
+                    y: parent.height - 2
                     width: parent.width
                     height: 0.5
                     z: 10
                     radius: 0
-                    antialiasing: false
-                    color: "#7890A3"
+                    antialiasing: true
+                    color: "#32A8C8"
 
                     Rectangle {
                         x: 0
@@ -385,7 +385,7 @@ Item {
                         width: parent.width * root.missionProgress(cardRoot.modelData)
                         height: parent.height
                         radius: 0
-                        antialiasing: false
+                        antialiasing: true
                         color: cardRoot.modelData.state === "WARNING" ? root.red : root.green
                     }
                 }
