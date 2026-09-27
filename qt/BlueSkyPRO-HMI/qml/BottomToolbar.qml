@@ -393,7 +393,7 @@ signal workspaceContextRequested(string tool)
 
         Item {
             id: toolArea
-            width: Math.max(1, toolbarRow.width - 76 - 76 - 76 - 18 - toolsButton.width)
+            width: Math.max(1, toolbarRow.width - 76 - 76 - 76 - 1 - 30 - toolsButton.width)
             height: 40
 
             Row {
