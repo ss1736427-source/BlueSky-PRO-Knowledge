@@ -398,7 +398,10 @@ signal workspaceContextRequested(string tool)
 
             Row {
                 id: visibleToolRow
-                anchors.fill: parent
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                width: implicitWidth
+                height: parent.height
                 spacing: 6
 
                 Repeater {
@@ -565,10 +568,10 @@ signal workspaceContextRequested(string tool)
 
             Text {
                 anchors.centerIn: parent
-                text: "TOOLS"
+                text: "☰"
                 color: toolsPopup.visible ? root.cyan : root.secondary
                 font.family: "B612 Mono"
-                font.pixelSize: 10
+                font.pixelSize: 17
             }
 
             MouseArea {
