@@ -16,10 +16,10 @@ Item {
     property int expandedUavIndex: -1
     property string expandedParameter: ""
     property var uavModel: [
-        { id: "BS-001", modelName: "MULTIROTOR", imageSource: "assets/uav_multirotor.svg", sequence: "01", state: "READY", height: 0, speed: 0, battery: 100, engine: 0, wind: "—", heading: "—", eta: "—", c2: "C2 OK", camera: "—", range: "120 km", eet: "—", trip: "—", tot: "—", gnss: "3D FIX", link: "OK", wp: "—", progress: "STBY", batteryHealth: "100 %", payload: "—", telemetry: "NOMINAL" },
-        { id: "BS-002", modelName: "FIXED WING", imageSource: "assets/uav_fixed_wing.svg", sequence: "02", state: "STBY", height: 0, speed: 0, battery: 100, engine: 0, wind: "—", heading: "—", eta: "—", c2: "C2 OK", camera: "—", range: "180 km", eet: "—", trip: "—", tot: "—", gnss: "3D FIX", link: "OK", wp: "—", progress: "STBY", batteryHealth: "100 %", payload: "—", telemetry: "NOMINAL" },
-        { id: "BS-003", modelName: "MULTIROTOR", imageSource: "assets/uav_heavy_multirotor.svg", sequence: "03", state: "READY", height: 0, speed: 0, battery: 100, engine: 0, wind: "—", heading: "—", eta: "—", c2: "C2 OK", camera: "—", range: "150 km", eet: "—", trip: "—", tot: "—", gnss: "3D FIX", link: "OK", wp: "—", progress: "STBY", batteryHealth: "100 %", payload: "—", telemetry: "NOMINAL" },
-        { id: "BS-004", modelName: "VTOL", imageSource: "assets/uav_vtol.svg", sequence: "04", state: "READY", height: 0, speed: 0, battery: 100, engine: 0, wind: "—", heading: "—", eta: "—", c2: "C2 OK", camera: "—", range: "200 km", eet: "—", trip: "—", tot: "—", gnss: "3D FIX", link: "OK", wp: "—", progress: "STBY", batteryHealth: "100 %", payload: "—", telemetry: "NOMINAL" }
+        { id: "BS-001", modelName: "MULTIROTOR", imageSource: "assets/uav_multirotor.svg", sequence: "01", state: "READY", missionTotalSeconds: 3725, missionRemainingSeconds: 3725, height: 0, speed: 0, battery: 100, engine: 0, wind: "—", heading: "—", eta: "—", c2: "C2 OK", camera: "—", range: "120 km", eet: "—", trip: "—", tot: "—", gnss: "3D FIX", link: "OK", wp: "—", progress: "STBY", batteryHealth: "100 %", payload: "—", telemetry: "NOMINAL" },
+        { id: "BS-002", modelName: "FIXED WING", imageSource: "assets/uav_fixed_wing.svg", sequence: "02", state: "STBY", missionTotalSeconds: 5400, missionRemainingSeconds: 5400, height: 0, speed: 0, battery: 100, engine: 0, wind: "—", heading: "—", eta: "—", c2: "C2 OK", camera: "—", range: "180 km", eet: "—", trip: "—", tot: "—", gnss: "3D FIX", link: "OK", wp: "—", progress: "STBY", batteryHealth: "100 %", payload: "—", telemetry: "NOMINAL" },
+        { id: "BS-003", modelName: "MULTIROTOR", imageSource: "assets/uav_heavy_multirotor.svg", sequence: "03", state: "READY", missionTotalSeconds: 2700, missionRemainingSeconds: 2700, height: 0, speed: 0, battery: 100, engine: 0, wind: "—", heading: "—", eta: "—", c2: "C2 OK", camera: "—", range: "150 km", eet: "—", trip: "—", tot: "—", gnss: "3D FIX", link: "OK", wp: "—", progress: "STBY", batteryHealth: "100 %", payload: "—", telemetry: "NOMINAL" },
+        { id: "BS-004", modelName: "VTOL", imageSource: "assets/uav_vtol.svg", sequence: "04", state: "READY", missionTotalSeconds: 3599, missionRemainingSeconds: 3599, height: 0, speed: 0, battery: 100, engine: 0, wind: "—", heading: "—", eta: "—", c2: "C2 OK", camera: "—", range: "200 km", eet: "—", trip: "—", tot: "—", gnss: "3D FIX", link: "OK", wp: "—", progress: "STBY", batteryHealth: "100 %", payload: "—", telemetry: "NOMINAL" }
     ]
 
     property var defaultParameters: ["ALT", "SPD", "BAT", "ENG"]
@@ -60,6 +60,21 @@ Item {
         category: "BlueSkyPRO/UAVPanel"
         property string uavOrderJson: ""
         property string parameterConfigsJson: ""
+    }
+
+    Timer {
+        id: missionCountdown
+        interval: 1000
+        repeat: true
+        running: true
+        onTriggered: {
+            var next = root.uavModel.map(function(item) {
+                var copy = Object.assign({}, item)
+                copy.missionRemainingSeconds = Math.max(0, Number(copy.missionRemainingSeconds) - 1)
+                return copy
+            })
+            root.uavModel = next
+        }
     }
 
     function parseJson(value, fallback) {
