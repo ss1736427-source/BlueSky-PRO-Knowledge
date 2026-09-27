@@ -8,6 +8,8 @@ find_package(Qt6 REQUIRED COMPONENTS Quick)
 
 qt_standard_project_setup(REQUIRES 6.5)
 
+qt_policy(SET QTP0004 NEW)
+
 set_source_files_properties(qml/Theme.qml
     PROPERTIES QT_QML_SINGLETON_TYPE TRUE
 )
@@ -25,11 +27,12 @@ qt_add_qml_module(appBlueSkyPRO
         qml/MainContent.ui.qml
         qml/TopHeader.ui.qml
         qml/HeaderSector.ui.qml
-        qml/LeftPanel.ui.qml
+        qml/LeftPanel.qml
         qml/FlightChart.ui.qml
         qml/RightPanel.ui.qml
-        qml/UAVStatus.ui.qml
-        qml/BottomToolbar.ui.qml
+        qml/UAVFleetPanel.qml
+        qml/UAVFleetPanelForm.ui.qml
+        qml/BottomToolbar.qml
         qml/ContextOverlay.ui.qml
         qml/Theme.qml
 )
