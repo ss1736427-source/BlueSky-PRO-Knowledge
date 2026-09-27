@@ -72,7 +72,7 @@ Item {
             showTopBorder: false
             // BottomToolbar owns the shared seam; avoid drawing a second line here.
             showBottomBorder: false
-            visible: root.activeTool !== "UAV" && root.leftPanelOpen
+            visible: root.leftPanelOpen
             width: visible ? root.leftWidth : 0
             missionVisible: root.missionVisible
             missionCreationMode: root.missionCreationMode
@@ -126,7 +126,7 @@ Item {
             // A zero-width panel does not clip its children: hide the whole
             // component when collapsed so buttons/text/popups cannot leak
             // into the Flight Chart.
-            visible: root.activeTool !== "UAV" && root.rightPanelOpen
+            visible: root.rightPanelOpen
             width: visible ? root.rightWidth : 0
             // Match the left panel's shared-edge ownership: header and toolbar draw the horizontal seams.
             showTopBorder: false
@@ -175,15 +175,9 @@ Item {
         onLeftPanelToggleRequested: root.leftPanelOpen = !root.leftPanelOpen
         onRightPanelToggleRequested: root.rightPanelOpen = !root.rightPanelOpen
         onToolActivated: {
-            if (tool === "UAV") {
-                // Opening the fleet view collapses both side panels and gives
-                // the map/card workspace the full width.
-                root.leftPanelOpen = false
-                root.rightPanelOpen = false
-                root.contextOverlayOpen = false
-            } else {
-                root.contextOverlayOpen = false
-            }
+            // Switching to UAV changes the workspace content only.
+            // Side panels keep their current open/closed state.
+            root.contextOverlayOpen = false
             root.workspaceContextRequested(tool)
         }
     }
