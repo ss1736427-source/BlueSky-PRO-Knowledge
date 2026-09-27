@@ -6,7 +6,7 @@
 
 ## Purpose
 
-Deterministically verify that route waypoints are outside active NOTAM-defined prohibited zones before a route can be accepted as a valid planning candidate.
+Deterministically verify that route waypoints and route segments are outside active NOTAM-defined prohibited zones before a route can be accepted as a valid planning candidate.
 
 ## Boundary
 
@@ -19,16 +19,17 @@ The upstream NOTAM adapter is responsible for converting an authoritative NOTAM 
 1. Route references a NOTAM snapshot when NOTAM avoidance is required.
 2. The snapshot is valid for the route evaluation time.
 3. Every route waypoint is tested against every active prohibited zone whose altitude band overlaps the waypoint altitude.
-4. A waypoint inside an active prohibited zone produces a deterministic rejection finding containing the NOTAM identifier and waypoint identifier.
-5. Missing, invalid or stale NOTAM input is never silently treated as an empty airspace.
+4. Every adjacent route segment is tested against active prohibited zones when the segment altitude interval overlaps the zone altitude band.
+5. A waypoint inside a zone or a segment intersecting a zone produces a deterministic rejection finding identifying the NOTAM and waypoint/segment.
+6. Missing, invalid or stale NOTAM input is never silently treated as an empty airspace.
 
 ## Geometry
 
 The initial normalized geometry supports circles and polygons. Geodesic conversion/projection belongs to the adapter; the validator receives latitude/longitude in the canonical route model.
 
-## Scope limitation
+## Geometry implementation note
 
-This block validates waypoint containment. Segment intersection with a prohibited zone is a separate deterministic check and must be implemented before route acceptance can claim full NOTAM corridor compliance.
+Circle segment checks use a local tangent-plane distance approximation; polygon checks use local planar segment-edge intersection. This is appropriate for the current bounded planning test cases but is not a substitute for validation against authoritative geospatial test vectors, especially for long segments, polar routes, or geometry crossing the antimeridian. The validator remains dependent on upstream normalization and does not interpret raw NOTAM text.
 
 ## Authority
 
