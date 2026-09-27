@@ -148,3 +148,11 @@ This document records the intended Design System / HMI behavior represented by t
 ## 12. Status
 
 Working Design System reference aligned with the controlled HMI implementation. Final production geometry, typography and certification status remain governed by their respective controlled specifications.
+
+### Centered toolbar tools and menu icon — 2026-09-27
+
+- Replaced the visible `TOOLS` text label with a compact hamburger/menu glyph (`☰`); the existing button continues to open/close the tool configuration popup.
+- LEFT and RIGHT remain fixed anchor controls. The clock and menu button remain in the right-side group.
+- The enabled tool buttons are centered within the available span between the LEFT and RIGHT anchors. Their row width follows the visible tool delegates, so the group re-centers when tools are enabled/disabled or added.
+- Existing tool ordering, drag-to-reorder, and persisted configuration are retained.
+- Verify in Qt Design Studio at the target window size and with all available tools enabled; very narrow windows may require a separate overflow/scroll treatment.
