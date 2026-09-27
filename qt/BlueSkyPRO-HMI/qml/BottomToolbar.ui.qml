@@ -5,18 +5,18 @@ Item {
 
     implicitHeight: 54
 
-    property color bg: "#000000"
+    property color bg: "#050A12"
     property color text: "#FFFFFF"
     property color secondary: "#BFBFBF"
     property color cyan: "#32FFFF"
-    property color divider: "#202020"
+    property color divider: "#111F30"
     property bool leftOpen: true
     property bool rightOpen: true
     property string activeTool: "MAP"
 
     signal leftPanelToggleRequested()
     signal rightPanelToggleRequested()
-    signal toolRequested(string tool)
+    signal toolActivated(string tool)
     signal toolConfigurationRequested()
 
     ListModel {
@@ -26,6 +26,12 @@ Item {
         ListElement { tool: "FPV" }
         ListElement { tool: "ADMIN" }
         ListElement { tool: "VIRTUAL FLT" }
+    }
+
+    function activateTool(tool) {
+        // UAV is a toggle: second activation returns the workspace to MAP.
+        activeTool = (tool === "UAV" && activeTool === "UAV") ? "MAP" : tool
+        toolActivated(activeTool)
     }
 
     function moveTool(fromIndex, toIndex) {
@@ -63,6 +69,16 @@ Item {
         color: root.bg
     }
 
+    // Single shared seam between the workspace and the bottom toolbar.
+    Rectangle {
+        x: 0
+        y: 0
+        width: parent.width
+        height: 1
+        color: root.cyan
+        antialiasing: false
+    }
+
     // Fixed left anchor.
     Rectangle {
         id: leftButton
@@ -71,7 +87,7 @@ Item {
         anchors.leftMargin: 10
         width: 88
         height: 38
-        color: "#0A0A0A"
+        color: "#0C1725"
         border.color: root.divider
         border.width: 1
 
@@ -97,7 +113,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         width: 88
         height: 38
-        color: "#0A0A0A"
+        color: "#0C1725"
         border.color: root.divider
         border.width: 1
 
@@ -175,9 +191,8 @@ Item {
                         }
                         target = Math.max(0, Math.min(toolModel.count - 1, target))
                         root.moveTool(parent.dragStartIndex, target)
-                        root.toolRequested(model.tool)
                     }
-                    onClicked: root.toolRequested(model.tool)
+                    onClicked: root.activateTool(model.tool)
                 }
             }
         }
@@ -190,7 +205,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         width: 72
         height: 38
-        color: "#000000"
+        color: "#050A12"
         border.color: root.divider
         border.width: 1
 
@@ -210,7 +225,7 @@ Item {
         anchors.rightMargin: 10
         width: 44
         height: 38
-        color: "#08111D"
+        color: "#0C1725"
         border.color: root.cyan
         border.width: 1
 
