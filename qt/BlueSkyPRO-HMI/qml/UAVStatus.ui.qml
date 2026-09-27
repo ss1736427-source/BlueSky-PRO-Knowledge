@@ -61,6 +61,7 @@ Item {
                 }
                 MouseArea {
                     x: 8; y: 6; width: 42; height: 38
+                    z: 3
                     onClicked: root.uavSelected(index)
                 }
 
@@ -199,7 +200,7 @@ Item {
 
                 MouseArea {
                     anchors.fill: parent
-                    z: -1
+                    z: 2
                     onClicked: root.uavSelected(index)
                     onDoubleClicked: root.uavDoubleClicked(index)
                 }
