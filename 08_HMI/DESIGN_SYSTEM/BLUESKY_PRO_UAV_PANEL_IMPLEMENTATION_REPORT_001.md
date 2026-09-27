@@ -88,7 +88,7 @@ Numeric values use a slightly larger size than labels to improve scanability. Th
 - The engine-load scale is a 2 px line placed at the bottom of the ENG row, below the value text. It no longer overlays the label or percentage.
 - Engine-load color is value-dependent: 0% is neutral gray; below the cruise reference it transitions through blue; at the cruise reference it is green; above cruise it progressively transitions toward red.
 - The current prototype uses a configurable 60% cruise reference (`engineCruisePercent`). This is a UI reference value, not a certified operating limit; production configuration must supply the appropriate value for each aircraft/engine profile.
-- Parameter rows use 24 px spacing, and the card height formula includes space for the header, metric rows, and status footer.
+- Parameter rows use 20 px height, and the card height formula includes space for the header, metric rows, and status footer.
 
 ## 4. Card layout and fleet behavior
 
@@ -137,5 +137,5 @@ Card values are design-preview values, not live telemetry. Production integratio
 ### Aircraft illustrations and state label
 
 - Card status is a single label centered across the full card width and bound to `modelData.state`; `READY` and `STBY` are mutually exclusive and replace one another. READY is green; STBY is cyan. The status is not concatenated with mission progress.
-- Added local scalable SVG illustrations by aircraft class: `qml/assets/uav_multirotor.svg`, `qml/assets/uav_fixed_wing.svg`, and `qml/assets/uav_vtol.svg`. They are lightweight, transparent-background schematic renders intended for the Design Studio mockup and work offline. All four mockup cards now use local assets; multirotor cards no longer depend on an external image URL.
+- Added local scalable SVG illustrations by aircraft class: `qml/assets/uav_multirotor.svg`, `qml/assets/uav_fixed_wing.svg`, `qml/assets/uav_heavy_multirotor.svg`, and `qml/assets/uav_vtol.svg`. They are lightweight, transparent-background schematic renders intended for the Design Studio mockup and work offline. All four mockup cards now use local assets; BS-001 and BS-003 use distinct multirotor illustrations; no card depends on an external image URL.
 - Internet visual references reviewed: [white quadcopter render](https://wallpapers.com/png/white-quadcopter-dronewith-camera-58sweghtoh4bc9ab.html), [fixed-wing UAV](https://www.kindpng.com/imgv/TJmJhJ_fixed-wing-drone-png-transparent-png/), and [WingtraOne VTOL](https://www.kindpng.com/imgv/TJmomb_wingtraone-wingtra-drone-png-transparent-png/). These pages were reviewed as visual references only. The source pages do not establish a clear license for redistribution in this project, so their photos are not copied into the repository. The committed SVGs are original schematic illustrations, not copies of those images. This avoids external network dependency and uncertain image rights in the DS mockup. Obtain appropriately licensed product images before commercial release.
