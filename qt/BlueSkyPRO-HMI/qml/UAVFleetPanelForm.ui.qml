@@ -367,27 +367,17 @@ Item {
                     elide: Text.ElideRight
                 }
 
-                // Mission progress shares the remaining-time row; the 0.5 px line is vertically centered.
+                // Single green mission-progress line, vertically centered in the remaining-time row.
                 Rectangle {
-                    id: missionProgressTrack
+                    id: missionProgressIndicator
                     x: missionRemainingLabel.x + missionRemainingLabel.width + 8
                     y: missionRemainingLabel.y + (missionRemainingLabel.height - height) / 2
-                    width: Math.max(0, parent.width - x - 12)
+                    width: Math.max(0, parent.width - x - 12) * root.missionProgress(cardRoot.modelData)
                     height: 0.5
                     z: 10
                     radius: 0
                     antialiasing: true
-                    color: "#32A8C8"
-
-                    Rectangle {
-                        x: 0
-                        y: 0
-                        width: parent.width * root.missionProgress(cardRoot.modelData)
-                        height: parent.height
-                        radius: 0
-                        antialiasing: true
-                        color: cardRoot.modelData.state === "WARNING" ? root.red : root.green
-                    }
+                    color: root.green
                 }
 
                 MouseArea {
