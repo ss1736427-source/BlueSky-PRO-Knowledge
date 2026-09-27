@@ -217,3 +217,11 @@ The previous preview showed fleet-card content stacked at the far left because `
 - Activating the UAV tool explicitly sets both `leftPanelOpen` and `rightPanelOpen` to false. The side panels collapse and the fleet view receives the full workspace width.
 - Selecting another tool does not automatically reopen the side panels; the user can reopen them with the fixed LEFT/RIGHT toolbar controls.
 - Verify the resulting placement and panel toggling in Qt Design Studio Preview.
+
+
+### Preserve side panels in UAV mode — 2026-09-27
+
+- Activating the UAV tool changes the workspace mode but does not close the left or right side panel.
+- Side-panel visibility is controlled only by the respective `leftPanelOpen` and `rightPanelOpen` states, not by the active tool.
+- The fleet cards remain constrained to the central area between the side panels; the available card width therefore reflects whether either side panel is open.
+- Verify in Qt Design Studio Preview that LEFT and RIGHT remain visible when UAV is active and still respond to their own toolbar toggles.
