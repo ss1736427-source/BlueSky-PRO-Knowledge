@@ -56,13 +56,34 @@ The per-card submenu provides these selectable fields:
 - PAYLOAD — payload/equipment
 - TELEM — telemetry quality/state
 
-The four primary fields (height, speed, battery, engines) are also configurable. Parameter order can be changed with the up/down controls. Additional selected tools appear as compact chips; selecting one expands its value while the other tools remain compact. The menu offers **ПРИМЕНИТЬ КО ВСЕМ** for copying the selected card's display configuration to the fleet.
+The four default fields (height, speed, battery, engines) are configurable. Parameter order can be changed with the up/down controls. All enabled fields, including optional fields selected in the submenu, are rendered as consistent readable rows. The menu offers **ПРИМЕНИТЬ КО ВСЕМ** for copying the selected card's display configuration to the fleet.
 
 To preserve readability, the current HMI prototype limits a card to eight displayed parameters at once. This is a presentation limit only; it does not limit telemetry acquisition or stored data.
 
+### Adaptive card height
+
+Card height is derived from the largest configured row count in the visible fleet. The four-row default produces a compact card; enabling additional rows increases the card and dock height by one row increment per field. Cards remain aligned to a common height for a stable fleet grid. The dock remains anchored immediately above the bottom toolbar and overlays the map rather than replacing the map workspace.
+
+### Progress indicator
+
+The mission-progress strip is set to 0.7 px by default on all cards.
+
+### Image treatment
+
+The aircraft illustration area has no frame/border. Its background is transparent so the aircraft graphic reads as part of the card rather than a separate boxed tile.
+
+### Typography
+
+The implementation follows the working Design System hierarchy from `BLUESKY_PRO_QT_DESIGN_STUDIO_WORKBOOK_001.md`:
+- `B612` for primary numeric values;
+- `B612 Mono` for compact technical codes where appropriate;
+- `IBM Plex Sans Condensed` for service labels and descriptive information.
+
+Numeric values use a slightly larger size than labels to improve scanability. The final installed font availability and rendered metrics must still be verified in Qt Design Studio.
+
 ## 4. Card layout and fleet behavior
 
-- Fleet cards are arranged in a responsive grid with a minimum target width of 320 px and a comfortable card height.
+- Fleet cards are arranged in a responsive grid with a minimum target width of 320 px. Card and dock heights adapt to the configured number of visible parameter rows.
 - Cards are reordered by drag-and-drop. The order is saved using Qt Settings.
 - Each UAV has its own parameter selection/order, saved by board ID.
 - The selected UAV is highlighted with the approved cyan navigation color.
