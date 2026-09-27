@@ -1,4 +1,4 @@
-import QtQuick
+﻿import QtQuick
 
 Item {
     id: root
@@ -12,10 +12,21 @@ Item {
     property color muted: "#7F7F7F"
     property color divider: "#202020"
     property bool missionVisible: true
+    property bool manualCreationMode: false
+    // The map/mission editor sets this only when the composed mission is complete.
+    property bool manualCompositionComplete: false
+    signal manualCompositionCompleted()
+    signal mapDoubleClicked()
 
     Rectangle {
         anchors.fill: parent
         color: root.bg
+
+        MouseArea {
+            anchors.fill: parent
+            acceptedButtons: Qt.LeftButton
+            onDoubleClicked: root.mapDoubleClicked()
+        }
     }
 
     Text {
@@ -82,13 +93,27 @@ Item {
         }
     }
     Text {
-        visible: !root.missionVisible
+        visible: !root.missionVisible && !root.manualCreationMode
         anchors.centerIn: parent
-        text: "NO ACTIVE MISSION"
+        text: "НЕТ АКТИВНОЙ МИССИИ"
         color: root.muted
         font.family: "B612 Mono"
         font.pixelSize: 12
     }
+
+
+
+    Text {
+        visible: root.manualCreationMode
+        anchors.horizontalCenter: parent.horizontalCenter
+        y: 24
+        text: "РУЧНОЕ СОЗДАНИЕ МИССИИ · M"
+        color: "#64FF00"
+        font.family: "B612 Mono"
+        font.pixelSize: 12
+        font.bold: true
+    }
+
 
     PanelSettingsButton {
         id: panelSettings
@@ -110,5 +135,4 @@ Item {
         tools: ["Base Map", "Airspace / Restrictions", "NOTAM", "Weather Layers", "Route / Waypoints", "UAV Display", "Planned / Actual Track", "Map Interaction"]
         onClosed: open = false
     }
-
 }

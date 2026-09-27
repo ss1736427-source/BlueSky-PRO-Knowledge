@@ -1,8 +1,11 @@
-import QtQuick
+﻿import QtQuick
 
 Item {
     id: root
 
+    // Prevent child controls from painting outside the panel when its
+    // width is collapsed to zero by MainContent.
+    clip: true
     implicitWidth: 340
 
     property color bg: "#0A0A0A"
@@ -17,9 +20,14 @@ Item {
 
     // Contextual validation is not shown until automatic revalidation succeeds.
     property bool validationConfirmationRequired: false
+    property bool manualCreationMode: false
+    property bool manualCompositionComplete: false
+    property bool manualValidationStarted: false
     property bool missionReady: false
     property bool warningActive: true
     property real validationPulse: 1.0
+    signal startMissionRequested()
+    signal validateManualMissionRequested()
 
     Rectangle {
         anchors.fill: parent
@@ -110,23 +118,25 @@ Item {
     }
 
     Rectangle {
-        visible: root.validationConfirmationRequired
+        visible: root.manualCreationMode ? !root.manualValidationStarted : root.validationConfirmationRequired
         x: 16
         y: 286
         width: parent.width - 32
         height: 38
         color: "transparent"
         border.color: Qt.rgba(root.green.r, root.green.g, root.green.b, root.validationPulse)
+        opacity: root.manualCreationMode && !root.manualCompositionComplete ? 0.55 : 1.0
         border.width: 1
     }
 
     Text {
-        visible: root.validationConfirmationRequired
+        visible: root.manualCreationMode ? !root.manualValidationStarted : root.validationConfirmationRequired
         x: 16
         y: 286
         width: parent.width - 32
         height: 38
-        text: "VALIDATE MISSION"
+        text: root.manualCreationMode ? "ВАЛИДАЦИЯ МИССИИ" : "VALIDATE MISSION"
+        opacity: root.manualCreationMode && !root.manualCompositionComplete ? 0.65 : 1.0
         color: root.green
         font.family: "B612"
         font.pixelSize: 12
@@ -135,8 +145,19 @@ Item {
         verticalAlignment: Text.AlignVCenter
     }
 
+    MouseArea {
+        visible: root.manualCreationMode && !root.manualValidationStarted
+        x: 16
+        y: 286
+        width: parent.width - 32
+        height: 38
+        enabled: root.manualCompositionComplete
+        cursorShape: enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
+        onClicked: root.validateManualMissionRequested()
+    }
+
     SequentialAnimation on validationPulse {
-        running: root.validationConfirmationRequired
+        running: root.manualCreationMode ? !root.manualValidationStarted : root.validationConfirmationRequired
         loops: Animation.Infinite
         NumberAnimation { from: 0.35; to: 1.0; duration: 650; easing.type: Easing.InOutSine }
         NumberAnimation { from: 1.0; to: 0.35; duration: 650; easing.type: Easing.InOutSine }
@@ -189,6 +210,15 @@ Item {
         verticalAlignment: Text.AlignVCenter
     }
 
+    MouseArea {
+        x: 16
+        y: 382
+        width: parent.width - 32
+        height: 38
+        enabled: root.missionReady
+        onClicked: root.startMissionRequested()
+    }
+
     Text {
         x: 16
         y: 437
@@ -229,6 +259,7 @@ Item {
         font.family: "B612"
         font.pixelSize: 10
     }
+
     PanelSettingsButton {
         id: panelSettings
         anchors.top: parent.top
@@ -249,5 +280,4 @@ Item {
         tools: ["Checklist", "Warnings / Corrections", "Readiness", "Validation", "Send Flight Plan", "Mission Actions", "Safety Gate"]
         onClosed: open = false
     }
-
 }

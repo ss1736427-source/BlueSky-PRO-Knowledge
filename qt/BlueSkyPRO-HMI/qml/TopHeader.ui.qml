@@ -1,4 +1,4 @@
-import QtQuick
+﻿import QtQuick
 
 Item {
     id: root
@@ -125,7 +125,7 @@ Item {
 
                     Text {
                         anchors.centerIn: parent
-                        text: "●"
+                        text: "OP"
                         color: root.secondary
                         font.pixelSize: Math.round(root.operatorIconSize * 0.42)
                     }
@@ -349,6 +349,7 @@ Item {
 
     // Central composition always occupies the exact adaptive space between the two equal anchors.
 
+
     PanelSettingsButton {
         id: panelSettings
         anchors.top: parent.top
@@ -369,5 +370,4 @@ Item {
         tools: ["ETD", "TOT", "TRIP", "ETA", "READY", "WARNING", "Operator", "Optional Aggregate Status"]
         onClosed: open = false
     }
-
 }
