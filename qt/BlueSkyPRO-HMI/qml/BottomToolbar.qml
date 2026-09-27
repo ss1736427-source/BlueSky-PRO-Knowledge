@@ -448,7 +448,10 @@ signal workspaceContextRequested(string tool)
                     delegate: Rectangle {
                         id: toolDelegate
                         width: Math.max(76, toolLabel.implicitWidth + 28)
-                        x: visibleToolRow.xForTool(index)
+                        x: (visibleToolModel.count % 2 === 1
+                            && index === Math.floor(visibleToolModel.count / 2))
+                            ? (visibleToolRow.width - width) / 2
+                            : visibleToolRow.xForTool(index)
                         y: (visibleToolRow.height - height) / 2
                         height: 38
                         color: root.activeTool === model.key ? "#111F30" : "#0C1725"
