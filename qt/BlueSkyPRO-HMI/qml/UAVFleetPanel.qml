@@ -23,6 +23,13 @@ Item {
     ]
 
     property var defaultParameters: ["ALT", "SPD", "BAT", "ENG"]
+    readonly property int maxParameterRows: {
+        var count = root.defaultParameters.length
+        for (var i = 0; i < root.uavModel.length; ++i)
+            count = Math.max(count, root.parametersFor(i).length)
+        return count
+    }
+    readonly property int preferredHeight: 48 + root.maxParameterRows * 24 + 42 + 16
     property var parameterConfigs: ({})
 
     readonly property var availableParameterOptions: [
@@ -117,16 +124,12 @@ Item {
     readonly property var displayModel: root.uavModel.map(function(data, index) {
         var enriched = Object.assign({}, data)
         var keys = root.parametersFor(index)
-        enriched.primaryParameters = keys.filter(function(key) {
-            return root.defaultParameters.indexOf(key) >= 0
-        }).map(function(key) {
+        // Every enabled parameter is rendered as a readable row.
+        // The card height grows with the configured row count.
+        enriched.primaryParameters = keys.map(function(key) {
             return { key: key, label: root.parameterLabel(key, data), value: root.parameterValue(key, data) }
         })
-        enriched.smartTools = keys.filter(function(key) {
-            return root.defaultParameters.indexOf(key) < 0
-        }).map(function(key) {
-            return { key: key, label: root.parameterLabel(key, data), value: root.parameterValue(key, data) }
-        })
+        enriched.smartTools = []
         return enriched
     })
     readonly property string expandedParameterLabel: root.expandedUavIndex >= 0
