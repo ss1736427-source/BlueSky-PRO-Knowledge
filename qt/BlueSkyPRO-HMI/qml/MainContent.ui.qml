@@ -141,26 +141,27 @@ Item {
             onValidateManualMissionRequested: root.missionState = "VALIDATING"
             onStartMissionRequested: root.leftPanelOpen = false
         }
-    }
 
-    UAVFleetPanel {
-        id: uavStatus
-        visible: root.uavPanelOpen
-        z: 20
-        selectedIndex: root.selectedUavIndex
-        onUavSelected: {
-            root.selectedUavIndex = index
-            root.contextOverlayOpen = false
+        // Keep fleet and side panels in the same coordinate space so anchors
+        // resolve correctly. Cards are centered within the available workspace.
+        UAVFleetPanel {
+            id: uavStatus
+            visible: root.uavPanelOpen
+            z: 20
+            selectedIndex: root.selectedUavIndex
+            onUavSelected: {
+                root.selectedUavIndex = index
+                root.contextOverlayOpen = false
+            }
+            onUavDoubleClicked: {
+                root.selectedUavIndex = index
+                root.contextOverlayOpen = true
+            }
+            anchors.left: leftPanel.right
+            anchors.right: rightPanel.left
+            anchors.verticalCenter: parent.verticalCenter
+            height: Math.min(uavStatus.preferredHeight, parent.height)
         }
-        onUavDoubleClicked: {
-            root.selectedUavIndex = index
-            root.contextOverlayOpen = true
-        }
-        // Fleet cards occupy only the workspace between the side panels.
-        anchors.left: leftPanel.right
-        anchors.right: rightPanel.left
-        anchors.bottom: bottomToolbar.top
-        height: Math.min(uavStatus.preferredHeight, root.height - root.headerHeight - root.toolbarHeight)
     }
 
     BottomToolbar {
