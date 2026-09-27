@@ -138,7 +138,7 @@ Item {
         }
     }
 
-    UAVStatus {
+    UAVFleetPanel {
         id: uavStatus
         visible: root.uavPanelOpen
         z: 20
