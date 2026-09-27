@@ -159,8 +159,8 @@ Item {
             }
             anchors.left: leftPanel.right
             anchors.right: rightPanel.left
+            anchors.top: parent.top
             anchors.bottom: parent.bottom
-            height: Math.min(uavStatus.preferredHeight, parent.height)
         }
     }
 
