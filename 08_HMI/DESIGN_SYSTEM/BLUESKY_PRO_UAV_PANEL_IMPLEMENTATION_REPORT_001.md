@@ -183,3 +183,8 @@ The countdown row now renders only one green 0.5 px mission-progress line. The c
 ### Remaining-time indicator direction
 
 Before mission start, the green indicator is full width (remaining time equals the mission's maximum duration). As the countdown decreases, the green line contracts from its right edge toward the left. At 0 remaining seconds, the line has zero width. The numeric label counts down from the configured maximum mission duration to `00:00` (hours omitted below one hour).
+
+
+### Countdown start condition
+
+The countdown is held at the configured maximum before departure. Each UAV model has `missionStarted: false` initially; the 1-second timer decrements `missionRemainingSeconds` only after `missionStarted` becomes `true`. The mission-start workflow must set this flag at actual departure/start-of-mission. In the current Design Studio mock, no flight-start control is wired, so the countdown remains at its maximum until connected to that event.
