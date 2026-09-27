@@ -156,8 +156,9 @@ Item {
             root.selectedUavIndex = index
             root.contextOverlayOpen = true
         }
-        anchors.left: parent.left
-        anchors.right: parent.right
+        // Fleet cards occupy only the workspace between the side panels.
+        anchors.left: leftPanel.right
+        anchors.right: rightPanel.left
         anchors.bottom: bottomToolbar.top
         height: Math.min(uavStatus.preferredHeight, root.height - root.headerHeight - root.toolbarHeight)
     }
