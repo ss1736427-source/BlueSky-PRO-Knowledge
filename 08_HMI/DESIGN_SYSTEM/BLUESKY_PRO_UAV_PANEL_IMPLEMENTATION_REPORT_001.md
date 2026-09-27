@@ -235,3 +235,11 @@ The previous preview showed fleet-card content stacked at the far left because `
 - The last panel position is persisted through `Qt.labs.settings` and reused on subsequent openings and application launches.
 - The fleet overlay now occupies the full central workspace while the card grid remains bottom-anchored. This gives the settings panel a workspace-sized coordinate area without changing the card strip placement.
 - Verify card selection, per-UAV parameter isolation, drag bounds, and position persistence in Qt Design Studio / application runtime.
+
+
+### Automatic mission highlight — 2026-09-27
+
+- Automatically generated missions are identified by the `-A-` segment in the mission ID (for example, `BS-260920-A-001`).
+- The mission row outline uses `#64FF00` for automatic missions.
+- Other mission types retain the standard divider outline.
+- The highlight is derived from the mission ID, so it updates when the mission ID changes.
