@@ -209,3 +209,11 @@ The countdown is held at the configured maximum before departure. Each UAV model
 ### Fleet layout anchor correction — 2026-09-27
 
 The previous preview showed fleet-card content stacked at the far left because `UAVFleetPanel` was a root-level item attempting to anchor to `LeftPanel` and `RightPanel`, which are children of `workspace`. Those items were not valid anchor siblings, so the intended horizontal constraints did not resolve. `UAVFleetPanel` has now been moved inside `workspace`, alongside both side panels. Its left/right anchors now target sibling panels, and it is vertically centered in the workspace. This corrects the coordinate-space/anchor issue behind the misaligned preview.
+
+
+### UAV panel bottom docking and side-panel collapse — 2026-09-27
+
+- The fleet panel is bottom-anchored to the workspace, whose lower edge is the top of the bottom toolbar. Its card strip therefore stays immediately above the toolbar instead of vertically covering the central map.
+- Activating the UAV tool explicitly sets both `leftPanelOpen` and `rightPanelOpen` to false. The side panels collapse and the fleet view receives the full workspace width.
+- Selecting another tool does not automatically reopen the side panels; the user can reopen them with the fixed LEFT/RIGHT toolbar controls.
+- Verify the resulting placement and panel toggling in Qt Design Studio Preview.
