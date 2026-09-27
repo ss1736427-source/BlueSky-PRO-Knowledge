@@ -9,7 +9,7 @@ Item {
     // Visual composition only. Core / Safety remain authoritative.
     property int headerHeight: 86
     property int leftWidth: leftPanel.implicitWidth
-    property int rightWidth: 340
+    property int rightWidth: leftWidth
     property int toolbarHeight: 54
     property bool leftPanelOpen: true
     property bool rightPanelOpen: true
@@ -128,6 +128,11 @@ Item {
             // into the Flight Chart.
             visible: root.activeTool !== "UAV" && root.rightPanelOpen
             width: visible ? root.rightWidth : 0
+            // Match the left panel's shared-edge ownership: header and toolbar draw the horizontal seams.
+            showTopBorder: false
+            showBottomBorder: false
+            showLeftBorder: true
+            showRightBorder: true
             missionReady: root.missionReady
             warningActive: root.warningActive
             manualCreationMode: root.missionCreationMode
