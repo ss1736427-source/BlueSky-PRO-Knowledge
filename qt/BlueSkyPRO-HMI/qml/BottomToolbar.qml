@@ -431,7 +431,10 @@ signal workspaceContextRequested(string tool)
                     if (count === 0)
                         return 0
                     var middle = Math.floor(count / 2)
-                    var centerX = width / 2
+                    // Center against the outer panel width, not the space
+                    // between LEFT/RIGHT anchors. Convert panel center to
+                    // this tool area's local coordinate system.
+                    var centerX = root.width / 2 - toolArea.x
                     if (count % 2 === 1) {
                         var middleWidth = widthAt(middle)
                         if (i === middle)
@@ -464,10 +467,7 @@ signal workspaceContextRequested(string tool)
                     delegate: Rectangle {
                         id: toolDelegate
                         width: 100
-                        x: (visibleToolModel.count % 2 === 1
-                            && index === Math.floor(visibleToolModel.count / 2))
-                            ? (visibleToolRow.width - width) / 2
-                            : visibleToolRow.xForTool(index)
+                        x: visibleToolRow.xForTool(index)
                         y: (visibleToolRow.height - height) / 2
                         height: 38
                         color: root.activeTool === model.key ? "#111F30" : "#0C1725"
