@@ -13,6 +13,8 @@ Item {
     property real dragStartX: 0
     property real dragStartY: 0
     property int dragTargetIndex: -1
+    property int expandedUavIndex: -1
+    property string expandedParameter: ""
     property var uavModel: [
         { id: "BS-001", modelName: "MULTIROTOR", sequence: "01", state: "READY", height: 0, speed: 0, battery: 100, engine: 0, wind: "—", heading: "—", eta: "—", c2: "C2 OK", camera: "—", range: "120 km", eet: "—", trip: "—", tot: "—", gnss: "3D FIX", link: "OK", wp: "—", progress: "STBY", batteryHealth: "100 %", payload: "—", telemetry: "NOMINAL" },
         { id: "BS-002", modelName: "FIXED WING", sequence: "02", state: "READY", height: 0, speed: 0, battery: 100, engine: 0, wind: "—", heading: "—", eta: "—", c2: "C2 OK", camera: "—", range: "180 km", eet: "—", trip: "—", tot: "—", gnss: "3D FIX", link: "OK", wp: "—", progress: "STBY", batteryHealth: "100 %", payload: "—", telemetry: "NOMINAL" },
@@ -114,11 +116,23 @@ Item {
 
     readonly property var displayModel: root.uavModel.map(function(data, index) {
         var enriched = Object.assign({}, data)
-        enriched.displayParameters = root.parametersFor(index).map(function(key) {
+        var keys = root.parametersFor(index)
+        enriched.primaryParameters = keys.filter(function(key) {
+            return root.defaultParameters.indexOf(key) >= 0
+        }).map(function(key) {
+            return { key: key, label: root.parameterLabel(key, data), value: root.parameterValue(key, data) }
+        })
+        enriched.smartTools = keys.filter(function(key) {
+            return root.defaultParameters.indexOf(key) < 0
+        }).map(function(key) {
             return { key: key, label: root.parameterLabel(key, data), value: root.parameterValue(key, data) }
         })
         return enriched
     })
+    readonly property string expandedParameterLabel: root.expandedUavIndex >= 0
+        ? root.parameterLabel(root.expandedParameter, root.uavModel[root.expandedUavIndex]) : ""
+    readonly property string expandedParameterValue: root.expandedUavIndex >= 0
+        ? root.parameterValue(root.expandedParameter, root.uavModel[root.expandedUavIndex]) : ""
 
     function persist() {
         settings.uavOrderJson = JSON.stringify(root.uavModel.map(function(item) { return item.id }))
@@ -220,6 +234,9 @@ Item {
         selectedIndex: root.selectedIndex
         settingsIndex: root.settingsIndex
         settingsParameters: root.parametersFor(root.settingsIndex)
+        expandedUavIndex: root.expandedUavIndex
+        expandedParameterLabel: root.expandedParameterLabel
+        expandedParameterValue: root.expandedParameterValue
         availableParameterOptions: root.availableParameterOptions
 
         onUavSelected: {
@@ -258,6 +275,15 @@ Item {
             form.dragTargetIndex = root.dragTargetIndex
         }
         onDragFinished: root.finishDrag()
+        onSmartToolRequested: {
+            if (root.expandedUavIndex === index && root.expandedParameter === parameter) {
+                root.expandedUavIndex = -1
+                root.expandedParameter = ""
+            } else {
+                root.expandedUavIndex = index
+                root.expandedParameter = parameter
+            }
+        }
         onParameterToggleRequested: root.toggleParameter(root.settingsIndex, parameter)
         onParameterMoveRequested: root.moveParameter(root.settingsIndex, parameter, direction)
         onApplyToAllRequested: root.applyParametersToAll()
