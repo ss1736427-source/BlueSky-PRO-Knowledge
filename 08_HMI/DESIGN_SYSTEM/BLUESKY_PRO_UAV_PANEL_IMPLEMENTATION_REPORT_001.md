@@ -196,3 +196,11 @@ The countdown is held at the configured maximum before departure. Each UAV model
 - `MainContent.ui.qml` binds `rightWidth` to `leftWidth`, so both side panels use the same width.
 - Right-panel top and bottom borders are disabled in the main composition. The full-width TopHeader bottom stroke and BottomToolbar top stroke own those shared seams, matching the left-panel arrangement and avoiding doubled horizontal lines.
 - The right panel retains its left and right vertical cyan edges. Confirm final appearance in Qt Design Studio Preview after pulling the branch.
+
+
+### Adaptive fleet-card layout between side panels — 2026-09-27
+
+- `UAVFleetPanel` is anchored between `leftPanel.right` and `rightPanel.left`, so its available width follows the central workspace rather than the full application window.
+- Fleet cards are laid out in responsive columns. A single card is centered in the available space. With multiple cards, each row is centered as a group around the workspace center; an incomplete final row is centered independently.
+- Card width adapts to the available space and column count, with a 240 px target minimum and 420 px maximum. When the workspace is narrower than the target minimum, cards shrink to fit rather than overflow.
+- The layout recalculates its column count and card dimensions as the available workspace changes. Preview verification at narrow, medium, and wide window sizes remains required.
