@@ -23,15 +23,14 @@ The prior implementation showed `RNG` and `ETA` by default and omitted the engin
 
 The default card now contains:
 
-1. Configured aircraft/model name and sequence.
-2. Local aircraft image placeholder (until the configured local UAV/model asset is connected).
-3. Board ID.
-4. Operational/readiness state and mission state indicator.
-5. Height: `HGT` below 100 m true height; `ALT` at/above 100 m, following the HMI terminology baseline.
-6. Speed.
-7. Battery percentage.
-8. Engine operating mode: numeric percentage plus a horizontal bar.
-9. Mission-state footer indicator.
+1. Configured aircraft/model name and registration/board ID on one line (for example, `MULTIROTOR · BS-001`).
+2. Local aircraft image placeholder (until the configured local UAV/model asset is connected), without a surrounding frame.
+3. Operational/readiness state and mission-state indicator.
+4. Height: `HGT` below 100 m true height; `ALT` at/above 100 m, following the HMI terminology baseline.
+5. Speed.
+6. Battery percentage.
+7. Engine operating mode: numeric percentage plus a horizontal bar.
+8. Mission-state footer indicator.
 
 `RNG` and `ETA` are optional parameters, not default permanent fields.
 
@@ -62,7 +61,7 @@ To preserve readability, the current HMI prototype limits a card to eight displa
 
 ### Adaptive card height
 
-Card height is derived from the largest configured row count in the visible fleet. The four-row default produces a compact card; enabling additional rows increases the card and dock height by one row increment per field. Cards remain aligned to a common height for a stable fleet grid. The dock remains anchored immediately above the bottom toolbar and overlays the map rather than replacing the map workspace.
+Card height is derived from the largest configured row count in the visible fleet. The compact four-row baseline uses 20 px metric rows and a reduced card header/image footprint. Enabling additional rows increases card height by one row increment per field. Cards remain aligned to a common height for a stable fleet grid. The dock remains anchored immediately above the bottom toolbar and overlays the map rather than replacing the map workspace. The settings popup is taller (up to 620 px), rises above the compact dock, uses 42 px option rows for easier selection, and calculates its width from the longest option label within the available screen width.
 
 ### Progress indicator
 
@@ -83,7 +82,7 @@ Numeric values use a slightly larger size than labels to improve scanability. Th
 
 ## 4. Card layout and fleet behavior
 
-- Fleet cards are arranged in a responsive grid with a minimum target width of 320 px. Card and dock heights adapt to the configured number of visible parameter rows.
+- Fleet cards are arranged in a responsive grid with a minimum target width of 280 px. The compact card height is reduced; card headings show model name and registration/board ID together on one line. Heading, label, and value font sizes adapt within defined bounds to card width. Card and dock heights adapt to the configured number of visible parameter rows.
 - Cards are reordered by drag-and-drop. The order is saved using Qt Settings.
 - Each UAV has its own parameter selection/order, saved by board ID.
 - The selected UAV is highlighted with the approved cyan navigation color.
