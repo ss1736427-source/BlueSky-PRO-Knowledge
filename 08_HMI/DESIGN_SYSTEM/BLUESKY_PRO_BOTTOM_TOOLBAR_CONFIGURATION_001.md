@@ -164,3 +164,11 @@ Working Design System reference aligned with the controlled HMI implementation. 
 - Remaining buttons are laid out outward to the left and right, preserving their order and spacing.
 - For an even number of tools, the complete group remains centered as a group.
 - Position calculations use each rendered button's actual delegate width (with a label-based fallback before delegates are available), avoiding spacing drift from estimated text widths. Verify in Qt Design Studio after drag-reordering and when the visible tool set changes.
+
+
+### Virtual Flight centered layout and stable spacing — 2026-09-27
+
+- The five-tool default order is now MAP, ADMIN, VIRTUAL FLT, FPV, UAV, placing VIRTUAL FLT in the exact center with two tools on each side.
+- Known previous default/displayed orders are migrated to this centered arrangement; custom user orders are preserved.
+- Toolbar tool buttons use a uniform 100 px width and a consistent 6 px gap. This removes spacing drift caused by label-dependent widths during and after drag-reordering.
+- Verify in Qt Design Studio: centered VIRTUAL FLT with five tools, drag each tool across the group, and confirm equal gaps after release.
