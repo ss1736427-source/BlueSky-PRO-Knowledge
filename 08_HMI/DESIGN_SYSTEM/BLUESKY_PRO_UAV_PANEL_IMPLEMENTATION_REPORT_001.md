@@ -63,9 +63,13 @@ To preserve readability, the current HMI prototype limits a card to eight displa
 
 Card height is derived from the largest configured row count in the visible fleet. The compact four-row baseline uses 20 px metric rows and a reduced card header/image footprint. Enabling additional rows increases card height by one row increment per field. Cards remain aligned to a common height for a stable fleet grid. The dock remains anchored immediately above the bottom toolbar and overlays the map rather than replacing the map workspace. The dock's own background is fully transparent; only the individual UAV cards retain their dark card surfaces, allowing the map to remain visible between and around cards. The settings popup is taller (up to 620 px), rises above the compact dock, uses 42 px option rows for easier selection, and calculates its width from the longest option label within the available screen width.
 
-### Progress indicator
+### Mission completion indicator and remaining time
 
-The mission-progress strip is set to 0.7 px by default on all cards.
+- Each card has a 0.5 px mission-completion track spanning the full card width at the bottom edge. The filled segment represents completion progress; the remaining segment is the subdued track. Warning state changes the fill to red; otherwise the progress fill is green.
+- A numeric remaining-time label is placed at the left of the bottom indicator area and formatted as `HH:MM:SS`. The hours field is omitted when less than one hour remains, producing `MM:SS`.
+- A 1000 ms QML timer decrements each card's remaining-seconds value once per second, clamped at zero. The current per-UAV countdown values and total durations are Design Studio mock data; production must bind these fields to the mission-time estimator/mission state rather than treat the prototype values as operational data.
+- Mission progress is derived from the configured total and remaining seconds. When the remaining time reaches zero, the progress fill reaches 100%.
+
 
 ### Image treatment
 
@@ -128,6 +132,8 @@ Required DS checks:
 - [ ] User submenu icon renders.
 - [ ] Single-click selects a UAV; double-click opens its local context.
 - [ ] No panel content is clipped at the tested resolution.
+- [ ] Mission countdown changes once per second; hour field is omitted below 01:00:00.
+- [ ] 0.5 px completion indicator spans the full card width and fill reflects mission progress.
 
 ## 7. Known integration boundary
 
@@ -147,3 +153,8 @@ Card values are design-preview values, not live telemetry. Production integratio
 - The card state (`READY` / `STBY`) is centered under the aircraft image, not under the whole card or telemetry column.
 - The menu glyph is 12 × 12 px and centered vertically in a 24 px header slot. The independent 30 × 28 px hit area remains unchanged.
 - Preview check still required after pulling the branch; no local Qt Design Studio execution is claimed.
+
+
+### Mission timer — screenshot-driven update
+
+The QML prototype now includes per-UAV `missionTotalSeconds` and `missionRemainingSeconds`, a repeating 1000 ms countdown, `HH:MM:SS` / `MM:SS` formatting, and a full-width 0.5 px completion track with progress fill. Values are illustrative Design Studio data pending connection to authoritative mission estimates.
