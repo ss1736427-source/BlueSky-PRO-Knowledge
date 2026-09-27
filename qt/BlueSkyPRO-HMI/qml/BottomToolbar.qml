@@ -232,10 +232,12 @@ signal workspaceContextRequested(string tool)
         for (var i = 0; i < toolModel.count; ++i) {
             var item = toolModel.get(i)
             if (item.key === key && item.enabled) {
-                root.activeTool = key
-                settings.activeTool = key
-                root.toolActivated(key)
-                root.workspaceContextRequested(key)
+                // UAV is a true panel toggle: second press closes it to MAP.
+                var nextTool = key === "UAV" && root.activeTool === "UAV" ? "MAP" : key
+                root.activeTool = nextTool
+                settings.activeTool = nextTool
+                root.toolActivated(nextTool)
+                root.workspaceContextRequested(nextTool)
                 return
             }
         }
