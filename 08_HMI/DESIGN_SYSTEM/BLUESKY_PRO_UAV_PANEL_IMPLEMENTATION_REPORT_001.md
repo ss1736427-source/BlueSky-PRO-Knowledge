@@ -162,4 +162,9 @@ The QML prototype now includes per-UAV `missionTotalSeconds` and `missionRemaini
 
 ### Indicator visibility correction
 
-The mission completion track is explicitly bottom-anchored, assigned a visible blue-gray track color, drawn above card contents, and rendered without antialiasing. Its height remains 0.5 px. This replaces positional placement based on `parent.height - 0.5`, which could be affected by fractional layout dimensions and preview rasterization.
+The mission completion track is inset 2 logical pixels from the card's bottom edge so the card border cannot obscure it. It spans the full width, uses a brighter cyan-blue track, is drawn above card contents, and enables antialiasing for fractional-pixel coverage. Its height remains 0.5 logical px. Qt Quick coordinates are device-independent; actual physical-pixel coverage depends on display scaling and rasterization.
+
+
+### Follow-up visibility fix
+
+Review of the committed QML confirmed that the prior 0.5 px line was positioned exactly on the card's bottom edge. The card border could visually mask it, and antialiasing was disabled for a fractional logical-pixel height. The line is now inset from the border, uses antialiasing, and has a higher-contrast track color. Preview verification is still required.
