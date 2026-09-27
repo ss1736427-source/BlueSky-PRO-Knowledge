@@ -172,3 +172,10 @@ Working Design System reference aligned with the controlled HMI implementation. 
 - Known previous default/displayed orders are migrated to this centered arrangement; custom user orders are preserved.
 - Toolbar tool buttons use a uniform 100 px width and a consistent 6 px gap. This removes spacing drift caused by label-dependent widths during and after drag-reordering.
 - Verify in Qt Design Studio: centered VIRTUAL FLT with five tools, drag each tool across the group, and confirm equal gaps after release.
+
+
+### Center reference — outer panel width — 2026-09-27
+
+- The tool group center is calculated from the full outer toolbar panel width, not from the remaining area between LEFT and RIGHT anchors.
+- The full-panel center is converted into the tool area's local coordinate system so anchors remain fixed without shifting the center reference.
+- Odd-count layouts place the middle button's center at the panel center; even-count layouts center the full group around the panel center.
