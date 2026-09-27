@@ -60,6 +60,8 @@ Item {
         category: "BlueSkyPRO/UAVPanel"
         property string uavOrderJson: ""
         property string parameterConfigsJson: ""
+        property real settingsPopupX: -1
+        property real settingsPopupY: -1
     }
 
     Timer {
@@ -229,6 +231,8 @@ Item {
 
     Component.onCompleted: {
         root.parameterConfigs = root.parseJson(settings.parameterConfigsJson, ({}))
+        form.settingsPopupX = settings.settingsPopupX
+        form.settingsPopupY = settings.settingsPopupY
         var savedOrder = root.parseJson(settings.uavOrderJson, [])
         if (Array.isArray(savedOrder) && savedOrder.length) {
             var ordered = []
@@ -252,7 +256,9 @@ Item {
         displayModel: root.displayModel
         selectedIndex: root.selectedIndex
         settingsIndex: root.settingsIndex
-        settingsParameters: root.parametersFor(root.settingsIndex)
+        settingsParameters: root.parametersFor(root.selectedIndex >= 0 ? root.selectedIndex : root.settingsIndex)
+        settingsPopupX: settings.settingsPopupX
+        settingsPopupY: settings.settingsPopupY
         expandedUavIndex: root.expandedUavIndex
         expandedParameterLabel: root.expandedParameterLabel
         expandedParameterValue: root.expandedParameterValue
@@ -260,6 +266,8 @@ Item {
 
         onUavSelected: {
             root.selectedIndex = index
+            if (form.settingsOpen)
+                root.settingsIndex = index
             root.uavSelected(index)
         }
         onUavDoubleClicked: {
@@ -267,12 +275,17 @@ Item {
             root.uavDoubleClicked(index)
         }
         onSettingsRequested: {
+            root.selectedIndex = index
+            root.settingsIndex = index
+            root.uavSelected(index)
             if (root.settingsIndex === index && form.settingsOpen)
                 form.settingsOpen = false
-            else {
-                root.settingsIndex = index
+            else
                 form.settingsOpen = true
-            }
+        }
+        onSettingsPositionChanged: {
+            settings.settingsPopupX = x
+            settings.settingsPopupY = y
         }
         onDragStarted: {
             root.dragSourceIndex = index
