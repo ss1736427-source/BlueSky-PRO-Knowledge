@@ -7,11 +7,17 @@ on:
       - '04_SOFTWARE/PLANNING/**'
       - '03_FLEET/BLUESKY_*ADAPTER*'
       - '.github/workflows/planning-benchmark.yml'
+      - '.gitignore'
+      - '**/build/**'
+      - '**/build_clean/**'
   pull_request:
     paths:
       - '04_SOFTWARE/PLANNING/**'
       - '03_FLEET/BLUESKY_*ADAPTER*'
       - '.github/workflows/planning-benchmark.yml'
+      - '.gitignore'
+      - '**/build/**'
+      - '**/build_clean/**'
 
 jobs:
   build-and-test:
