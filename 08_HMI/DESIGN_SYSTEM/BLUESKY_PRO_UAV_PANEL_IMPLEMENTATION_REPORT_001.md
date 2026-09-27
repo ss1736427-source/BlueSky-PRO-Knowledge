@@ -168,3 +168,8 @@ The mission completion track is inset 2 logical pixels from the card's bottom ed
 ### Follow-up visibility fix
 
 Review of the committed QML confirmed that the prior 0.5 px line was positioned exactly on the card's bottom edge. The card border could visually mask it, and antialiasing was disabled for a fractional logical-pixel height. The line is now inset from the border, uses antialiasing, and has a higher-contrast track color. Preview verification is still required.
+
+
+### Countdown-row alignment update
+
+The 0.5 px mission-progress indicator now occupies the same horizontal row as the remaining-time label. The label has a fixed 16 px row height; the indicator is positioned from the label's vertical center and begins to its right, extending to the card's right inset. The time text and progress line therefore share one baseline row without overlapping.
