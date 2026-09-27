@@ -12,6 +12,8 @@ Item {
     property string expandedParameterValue: ""
     property var availableParameterOptions: []
     property bool settingsOpen: false
+    property real settingsPopupX: -1
+    property real settingsPopupY: -1
     property int dragIndex: -1
     property real dragOffsetX: 0
     property real dragOffsetY: 0
@@ -100,6 +102,7 @@ Item {
     signal parameterMoveRequested(string parameter, int direction)
     signal applyToAllRequested()
     signal settingsClosed()
+    signal settingsPositionChanged(real x, real y)
 
     Rectangle {
         anchors.fill: parent
@@ -120,7 +123,7 @@ Item {
         property int rowCount: Math.ceil(root.displayModel.length / columnCount)
         width: Math.max(0, root.width - 20)
         x: 10
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.bottom: parent.bottom
         height: rowCount * cardHeight + Math.max(0, rowCount - 1) * gap
 
         Repeater {
@@ -399,6 +402,7 @@ Item {
                     onPressed: root.dragStarted(index, cardDragArea.mapToItem(cardGrid, mouse.x, mouse.y).x, cardDragArea.mapToItem(cardGrid, mouse.x, mouse.y).y)
                     onPositionChanged: if (pressed) root.dragMoved(index, cardDragArea.mapToItem(cardGrid, mouse.x, mouse.y).x, cardDragArea.mapToItem(cardGrid, mouse.x, mouse.y).y)
                     onReleased: root.dragFinished(index)
+                    onClicked: root.uavSelected(index)
                     onDoubleClicked: root.uavDoubleClicked(index)
                     onCanceled: root.dragFinished(index)
                 }
@@ -411,13 +415,39 @@ Item {
         visible: root.settingsOpen
         z: 500
         width: root.settingsPopupPreferredWidth
-        height: Math.min(620, Math.max(360, parent.height * 2))
-        x: Math.max(12, parent.width - width - 16)
-        y: parent.height - height - 8
+        height: Math.min(620, Math.max(360, parent.height * 0.72))
+        x: Math.max(8, Math.min(root.width - width - 8,
+                                root.settingsPopupX >= 0 ? root.settingsPopupX : root.width - width - 16))
+        y: Math.max(8, Math.min(root.height - height - 8,
+                                root.settingsPopupY >= 0 ? root.settingsPopupY : root.height - height - cardGrid.cardHeight - 24))
         radius: 4
         color: "#08111D"
         border.color: root.cyan
         border.width: 1
+
+        MouseArea {
+            id: settingsDragHandle
+            x: 0
+            y: 0
+            width: parent.width - 42
+            height: 38
+            z: 1
+            property real pressX: 0
+            property real pressY: 0
+            onPressed: {
+                pressX = mouse.x
+                pressY = mouse.y
+            }
+            onPositionChanged: {
+                if (!pressed)
+                    return
+                root.settingsPopupX = Math.max(8, Math.min(root.width - settingsPopup.width - 8,
+                    settingsPopup.x + mouse.x - pressX))
+                root.settingsPopupY = Math.max(8, Math.min(root.height - settingsPopup.height - 8,
+                    settingsPopup.y + mouse.y - pressY))
+                root.settingsPositionChanged(root.settingsPopupX, root.settingsPopupY)
+            }
+        }
 
         Text {
             id: settingsTitle
