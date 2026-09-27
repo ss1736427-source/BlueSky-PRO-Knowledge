@@ -80,6 +80,16 @@ The implementation follows the working Design System hierarchy from `BLUESKY_PRO
 
 Numeric values use a slightly larger size than labels to improve scanability. The final installed font availability and rendered metrics must still be verified in Qt Design Studio.
 
+
+
+### Menu icon and engine-load scale
+
+- The supplied three-line menu icon is reduced to 16 × 16 px; its separate 30 × 28 px click target is retained for reliable operation.
+- The engine-load scale is a 2 px line placed at the bottom of the ENG row, below the value text. It no longer overlays the label or percentage.
+- Engine-load color is value-dependent: 0% is neutral gray; below the cruise reference it transitions through blue; at the cruise reference it is green; above cruise it progressively transitions toward red.
+- The current prototype uses a configurable 60% cruise reference (`engineCruisePercent`). This is a UI reference value, not a certified operating limit; production configuration must supply the appropriate value for each aircraft/engine profile.
+- Parameter rows use 24 px spacing, and the card height formula includes space for the header, metric rows, and status footer.
+
 ## 4. Card layout and fleet behavior
 
 - Fleet cards are arranged in a responsive grid with a minimum target width of 280 px. The compact card height is reduced; card headings show model name and registration/board ID together on one line. Heading, label, and value font sizes adapt within defined bounds to card width. Card and dock heights adapt to the configured number of visible parameter rows.
