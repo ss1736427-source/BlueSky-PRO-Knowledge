@@ -325,17 +325,21 @@ Item {
                 }
 
                 Text {
+                    id: aircraftStateLabel
                     x: 12
                     y: parent.height - 24
-                    width: parent.width * 0.43
-                    text: modelData.state
+                    width: parent.width - 24
+                    text: modelData.state === "STBY" ? "STBY"
+                          : modelData.state === "READY" ? "READY"
+                          : modelData.state
                     color: modelData.state === "READY" ? root.green
                            : modelData.state === "STBY" ? root.cyan
                            : modelData.state === "WARNING" ? root.red : root.amber
                     font.family: "B612 Mono"
-                    font.pixelSize: 12
+                    font.pixelSize: Math.max(11, Math.min(13, cardRoot.width / 30))
                     font.bold: true
                     horizontalAlignment: Text.AlignHCenter
+                    elide: Text.ElideRight
                 }
 
                 Rectangle {
