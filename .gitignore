@@ -1,0 +1,20 @@
+# Generated build output
+/build/
+/build_clean/
+**/build/
+**/build_clean/
+**/CMakeFiles/
+**/CMakeCache.txt
+**/cmake_install.cmake
+**/Makefile
+**/compile_commands.json
+**/*.obj
+**/*.o
+**/*.pdb
+**/*.ilk
+**/*.exe
+**/*.dll
+**/*.so
+**/*.a
+**/*.lib
+**/*.app/
