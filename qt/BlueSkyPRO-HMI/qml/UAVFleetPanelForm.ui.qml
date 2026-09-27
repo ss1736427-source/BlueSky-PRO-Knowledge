@@ -59,10 +59,11 @@ Item {
                 : twoDigits(minutes) + ":" + twoDigits(seconds)
     }
 
+    // Remaining mission fraction: 100% before departure, decreasing to 0% at mission end.
     function missionProgress(data) {
         var total = Math.max(1, Number(data.missionTotalSeconds) || 1)
         var remaining = Math.max(0, Number(data.missionRemainingSeconds) || 0)
-        return Math.max(0, Math.min(1, 1 - remaining / total))
+        return Math.max(0, Math.min(1, remaining / total))
     }
 
     function blendColor(fromColor, toColor, amount) {
