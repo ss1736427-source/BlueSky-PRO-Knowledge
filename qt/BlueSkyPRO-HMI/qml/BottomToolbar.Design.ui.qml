@@ -1,4 +1,4 @@
-import QtQuick
+﻿import QtQuick
 
 Item {
     id: root
@@ -40,7 +40,7 @@ Item {
         border.width: 1
         Text {
             anchors.centerIn: parent
-            text: "◀ LEFT"
+            text: "LEFT"
             color: root.primaryColor
             font.family: "B612 Mono"
             font.pixelSize: 16
@@ -148,7 +148,7 @@ Item {
         border.width: 1
         Text {
             anchors.centerIn: parent
-            text: "RIGHT ▶"
+            text: "RIGHT"
             color: root.primaryColor
             font.family: "B612 Mono"
             font.pixelSize: 16
@@ -188,7 +188,7 @@ Item {
         color: "transparent"
         Text {
             anchors.centerIn: parent
-            text: "☰"
+            text: "TOOLS"
             color: root.primaryColor
             font.family: "B612 Mono"
             font.pixelSize: 16
