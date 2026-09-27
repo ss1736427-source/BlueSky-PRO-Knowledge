@@ -56,7 +56,7 @@ The per-card submenu provides these selectable fields:
 - PAYLOAD — payload/equipment
 - TELEM — telemetry quality/state
 
-The four primary fields (height, speed, battery, engines) are also configurable. Parameter order can be changed with the up/down controls. The menu offers **ПРИМЕНИТЬ КО ВСЕМ** for copying the selected card's display configuration to the fleet.
+The four primary fields (height, speed, battery, engines) are also configurable. Parameter order can be changed with the up/down controls. Additional selected tools appear as compact chips; selecting one expands its value while the other tools remain compact. The menu offers **ПРИМЕНИТЬ КО ВСЕМ** for copying the selected card's display configuration to the fleet.
 
 To preserve readability, the current HMI prototype limits a card to eight displayed parameters at once. This is a presentation limit only; it does not limit telemetry acquisition or stored data.
 
