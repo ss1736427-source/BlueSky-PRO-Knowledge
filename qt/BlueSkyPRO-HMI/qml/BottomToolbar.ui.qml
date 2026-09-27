@@ -69,6 +69,16 @@ Item {
         color: root.bg
     }
 
+    // Single shared seam between the workspace and the bottom toolbar.
+    Rectangle {
+        x: 0
+        y: 0
+        width: parent.width
+        height: 1
+        color: root.cyan
+        antialiasing: false
+    }
+
     // Fixed left anchor.
     Rectangle {
         id: leftButton
