@@ -84,7 +84,7 @@ bool on_segment(const Point2& a, const Point2& b, const Point2& p) {
 bool segments_intersect(const Point2& a, const Point2& b, const Point2& c, const Point2& d) {
     const double ab_c = cross(a, b, c), ab_d = cross(a, b, d);
     const double cd_a = cross(c, d, a), cd_b = cross(c, d, b);
-    if (((ab_c > 0..0 && ab_d < 0.0) || (ab_c < 0.0 && ab_d > 0.0)) &&
+    if (((ab_c > 0.0 && ab_d < 0.0) || (ab_c < 0.0 && ab_d > 0.0)) &&
         ((cd_a > 0.0 && cd_b < 0.0) || (cd_a < 0.0 && cd_b > 0.0)))
         return true;
     return (std::abs(ab_c) < 1e-7 && on_segment(a, b, c)) ||
