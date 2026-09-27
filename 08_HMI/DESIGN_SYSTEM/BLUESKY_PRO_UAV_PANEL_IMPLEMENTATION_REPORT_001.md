@@ -65,7 +65,7 @@ Card height is derived from the largest configured row count in the visible flee
 
 ### Mission completion indicator and remaining time
 
-- Each card has a 0.5 px mission-completion track spanning the full card width at the bottom edge. The filled segment represents completion progress; the remaining segment is the subdued track. Warning state changes the fill to red; otherwise the progress fill is green.
+- Each card has a 0.5 px mission-completion track anchored to the card's bottom edge and spanning the full card width. The subdued track remains visible at 0% progress; the filled segment represents completion progress. Antialiasing is disabled on the line to keep its half-pixel geometry crisp in the preview. Warning state changes the fill to red; otherwise the progress fill is green.
 - A numeric remaining-time label is placed at the left of the bottom indicator area and formatted as `HH:MM:SS`. The hours field is omitted when less than one hour remains, producing `MM:SS`.
 - A 1000 ms QML timer decrements each card's remaining-seconds value once per second, clamped at zero. The current per-UAV countdown values and total durations are Design Studio mock data; production must bind these fields to the mission-time estimator/mission state rather than treat the prototype values as operational data.
 - Mission progress is derived from the configured total and remaining seconds. When the remaining time reaches zero, the progress fill reaches 100%.
@@ -158,3 +158,8 @@ Card values are design-preview values, not live telemetry. Production integratio
 ### Mission timer — screenshot-driven update
 
 The QML prototype now includes per-UAV `missionTotalSeconds` and `missionRemainingSeconds`, a repeating 1000 ms countdown, `HH:MM:SS` / `MM:SS` formatting, and a full-width 0.5 px completion track with progress fill. Values are illustrative Design Studio data pending connection to authoritative mission estimates.
+
+
+### Indicator visibility correction
+
+The mission completion track is explicitly bottom-anchored, assigned a visible blue-gray track color, drawn above card contents, and rendered without antialiasing. Its height remains 0.5 px. This replaces positional placement based on `parent.height - 0.5`, which could be affected by fractional layout dimensions and preview rasterization.
