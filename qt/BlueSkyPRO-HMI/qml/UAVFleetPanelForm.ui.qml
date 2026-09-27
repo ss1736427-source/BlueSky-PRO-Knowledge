@@ -106,20 +106,22 @@ Item {
         color: root.bg
     }
 
-    Grid {
+    Item {
         id: cardGrid
         property int gap: 12
-        property int minCardWidth: 280
-        property int columnCount: Math.max(1, Math.floor((width + gap) / (minCardWidth + gap)))
-        property real cardWidth: (width - (columnCount - 1) * gap) / columnCount
+        property int spacing: gap
+        property int minCardWidth: 240
+        property int maxCardWidth: 420
+        property int columnCount: Math.max(1, Math.min(root.displayModel.length || 1,
+            Math.floor((width + gap) / (minCardWidth + gap))))
+        property real cardWidth: Math.min(maxCardWidth,
+            (width - (columnCount - 1) * gap) / columnCount)
         property real cardHeight: Math.min(root.height - 12, 66 + root.maxParameterRows * 20)
-        columns: columnCount
-        spacing: gap
-        width: root.width - 20
+        property int rowCount: Math.ceil(root.displayModel.length / columnCount)
+        width: Math.max(0, root.width - 20)
         x: 10
         anchors.verticalCenter: parent.verticalCenter
-        height: Math.ceil(root.displayModel.length / columnCount) * cardHeight
-                + Math.max(0, Math.ceil(root.displayModel.length / columnCount) - 1) * spacing
+        height: rowCount * cardHeight + Math.max(0, rowCount - 1) * gap
 
         Repeater {
             id: cardRepeater
@@ -130,8 +132,16 @@ Item {
                 required property int index
                 required property var modelData
 
+                readonly property int rowIndex: Math.floor(index / cardGrid.columnCount)
+                readonly property int columnIndex: index % cardGrid.columnCount
+                readonly property int itemsInRow: Math.min(cardGrid.columnCount,
+                    root.displayModel.length - rowIndex * cardGrid.columnCount)
                 width: cardGrid.cardWidth
                 height: cardGrid.cardHeight
+                x: Math.max(0, (cardGrid.width - itemsInRow * width
+                    - (itemsInRow - 1) * cardGrid.gap) / 2)
+                    + columnIndex * (width + cardGrid.gap)
+                y: rowIndex * (height + cardGrid.gap)
                 radius: 5
                 color: index === root.selectedIndex ? "#F0111F30" : "#E60C1725"
                 border.color: modelData.state === "WARNING" ? root.red
