@@ -100,14 +100,21 @@ Item {
 
     ListModel {
         id: templateModel
-        ListElement { title: "Картографирование территории"; subtitle: ""; accent: "#64FF00" }
-        ListElement { title: "Обследование зданий"; subtitle: ""; accent: "#BFBFBF" }
-        ListElement { title: "3D картография"; subtitle: ""; accent: "#32FFFF" }
-        ListElement { title: "Линейное обследование"; subtitle: ""; accent: "#32FFFF" }
-        ListElement { title: "Картографирование коридора"; subtitle: ""; accent: "#FFD339" }
-        ListElement { title: "Точка интереса"; subtitle: ""; accent: "#FF32FF" }
+        ListElement { title: "Картографирование территории"; subtitle: ""; accent: "#BFBFBF" }
+        ListElement { title: "Инспекция объектов (здания, ЛЭП, трубопроводы)"; subtitle: ""; accent: "#BFBFBF" }
+        ListElement { title: "3D-картография / реконструкция"; subtitle: ""; accent: "#32FFFF" }
+        ListElement { title: "Мониторинг территории"; subtitle: ""; accent: "#BFBFBF" }
+        ListElement { title: "Поиск человека"; subtitle: ""; accent: "#BFBFBF" }
+        ListElement { title: "Пожарный мониторинг"; subtitle: ""; accent: "#BFBFBF" }
+        ListElement { title: "Доставка"; subtitle: ""; accent: "#BFBFBF" }
+        ListElement { title: "Drone-in-a-Box"; subtitle: ""; accent: "#BFBFBF" }
+        ListElement { title: "BVLOS-мониторинг"; subtitle: ""; accent: "#BFBFBF" }
+        ListElement { title: "Экологический мониторинг"; subtitle: ""; accent: "#BFBFBF" }
+        ListElement { title: "Ретрансляция связи"; subtitle: ""; accent: "#BFBFBF" }
+        ListElement { title: "C-UAS — обнаружение БПЛА"; subtitle: ""; accent: "#BFBFBF" }
+        ListElement { title: "Автоматическое обнаружение объектов"; subtitle: ""; accent: "#BFBFBF" }
+        ListElement { title: "Групповая / роёвая миссия"; subtitle: ""; accent: "#BFBFBF" }
     }
-
     Rectangle {
         anchors.fill: parent
         color: root.bg
@@ -334,72 +341,77 @@ Item {
         }
     }
 
-    // Reference-style template list. The selected item uses the controlled
-    // selected surface and cyan structural highlight rather than arbitrary blue.
-    Column {
+    // Canonical task templates. Detailed geometry modes (corridor, linear route,
+    // point of interest) are selected inside the mission setup, not as top-level tasks.
+    Flickable {
+        id: templateList
         visible: (root.missionVisible || root.missionCreationMode) && root.templatesExpanded && !root.panelConfigOpen
         x: 10
         y: root.missionVisible ? 110 : 50
         width: parent.width - 20
         height: Math.max(0, parent.height - y - createMissionButton.height - 20)
-        spacing: 3
+        contentWidth: width
+        contentHeight: templateColumn.implicitHeight
         clip: true
+        boundsBehavior: Flickable.StopAtBounds
 
-        Repeater {
-            model: templateModel
+        Column {
+            id: templateColumn
+            width: templateList.width
+            spacing: 3
 
-            delegate: Rectangle {
-                required property int index
-                required property string title
-                required property string subtitle
-                required property string accent
+            Repeater {
+                model: templateModel
+                delegate: Rectangle {
+                    required property int index
+                    required property string title
+                    required property string subtitle
+                    required property string accent
+                    width: templateColumn.width
+                    height: 56
+                    radius: 3
+                    color: root.templateIsSelected(index) ? root.selectedSurface : root.card
+                    border.color: root.templateIsSelected(index) ? root.cyan : root.divider
+                    border.width: 1
 
-                visible: root.templateIsVisible(index)
-                width: parent.width
-                height: visible ? 56 : 0
-                radius: 3
-                color: root.templateIsSelected(index) ? root.selectedSurface : root.card
-                border.color: root.templateIsSelected(index) ? root.cyan : root.divider
-                border.width: 1
-
-                Rectangle {
-                    anchors.left: parent.left
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    width: 3
-                    radius: 2
-                    color: root.templateIsSelected(index) ? root.cyan : "transparent"
-                }
-
-                Text {
-                    x: 16
-                    y: 19
-                    text: title
-                    color: root.text
-                    font.family: "Noto Sans"
-                    font.pixelSize: 12
-                    font.bold: true
-                }
-
-                Text {
-                    visible: root.templateIsSelected(index)
-                    x: parent.width - 30
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "✓"
-                    color: root.cyan
-                    font.family: "B612 Mono"
-                    font.pixelSize: 15
-                    font.bold: true
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        if (root.missionCreationMode)
-                            root.toggleManualTemplate(index)
-                        else {
-                            root.selectedTemplate = index
-                            root.templateSelected(index)
+                    Rectangle {
+                        anchors.left: parent.left
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        width: 3
+                        radius: 2
+                        color: root.templateIsSelected(index) ? root.cyan : "transparent"
+                    }
+                    Text {
+                        x: 16
+                        width: parent.width - 52
+                        anchors.verticalCenter: parent.verticalCenter
+                        elide: Text.ElideRight
+                        text: title
+                        color: root.text
+                        font.family: "Noto Sans"
+                        font.pixelSize: 12
+                        font.bold: true
+                    }
+                    Text {
+                        visible: root.templateIsSelected(index)
+                        x: parent.width - 30
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: "✓"
+                        color: root.cyan
+                        font.family: "B612 Mono"
+                        font.pixelSize: 15
+                        font.bold: true
+                    }
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            if (root.missionCreationMode)
+                                root.toggleManualTemplate(index)
+                            else {
+                                root.selectedTemplate = index
+                                root.templateSelected(index)
+                            }
                         }
                     }
                 }
