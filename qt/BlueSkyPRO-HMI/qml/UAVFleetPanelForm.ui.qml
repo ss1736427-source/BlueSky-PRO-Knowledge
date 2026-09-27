@@ -34,7 +34,7 @@ Item {
     property real gridCardHeight: cardGrid.cardHeight
     property int gridSpacing: cardGrid.spacing
 
-    property color bg: "#D9050A12"
+    property color bg: "transparent"
     property color card: "#0C1725"
     property color selectedSurface: "#111F30"
     property color text: "#FFFFFF"
@@ -134,12 +134,18 @@ Item {
                     height: 24
                     spacing: 7
 
-                    Image {
-                        width: 16
-                        height: 16
-                        source: "icons8-menu-24.svg"
-                        fillMode: Image.PreserveAspectFit
-                        smooth: true
+                    Item {
+                        width: 12
+                        height: 24
+
+                        Image {
+                            anchors.centerIn: parent
+                            width: 12
+                            height: 12
+                            source: "icons8-menu-24.svg"
+                            fillMode: Image.PreserveAspectFit
+                            smooth: true
+                        }
                     }
 
                     Text {
@@ -326,9 +332,9 @@ Item {
 
                 Text {
                     id: aircraftStateLabel
-                    x: 12
+                    x: aircraftArea.x
                     y: parent.height - 24
-                    width: parent.width - 24
+                    width: aircraftArea.width
                     text: modelData.state === "STBY" ? "STBY"
                           : modelData.state === "READY" ? "READY"
                           : modelData.state
