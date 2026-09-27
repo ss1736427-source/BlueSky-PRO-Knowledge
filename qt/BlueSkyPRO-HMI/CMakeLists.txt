@@ -35,6 +35,12 @@ qt_add_qml_module(appBlueSkyPRO
         qml/BottomToolbar.qml
         qml/ContextOverlay.ui.qml
         qml/Theme.qml
+    RESOURCES
+        qml/icons8-menu-24.svg
+        qml/assets/uav_multirotor.svg
+        qml/assets/uav_fixed_wing.svg
+        qml/assets/uav_heavy_multirotor.svg
+        qml/assets/uav_vtol.svg
 )
 
 target_link_libraries(appBlueSkyPRO PRIVATE Qt6::Quick)
