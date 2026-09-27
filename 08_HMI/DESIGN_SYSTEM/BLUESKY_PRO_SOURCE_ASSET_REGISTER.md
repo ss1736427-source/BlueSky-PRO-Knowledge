@@ -38,4 +38,14 @@ Do not silently replace supplied assets with generic UI libraries.
 
 ## Binary asset status
 
-The GitHub file-writing connector available in this session can create/update UTF-8 text files, but cannot upload binary PNG/JPG/SVG files. Therefore this register records the supplied binary assets and their intended repository locations; the binary files themselves must be committed from the local working copy/desktop Git client.
+The GitHub file-writing connector available in this session can create/update UTF-8 text files, including editable SVG source. Original schematic UAV SVGs have therefore been created and committed as text assets under `qt/BlueSkyPRO-HMI/qml/assets/`. Supplied binary PNG/JPG assets still need to be committed from the local working copy/desktop Git client; their licensing and provenance must be recorded before product distribution.
+
+
+## BlueSky PRO UAV panel — authored local illustrations
+
+- `qt/BlueSkyPRO-HMI/qml/assets/uav_multirotor.svg` — BS-001, multirotor.
+- `qt/BlueSkyPRO-HMI/qml/assets/uav_fixed_wing.svg` — BS-002, fixed-wing.
+- `qt/BlueSkyPRO-HMI/qml/assets/uav_heavy_multirotor.svg` — BS-003, heavy multirotor.
+- `qt/BlueSkyPRO-HMI/qml/assets/uav_vtol.svg` — BS-004, VTOL.
+
+These are original schematic illustrations with transparent backgrounds, not downloaded product photographs. They are bundled locally for offline preview. Commercial product imagery remains a separate asset/licensing task.
