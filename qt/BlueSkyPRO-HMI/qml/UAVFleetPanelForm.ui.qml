@@ -338,8 +338,9 @@ Item {
                 Text {
                     id: missionRemainingLabel
                     x: 12
-                    y: parent.height - 23
-                    width: parent.width - 24
+                    y: parent.height - 26
+                    width: 52
+                    height: 16
                     text: root.formatMissionTime(modelData.missionRemainingSeconds)
                     color: root.secondary
                     font.family: "B612 Mono"
@@ -366,13 +367,12 @@ Item {
                     elide: Text.ElideRight
                 }
 
-                // Half-pixel mission indicator, inset from the card border so it is not covered.
-                // Antialiasing preserves fractional-pixel coverage; the brighter track stays visible at 0%.
+                // Mission progress shares the remaining-time row; the 0.5 px line is vertically centered.
                 Rectangle {
                     id: missionProgressTrack
-                    x: 0
-                    y: parent.height - 2
-                    width: parent.width
+                    x: missionRemainingLabel.x + missionRemainingLabel.width + 8
+                    y: missionRemainingLabel.y + (missionRemainingLabel.height - height) / 2
+                    width: Math.max(0, parent.width - x - 12)
                     height: 0.5
                     z: 10
                     radius: 0
