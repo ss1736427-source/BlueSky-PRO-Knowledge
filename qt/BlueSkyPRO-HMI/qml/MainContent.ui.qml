@@ -10,7 +10,6 @@ Item {
     property int headerHeight: 86
     property int leftWidth: leftPanel.implicitWidth
     property int rightWidth: 340
-    property int uavHeight: 82
     property int toolbarHeight: 54
     property bool leftPanelOpen: true
     property bool rightPanelOpen: true
@@ -62,7 +61,7 @@ Item {
         anchors.top: topHeader.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.bottom: root.uavPanelOpen ? uavStatus.top : bottomToolbar.top
+        anchors.bottom: bottomToolbar.top
 
         LeftPanel {
             id: leftPanel
@@ -73,7 +72,8 @@ Item {
             showTopBorder: false
             // BottomToolbar owns the shared seam; avoid drawing a second line here.
             showBottomBorder: false
-            width: root.leftPanelOpen ? root.leftWidth : 0
+            visible: root.activeTool !== "UAV" && root.leftPanelOpen
+            width: visible ? root.leftWidth : 0
             missionVisible: root.missionVisible
             missionCreationMode: root.missionCreationMode
             missionId: root.missionId
@@ -104,7 +104,7 @@ Item {
             anchors.right: rightPanel.left
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            visible: root.activeTool !== "MAP"
+            visible: root.activeTool !== "MAP" && root.activeTool !== "UAV"
             contextName: root.activeTool
             selectedUavIndex: root.selectedUavIndex
             selectedUavId: root.selectedUavId
@@ -126,8 +126,8 @@ Item {
             // A zero-width panel does not clip its children: hide the whole
             // component when collapsed so buttons/text/popups cannot leak
             // into the Flight Chart.
-            visible: root.rightPanelOpen
-            width: root.rightPanelOpen ? root.rightWidth : 0
+            visible: root.activeTool !== "UAV" && root.rightPanelOpen
+            width: visible ? root.rightWidth : 0
             missionReady: root.missionReady
             warningActive: root.warningActive
             manualCreationMode: root.missionCreationMode
@@ -141,6 +141,7 @@ Item {
     UAVStatus {
         id: uavStatus
         visible: root.uavPanelOpen
+        z: 20
         selectedIndex: root.selectedUavIndex
         onUavSelected: {
             root.selectedUavIndex = index
@@ -152,8 +153,8 @@ Item {
         }
         anchors.left: parent.left
         anchors.right: parent.right
+        anchors.top: topHeader.bottom
         anchors.bottom: bottomToolbar.top
-        height: root.uavHeight
     }
 
     BottomToolbar {
