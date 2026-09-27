@@ -556,7 +556,7 @@ signal workspaceContextRequested(string tool)
                 text: Qt.formatTime(new Date(), "hh:mm")
                 color: root.secondary
                 font.family: "B612 Mono"
-                font.pixelSize: 10
+                font.pixelSize: 14
             }
         }
 
@@ -564,7 +564,7 @@ signal workspaceContextRequested(string tool)
             id: toolsButton
             width: 76
             height: 38
-            color: toolsPopup.visible ? "#111F30" : "#0C1725"
+            color: "transparent"
 
             Text {
                 anchors.centerIn: parent
