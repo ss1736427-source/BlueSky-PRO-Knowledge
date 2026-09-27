@@ -22,7 +22,7 @@ Item {
     property real gridCardHeight: cardGrid.cardHeight
     property int gridSpacing: cardGrid.spacing
 
-    property color bg: "#050A12"
+    property color bg: "#D9050A12"
     property color card: "#0C1725"
     property color selectedSurface: "#111F30"
     property color text: "#FFFFFF"
@@ -57,7 +57,7 @@ Item {
         property int minCardWidth: 320
         property int columnCount: Math.max(1, Math.floor((width + gap) / (minCardWidth + gap)))
         property real cardWidth: (width - (columnCount - 1) * gap) / columnCount
-        property real cardHeight: Math.min(380, Math.max(340, root.height * 0.44))
+        property real cardHeight: Math.min(250, Math.max(232, root.height * 0.92))
         columns: columnCount
         spacing: gap
         width: root.width - 20
@@ -78,7 +78,7 @@ Item {
                 width: cardGrid.cardWidth
                 height: cardGrid.cardHeight
                 radius: 5
-                color: index === root.selectedIndex ? root.selectedSurface : root.card
+                color: index === root.selectedIndex ? "#F0111F30" : "#E60C1725"
                 border.color: modelData.state === "WARNING" ? root.red
                               : index === root.selectedIndex ? root.cyan : root.divider
                 border.width: index === root.selectedIndex || modelData.state === "WARNING" ? 2 : 1
