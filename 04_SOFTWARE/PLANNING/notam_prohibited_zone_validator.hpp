@@ -14,7 +14,8 @@ enum class NotamRestrictionType { Prohibited };
 enum class NotamValidationCode {
     MissingSnapshotReference,
     SnapshotNotValid,
-    WaypointInsideProhibitedZone
+    WaypointInsideProhibitedZone,
+    SegmentIntersectsProhibitedZone
 };
 
 struct NotamZone {
@@ -43,6 +44,8 @@ struct NotamValidationFinding {
     std::string waypoint_id;
     std::string notam_id;
     std::string detail;
+    std::string segment_start_waypoint_id;
+    std::string segment_end_waypoint_id;
 };
 
 struct NotamValidationResult {
