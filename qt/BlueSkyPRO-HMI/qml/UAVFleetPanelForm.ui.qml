@@ -3,11 +3,21 @@ import QtQuick
 Item {
     id: root
 
-    property var uavModel: []
+    property var displayModel: []
     property int selectedIndex: -1
     property int settingsIndex: -1
     property var settingsParameters: ["ALT", "SPD", "BAT", "ENG"]
+    property var availableParameterOptions: []
     property bool settingsOpen: false
+    property int dragIndex: -1
+    property real dragOffsetX: 0
+    property real dragOffsetY: 0
+    property int dragTargetIndex: -1
+
+    property int gridColumns: cardGrid.columns
+    property real gridCardWidth: cardGrid.cardWidth
+    property real gridCardHeight: cardGrid.cardHeight
+    property int gridSpacing: cardGrid.spacing
 
     property color bg: "#050A12"
     property color card: "#0C1725"
@@ -21,71 +31,16 @@ Item {
     property color red: "#FF1E14"
     property color divider: "#29435B"
 
-    readonly property var availableParameters: [
-        "ALT", "SPD", "BAT", "ENG",
-        "WIND", "HDG", "ETA", "C2", "CAM",
-        "RNG", "EET", "TRIP", "TOT", "GNSS",
-        "LINK", "WP", "PROGRESS", "BAT HEALTH",
-        "PAYLOAD", "TELEM"
-    ]
-
     signal uavSelected(int index)
     signal uavDoubleClicked(int index)
     signal settingsRequested(int index)
-    signal reorderRequested(int fromIndex, int toIndex)
+    signal dragStarted(int index, real x, real y)
+    signal dragMoved(int index, real x, real y)
+    signal dragFinished(int index)
     signal parameterToggleRequested(string parameter)
     signal parameterMoveRequested(string parameter, int direction)
     signal applyToAllRequested()
     signal settingsClosed()
-
-    function parameterLabel(key, data) {
-        if (key === "ALT")
-            return data.height < 100 ? "HGT" : "ALT"
-        if (key === "SPD") return "SPD"
-        if (key === "BAT") return "BAT"
-        if (key === "ENG") return "ENG"
-        if (key === "WIND") return "WIND"
-        if (key === "HDG") return "HDG"
-        if (key === "ETA") return "ETA"
-        if (key === "C2") return "C2"
-        if (key === "CAM") return "CAM"
-        if (key === "RNG") return "RNG"
-        if (key === "EET") return "EET"
-        if (key === "TRIP") return "TRIP"
-        if (key === "TOT") return "TOT"
-        if (key === "GNSS") return "GNSS"
-        if (key === "LINK") return "LINK"
-        if (key === "WP") return "WP"
-        if (key === "PROGRESS") return "MISSION"
-        if (key === "BAT HEALTH") return "BAT HLTH"
-        if (key === "PAYLOAD") return "LOAD"
-        if (key === "TELEM") return "TELEM"
-        return key
-    }
-
-    function parameterValue(key, data) {
-        if (key === "ALT") return Math.round(data.height) + " m"
-        if (key === "SPD") return data.speed + " km/h"
-        if (key === "BAT") return data.battery + " %"
-        if (key === "ENG") return data.engine + " %"
-        if (key === "WIND") return data.wind
-        if (key === "HDG") return data.heading + "°"
-        if (key === "ETA") return data.eta
-        if (key === "C2") return data.c2
-        if (key === "CAM") return data.camera
-        if (key === "RNG") return data.range
-        if (key === "EET") return data.eet
-        if (key === "TRIP") return data.trip
-        if (key === "TOT") return data.tot
-        if (key === "GNSS") return data.gnss
-        if (key === "LINK") return data.link
-        if (key === "WP") return data.wp
-        if (key === "PROGRESS") return data.progress
-        if (key === "BAT HEALTH") return data.batteryHealth
-        if (key === "PAYLOAD") return data.payload
-        if (key === "TELEM") return data.telemetry
-        return "—"
-    }
 
     Rectangle {
         anchors.fill: parent
@@ -96,21 +51,20 @@ Item {
         id: cardGrid
         property int gap: 12
         property int minCardWidth: 320
-        property int columns: Math.max(1, Math.floor((root.width + gap) / (minCardWidth + gap)))
-        property real cardWidth: (root.width - (columns - 1) * gap) / columns
-        property real cardHeight: Math.min(340, Math.max(300, root.height * 0.40))
-        columns: Math.max(1, Math.ceil(root.uavModel.length / Math.max(1, columns))) // layout is reset below by binding
-        columns: Math.max(1, Math.floor((root.width + gap) / (minCardWidth + gap)))
+        property int columns: Math.max(1, Math.floor((width + gap) / (minCardWidth + gap)))
+        property real cardWidth: (width - (columns - 1) * gap) / columns
+        property real cardHeight: Math.min(360, Math.max(310, root.height * 0.40))
+        columns: Math.max(1, Math.floor((width + gap) / (minCardWidth + gap)))
         spacing: gap
         width: root.width - 20
         x: 10
         anchors.verticalCenter: parent.verticalCenter
-        height: Math.ceil(root.uavModel.length / columns) * cardHeight
-                + Math.max(0, Math.ceil(root.uavModel.length / columns) - 1) * spacing
+        height: Math.ceil(root.displayModel.length / columns) * cardHeight
+                + Math.max(0, Math.ceil(root.displayModel.length / columns) - 1) * spacing
 
         Repeater {
             id: cardRepeater
-            model: root.uavModel
+            model: root.displayModel
 
             delegate: Rectangle {
                 id: cardRoot
@@ -121,18 +75,15 @@ Item {
                 height: cardGrid.cardHeight
                 radius: 5
                 color: index === root.selectedIndex ? root.selectedSurface : root.card
-                border.color: index === root.selectedIndex ? root.cyan : root.divider
-                border.width: index === root.selectedIndex ? 2 : 1
+                border.color: modelData.state === "WARNING" ? root.red
+                              : index === root.selectedIndex ? root.cyan : root.divider
+                border.width: index === root.selectedIndex || modelData.state === "WARNING" ? 2 : 1
 
-                property bool dragging: false
-                property real dragOffsetX: 0
-                property real dragOffsetY: 0
-                property real pressX: 0
-                property real pressY: 0
-                property int dragTargetIndex: index
-
-                transform: Translate { x: cardRoot.dragOffsetX; y: cardRoot.dragOffsetY }
-                z: dragging ? 100 : 0
+                transform: Translate {
+                    x: root.dragIndex === index ? root.dragOffsetX : 0
+                    y: root.dragIndex === index ? root.dragOffsetY : 0
+                }
+                z: root.dragIndex === index ? 100 : 0
 
                 Row {
                     id: cardHeader
@@ -186,7 +137,7 @@ Item {
                     width: parent.width * 0.43
                     height: parent.height - 122
 
-                    // Neutral local placeholder until the configured UAV image is available.
+                    // Neutral placeholder; production uses the local image assigned in UAV configuration.
                     Item {
                         anchors.centerIn: parent
                         width: Math.min(parent.width * 0.88, parent.height * 0.72)
@@ -248,20 +199,16 @@ Item {
                     spacing: 0
 
                     Repeater {
-                        model: root.settingsOpen && root.settingsIndex === index
-                               ? root.settingsParameters
-                               : root.parameterListFor(index)
-
+                        model: modelData.displayParameters
                         delegate: Item {
-                            required property string modelData
+                            required property var modelData
                             width: metricColumn.width
-                            height: metricColumn.height / Math.max(1, root.parameterListFor(cardRoot.index).length)
+                            height: metricColumn.height / Math.max(1, cardRoot.modelData.displayParameters.length)
 
                             Text {
-                                id: metricLabel
                                 anchors.left: parent.left
                                 anchors.top: parent.top
-                                text: root.parameterLabel(modelData, cardRoot.modelData)
+                                text: modelData.label
                                 color: root.secondary
                                 font.family: "B612 Mono"
                                 font.pixelSize: 12
@@ -270,7 +217,7 @@ Item {
                             Text {
                                 anchors.right: parent.right
                                 anchors.top: parent.top
-                                text: root.parameterValue(modelData, cardRoot.modelData)
+                                text: modelData.value
                                 color: root.text
                                 font.family: "B612 Mono"
                                 font.pixelSize: 13
@@ -278,14 +225,13 @@ Item {
                             }
 
                             Rectangle {
-                                visible: modelData === "ENG"
+                                visible: modelData.key === "ENG"
                                 x: 0
                                 y: 22
                                 width: parent.width
                                 height: 5
                                 radius: 2
                                 color: "#20384A"
-
                                 Rectangle {
                                     width: parent.width * Math.max(0, Math.min(1, cardRoot.modelData.engine / 100))
                                     height: parent.height
@@ -314,7 +260,8 @@ Item {
                     y: parent.height - 30
                     width: parent.width * 0.43
                     text: modelData.state
-                    color: modelData.state === "READY" ? root.green : modelData.state === "WARNING" ? root.red : root.amber
+                    color: modelData.state === "READY" ? root.green
+                           : modelData.state === "WARNING" ? root.red : root.amber
                     font.family: "B612 Mono"
                     font.pixelSize: 12
                     font.bold: true
@@ -337,59 +284,17 @@ Item {
                     anchors.fill: parent
                     z: 1
                     preventStealing: true
-                    property bool moved: false
-
                     onPressed: {
-                        cardRoot.pressX = mouse.x
-                        cardRoot.pressY = mouse.y
-                        cardRoot.dragOffsetX = 0
-                        cardRoot.dragOffsetY = 0
-                        cardRoot.dragTargetIndex = index
-                        cardRoot.dragging = false
-                        moved = false
-                    }
-
-                    onPositionChanged: {
-                        if (!pressed)
-                            return
-                        var dx = mouse.x - cardRoot.pressX
-                        var dy = mouse.y - cardRoot.pressY
-                        if (!cardRoot.dragging && (Math.abs(dx) > 10 || Math.abs(dy) > 10))
-                            cardRoot.dragging = true
-                        if (!cardRoot.dragging)
-                            return
-
-                        cardRoot.dragOffsetX = dx
-                        cardRoot.dragOffsetY = dy
-                        moved = true
-
                         var p = cardDragArea.mapToItem(cardGrid, mouse.x, mouse.y)
-                        var col = Math.max(0, Math.min(cardGrid.columns - 1,
-                            Math.floor(p.x / (cardGrid.cardWidth + cardGrid.spacing))))
-                        var row = Math.max(0, Math.floor(p.y / (cardGrid.cardHeight + cardGrid.spacing)))
-                        var target = Math.max(0, Math.min(root.uavModel.length - 1,
-                            row * cardGrid.columns + col))
-                        cardRoot.dragTargetIndex = target
+                        root.dragStarted(index, p.x, p.y)
                     }
-
-                    onReleased: {
-                        var wasDragged = cardRoot.dragging
-                        cardRoot.dragging = false
-                        cardRoot.dragOffsetX = 0
-                        cardRoot.dragOffsetY = 0
-                        if (wasDragged) {
-                            root.reorderRequested(index, cardRoot.dragTargetIndex)
-                        } else {
-                            root.uavSelected(index)
-                        }
+                    onPositionChanged: if (pressed) {
+                        var p = cardDragArea.mapToItem(cardGrid, mouse.x, mouse.y)
+                        root.dragMoved(index, p.x, p.y)
                     }
-
+                    onReleased: root.dragFinished(index)
                     onDoubleClicked: root.uavDoubleClicked(index)
-                    onCanceled: {
-                        cardRoot.dragging = false
-                        cardRoot.dragOffsetX = 0
-                        cardRoot.dragOffsetY = 0
-                    }
+                    onCanceled: root.dragFinished(index)
                 }
             }
         }
@@ -458,39 +363,28 @@ Item {
                 spacing: 2
 
                 Repeater {
-                    model: root.availableParameters
-
+                    model: root.availableParameterOptions
                     delegate: Rectangle {
-                        required property string modelData
+                        required property var modelData
                         width: settingsColumn.width
                         height: 30
-                        color: root.settingsParameters.indexOf(modelData) >= 0 ? root.selectedSurface : "transparent"
+                        color: root.settingsParameters.indexOf(modelData.key) >= 0 ? root.selectedSurface : "transparent"
+
+                        MouseArea {
+                            anchors.left: parent.left
+                            anchors.right: upButton.left
+                            anchors.top: parent.top
+                            anchors.bottom: parent.bottom
+                            onClicked: root.parameterToggleRequested(modelData.key)
+                        }
 
                         Text {
                             x: 8
                             anchors.verticalCenter: parent.verticalCenter
-                            text: (root.settingsParameters.indexOf(modelData) >= 0 ? "☑" : "☐")
-                                  + "  " + root.parameterLabel(modelData, root.uavModel[Math.max(0, root.settingsIndex)])
-                            color: root.settingsParameters.indexOf(modelData) >= 0 ? root.text : root.secondary
+                            text: (root.settingsParameters.indexOf(modelData.key) >= 0 ? "☑  " : "☐  ") + modelData.label
+                            color: root.settingsParameters.indexOf(modelData.key) >= 0 ? root.text : root.secondary
                             font.family: "B612"
                             font.pixelSize: 11
-                        }
-
-                        Text {
-                            anchors.right: upButton.left
-                            anchors.rightMargin: 6
-                            anchors.verticalCenter: parent.verticalCenter
-                            text: "↑"
-                            color: root.settingsParameters.indexOf(modelData) >= 0 ? root.cyan : root.muted
-                            font.pixelSize: 14
-                        }
-                        MouseArea {
-                            anchors.right: upButton.left
-                            anchors.rightMargin: 2
-                            width: 24
-                            height: parent.height
-                            enabled: root.settingsParameters.indexOf(modelData) >= 0
-                            onClicked: root.parameterMoveRequested(modelData, -1)
                         }
 
                         Text {
@@ -499,7 +393,7 @@ Item {
                             anchors.rightMargin: 2
                             anchors.verticalCenter: parent.verticalCenter
                             text: "↑"
-                            color: root.settingsParameters.indexOf(modelData) >= 0 ? root.cyan : root.muted
+                            color: root.settingsParameters.indexOf(modelData.key) >= 0 ? root.cyan : root.muted
                             font.pixelSize: 14
                         }
                         MouseArea {
@@ -507,8 +401,8 @@ Item {
                             anchors.rightMargin: 2
                             width: 24
                             height: parent.height
-                            enabled: root.settingsParameters.indexOf(modelData) >= 0
-                            onClicked: root.parameterMoveRequested(modelData, -1)
+                            enabled: root.settingsParameters.indexOf(modelData.key) >= 0
+                            onClicked: root.parameterMoveRequested(modelData.key, -1)
                         }
 
                         Text {
@@ -517,7 +411,7 @@ Item {
                             anchors.rightMargin: 6
                             anchors.verticalCenter: parent.verticalCenter
                             text: "↓"
-                            color: root.settingsParameters.indexOf(modelData) >= 0 ? root.cyan : root.muted
+                            color: root.settingsParameters.indexOf(modelData.key) >= 0 ? root.cyan : root.muted
                             font.pixelSize: 14
                         }
                         MouseArea {
@@ -525,17 +419,8 @@ Item {
                             anchors.rightMargin: 2
                             width: 24
                             height: parent.height
-                            enabled: root.settingsParameters.indexOf(modelData) >= 0
-                            onClicked: root.parameterMoveRequested(modelData, 1)
-                        }
-
-                        MouseArea {
-                            anchors.left: parent.left
-                            anchors.right: parent.right
-                            anchors.top: parent.top
-                            anchors.bottom: parent.bottom
-                            z: -1
-                            onClicked: root.parameterToggleRequested(modelData)
+                            enabled: root.settingsParameters.indexOf(modelData.key) >= 0
+                            onClicked: root.parameterMoveRequested(modelData.key, 1)
                         }
                     }
                 }
