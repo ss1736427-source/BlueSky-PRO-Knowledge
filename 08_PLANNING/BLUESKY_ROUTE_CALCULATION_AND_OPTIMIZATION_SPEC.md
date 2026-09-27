@@ -449,3 +449,30 @@ Reference scenarios shall include:
 **Architectural rule:** one calculation, one authoritative result, downstream reuse, dependency-driven invalidation.
 
 **AI:** may later assist candidate generation, comparison or Corrections only through the established proposal/validation/safety/authorization boundaries. AI does not become the authoritative calculation or execution path.
+
+
+### 8.1 Ground resolution of multi-UAV conflicts
+
+All calculated multi-UAV conflicts shall be resolved **before the affected UAVs start**. An unresolved conflict is not converted into a reactive in-flight maneuver.
+
+The planning sequence is:
+
+4D TRAJECTORIES
+→ CONTINUOUS CONFLICT DETECTION
+→ CONFLICT RESOLUTION
+→ CONTINUOUS CONFLICT RECHECK
+→ CANDIDATE COMPARISON / OPTIMIZATION
+
+Resolution uses, in order where applicable:
+
+1. **Start-time correction:** delay one UAV by the minimum configured amount required to remove a temporal conflict, within the permitted delay range.
+2. **Vertical profile correction:** for a same-altitude crossing that remains conflicting, the UAV on the right by course is planned at **+1 m**, and the UAV on the left at **-1 m** over the affected profile segment. The resulting nominal vertical difference is 2 m.
+3. **Profile return:** after the conflict zone, each UAV returns to its required original flight profile.
+
+The 1 m value is a maneuver step, not a universal regulatory vertical separation requirement. Every vertical correction must pass the applicable altitude, terrain/obstacle, airspace, performance and other hard-constraint checks.
+
+After each correction, the continuous 4D conflict detector is run again. The final multi-UAV plan may proceed to READY only when no unresolved calculated conflicts remain. If a conflict remains, another deterministic planning alternative is required.
+
+These corrections are planned on the ground and become part of the versioned execution profile/start schedule. They are not reactive execution commands.
+
+The conflict detector remains detection-only; conflict resolution is a separate deterministic planning component.
