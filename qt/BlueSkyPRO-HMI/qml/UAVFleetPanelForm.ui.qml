@@ -94,7 +94,7 @@ Item {
         property int minCardWidth: 280
         property int columnCount: Math.max(1, Math.floor((width + gap) / (minCardWidth + gap)))
         property real cardWidth: (width - (columnCount - 1) * gap) / columnCount
-        property real cardHeight: Math.min(root.height - 12, 66 + root.maxParameterRows * 24)
+        property real cardHeight: Math.min(root.height - 12, 66 + root.maxParameterRows * 20)
         columns: columnCount
         spacing: gap
         width: root.width - 20
@@ -182,8 +182,8 @@ Item {
                     Image {
                         id: aircraftImage
                         anchors.centerIn: parent
-                        width: Math.min(parent.width - 8, parent.height - 8, 124)
-                        height: width
+                        width: Math.min(parent.width - 8, 124)
+                        height: Math.min(parent.height - 8, 92)
                         source: modelData.imageSource
                         fillMode: Image.PreserveAspectFit
                         smooth: true
@@ -205,7 +205,7 @@ Item {
                     x: parent.width * 0.45
                     y: 38
                     width: parent.width * 0.53
-                    height: root.maxParameterRows * 24
+                    height: root.maxParameterRows * 20
                     spacing: 0
 
                     Repeater {
@@ -213,7 +213,7 @@ Item {
                         delegate: Item {
                             required property var modelData
                             width: metricColumn.width
-                            height: 24
+                            height: 20
 
                             Text {
                                 anchors.left: parent.left
@@ -248,7 +248,7 @@ Item {
                                 Rectangle {
                                     x: 0
                                     y: 0
-                                    width: parent.width * Math.max(0, Math.min(100, Number(cardRoot.modelData.engine))) / 100
+                                    width: Math.max(2, parent.width * Math.max(0, Math.min(100, Number(cardRoot.modelData.engine))) / 100)
                                     height: parent.height
                                     radius: 1
                                     color: root.engineLoadColor(cardRoot.modelData.engine)
