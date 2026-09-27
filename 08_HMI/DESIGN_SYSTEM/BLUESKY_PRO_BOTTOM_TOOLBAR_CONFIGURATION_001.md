@@ -156,3 +156,11 @@ Working Design System reference aligned with the controlled HMI implementation. 
 - The enabled tool buttons are centered within the available span between the LEFT and RIGHT anchors. Their row width follows the visible tool delegates, so the group re-centers when tools are enabled/disabled or added.
 - Existing tool ordering, drag-to-reorder, and persisted configuration are retained.
 - Verify in Qt Design Studio at the target window size and with all available tools enabled; very narrow windows may require a separate overflow/scroll treatment.
+
+
+### Odd-count center alignment — 2026-09-27
+
+- When the visible tool count is odd, the middle tool button is anchored by its own center to the exact center of the available toolbar tool area.
+- Remaining buttons are laid out outward to the left and right, preserving their order and spacing.
+- For an even number of tools, the complete group remains centered as a group.
+- Tool widths are calculated from labels; verify spacing and centering in Qt Design Studio, especially for longer labels and after drag-reordering.
