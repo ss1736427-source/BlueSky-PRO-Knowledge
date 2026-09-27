@@ -241,66 +241,66 @@ Item {
         }
     }
 
-    Column {
+    Flickable {
+        id: templateList
         visible: (root.missionVisible || root.missionCreationMode) && !root.panelConfigOpen
         x: 10
         y: 92
         width: parent.width - 20
-        spacing: 3
+        height: Math.max(0, parent.height - y - createMissionButton.height - 20)
+        contentWidth: width
+        contentHeight: templateColumn.implicitHeight
+        clip: true
+        boundsBehavior: Flickable.StopAtBounds
 
-        Repeater {
-            model: [
-                "Картографирование территории",
-                "Обследование зданий",
-                "3D картография",
-                "Линейное обследование",
-                "Картографирование коридора",
-                "Точка интереса"
-            ]
-
-            delegate: Rectangle {
-                required property int index
-                required property string modelData
-                width: parent.width
-                height: 56
-                radius: 3
-                color: index === root.selectedTemplate ? root.selectedSurface : root.card
-                border.color: index === root.selectedTemplate ? root.cyan : root.divider
-                border.width: 1
-
-                Rectangle {
-                    visible: index === root.selectedTemplate
-                    anchors.left: parent.left
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    width: 3
-                    color: root.cyan
-                }
-
-                Text {
-                    x: 16
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: modelData
-                    color: root.text
-                    font.family: "Noto Sans"
-                    font.pixelSize: 12
-                    font.bold: true
-                }
-
-                Text {
-                    visible: index === root.selectedTemplate
-                    x: parent.width - 30
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "✓"
-                    color: root.cyan
-                    font.family: "B612 Mono"
-                    font.pixelSize: 15
-                    font.bold: true
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: root.selectedTemplate = index
+        Column {
+            id: templateColumn
+            width: templateList.width
+            spacing: 3
+            Repeater {
+                model: ["Картографирование территории","Инспекция объектов (здания, ЛЭП, трубопроводы)","3D-картография / реконструкция","Мониторинг территории","Поиск человека","Пожарный мониторинг","Доставка","Drone-in-a-Box","BVLOS-мониторинг","Экологический мониторинг","Ретрансляция связи","C-UAS — обнаружение БПЛА","Автоматическое обнаружение объектов","Групповая / роёвая миссия"]
+                delegate: Rectangle {
+                    required property int index
+                    required property string modelData
+                    width: templateColumn.width
+                    height: 56
+                    radius: 3
+                    color: index === root.selectedTemplate ? root.selectedSurface : root.card
+                    border.color: index === root.selectedTemplate ? root.cyan : root.divider
+                    border.width: 1
+                    Rectangle {
+                        visible: index === root.selectedTemplate
+                        anchors.left: parent.left
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        width: 3
+                        color: root.cyan
+                    }
+                    Text {
+                        x: 16
+                        width: parent.width - 52
+                        anchors.verticalCenter: parent.verticalCenter
+                        elide: Text.ElideRight
+                        text: modelData
+                        color: root.text
+                        font.family: "Noto Sans"
+                        font.pixelSize: 12
+                        font.bold: true
+                    }
+                    Text {
+                        visible: index === root.selectedTemplate
+                        x: parent.width - 30
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: "✓"
+                        color: root.cyan
+                        font.family: "B612 Mono"
+                        font.pixelSize: 15
+                        font.bold: true
+                    }
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: root.selectedTemplate = index
+                    }
                 }
             }
         }
