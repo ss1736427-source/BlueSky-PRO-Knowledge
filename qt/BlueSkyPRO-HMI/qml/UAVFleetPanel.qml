@@ -275,13 +275,14 @@ Item {
             root.uavDoubleClicked(index)
         }
         onSettingsRequested: {
-            root.selectedIndex = index
-            root.settingsIndex = index
-            root.uavSelected(index)
-            if (root.settingsIndex === index && form.settingsOpen)
+            if (form.settingsOpen && root.settingsIndex === index) {
                 form.settingsOpen = false
-            else
+            } else {
+                root.selectedIndex = index
+                root.settingsIndex = index
+                root.uavSelected(index)
                 form.settingsOpen = true
+            }
         }
         onSettingsPositionChanged: {
             settings.settingsPopupX = x
