@@ -173,3 +173,8 @@ Review of the committed QML confirmed that the prior 0.5 px line was positioned 
 ### Countdown-row alignment update
 
 The 0.5 px mission-progress indicator now occupies the same horizontal row as the remaining-time label. The label has a fixed 16 px row height; the indicator is positioned from the label's vertical center and begins to its right, extending to the card's right inset. The time text and progress line therefore share one baseline row without overlapping.
+
+
+### Single-color progress indicator
+
+The countdown row now renders only one green 0.5 px mission-progress line. The cyan background track and nested fill were removed; the green line's length is proportional to mission completion. No second indicator line is rendered.
