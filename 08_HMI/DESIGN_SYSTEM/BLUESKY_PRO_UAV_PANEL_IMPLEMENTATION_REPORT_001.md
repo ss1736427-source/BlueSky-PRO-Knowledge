@@ -178,3 +178,8 @@ The 0.5 px mission-progress indicator now occupies the same horizontal row as th
 ### Single-color progress indicator
 
 The countdown row now renders only one green 0.5 px mission-progress line. The cyan background track and nested fill were removed; the green line's length is proportional to mission completion. No second indicator line is rendered.
+
+
+### Remaining-time indicator direction
+
+Before mission start, the green indicator is full width (remaining time equals the mission's maximum duration). As the countdown decreases, the green line contracts from its right edge toward the left. At 0 remaining seconds, the line has zero width. The numeric label counts down from the configured maximum mission duration to `00:00` (hours omitted below one hour).
