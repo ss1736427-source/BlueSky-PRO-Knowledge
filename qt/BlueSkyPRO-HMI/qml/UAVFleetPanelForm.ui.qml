@@ -14,7 +14,7 @@ Item {
     property real dragOffsetY: 0
     property int dragTargetIndex: -1
 
-    property int gridColumns: cardGrid.columns
+    property int gridColumns: cardGrid.columnCount
     property real gridCardWidth: cardGrid.cardWidth
     property real gridCardHeight: cardGrid.cardHeight
     property int gridSpacing: cardGrid.spacing
@@ -51,16 +51,16 @@ Item {
         id: cardGrid
         property int gap: 12
         property int minCardWidth: 320
-        property int columns: Math.max(1, Math.floor((width + gap) / (minCardWidth + gap)))
-        property real cardWidth: (width - (columns - 1) * gap) / columns
+        property int columnCount: Math.max(1, Math.floor((width + gap) / (minCardWidth + gap)))
+        property real cardWidth: (width - (columnCount - 1) * gap) / columnCount
         property real cardHeight: Math.min(360, Math.max(310, root.height * 0.40))
-        columns: Math.max(1, Math.floor((width + gap) / (minCardWidth + gap)))
+        columns: columnCount
         spacing: gap
         width: root.width - 20
         x: 10
         anchors.verticalCenter: parent.verticalCenter
-        height: Math.ceil(root.displayModel.length / columns) * cardHeight
-                + Math.max(0, Math.ceil(root.displayModel.length / columns) - 1) * spacing
+        height: Math.ceil(root.displayModel.length / columnCount) * cardHeight
+                + Math.max(0, Math.ceil(root.displayModel.length / columnCount) - 1) * spacing
 
         Repeater {
             id: cardRepeater
@@ -259,7 +259,7 @@ Item {
                     x: 12
                     y: parent.height - 30
                     width: parent.width * 0.43
-                    text: modelData.state
+                    text: modelData.state + "  ·  " + modelData.progress
                     color: modelData.state === "READY" ? root.green
                            : modelData.state === "WARNING" ? root.red : root.amber
                     font.family: "B612 Mono"
@@ -284,14 +284,8 @@ Item {
                     anchors.fill: parent
                     z: 1
                     preventStealing: true
-                    onPressed: {
-                        var p = cardDragArea.mapToItem(cardGrid, mouse.x, mouse.y)
-                        root.dragStarted(index, p.x, p.y)
-                    }
-                    onPositionChanged: if (pressed) {
-                        var p = cardDragArea.mapToItem(cardGrid, mouse.x, mouse.y)
-                        root.dragMoved(index, p.x, p.y)
-                    }
+                    onPressed: root.dragStarted(index, cardDragArea.mapToItem(cardGrid, mouse.x, mouse.y).x, cardDragArea.mapToItem(cardGrid, mouse.x, mouse.y).y)
+                    onPositionChanged: if (pressed) root.dragMoved(index, cardDragArea.mapToItem(cardGrid, mouse.x, mouse.y).x, cardDragArea.mapToItem(cardGrid, mouse.x, mouse.y).y)
                     onReleased: root.dragFinished(index)
                     onDoubleClicked: root.uavDoubleClicked(index)
                     onCanceled: root.dragFinished(index)
@@ -317,7 +311,7 @@ Item {
             x: 14
             y: 12
             width: parent.width - 52
-            text: "ПАРАМЕТРЫ КАРТОЧКИ"
+            text: "ПАРАМЕТРЫ КАРТОЧКИ · ДО 8"
             color: root.text
             font.family: "B612"
             font.pixelSize: 13
