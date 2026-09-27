@@ -11,6 +11,7 @@ Item {
     property int leftWidth: leftPanel.implicitWidth
     property int rightWidth: 340
     property int toolbarHeight: 54
+    property int uavPanelHeight: 270
     property bool leftPanelOpen: true
     property bool rightPanelOpen: true
     property string missionState: "AUTO" // AUTO, HIDDEN, MANUAL
@@ -93,7 +94,7 @@ Item {
             missionVisible: root.missionVisible
             manualCreationMode: root.missionCreationMode
             manualCompositionComplete: root.manualCompositionComplete
-            visible: root.activeTool === "MAP"
+            visible: root.activeTool === "MAP" || root.activeTool === "UAV"
             onManualCompositionCompleted: root.manualCompositionComplete = true
             onMapDoubleClicked: root.leftPanelOpen = false
         }
@@ -153,8 +154,8 @@ Item {
         }
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.top: topHeader.bottom
         anchors.bottom: bottomToolbar.top
+        height: Math.min(root.uavPanelHeight, root.height - root.headerHeight - root.toolbarHeight)
     }
 
     BottomToolbar {
