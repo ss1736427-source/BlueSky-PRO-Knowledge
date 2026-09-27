@@ -132,3 +132,10 @@ Required DS checks:
 ## 7. Known integration boundary
 
 Card values are design-preview values, not live telemetry. Production integration must bind these fields to the normalized telemetry/fleet state and the configured local UAV image. The visual layer must not invent or calculate authoritative flight state. Missing values should be represented as unavailable, and safety-critical warnings must remain visible regardless of optional-field filtering.
+
+
+### Aircraft illustrations and state label
+
+- Card status is a single centered label bound to `modelData.state`; `READY` and `STBY` are mutually exclusive. READY is green; STBY is cyan. The previous combined `state · progress` text is removed.
+- Added local scalable SVG illustrations by aircraft class: `qml/assets/uav_multirotor.svg`, `qml/assets/uav_fixed_wing.svg`, and `qml/assets/uav_vtol.svg`. They are lightweight, transparent-background schematic renders intended for the Design Studio mockup and work offline.
+- Internet visual references reviewed: [white quadcopter render](https://wallpapers.com/png/white-quadcopter-dronewith-camera-58sweghtoh4bc9ab.html), [fixed-wing UAV](https://www.kindpng.com/imgv/TJmJhJ_fixed-wing-drone-png-transparent-png/), and [WingtraOne VTOL](https://www.kindpng.com/imgv/TJmomb_wingtraone-wingtra-drone-png-transparent-png/). The latter two pages indicate personal/non-commercial use; these original internet files are therefore not bundled into the project. The committed SVGs are original schematic illustrations, not copies of those images. Obtain appropriately licensed product images before commercial release.
