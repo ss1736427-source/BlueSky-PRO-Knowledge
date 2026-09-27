@@ -29,7 +29,7 @@ Item {
             count = Math.max(count, root.parametersFor(i).length)
         return count
     }
-    readonly property int preferredHeight: 48 + root.maxParameterRows * 24 + 42 + 16
+    readonly property int preferredHeight: 48 + root.maxParameterRows * 20 + 42 + 16
     property var parameterConfigs: ({})
 
     readonly property var availableParameterOptions: [
