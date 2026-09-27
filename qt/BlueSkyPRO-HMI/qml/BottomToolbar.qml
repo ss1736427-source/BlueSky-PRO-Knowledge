@@ -406,6 +406,10 @@ signal workspaceContextRequested(string tool)
                 function widthAt(i) {
                     if (i < 0 || i >= visibleToolModel.count)
                         return 0
+                    // Use the real delegate width, not an estimated label width.
+                    var delegate = toolRepeater.itemAt(i)
+                    if (delegate)
+                        return delegate.width
                     var label = String(visibleToolModel.get(i).label)
                     return Math.max(76, label.length * 6.2 + 28)
                 }
