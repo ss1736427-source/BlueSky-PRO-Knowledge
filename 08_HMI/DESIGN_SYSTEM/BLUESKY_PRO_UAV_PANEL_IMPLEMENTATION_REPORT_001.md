@@ -88,7 +88,7 @@ Numeric values use a slightly larger size than labels to improve scanability. Th
 - The engine-load scale is a 2 px line placed at the bottom of the ENG row, below the value text. It no longer overlays the label or percentage.
 - Engine-load color is value-dependent: 0% is neutral gray; below the cruise reference it transitions through blue; at the cruise reference it is green; above cruise it progressively transitions toward red.
 - The current prototype uses a configurable 60% cruise reference (`engineCruisePercent`). This is a UI reference value, not a certified operating limit; production configuration must supply the appropriate value for each aircraft/engine profile.
-- Parameter rows use 20 px height, and the card height formula includes space for the header, metric rows, and status footer.
+- Parameter rows use 20 px height. Card height is `66 + 20 × visible rows` (subject to available panel height), and dock preferred height uses the same 20 px increment. The ENG row therefore clears the centered state label. A 2 px gray engine-load mark remains visible at 0%.
 
 ## 4. Card layout and fleet behavior
 
@@ -110,11 +110,11 @@ Numeric values use a slightly larger size than labels to improve scanability. Th
 - `qt/BlueSkyPRO-HMI/qml/MainContent.ui.qml` — routes the UAV workspace to the new fleet panel.
 - `qt/BlueSkyPRO-HMI/qml/BottomToolbar.qml` — runtime UAV toggle behavior.
 
-The project QML and image folders are included by directory in `BlueSkyPRO-HMI.qmlproject`; no individual file registration is required.
+The Design Studio `.qmlproject` includes QML and image directories. The CMake application explicitly packages the menu icon and all four UAV SVGs under `RESOURCES`; `BlueSkyPRO-HMI.qrc` also lists them for the qrc-based project path.
 
 ## 6. Verification status
 
-Implemented in the controlled branch. The repository source has been updated, but Qt Design Studio runtime/preview verification has not yet been performed in the user's local environment.
+Implemented in the controlled branch. The user's 2026-09-27 screenshot still showed small aircraft glyphs and simultaneous `READY · STBY`, so the displayed preview did not reflect the intended component state or used a stale/local project copy. Source corrections are committed; Qt Design Studio runtime/preview verification remains pending in the user's local environment.
 
 Required DS checks:
 
