@@ -396,13 +396,50 @@ signal workspaceContextRequested(string tool)
             width: Math.max(1, toolbarRow.width - 76 - 76 - 76 - 1 - 30 - toolsButton.width)
             height: 40
 
-            Row {
+            Item {
                 id: visibleToolRow
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                width: implicitWidth
-                height: parent.height
-                spacing: 6
+                anchors.fill: parent
+
+                // For an odd number of tools, anchor the middle button itself
+                // to the exact horizontal center, then pack the other buttons
+                // outward on both sides.
+                function widthAt(i) {
+                    if (i < 0 || i >= visibleToolModel.count)
+                        return 0
+                    var label = String(visibleToolModel.get(i).label)
+                    return Math.max(76, label.length * 6.2 + 28)
+                }
+
+                function xForTool(i) {
+                    var count = visibleToolModel.count
+                    if (count === 0)
+                        return 0
+                    var middle = Math.floor(count / 2)
+                    var centerX = width / 2
+                    if (count % 2 === 1) {
+                        var middleWidth = widthAt(middle)
+                        if (i === middle)
+                            return centerX - middleWidth / 2
+                        if (i < middle) {
+                            var leftOffset = middleWidth / 2 + 6
+                            for (var left = middle - 1; left >= i; --left)
+                                leftOffset += widthAt(left) + (left === i ? 0 : 6)
+                            return centerX - leftOffset
+                        }
+                        var rightOffset = middleWidth / 2 + 6
+                        for (var right = middle + 1; right < i; ++right)
+                            rightOffset += widthAt(right) + 6
+                        return centerX + rightOffset
+                    }
+                    var total = 0
+                    for (var j = 0; j < count; ++j)
+                        total += widthAt(j)
+                    total += Math.max(0, count - 1) * 6
+                    var start = centerX - total / 2
+                    for (var k = 0; k < i; ++k)
+                        start += widthAt(k) + 6
+                    return start
+                }
 
                 Repeater {
                     id: toolRepeater
@@ -411,6 +448,8 @@ signal workspaceContextRequested(string tool)
                     delegate: Rectangle {
                         id: toolDelegate
                         width: Math.max(76, toolLabel.implicitWidth + 28)
+                        x: visibleToolRow.xForTool(index)
+                        y: (visibleToolRow.height - height) / 2
                         height: 38
                         color: root.activeTool === model.key ? "#111F30" : "#0C1725"
                         border.color: root.activeTool === model.key ? root.cyan : root.divider
