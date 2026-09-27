@@ -22,5 +22,9 @@
         <file>qml/ToolContext.ui.qml</file>
         <file>qml/TopHeader.ui.qml</file>
         <file>qml/UAVStatus.ui.qml</file>
+        <file>qml/assets/uav_multirotor.svg</file>
+        <file>qml/assets/uav_fixed_wing.svg</file>
+        <file>qml/assets/uav_heavy_multirotor.svg</file>
+        <file>qml/assets/uav_vtol.svg</file>
     </qresource>
 </RCC>
