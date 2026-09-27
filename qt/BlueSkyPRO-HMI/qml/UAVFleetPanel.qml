@@ -9,6 +9,10 @@ Item {
 
     property int selectedIndex: -1
     property int settingsIndex: -1
+    property int dragSourceIndex: -1
+    property real dragStartX: 0
+    property real dragStartY: 0
+    property int dragTargetIndex: -1
     property var uavModel: [
         { id: "BS-001", modelName: "MULTIROTOR", sequence: "01", state: "READY", height: 0, speed: 0, battery: 100, engine: 0, wind: "—", heading: "—", eta: "—", c2: "C2 OK", camera: "—", range: "120 km", eet: "—", trip: "—", tot: "—", gnss: "3D FIX", link: "OK", wp: "—", progress: "STBY", batteryHealth: "100 %", payload: "—", telemetry: "NOMINAL" },
         { id: "BS-002", modelName: "FIXED WING", sequence: "02", state: "READY", height: 0, speed: 0, battery: 100, engine: 0, wind: "—", heading: "—", eta: "—", c2: "C2 OK", camera: "—", range: "180 km", eet: "—", trip: "—", tot: "—", gnss: "3D FIX", link: "OK", wp: "—", progress: "STBY", batteryHealth: "100 %", payload: "—", telemetry: "NOMINAL" },
@@ -18,6 +22,29 @@ Item {
 
     property var defaultParameters: ["ALT", "SPD", "BAT", "ENG"]
     property var parameterConfigs: ({})
+
+    readonly property var availableParameterOptions: [
+        { key: "ALT", label: "Высота (HGT / ALT)" },
+        { key: "SPD", label: "Скорость" },
+        { key: "BAT", label: "Battery, %" },
+        { key: "ENG", label: "Режим двигателей" },
+        { key: "WIND", label: "Ветер" },
+        { key: "HDG", label: "Курс" },
+        { key: "ETA", label: "ETA — расчётное прибытие" },
+        { key: "C2", label: "C2 / канал управления" },
+        { key: "CAM", label: "Камера" },
+        { key: "RNG", label: "Остаточная дальность" },
+        { key: "EET", label: "EET — расчётное время полёта" },
+        { key: "TRIP", label: "Trip Time" },
+        { key: "TOT", label: "TOT — время взлёта" },
+        { key: "GNSS", label: "GNSS / навигация" },
+        { key: "LINK", label: "Состояние связи" },
+        { key: "WP", label: "Waypoint" },
+        { key: "PROGRESS", label: "Прогресс миссии" },
+        { key: "BAT HEALTH", label: "Состояние аккумулятора" },
+        { key: "PAYLOAD", label: "Полезная нагрузка" },
+        { key: "TELEM", label: "Качество телеметрии" }
+    ]
 
     Settings {
         id: settings
@@ -30,17 +57,72 @@ Item {
         try { return value ? JSON.parse(value) : fallback } catch (e) { return fallback }
     }
 
-    function persist() {
-        settings.uavOrderJson = JSON.stringify(root.uavModel.map(function(item) { return item.id }))
-        settings.parameterConfigsJson = JSON.stringify(root.parameterConfigs)
-    }
-
     function parametersFor(index) {
         if (index < 0 || index >= root.uavModel.length)
             return root.defaultParameters.slice()
-        var id = root.uavModel[index].id
-        var saved = root.parameterConfigs[id]
+        var saved = root.parameterConfigs[root.uavModel[index].id]
         return Array.isArray(saved) ? saved.slice() : root.defaultParameters.slice()
+    }
+
+    function parameterLabel(key, data) {
+        if (key === "ALT") return data.height < 100 ? "HGT" : "ALT"
+        if (key === "SPD") return "SPD"
+        if (key === "BAT") return "BAT"
+        if (key === "ENG") return "ENG"
+        if (key === "WIND") return "WIND"
+        if (key === "HDG") return "HDG"
+        if (key === "ETA") return "ETA"
+        if (key === "C2") return "C2"
+        if (key === "CAM") return "CAM"
+        if (key === "RNG") return "RNG"
+        if (key === "EET") return "EET"
+        if (key === "TRIP") return "TRIP"
+        if (key === "TOT") return "TOT"
+        if (key === "GNSS") return "GNSS"
+        if (key === "LINK") return "LINK"
+        if (key === "WP") return "WP"
+        if (key === "PROGRESS") return "MISSION"
+        if (key === "BAT HEALTH") return "BAT HLTH"
+        if (key === "PAYLOAD") return "LOAD"
+        if (key === "TELEM") return "TELEM"
+        return key
+    }
+
+    function parameterValue(key, data) {
+        if (key === "ALT") return Math.round(data.height) + " m"
+        if (key === "SPD") return data.speed + " km/h"
+        if (key === "BAT") return data.battery + " %"
+        if (key === "ENG") return data.engine + " %"
+        if (key === "WIND") return data.wind
+        if (key === "HDG") return data.heading + "°"
+        if (key === "ETA") return data.eta
+        if (key === "C2") return data.c2
+        if (key === "CAM") return data.camera
+        if (key === "RNG") return data.range
+        if (key === "EET") return data.eet
+        if (key === "TRIP") return data.trip
+        if (key === "TOT") return data.tot
+        if (key === "GNSS") return data.gnss
+        if (key === "LINK") return data.link
+        if (key === "WP") return data.wp
+        if (key === "PROGRESS") return data.progress
+        if (key === "BAT HEALTH") return data.batteryHealth
+        if (key === "PAYLOAD") return data.payload
+        if (key === "TELEM") return data.telemetry
+        return "—"
+    }
+
+    readonly property var displayModel: root.uavModel.map(function(data, index) {
+        var enriched = Object.assign({}, data)
+        enriched.displayParameters = root.parametersFor(index).map(function(key) {
+            return { key: key, label: root.parameterLabel(key, data), value: root.parameterValue(key, data) }
+        })
+        return enriched
+    })
+
+    function persist() {
+        settings.uavOrderJson = JSON.stringify(root.uavModel.map(function(item) { return item.id }))
+        settings.parameterConfigsJson = JSON.stringify(root.parameterConfigs)
     }
 
     function moveUav(fromIndex, toIndex) {
@@ -99,16 +181,24 @@ Item {
         root.persist()
     }
 
+    function finishDrag() {
+        if (root.dragSourceIndex >= 0 && root.dragTargetIndex >= 0)
+            root.moveUav(root.dragSourceIndex, root.dragTargetIndex)
+        root.dragSourceIndex = -1
+        root.dragTargetIndex = -1
+        form.dragIndex = -1
+        form.dragOffsetX = 0
+        form.dragOffsetY = 0
+    }
+
     Component.onCompleted: {
         root.parameterConfigs = root.parseJson(settings.parameterConfigsJson, ({}))
         var savedOrder = root.parseJson(settings.uavOrderJson, [])
         if (Array.isArray(savedOrder) && savedOrder.length) {
             var ordered = []
             for (var i = 0; i < savedOrder.length; ++i) {
-                for (var j = 0; j < root.uavModel.length; ++j) {
-                    if (root.uavModel[j].id === savedOrder[i])
-                        ordered.push(root.uavModel[j])
-                }
+                for (var j = 0; j < root.uavModel.length; ++j)
+                    if (root.uavModel[j].id === savedOrder[i]) ordered.push(root.uavModel[j])
             }
             for (var k = 0; k < root.uavModel.length; ++k) {
                 var found = false
@@ -123,10 +213,12 @@ Item {
     UAVFleetPanelForm {
         id: form
         anchors.fill: parent
-        uavModel: root.uavModel
+        displayModel: root.displayModel
         selectedIndex: root.selectedIndex
         settingsIndex: root.settingsIndex
         settingsParameters: root.parametersFor(root.settingsIndex)
+        availableParameterOptions: root.availableParameterOptions
+
         onUavSelected: {
             root.selectedIndex = index
             root.uavSelected(index)
@@ -143,7 +235,26 @@ Item {
                 form.settingsOpen = true
             }
         }
-        onReorderRequested: root.moveUav(fromIndex, toIndex)
+        onDragStarted: {
+            root.dragSourceIndex = index
+            root.dragTargetIndex = index
+            root.dragStartX = x
+            root.dragStartY = y
+            form.dragIndex = index
+        }
+        onDragMoved: {
+            if (root.dragSourceIndex !== index)
+                return
+            form.dragOffsetX = x - root.dragStartX
+            form.dragOffsetY = y - root.dragStartY
+            var col = Math.max(0, Math.min(form.gridColumns - 1,
+                Math.floor(x / (form.gridCardWidth + form.gridSpacing))))
+            var row = Math.max(0, Math.floor(y / (form.gridCardHeight + form.gridSpacing)))
+            root.dragTargetIndex = Math.max(0, Math.min(root.uavModel.length - 1,
+                row * form.gridColumns + col))
+            form.dragTargetIndex = root.dragTargetIndex
+        }
+        onDragFinished: root.finishDrag()
         onParameterToggleRequested: root.toggleParameter(root.settingsIndex, parameter)
         onParameterMoveRequested: root.moveParameter(root.settingsIndex, parameter, direction)
         onApplyToAllRequested: root.applyParametersToAll()
