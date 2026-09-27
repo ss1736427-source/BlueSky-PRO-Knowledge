@@ -224,16 +224,17 @@ Item {
         }
     }
 
-    // Mission context is persistent while the mission is visible.
+    // Compact mission row: ID, summary and hide action are separated inside one contour.
     Rectangle {
         visible: root.missionVisible
         x: 10
         y: 50
         width: parent.width - 20
-        height: 36
+        height: 40
+        radius: 3
         color: root.card
-        border.color: "transparent"
-        border.width: 0
+        border.color: root.divider
+        border.width: 1
 
         Text {
             id: missionIdLabel
@@ -253,9 +254,18 @@ Item {
             }
         }
 
+        Rectangle {
+            x: missionIdLabel.x + missionIdLabel.width + 5
+            y: 8
+            width: 1
+            height: parent.height - 16
+            color: root.divider
+        }
+
         Text {
-            x: missionIdLabel.x + missionIdLabel.width + 8
-            width: Math.max(0, parent.width - x - 88)
+            id: missionSummaryLabel
+            x: missionIdLabel.x + missionIdLabel.width + 17
+            width: Math.max(0, parent.width - x - 98)
             anchors.verticalCenter: parent.verticalCenter
             elide: Text.ElideRight
             text: root.missionSummary
@@ -264,21 +274,40 @@ Item {
             font.pixelSize: 10
         }
 
-        Text {
-            x: parent.width - 66
-            anchors.verticalCenter: parent.verticalCenter
-            text: "СКРЫТЬ"
-            color: root.secondary
-            font.family: "B612 Mono"
-            font.pixelSize: 10
-            font.bold: true
+        Rectangle {
+            x: parent.width - 91
+            y: 8
+            width: 1
+            height: parent.height - 16
+            color: root.divider
         }
 
-        MouseArea {
+        Rectangle {
+            id: hideMissionButton
             x: parent.width - 82
             width: 72
-            height: parent.height
-            onClicked: root.hideMissionRequested()
+            height: 26
+            anchors.verticalCenter: parent.verticalCenter
+            radius: 2
+            color: root.selectedSurface
+            border.color: root.divider
+            border.width: 1
+
+            Text {
+                anchors.fill: parent
+                text: "⊘  СКРЫТЬ"
+                color: root.secondary
+                font.family: "B612 Mono"
+                font.pixelSize: 9
+                font.bold: true
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: root.hideMissionRequested()
+            }
         }
     }
 
