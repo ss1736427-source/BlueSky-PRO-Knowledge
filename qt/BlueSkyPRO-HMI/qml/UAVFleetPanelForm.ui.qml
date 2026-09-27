@@ -432,19 +432,15 @@ Item {
             width: parent.width - 42
             height: 38
             z: 1
-            property real pressX: 0
-            property real pressY: 0
-            onPressed: {
-                pressX = mouse.x
-                pressY = mouse.y
-            }
-            onPositionChanged: {
-                if (!pressed)
-                    return
-                root.settingsPopupX = Math.max(8, Math.min(root.width - settingsPopup.width - 8,
-                    settingsPopup.x + mouse.x - pressX))
-                root.settingsPopupY = Math.max(8, Math.min(root.height - settingsPopup.height - 8,
-                    settingsPopup.y + mouse.y - pressY))
+            drag.target: settingsPopup
+            drag.axis: Drag.XAndYAxis
+            drag.minimumX: 8
+            drag.maximumX: Math.max(8, root.width - settingsPopup.width - 8)
+            drag.minimumY: 8
+            drag.maximumY: Math.max(8, root.height - settingsPopup.height - 8)
+            onReleased: {
+                root.settingsPopupX = settingsPopup.x
+                root.settingsPopupY = settingsPopup.y
                 root.settingsPositionChanged(root.settingsPopupX, root.settingsPopupY)
             }
         }
