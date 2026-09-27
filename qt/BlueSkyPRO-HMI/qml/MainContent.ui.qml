@@ -159,7 +159,7 @@ Item {
             }
             anchors.left: leftPanel.right
             anchors.right: rightPanel.left
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.bottom: parent.bottom
             height: Math.min(uavStatus.preferredHeight, parent.height)
         }
     }
@@ -175,8 +175,15 @@ Item {
         onLeftPanelToggleRequested: root.leftPanelOpen = !root.leftPanelOpen
         onRightPanelToggleRequested: root.rightPanelOpen = !root.rightPanelOpen
         onToolActivated: {
-            if (tool !== "UAV")
+            if (tool === "UAV") {
+                // Opening the fleet view collapses both side panels and gives
+                // the map/card workspace the full width.
+                root.leftPanelOpen = false
+                root.rightPanelOpen = false
                 root.contextOverlayOpen = false
+            } else {
+                root.contextOverlayOpen = false
+            }
             root.workspaceContextRequested(tool)
         }
     }
