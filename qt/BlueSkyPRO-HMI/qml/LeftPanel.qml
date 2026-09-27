@@ -44,6 +44,9 @@ Item {
     property bool missionCreationMode: false
     readonly property string newMissionType: "M"
     property string missionId: "BS-260920-A-001"
+    // Automatic missions use the A-### identifier segment.
+    readonly property bool missionIsAutomatic: missionId.indexOf("-A-") >= 0
+    property color automaticMissionAccent: "#64FF00"
     property string missionSummary: "3D картография территории"
     property bool missionIdExpanded: false
     readonly property string missionShortId: {
@@ -233,7 +236,7 @@ Item {
         height: 40
         radius: 3
         color: root.card
-        border.color: root.divider
+        border.color: root.missionIsAutomatic ? root.automaticMissionAccent : root.divider
         border.width: 1
 
         Text {
