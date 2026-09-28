@@ -24,7 +24,7 @@ qt_add_qml_module(appBlueSkyPRO
     QML_FILES
         qml/App.qml
         qml/Main.qml
-        qml/MainContent.ui.qml
+        qml/MainContent.qml
         qml/TopHeader.ui.qml
         qml/HeaderSector.ui.qml
         qml/LeftPanel.qml
