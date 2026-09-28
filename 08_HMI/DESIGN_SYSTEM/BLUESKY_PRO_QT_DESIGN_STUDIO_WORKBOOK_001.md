@@ -646,3 +646,12 @@ Final pixel geometry, final typography package and unresolved visual-baseline co
 - UAV cards keep a 1 px outline in every state; selection and warning are communicated by outline color, not by increasing thickness.
 - Neutral internal dividers use `#7F7F7F`; structural panel seams use cyan `#32FFFF`. Semantic status colors remain reserved for status indication.
 - The Flight Chart placeholder frame uses the neutral divider token rather than a near-black stroke.
+
+
+## Tools configuration popup and toolbar control — 2026-09-28
+
+- The TOOLS configuration popup sizes itself to the tool list and its content instead of using a fixed 330 × 330 rectangle. Width is based on the longest tool label with a minimum usable width; height follows the row count.
+- Clicking the popup header/title area closes the configuration panel.
+- The toolbar menu glyph uses the same 14 px font size as the digital clock.
+- Menu glyph state colors are inverted: white while the configuration panel is expanded, cyan while collapsed.
+- The clock allocation is reduced to 58 px and the menu button to 36 px, with the existing compact 6 px toolbar gap retained.
