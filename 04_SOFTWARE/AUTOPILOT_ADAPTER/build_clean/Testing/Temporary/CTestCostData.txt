@@ -1,3 +1,0 @@
-evidence_source_adapter_test 0 0
----
-evidence_source_adapter_test
