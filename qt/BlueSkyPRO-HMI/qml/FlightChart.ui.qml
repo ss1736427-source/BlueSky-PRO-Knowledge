@@ -64,7 +64,7 @@ Item {
     Canvas {
         id: chartCanvas
         anchors.fill: parent
-        visible: root.missionVisible || root.manualCreationMode
+        visible: true
         renderTarget: Canvas.Image
         onWidthChanged: requestPaint()
         onHeightChanged: requestPaint()
@@ -164,7 +164,7 @@ Item {
     }
 
     Text {
-        visible: root.missionVisible
+        visible: true
         x: 18
         y: 16
         text: "FLIGHT CHART"
@@ -175,7 +175,7 @@ Item {
     }
 
     Rectangle {
-        visible: root.missionVisible
+        visible: true
         x: 18
         y: 44
         width: 108
@@ -193,7 +193,7 @@ Item {
     }
 
     Rectangle {
-        visible: root.missionVisible
+        visible: true
         anchors.top: parent.top
         anchors.right: parent.right
         anchors.topMargin: 18
@@ -224,7 +224,7 @@ Item {
     }
 
     Rectangle {
-        visible: root.missionVisible
+        visible: true
         anchors.left: parent.left
         anchors.bottom: parent.bottom
         anchors.leftMargin: 18
@@ -267,7 +267,7 @@ Item {
     }
 
     Text {
-        visible: root.missionVisible
+        visible: true
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 14
