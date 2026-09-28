@@ -11,7 +11,7 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        color: "#050A12"
+        color: "transparent"
     }
 
     Text {
