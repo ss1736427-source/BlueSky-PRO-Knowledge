@@ -152,39 +152,14 @@ Item {
             visible: root.uavPanelOpen
             z: 20
             selectedIndex: root.selectedUavIndex
-            onUavSelected: {
-                root.selectedUavIndex = index
-                root.contextOverlayOpen = false
-            }
-            onUavDoubleClicked: {
-                root.selectedUavIndex = index
-                root.contextOverlayOpen = true
-            }
+            onUavSelected: root.selectedUavIndex = index
+            onUavDoubleClicked: root.contextOverlayOpen = true
             anchors.left: leftPanel.right
             anchors.right: rightPanel.left
             anchors.top: parent.top
             anchors.bottom: parent.bottom
         }
-    }
-
-    BottomToolbar {
-        id: bottomToolbar
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        height: root.toolbarHeight
-        leftOpen: root.leftPanelOpen
-        rightOpen: root.rightPanelOpen
-        onLeftPanelToggleRequested: root.leftPanelOpen = !root.leftPanelOpen
-        onRightPanelToggleRequested: root.rightPanelOpen = !root.rightPanelOpen
-        onToolActivated: {
-            // Switching to UAV changes the workspace content only.
-            // Side panels keep their current open/closed state.
-            root.contextOverlayOpen = false
-            root.workspaceContextRequested(tool)
-        }
-    }
-
+        
     ContextOverlay {
         id: contextOverlay
         visible: root.contextOverlayOpen && root.selectedUavIndex >= 0
@@ -198,4 +173,20 @@ Item {
         onDecisionRequested: root.uavDecisionRequested(decision, uavIndex)
         onContextClosed: root.contextOverlayOpen = false
     }
+    }
+
+    BottomToolbar {
+        id: bottomToolbar
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        height: root.toolbarHeight
+        leftOpen: root.leftPanelOpen
+        rightOpen: root.rightPanelOpen
+        onLeftPanelToggleRequested: root.leftPanelOpen = !root.leftPanelOpen
+        onRightPanelToggleRequested: root.rightPanelOpen = !root.rightPanelOpen
+        // Switching tools changes workspace content only; side panels keep their state.
+        onToolActivated: root.contextOverlayOpen = false
+    }
+
 }
