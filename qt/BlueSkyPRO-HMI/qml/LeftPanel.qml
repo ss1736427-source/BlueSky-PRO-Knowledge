@@ -194,15 +194,20 @@ Item {
             anchors.right: parent.right
             anchors.rightMargin: 10
             anchors.verticalCenter: parent.verticalCenter
-            spacing: 10
+            spacing: 6
 
             Text {
-                width: 88
+                width: 100
                 horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
                 text: "return to auto"
                 color: root.cyan
                 font.family: "B612"
                 font.pixelSize: 10
+                fontSizeMode: Text.Fit
+                minimumPixelSize: 8
+                wrapMode: Text.NoWrap
+                elide: Text.ElideNone
                 font.bold: true
 
                 MouseArea {
