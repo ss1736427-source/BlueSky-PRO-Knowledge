@@ -408,7 +408,7 @@ signal workspaceContextRequested(string tool)
 
         Item {
             id: toolArea
-            width: Math.max(1, toolbarRow.width - 76 - 76 - 76 - 1 - 30 - toolsButton.width)
+            width: Math.max(1, toolbarRow.width - 76 - 76 - 58 - 1 - 30 - toolsButton.width)
             height: 40
 
             Item {
@@ -604,7 +604,7 @@ signal workspaceContextRequested(string tool)
         }
 
         Rectangle {
-            width: 76
+            width: 58
             height: 38
             color: "transparent"
 
@@ -620,16 +620,16 @@ signal workspaceContextRequested(string tool)
 
         Rectangle {
             id: toolsButton
-            width: 76
+            width: 36
             height: 38
             color: "transparent"
 
             Text {
                 anchors.centerIn: parent
                 text: "☰"
-                color: toolsPopup.visible ? root.cyan : root.secondary
+                color: toolsPopup.visible ? root.text : root.cyan
                 font.family: "B612 Mono"
-                font.pixelSize: 17
+                font.pixelSize: 14
             }
 
             MouseArea {
@@ -653,8 +653,10 @@ signal workspaceContextRequested(string tool)
             if (visible)
                 root.ensureEnabledToolsVisible()
         }
-        width: 330
-        height: 330
+        // Fit the panel to the longest tool label and the number of rows.
+        // Keep a small minimum for touch targets, but avoid a fixed oversized box.
+        width: Math.min(root.width - 16, Math.max(220, configLabelMetrics.width + 112))
+        height: Math.min(root.height - 12, 70 + toolModel.count * 45)
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.bottomMargin: root.height + 6
@@ -662,22 +664,42 @@ signal workspaceContextRequested(string tool)
         border.color: root.divider
         border.width: 1
 
-        Text {
-            x: 16
-            y: 14
-            text: "TOOLS CONFIGURATION"
-            color: root.text
+        TextMetrics {
+            id: configLabelMetrics
             font.family: "B612 Mono"
-            font.pixelSize: 11
+            font.pixelSize: 10
+            text: "VIRTUAL FLT"
         }
 
-        Text {
-            x: 16
-            y: 34
-            text: "ENABLE / DISABLE | ORDER"
-            color: root.secondary
-            font.family: "B612 Mono"
-            font.pixelSize: 8
+        Item {
+            id: configHeader
+            x: 0
+            y: 0
+            width: parent.width
+            height: 54
+
+            Text {
+                x: 16
+                y: 14
+                text: "TOOLS CONFIGURATION"
+                color: root.text
+                font.family: "B612 Mono"
+                font.pixelSize: 11
+            }
+
+            Text {
+                x: 16
+                y: 34
+                text: "ENABLE / DISABLE | ORDER"
+                color: root.secondary
+                font.family: "B612 Mono"
+                font.pixelSize: 8
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: toolsPopup.visible = false
+            }
         }
 
         ListView {
