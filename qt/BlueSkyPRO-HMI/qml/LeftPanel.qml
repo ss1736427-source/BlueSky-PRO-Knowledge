@@ -197,6 +197,7 @@ Item {
             spacing: 6
 
             Rectangle {
+                visible: root.missionCreationMode
                 width: 88
                 height: 22
                 radius: 2
@@ -415,6 +416,7 @@ Item {
                 delegate: Rectangle {
                     required property int index
                     required property string title
+                    visible: root.templateIsVisible(index)
                     required property string subtitle
                     required property string accent
                     width: templateColumn.width
