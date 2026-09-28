@@ -42,6 +42,9 @@ Item {
     property var missionTemplateIndices: [2]
     property string journalStatus: "READY"
     property string activeTool: bottomToolbar.activeTool
+    // Role selection is the application entry point; the workspace remains underneath.
+    property bool roleSelectionVisible: true
+    property string currentRole: ""
     readonly property bool uavPanelOpen: activeTool === "UAV"
     signal journalEvent(string eventType, int uavIndex, string decision)
     signal journalAppendRequested(string eventType, string missionId, int uavIndex, string decision)
@@ -226,6 +229,25 @@ Item {
         onLeftPanelToggleRequested: root.leftPanelOpen = !root.leftPanelOpen
         onRightPanelToggleRequested: root.rightPanelOpen = !root.rightPanelOpen
         onToolActivated: root.contextOverlayOpen = false
+    }
+
+    // Entry screen connected to the real workspace. Continue closes the
+    // role screen and activates the corresponding application context.
+    RoleSelection {
+        id: roleSelection
+        anchors.fill: parent
+        z: 1000
+        visible: root.roleSelectionVisible
+        onContinueRequested: function(role) {
+            root.currentRole = role
+            root.roleSelectionVisible = false
+            if (role === "ADMIN")
+                bottomToolbar.activateTool("ADMIN")
+            else if (role === "ENGINEER")
+                bottomToolbar.activateTool("UAV")
+            else
+                bottomToolbar.activateTool("UAV")
+        }
     }
 
 }
