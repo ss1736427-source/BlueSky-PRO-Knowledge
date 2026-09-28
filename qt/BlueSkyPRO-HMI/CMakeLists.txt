@@ -34,6 +34,9 @@ qt_add_qml_module(appBlueSkyPRO
         qml/UAVFleetPanelForm.ui.qml
         qml/BottomToolbar.qml
         qml/ContextOverlay.ui.qml
+        qml/ToolContext.ui.qml
+        qml/PanelSettingsButton.ui.qml
+        qml/PanelSettingsPopup.qml
         qml/Theme.qml
 )
 
