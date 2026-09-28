@@ -1,16 +1,16 @@
-﻿import QtQuick
+import QtQuick
 
 Item {
     id: root
 
-    // PLACEHOLDER ONLY.
-    // Flight Chart has not yet been designed or approved. Do not treat this component
-    // as the final map visual, map provider selection, or spatial interaction design.
-    property color bg: "#000000"
+    // BlueSky PRO — schematic Flight Chart workspace.
+    // Visual preview only: not a geographic map or flight-authoritative data.
+    property color bg: "#050A12"
     property color text: "#FFFFFF"
     property color secondary: "#BFBFBF"
     property color muted: "#7F7F7F"
-    property color divider: "#7F7F7F"
+    property color divider: "#1B2A3A"
+    property color cyan: "#32FFFF"
     property bool missionVisible: true
     property bool manualCreationMode: false
     // The map/mission editor sets this only when the composed mission is complete.
@@ -21,77 +21,205 @@ Item {
     Rectangle {
         anchors.fill: parent
         color: root.bg
+    }
 
-        MouseArea {
-            anchors.fill: parent
-            acceptedButtons: Qt.LeftButton
-            onDoubleClicked: root.mapDoubleClicked()
+    // Grid, restricted airspace and route are schematic design-preview elements.
+    Canvas {
+        id: chartCanvas
+        anchors.fill: parent
+        visible: root.missionVisible
+        renderTarget: Canvas.Image
+        onWidthChanged: requestPaint()
+        onHeightChanged: requestPaint()
+        onPaint: {
+            var ctx = getContext("2d")
+            var w = width
+            var h = height
+            ctx.clearRect(0, 0, w, h)
+            ctx.fillStyle = root.bg
+            ctx.fillRect(0, 0, w, h)
+
+            var step = 66
+            ctx.lineWidth = 1
+            for (var x = 0; x <= w; x += step) {
+                ctx.beginPath()
+                ctx.strokeStyle = (Math.round(x / step) % 5 === 0) ? "#1B2A3A" : "#111E2C"
+                ctx.moveTo(x, 0)
+                ctx.lineTo(x, h)
+                ctx.stroke()
+            }
+            for (var y = 0; y <= h; y += step) {
+                ctx.beginPath()
+                ctx.strokeStyle = (Math.round(y / step) % 5 === 0) ? "#1B2A3A" : "#111E2C"
+                ctx.moveTo(0, y)
+                ctx.lineTo(w, y)
+                ctx.stroke()
+            }
+
+            // Restricted area (illustrative only).
+            var rx = w * 0.57
+            var ry = h * 0.22
+            var rw = Math.min(194, w * 0.23)
+            var rh = Math.min(154, h * 0.24)
+            ctx.fillStyle = "#30121B"
+            ctx.strokeStyle = "#8B2637"
+            ctx.lineWidth = 1
+            ctx.fillRect(rx, ry, rw, rh)
+            ctx.strokeRect(rx, ry, rw, rh)
+            ctx.strokeStyle = "#5A202D"
+            for (var sy = ry + 14; sy < ry + rh; sy += 24) {
+                ctx.beginPath()
+                ctx.moveTo(rx + 8, sy)
+                ctx.lineTo(rx + rw - 8, sy)
+                ctx.stroke()
+            }
+
+            // Schematic route.
+            var pts = [
+                {x: w * 0.16, y: h * 0.73},
+                {x: w * 0.30, y: h * 0.54},
+                {x: w * 0.42, y: h * 0.62},
+                {x: w * 0.52, y: h * 0.42},
+                {x: w * 0.73, y: h * 0.69}
+            ]
+            ctx.beginPath()
+            ctx.moveTo(pts[0].x, pts[0].y)
+            for (var i = 1; i < pts.length; ++i)
+                ctx.lineTo(pts[i].x, pts[i].y)
+            ctx.strokeStyle = root.cyan
+            ctx.lineWidth = 2
+            ctx.lineJoin = "round"
+            ctx.stroke()
+
+            for (var j = 0; j < pts.length; ++j) {
+                ctx.beginPath()
+                ctx.arc(pts[j].x, pts[j].y, j === 0 || j === pts.length - 1 ? 4.5 : 3.5, 0, Math.PI * 2)
+                ctx.fillStyle = j === 0 ? "#64FF00" : (j === pts.length - 1 ? "#FFD43B" : root.cyan)
+                ctx.fill()
+            }
         }
     }
 
     Text {
         visible: root.missionVisible
-        anchors.horizontalCenter: parent.horizontalCenter
-        y: 28
+        x: 18
+        y: 16
         text: "FLIGHT CHART"
         color: root.secondary
         font.family: "B612"
-        font.pixelSize: 16
+        font.pixelSize: 14
         font.bold: true
-    }
-
-    Text {
-        visible: root.missionVisible
-        anchors.horizontalCenter: parent.horizontalCenter
-        y: 58
-        text: "MAP DESIGN PENDING"
-        color: root.muted
-        font.family: "B612 Mono"
-        font.pixelSize: 10
     }
 
     Rectangle {
         visible: root.missionVisible
-        anchors.centerIn: parent
-        width: Math.min(720, parent.width - 80)
-        height: 220
-        color: "#0A0A0A"
-        border.color: root.divider
+        x: 18
+        y: 44
+        width: 108
+        height: 24
+        color: "#0C1725"
+        border.color: "#24384B"
         border.width: 1
+        Text {
+            anchors.centerIn: parent
+            text: "SCHEMATIC VIEW"
+            color: "#FFD43B"
+            font.family: "B612 Mono"
+            font.pixelSize: 9
+        }
+    }
 
+    Rectangle {
+        visible: root.missionVisible
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.topMargin: 18
+        anchors.rightMargin: 18
+        width: 128
+        height: 54
+        color: "#08111D"
+        border.color: "#24384B"
+        border.width: 1
         Column {
             anchors.centerIn: parent
-            spacing: 10
-
+            spacing: 3
             Text {
-                width: 620
-                horizontalAlignment: Text.AlignHCenter
-                text: "Flight Chart is the primary workspace."
-                color: root.text
-                font.family: "B612"
-                font.pixelSize: 16
-            }
-
-            Text {
-                width: 620
-                horizontalAlignment: Text.AlignHCenter
-                text: "Route, UAV, restriction, weather and spatial layers will be defined in the dedicated map design pass."
-                color: root.secondary
-                font.family: "B612"
-                font.pixelSize: 11
-                wrapMode: Text.WordWrap
-            }
-
-            Text {
-                width: 620
-                horizontalAlignment: Text.AlignHCenter
-                text: "Current screen is a structural placeholder only."
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: "WIND"
                 color: root.muted
                 font.family: "B612 Mono"
-                font.pixelSize: 10
+                font.pixelSize: 9
+            }
+            Text {
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: "↗  — m/s"
+                color: root.cyan
+                font.family: "B612 Mono"
+                font.pixelSize: 12
             }
         }
     }
+
+    Rectangle {
+        visible: root.missionVisible
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        anchors.leftMargin: 18
+        anchors.bottomMargin: 14
+        width: 286
+        height: 26
+        color: "#050A12"
+        opacity: 0.94
+        Row {
+            anchors.fill: parent
+            spacing: 14
+            anchors.leftMargin: 2
+            Repeater {
+                model: [
+                    { label: "START", color: "#64FF00" },
+                    { label: "WAYPOINT", color: root.cyan },
+                    { label: "FINISH", color: "#FFD43B" },
+                    { label: "RESTRICTED", color: "#FF4D5A" }
+                ]
+                delegate: Row {
+                    spacing: 5
+                    anchors.verticalCenter: parent.verticalCenter
+                    Rectangle {
+                        width: 7
+                        height: 7
+                        radius: 4
+                        color: modelData.color
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    Text {
+                        text: modelData.label
+                        color: root.secondary
+                        font.family: "B612 Mono"
+                        font.pixelSize: 8
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                }
+            }
+        }
+    }
+
+    Text {
+        visible: root.missionVisible
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 14
+        text: "SCHEMATIC ROUTE • NOT FOR FLIGHT EXECUTION"
+        color: root.muted
+        font.family: "B612 Mono"
+        font.pixelSize: 9
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        acceptedButtons: Qt.LeftButton
+        onDoubleClicked: root.mapDoubleClicked()
+    }
+
     Text {
         visible: !root.missionVisible && !root.manualCreationMode
         anchors.centerIn: parent
@@ -100,8 +228,6 @@ Item {
         font.family: "B612 Mono"
         font.pixelSize: 12
     }
-
-
 
     Text {
         visible: root.manualCreationMode
@@ -113,7 +239,6 @@ Item {
         font.pixelSize: 12
         font.bold: true
     }
-
 
     PanelSettingsButton {
         id: panelSettings
