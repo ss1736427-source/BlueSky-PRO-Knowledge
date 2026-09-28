@@ -64,7 +64,7 @@ Item {
     Canvas {
         id: chartCanvas
         anchors.fill: parent
-        visible: root.missionVisible
+        visible: root.missionVisible || root.manualCreationMode
         renderTarget: Canvas.Image
         onWidthChanged: requestPaint()
         onHeightChanged: requestPaint()
