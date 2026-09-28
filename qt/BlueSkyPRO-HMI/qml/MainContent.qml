@@ -107,7 +107,9 @@ Item {
             mapPanX: root.mapPanX
             mapPanY: root.mapPanY
             mapZoom: root.mapZoom
-            visible: root.activeTool === "MAP" || root.activeTool === "UAV"
+            // The map workspace is mandatory during mission creation,
+            // regardless of the currently selected bottom-toolbar tool.
+            visible: root.missionCreationMode || root.activeTool === "MAP" || root.activeTool === "UAV"
             onMapViewChangeRequested: function(panX, panY, zoom) {
                 root.mapPanX = panX
                 root.mapPanY = panY
@@ -123,7 +125,8 @@ Item {
             anchors.right: rightPanel.left
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            visible: root.activeTool !== "MAP" && root.activeTool !== "UAV"
+            // Do not replace the map workspace while creating a mission.
+            visible: !root.missionCreationMode && root.activeTool !== "MAP" && root.activeTool !== "UAV"
             contextName: root.activeTool
             selectedUavIndex: root.selectedUavIndex
             selectedUavId: root.selectedUavId
