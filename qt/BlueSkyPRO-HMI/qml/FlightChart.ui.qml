@@ -74,7 +74,9 @@ Item {
                 ctx.stroke()
             }
 
-            // Schematic route.
+            // Schematic route. Center the complete route geometry in the
+            // currently available map viewport, so opening/closing side panels
+            // does not leave the mission area visually off-center.
             var pts = [
                 {x: w * 0.16, y: h * 0.73},
                 {x: w * 0.30, y: h * 0.54},
@@ -82,6 +84,23 @@ Item {
                 {x: w * 0.52, y: h * 0.42},
                 {x: w * 0.73, y: h * 0.69}
             ]
+            var minX = pts[0].x
+            var maxX = pts[0].x
+            var minY = pts[0].y
+            var maxY = pts[0].y
+            for (var b = 1; b < pts.length; ++b) {
+                minX = Math.min(minX, pts[b].x)
+                maxX = Math.max(maxX, pts[b].x)
+                minY = Math.min(minY, pts[b].y)
+                maxY = Math.max(maxY, pts[b].y)
+            }
+            var offsetX = w / 2 - (minX + maxX) / 2
+            var offsetY = h / 2 - (minY + maxY) / 2
+            for (var p = 0; p < pts.length; ++p) {
+                pts[p].x += offsetX
+                pts[p].y += offsetY
+            }
+
             ctx.beginPath()
             ctx.moveTo(pts[0].x, pts[0].y)
             for (var i = 1; i < pts.length; ++i)
