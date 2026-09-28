@@ -15,6 +15,13 @@ Item {
     property bool manualCreationMode: false
     // The map/mission editor sets this only when the composed mission is complete.
     property bool manualCompositionComplete: false
+    // Pan offset for mouse-driven map dragging (visual preview interaction).
+    property real mapPanX: 0
+    property real mapPanY: 0
+    property real dragStartMouseX: 0
+    property real dragStartMouseY: 0
+    property real dragStartPanX: 0
+    property real dragStartPanY: 0
     signal manualCompositionCompleted()
     signal mapDoubleClicked()
 
@@ -38,6 +45,10 @@ Item {
             ctx.clearRect(0, 0, w, h)
             ctx.fillStyle = root.bg
             ctx.fillRect(0, 0, w, h)
+
+            // Pan map content while keeping the surrounding UI overlays fixed.
+            ctx.save()
+            ctx.translate(root.mapPanX, root.mapPanY)
 
             var step = 66
             ctx.lineWidth = 1
@@ -116,6 +127,8 @@ Item {
                 ctx.fillStyle = j === 0 ? "#64FF00" : (j === pts.length - 1 ? "#FFD43B" : root.cyan)
                 ctx.fill()
             }
+
+            ctx.restore()
         }
     }
 
@@ -236,6 +249,24 @@ Item {
     MouseArea {
         anchors.fill: parent
         acceptedButtons: Qt.LeftButton
+        hoverEnabled: true
+        cursorShape: pressed ? Qt.ClosedHandCursor : Qt.OpenHandCursor
+
+        onPressed: function(mouse) {
+            root.dragStartMouseX = mouse.x
+            root.dragStartMouseY = mouse.y
+            root.dragStartPanX = root.mapPanX
+            root.dragStartPanY = root.mapPanY
+        }
+
+        onPositionChanged: function(mouse) {
+            if (pressed) {
+                root.mapPanX = root.dragStartPanX + mouse.x - root.dragStartMouseX
+                root.mapPanY = root.dragStartPanY + mouse.y - root.dragStartMouseY
+                chartCanvas.requestPaint()
+            }
+        }
+
         onDoubleClicked: root.mapDoubleClicked()
     }
 
