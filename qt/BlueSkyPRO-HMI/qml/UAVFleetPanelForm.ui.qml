@@ -149,7 +149,7 @@ Item {
                 color: index === root.selectedIndex ? "#F0111F30" : "#E60C1725"
                 border.color: modelData.state === "WARNING" ? root.red
                               : index === root.selectedIndex ? root.cyan : root.divider
-                border.width: index === root.selectedIndex || modelData.state === "WARNING" ? 2 : 1
+                border.width: 1
 
                 transform: Translate {
                     x: root.dragIndex === index ? root.dragOffsetX : 0
