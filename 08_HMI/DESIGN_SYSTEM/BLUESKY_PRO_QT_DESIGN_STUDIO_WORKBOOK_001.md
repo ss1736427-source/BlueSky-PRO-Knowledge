@@ -624,3 +624,14 @@ This is the **working DS document for interface construction**.
 It is an implementation/design document, not a certification approval.
 
 Final pixel geometry, final typography package and unresolved visual-baseline conflicts remain subject to explicit project approval.
+
+
+## Mission review status and Create Mission button — 2026-09-28
+
+- Mission ID text is driven by the separate `missionReviewState` property, independent of flight readiness:
+  - `VERIFIED`: green `#64FF00` after assembly and checks pass.
+  - `REWORK`: magenta `#FF00FF` when mission corrections are required.
+  - Other/unset states fall back to the standard text color in the runtime panel.
+- `MainContent.ui.qml` passes `missionReviewState` to `LeftPanel.qml`. The default is `REWORK` until a validation workflow explicitly marks the mission verified.
+- The Create Mission button now uses the system card surface (`root.card`) with the green `#64FF00` label; the previous solid green fill is removed.
+- Verify both runtime and Design Studio preview. Confirm the validation workflow updates `missionReviewState` to `VERIFIED` only after checks pass.
