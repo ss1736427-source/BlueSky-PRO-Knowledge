@@ -144,12 +144,7 @@ Item {
             manualCreationMode: root.missionCreationMode
             manualCompositionComplete: root.manualCompositionComplete
             manualValidationStarted: root.manualValidationStarted
-            onValidateManualMissionRequested: {
-                if (root.missionState === "MANUAL" &&
-                    root.manualCompositionComplete) {
-                    root.missionState = "VALIDATING"
-                }
-            }
+            onValidateManualMissionRequested: root.missionState = "VALIDATING"
             onStartMissionRequested: root.leftPanelOpen = false
         }
 
@@ -160,14 +155,8 @@ Item {
             visible: root.uavPanelOpen
             z: 20
             selectedIndex: root.selectedUavIndex
-            onUavSelected: {
-                root.selectedUavIndex = index
-                root.contextOverlayOpen = false
-            }
-            onUavDoubleClicked: {
-                root.selectedUavIndex = index
-                root.contextOverlayOpen = true
-            }
+            onUavSelected: root.selectedUavIndex = index
+            onUavDoubleClicked: root.selectedUavIndex = index
             anchors.left: leftPanel.right
             anchors.right: rightPanel.left
             anchors.top: parent.top
@@ -185,12 +174,7 @@ Item {
         rightOpen: root.rightPanelOpen
         onLeftPanelToggleRequested: root.leftPanelOpen = !root.leftPanelOpen
         onRightPanelToggleRequested: root.rightPanelOpen = !root.rightPanelOpen
-        onToolActivated: {
-            // Switching to UAV changes the workspace content only.
-            // Side panels keep their current open/closed state.
-            root.contextOverlayOpen = false
-            root.workspaceContextRequested(tool)
-        }
+        onToolActivated: root.contextOverlayOpen = false
     }
 
     ContextOverlay {
