@@ -10,7 +10,7 @@ Item {
     property color text: "#FFFFFF"
     property color secondary: "#BFBFBF"
     property color muted: "#7F7F7F"
-    property color divider: "#202020"
+    property color divider: "#7F7F7F"
     property bool missionVisible: true
     property bool manualCreationMode: false
     // The map/mission editor sets this only when the composed mission is complete.
