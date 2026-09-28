@@ -21,6 +21,10 @@ Item {
         missionState === "MANUAL" || missionState === "VALIDATING"
     property bool missionReady: false
     property bool manualCompositionComplete: false
+    // Shared map view state: retained while switching mission templates and tools.
+    property real mapPanX: 0
+    property real mapPanY: 0
+    property real mapZoom: 1.0
     readonly property bool manualValidationStarted: missionState === "VALIDATING"
     property bool warningActive: true
     property int selectedUavIndex: -1
@@ -99,7 +103,16 @@ Item {
             missionVisible: root.missionVisible
             manualCreationMode: root.missionCreationMode
             manualCompositionComplete: root.manualCompositionComplete
+            useExternalMapState: true
+            mapPanX: root.mapPanX
+            mapPanY: root.mapPanY
+            mapZoom: root.mapZoom
             visible: root.activeTool === "MAP" || root.activeTool === "UAV"
+            onMapViewChangeRequested: function(panX, panY, zoom) {
+                root.mapPanX = panX
+                root.mapPanY = panY
+                root.mapZoom = zoom
+            }
             onManualCompositionCompleted: root.manualCompositionComplete = true
             onMapDoubleClicked: root.leftPanelOpen = false
         }
