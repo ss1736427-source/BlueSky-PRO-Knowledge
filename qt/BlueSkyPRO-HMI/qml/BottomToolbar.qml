@@ -656,7 +656,7 @@ signal workspaceContextRequested(string tool)
         // Fit the panel to the longest tool label and the number of rows.
         // Keep a small minimum for touch targets, but avoid a fixed oversized box.
         width: Math.min(root.width - 16, Math.max(220, configLabelMetrics.width + 112))
-        height: Math.min(root.height - 12, 70 + toolModel.count * 45)
+        height: 70 + toolModel.count * 45
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.bottomMargin: root.height + 6
