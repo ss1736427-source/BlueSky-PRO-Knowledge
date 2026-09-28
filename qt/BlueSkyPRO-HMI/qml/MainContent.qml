@@ -165,6 +165,21 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
         }
+
+        ContextOverlay {
+            id: contextOverlay
+            visible: root.contextOverlayOpen && root.selectedUavIndex >= 0
+            uavIndex: root.selectedUavIndex
+            uavId: root.selectedUavId
+            x: Math.max(0, Math.min(parent.width - width,
+                                    parent.width * (root.selectedUavIndex + 0.5) / uavStatus.uavModel.length - width / 2))
+            anchors.top: parent.top
+            width: 360
+            height: 122
+            z: 30
+            onDecisionRequested: root.uavDecisionRequested(decision, uavIndex)
+            onContextClosed: root.contextOverlayOpen = false
+        }
     }
 
     BottomToolbar {
@@ -185,18 +200,4 @@ Item {
         }
     }
 
-        ContextOverlay {
-            id: contextOverlay
-            visible: root.contextOverlayOpen && root.selectedUavIndex >= 0
-            uavIndex: root.selectedUavIndex
-            uavId: root.selectedUavId
-            x: Math.max(0, Math.min(parent.width - width,
-                                    parent.width * (root.selectedUavIndex + 0.5) / uavStatus.uavModel.length - width / 2))
-            anchors.top: parent.top
-            width: 360
-            height: 122
-            z: 30
-            onDecisionRequested: root.uavDecisionRequested(decision, uavIndex)
-            onContextClosed: root.contextOverlayOpen = false
-        }
 }
