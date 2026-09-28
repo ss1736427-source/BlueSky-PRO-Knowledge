@@ -197,20 +197,17 @@ Item {
             spacing: 10
 
             Text {
-                width: 18
+                width: 88
                 horizontalAlignment: Text.AlignHCenter
-                text: "+"
-                color: root.missionVisible ? root.muted : root.cyan
-                font.family: "B612 Mono"
-                font.pixelSize: 18
+                text: "return to auto"
+                color: root.cyan
+                font.family: "B612"
+                font.pixelSize: 10
                 font.bold: true
 
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: {
-                        if (!root.missionVisible)
-                            root.restoreMissionRequested()
-                    }
+                    onClicked: root.restoreMissionRequested()
                 }
             }
 
