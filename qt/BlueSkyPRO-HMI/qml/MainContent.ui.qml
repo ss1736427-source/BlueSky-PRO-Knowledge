@@ -169,6 +169,7 @@ Item {
             anchors.bottom: uavStatus.top
             width: 360
             height: 122
+            onDecisionRequested: root.uavDecision = decision
             onContextClosed: root.contextOverlayOpen = false
         }
     }
