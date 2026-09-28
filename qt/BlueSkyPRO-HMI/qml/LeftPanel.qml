@@ -196,19 +196,29 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             spacing: 6
 
-            Text {
-                width: 100
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                text: "return to auto"
-                color: root.cyan
-                font.family: "B612"
-                font.pixelSize: 10
-                fontSizeMode: Text.Fit
-                minimumPixelSize: 8
-                wrapMode: Text.NoWrap
-                elide: Text.ElideNone
-                font.bold: true
+            Rectangle {
+                width: 88
+                height: 22
+                radius: 2
+                color: root.card
+                border.color: root.cyan
+                border.width: 1
+
+                Text {
+                    anchors.fill: parent
+                    anchors.leftMargin: 3
+                    anchors.rightMargin: 3
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    text: "return to auto"
+                    color: root.cyan
+                    font.family: "B612"
+                    font.pixelSize: 10
+                    fontSizeMode: Text.Fit
+                    minimumPixelSize: 8
+                    wrapMode: Text.NoWrap
+                    font.bold: true
+                }
 
                 MouseArea {
                     anchors.fill: parent
