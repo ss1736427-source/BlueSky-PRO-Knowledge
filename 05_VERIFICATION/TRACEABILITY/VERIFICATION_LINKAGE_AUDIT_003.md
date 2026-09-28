@@ -145,3 +145,19 @@ No status is upgraded to `VERIFIED`. No new requirement or test case is created.
 5. Separately prepare real C2 and Dynamic Return verification execution; do not replace their stubs or planned evidence with software CI results.
 
 **Status: LINKAGE AUDIT RECONCILED — PARTIAL AUTOMATED SUPPORT RECORDED; FULL CASE EXECUTION AND EVIDENCE CLOSURE OPEN.**
+
+
+## 10. Source-level objective mapping for the recorded CI fixture
+
+Inspection of the exact tested source `04_SOFTWARE/AI/ai_runtime_continuity_test.cpp` at
+`2f2699a673a446333d928dc063f05b0d314e8589` confirms the following exercised assertions:
+
+| Test case | Directly exercised by this fixture | Not demonstrated by this fixture |
+|---|---|---|
+| TEST-072 | Offline baseline setup; register one Mission agent; create and assign one task; record one result; submit one proposal; append one trace event; retained task/proposal/trace counts and authority-model flag | Multi-agent assignment/aggregation; conflicting agent results; timeout/unavailable-agent handling; complete event-history reconstruction |
+| TEST-073 | Proposal transition succeeds when validation, safety and authorization are Allowed; transition is rejected when authorization is not Allowed; external result is rejected | Explicit Mission Validation bypass attempt; Safety Gate denial path; operator approval; conflicting proposals; rejected-proposal audit; before/after authoritative C++ Core state evidence |
+| TEST-074 | Establish baseline; enter offline mode; retain task/proposal/trace; reject external results; controlled recovery to Degraded and Online; authority-model preservation | Internet/cloud disconnection mechanics; approved model/knowledge selection; unauthorized model substitution; resource utilization limits; synchronization conflict detection; full environment/configuration capture |
+
+This mapping is limited to assertions visible in the cited source. It does not infer coverage from test names or trace labels.
+
+**Disposition:** the CI run is valid supporting evidence for the listed assertions only. The uncovered objectives remain open and require targeted tests or an approved rationale for alternative verification. The individual case files remain `draft / not_run` until their own execution records and evidence are completed.
