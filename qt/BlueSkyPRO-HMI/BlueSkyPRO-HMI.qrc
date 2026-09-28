@@ -13,7 +13,7 @@
         <file>qml/LeftPanel.Design.ui.qml</file>
         <file>qml/LeftPanel.qml</file>
         <file>qml/Main.qml</file>
-        <file>qml/MainContent.ui.qml</file>
+        <file>qml/MainContent.qml</file>
         <file>qml/PanelSettingsButton.ui.qml</file>
         <file>qml/PanelSettingsPopup.qml</file>
         <file>qml/qmldir</file>
