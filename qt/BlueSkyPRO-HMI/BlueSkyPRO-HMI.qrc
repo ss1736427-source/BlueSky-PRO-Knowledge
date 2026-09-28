@@ -9,11 +9,12 @@
         <file>qml/ContextOverlay.ui.qml</file>
         <file>qml/FlightChart.ui.qml</file>
         <file>qml/HeaderSector.ui.qml</file>
+        <file>qml/icons8-menu-24.svg</file>
         <file>qml/JournalStatus.ui.qml</file>
         <file>qml/LeftPanel.Design.ui.qml</file>
         <file>qml/LeftPanel.qml</file>
         <file>qml/Main.qml</file>
-        <file>qml/MainContent.ui.qml</file>
+        <file>qml/MainContent.qml</file>
         <file>qml/PanelSettingsButton.ui.qml</file>
         <file>qml/PanelSettingsPopup.qml</file>
         <file>qml/qmldir</file>
@@ -21,7 +22,8 @@
         <file>qml/Theme.qml</file>
         <file>qml/ToolContext.ui.qml</file>
         <file>qml/TopHeader.ui.qml</file>
-        <file>qml/UAVStatus.ui.qml</file>
+        <file>qml/UAVFleetPanel.qml</file>
+        <file>qml/UAVFleetPanelForm.ui.qml</file>
         <file>qml/assets/uav_multirotor.svg</file>
         <file>qml/assets/uav_fixed_wing.svg</file>
         <file>qml/assets/uav_heavy_multirotor.svg</file>
