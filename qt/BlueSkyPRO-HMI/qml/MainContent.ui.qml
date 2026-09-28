@@ -13,9 +13,12 @@ Item {
     property int toolbarHeight: 54
     property bool leftPanelOpen: true
     property bool rightPanelOpen: true
-    property string missionState: "AUTO" // AUTO, HIDDEN, MANUAL
+    // Mission workflow states: AUTO, HIDDEN, MANUAL, VALIDATING
+    property string missionState: "AUTO"
     readonly property bool missionVisible: missionState === "AUTO"
-    readonly property bool missionCreationMode: missionState === "MANUAL"
+    // Validation is part of the manual-mission workflow; keep its UI active.
+    readonly property bool missionCreationMode:
+        missionState === "MANUAL" || missionState === "VALIDATING"
     property bool missionReady: false
     property bool manualCompositionComplete: false
     readonly property bool manualValidationStarted: missionState === "VALIDATING"
@@ -141,7 +144,12 @@ Item {
             manualCreationMode: root.missionCreationMode
             manualCompositionComplete: root.manualCompositionComplete
             manualValidationStarted: root.manualValidationStarted
-            onValidateManualMissionRequested: root.missionState = "VALIDATING"
+            onValidateManualMissionRequested: {
+                if (root.missionState === "MANUAL" &&
+                    root.manualCompositionComplete) {
+                    root.missionState = "VALIDATING"
+                }
+            }
             onStartMissionRequested: root.leftPanelOpen = false
         }
 
