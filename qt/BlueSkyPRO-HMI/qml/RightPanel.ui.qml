@@ -1,10 +1,8 @@
-﻿import QtQuick
+import QtQuick
 
 Item {
     id: root
 
-    // Prevent child controls from painting outside the panel when its
-    // width is collapsed to zero by MainContent.
     clip: true
     implicitWidth: 340
 
@@ -16,15 +14,13 @@ Item {
     property color amber: "#FFD339"
     property color red: "#FF1E14"
     property color cyan: "#32FFFF"
-    property color divider: "#7F7F7F"
+    property color divider: "#263747"
 
-    // Match LeftPanel outline; shared top/bottom seams are owned by header/toolbar.
     property bool showTopBorder: true
     property bool showRightBorder: true
     property bool showBottomBorder: true
     property bool showLeftBorder: true
 
-    // Contextual validation is not shown until automatic revalidation succeeds.
     property bool validationConfirmationRequired: false
     property bool manualCreationMode: false
     property bool manualCompositionComplete: false
@@ -40,138 +36,168 @@ Item {
         color: root.bg
     }
 
-    // Edge ownership mirrors LeftPanel. MainContent disables the top and bottom
-    // edges so TopHeader and BottomToolbar each provide one continuous shared line.
+    // Single-pixel panel edges; shared horizontal seams belong to header/toolbar.
     Rectangle {
         visible: root.showTopBorder
-        x: 0
-        y: 0
-        width: parent.width
-        height: 1
+        x: 0; y: 0; width: parent.width; height: 1
         color: root.cyan
         antialiasing: false
     }
     Rectangle {
         visible: root.showRightBorder
-        x: parent.width - 1
-        y: 0
-        width: 1
-        height: parent.height
+        x: parent.width - 1; y: 0; width: 1; height: parent.height
         color: root.cyan
         antialiasing: false
     }
     Rectangle {
         visible: root.showBottomBorder
-        x: 0
-        y: parent.height - 1
-        width: parent.width
-        height: 1
+        x: 0; y: parent.height - 1; width: parent.width; height: 1
         color: root.cyan
         antialiasing: false
     }
     Rectangle {
         visible: root.showLeftBorder
-        x: 0
-        y: 0
-        width: 1
-        height: parent.height
+        x: 0; y: 0; width: 1; height: parent.height
         color: root.cyan
         antialiasing: false
     }
 
     Text {
-        x: 16
-        y: 14
-        text: "CHECKLIST 5/8 ✓"
+        x: 16; y: 14
+        text: "MISSION STATUS"
         color: root.text
         font.family: "B612"
         font.pixelSize: 16
         font.bold: true
     }
 
-    Text { x: 16; y: 43; text: "✓ Mission definition"; color: root.green; font.family: "B612"; font.pixelSize: 12 }
-    Text { x: 16; y: 64; text: "✓ UAV allocation"; color: root.green; font.family: "B612"; font.pixelSize: 12 }
-    Text { x: 16; y: 85; text: "✓ C2 availability"; color: root.green; font.family: "B612"; font.pixelSize: 12 }
-    Text { x: 16; y: 106; text: "⚠ Weather revalidation"; color: root.amber; font.family: "B612"; font.pixelSize: 12 }
+    Text {
+        x: 16; y: 43
+        text: "READINESS"
+        color: root.secondary
+        font.family: "B612 Mono"
+        font.pixelSize: 10
+    }
 
     Rectangle {
-        x: 16
-        y: 130
-        width: parent.width - 32
-        height: 1
-        color: root.divider
+        x: 16; y: 64
+        width: parent.width - 32; height: 34
+        color: root.missionReady ? "#102719" : "#2A2410"
+        border.color: root.missionReady ? root.green : root.amber
+        border.width: 1
+        Text {
+            anchors.centerIn: parent
+            text: root.missionReady ? "READY" : "NOT READY"
+            color: root.missionReady ? root.green : root.amber
+            font.family: "B612 Mono"
+            font.pixelSize: 14
+            font.bold: true
+        }
+    }
+
+    Rectangle { x: 16; y: 112; width: parent.width - 32; height: 1; color: root.divider }
+
+    Text {
+        x: 16; y: 128
+        text: "FLIGHT CONDITIONS"
+        color: root.secondary
+        font.family: "B612"
+        font.pixelSize: 12
+        font.bold: true
     }
 
     Text {
-        x: 16
-        y: 147
+        x: 16; y: 154
+        text: "✓ Mission definition"
+        color: root.green
+        font.family: "B612"
+        font.pixelSize: 11
+    }
+    Text {
+        x: 16; y: 175
+        text: "✓ UAV allocation"
+        color: root.green
+        font.family: "B612"
+        font.pixelSize: 11
+    }
+    Text {
+        x: 16; y: 196
+        text: "✓ C2 availability"
+        color: root.green
+        font.family: "B612"
+        font.pixelSize: 11
+    }
+    Text {
+        x: 16; y: 217
+        text: root.warningActive ? "⚠ Weather revalidation" : "✓ Weather reviewed"
+        color: root.warningActive ? root.amber : root.green
+        font.family: "B612"
+        font.pixelSize: 11
+    }
+
+    Rectangle { x: 16; y: 242; width: parent.width - 32; height: 1; color: root.divider }
+
+    Text {
+        x: 16; y: 258
         text: "WARNINGS / CORRECTIONS"
         color: root.secondary
         font.family: "B612"
         font.pixelSize: 12
         font.bold: true
     }
-
     Text {
-        x: 16
-        y: 174
+        x: 16; y: 284
+        width: parent.width - 32
         visible: root.warningActive
         text: "Wind correction pending confirmation"
         color: root.amber
         font.family: "B612"
-        font.pixelSize: 11
+        font.pixelSize: 10
+        wrapMode: Text.WordWrap
     }
-
     Text {
-        x: 16
-        y: 195
+        x: 16; y: 307
+        width: parent.width - 32
         visible: root.warningActive
         text: "Battery degradation model applied"
         color: root.secondary
         font.family: "B612"
         font.pixelSize: 10
+        wrapMode: Text.WordWrap
+    }
+    Text {
+        x: 16; y: 284
+        visible: !root.warningActive
+        text: "No active warnings"
+        color: root.green
+        font.family: "B612"
+        font.pixelSize: 10
     }
 
-    Rectangle { x: 16; y: 218; width: parent.width - 32; height: 1; color: root.divider }
+    Rectangle { x: 16; y: 336; width: parent.width - 32; height: 1; color: root.divider }
 
     Text {
-        x: 16
-        y: 235
-        text: "MISSION READINESS"
+        x: 16; y: 352
+        text: "MISSION ACTIONS"
         color: root.secondary
         font.family: "B612"
         font.pixelSize: 12
         font.bold: true
     }
 
-    Text {
-        x: 16
-        y: 260
-        text: root.missionReady ? "READY" : "NOT READY"
-        color: root.missionReady ? root.green : root.amber
-        font.family: "B612 Mono"
-        font.pixelSize: 13
-        font.bold: true
-    }
-
     Rectangle {
         visible: root.manualCreationMode ? !root.manualValidationStarted : root.validationConfirmationRequired
-        x: 16
-        y: 286
-        width: parent.width - 32
-        height: 38
+        x: 16; y: 378
+        width: parent.width - 32; height: 38
         color: "transparent"
         border.color: Qt.rgba(root.green.r, root.green.g, root.green.b, root.validationPulse)
-        opacity: root.manualCreationMode && !root.manualCompositionComplete ? 0.55 : 1.0
         border.width: 1
+        opacity: root.manualCreationMode && !root.manualCompositionComplete ? 0.55 : 1.0
     }
-
     Text {
         visible: root.manualCreationMode ? !root.manualValidationStarted : root.validationConfirmationRequired
-        x: 16
-        y: 286
-        width: parent.width - 32
-        height: 38
+        x: 16; y: 378
+        width: parent.width - 32; height: 38
         text: root.manualCreationMode ? "ВАЛИДАЦИЯ МИССИИ" : "VALIDATE MISSION"
         opacity: root.manualCreationMode && !root.manualCompositionComplete ? 0.65 : 1.0
         color: root.green
@@ -181,13 +207,10 @@ Item {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
     }
-
     MouseArea {
         visible: root.manualCreationMode && !root.manualValidationStarted
-        x: 16
-        y: 286
-        width: parent.width - 32
-        height: 38
+        x: 16; y: 378
+        width: parent.width - 32; height: 38
         enabled: root.manualCompositionComplete
         cursorShape: enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
         onClicked: root.validateManualMissionRequested()
@@ -201,20 +224,15 @@ Item {
     }
 
     Rectangle {
-        x: 16
-        y: 334
-        width: parent.width - 32
-        height: 38
+        x: 16; y: 428
+        width: parent.width - 32; height: 38
         color: "transparent"
         border.color: root.divider
         border.width: 1
     }
-
     Text {
-        x: 16
-        y: 334
-        width: parent.width - 32
-        height: 38
+        x: 16; y: 428
+        width: parent.width - 32; height: 38
         text: "SEND FLIGHT PLAN"
         color: root.secondary
         font.family: "B612"
@@ -224,20 +242,15 @@ Item {
     }
 
     Rectangle {
-        x: 16
-        y: 382
-        width: parent.width - 32
-        height: 38
-        color: root.missionReady ? "transparent" : "#050505"
+        x: 16; y: 476
+        width: parent.width - 32; height: 38
+        color: root.missionReady ? "#102719" : "#050A12"
         border.color: root.missionReady ? root.green : root.divider
         border.width: 1
     }
-
     Text {
-        x: 16
-        y: 382
-        width: parent.width - 32
-        height: 38
+        x: 16; y: 476
+        width: parent.width - 32; height: 38
         text: "START MISSION"
         color: root.missionReady ? root.green : root.muted
         font.family: "B612"
@@ -246,55 +259,50 @@ Item {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
     }
-
     MouseArea {
-        x: 16
-        y: 382
-        width: parent.width - 32
-        height: 38
+        x: 16; y: 476
+        width: parent.width - 32; height: 38
         enabled: root.missionReady
         onClicked: root.startMissionRequested()
     }
 
     Text {
-        x: 16
-        y: 437
+        x: 16; y: 530
+        width: parent.width - 32
         text: root.missionReady
-              ? "Ready state active; safety gate remains authoritative."
-              : "START remains inactive until full readiness."
+              ? "Readiness confirmed; Core / Safety remains authoritative."
+              : "START remains inactive until all readiness checks pass."
         color: root.muted
         font.family: "B612"
         font.pixelSize: 9
+        wrapMode: Text.WordWrap
     }
 
-    Rectangle { x: 16; y: 462; width: parent.width - 32; height: 1; color: root.divider }
+    Rectangle { x: 16; y: 562; width: parent.width - 32; height: 1; color: root.divider }
 
     Text {
-        x: 16
-        y: 480
-        text: "SAFETY GATE"
+        x: 16; y: 578
+        text: "SAFETY AUTHORITY"
         color: root.secondary
         font.family: "B612"
         font.pixelSize: 12
         font.bold: true
     }
-
     Text {
-        x: 16
-        y: 505
+        x: 16; y: 604
         text: "Core / Safety authority active"
         color: root.text
         font.family: "B612"
-        font.pixelSize: 11
+        font.pixelSize: 10
     }
-
     Text {
-        x: 16
-        y: 525
+        x: 16; y: 624
+        width: parent.width - 32
         text: "AI recommendations: advisory only"
         color: root.secondary
         font.family: "B612"
         font.pixelSize: 10
+        wrapMode: Text.WordWrap
     }
 
     PanelSettingsButton {
@@ -314,7 +322,7 @@ Item {
         width: 260
         height: 230
         title: "RIGHT PANEL SETTINGS"
-        tools: ["Checklist", "Warnings / Corrections", "Readiness", "Validation", "Send Flight Plan", "Mission Actions", "Safety Gate"]
+        tools: ["Readiness", "Flight Conditions", "Warnings / Corrections", "Mission Actions", "Safety Authority"]
         onClosed: open = false
     }
 }
