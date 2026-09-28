@@ -188,11 +188,25 @@ Item {
             visible: root.contextOverlayOpen && root.selectedUavIndex >= 0
             uavIndex: root.selectedUavIndex
             uavId: root.selectedUavId
-            x: Math.max(0, Math.min(parent.width - width,
-                                    parent.width * (root.selectedUavIndex + 0.5) / uavStatus.uavModel.length - width / 2))
-            anchors.top: parent.top
-            width: 360
-            height: 122
+            // Match the selected card's width, then clamp to the workspace.
+            width: Math.max(minWidth, Math.min(maxWidth,
+                uavStatus.cardRect(root.selectedUavIndex).width, parent.width - 16))
+            height: implicitHeight
+            x: {
+                var card = uavStatus.cardRect(root.selectedUavIndex)
+                var cardCenterX = uavStatus.x + card.x + card.width / 2
+                return Math.max(8, Math.min(parent.width - width - 8, cardCenterX - width / 2))
+            }
+            y: {
+                var card = uavStatus.cardRect(root.selectedUavIndex)
+                var cardTop = uavStatus.y + card.y
+                var above = cardTop - height - 8
+                // Prefer directly above the affected card; if space is limited,
+                // place it over the card while keeping the whole panel in view.
+                return above >= 8 ? above
+                                  : Math.max(8, Math.min(parent.height - height - 8,
+                                        cardTop + (card.height - height) / 2))
+            }
             z: 30
             onDecisionRequested: root.uavDecisionRequested(decision, uavIndex)
             onContextClosed: root.contextOverlayOpen = false
