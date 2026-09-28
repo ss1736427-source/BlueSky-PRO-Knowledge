@@ -293,7 +293,7 @@ Item {
         onWheel: function(event) {
             var factor = event.angleDelta.y > 0 ? 1.12 : (event.angleDelta.y < 0 ? 1 / 1.12 : 1.0)
             if (factor !== 1.0) {
-                root.zoomAt(factor, event.position.x, event.position.y)
+                root.zoomAt(factor, event.x, event.y)
                 event.accepted = true
             }
         }
