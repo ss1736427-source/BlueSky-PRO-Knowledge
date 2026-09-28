@@ -27,6 +27,8 @@ Item {
     property string uavDecision: ""
     property string lastJournalEvent: ""
     property string missionId: "BS-260920-A-001"
+    // Mission review status is independent of flight readiness.
+    property string missionReviewState: "REWORK"
     // Populated by the mission/task aggregation layer; current value is a design-preview example.
     property string missionSummary: "3D картография территории"
     // Example current automatic mission composition; supplied by mission/task aggregation in production.
@@ -77,6 +79,7 @@ Item {
             missionVisible: root.missionVisible
             missionCreationMode: root.missionCreationMode
             missionId: root.missionId
+            missionReviewState: root.missionReviewState
             missionSummary: root.missionSummary
             missionTemplateIndices: root.missionTemplateIndices
             onHideMissionRequested: root.missionState = "HIDDEN"
