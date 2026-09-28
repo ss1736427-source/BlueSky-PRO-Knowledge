@@ -18,6 +18,8 @@ Item {
     readonly property bool missionVisible: missionState === "AUTO"
     readonly property bool missionCreationMode: missionState === "MANUAL"
     property bool missionIdExpanded: false
+    property string missionReviewState: "REWORK"
+    readonly property color missionIdStatusColor: missionReviewState === "VERIFIED" ? "#64FF00" : "#FF00FF"
     property bool panelConfigOpen: false
     property int selectedTemplate: 2
     property bool analysisVisible: true
@@ -135,7 +137,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             elide: Text.ElideRight
             text: root.missionIdExpanded ? "BS-260920-A-001" : "A-001"
-            color: root.text
+            color: root.missionIdStatusColor
             font.family: "B612 Mono"
             font.pixelSize: 11
             font.bold: true
@@ -344,15 +346,15 @@ Item {
         width: parent.width - 20
         height: 44
         radius: 2
-        color: "#64FF00"
-        border.color: "#64FF00"
+        color: root.card
+        border.color: root.divider
         border.width: 1
         z: 30
 
         Text {
             anchors.fill: parent
             text: "СОЗДАТЬ МИССИЮ"
-            color: "#050A12"
+            color: "#64FF00"
             font.family: "B612"
             font.pixelSize: 12
             font.bold: true
