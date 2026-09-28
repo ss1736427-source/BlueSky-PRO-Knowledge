@@ -16,9 +16,24 @@ Item {
     // The map/mission editor sets this only when the composed mission is complete.
     property bool manualCompositionComplete: false
     // Pan offset for mouse-driven map dragging (visual preview interaction).
+    // View state can be owned by MainContent so it survives template/tool changes.
+    property bool useExternalMapState: false
     property real mapPanX: 0
     property real mapPanY: 0
     property real mapZoom: 1.0
+    signal mapViewChangeRequested(real panX, real panY, real zoom)
+
+    function setMapView(panX, panY, zoom) {
+        if (useExternalMapState) {
+            mapViewChangeRequested(panX, panY, zoom)
+        } else {
+            mapPanX = panX
+            mapPanY = panY
+            mapZoom = zoom
+        }
+        chartCanvas.requestPaint()
+    }
+
     property real dragStartMouseX: 0
     property real dragStartMouseY: 0
     property real dragStartPanX: 0
@@ -32,10 +47,9 @@ Item {
     function zoomAt(factor, x, y) {
         var nextZoom = Math.max(0.5, Math.min(4.0, mapZoom * factor))
         var appliedFactor = nextZoom / mapZoom
-        mapPanX = x - (x - mapPanX) * appliedFactor
-        mapPanY = y - (y - mapPanY) * appliedFactor
-        mapZoom = nextZoom
-        chartCanvas.requestPaint()
+        var nextPanX = x - (x - mapPanX) * appliedFactor
+        var nextPanY = y - (y - mapPanY) * appliedFactor
+        setMapView(nextPanX, nextPanY, nextZoom)
     }
 
     signal manualCompositionCompleted()
@@ -278,9 +292,11 @@ Item {
 
         onPositionChanged: function(mouse) {
             if (pressed) {
-                root.mapPanX = root.dragStartPanX + mouse.x - root.dragStartMouseX
-                root.mapPanY = root.dragStartPanY + mouse.y - root.dragStartMouseY
-                chartCanvas.requestPaint()
+                root.setMapView(
+                    root.dragStartPanX + mouse.x - root.dragStartMouseX,
+                    root.dragStartPanY + mouse.y - root.dragStartMouseY,
+                    root.mapZoom
+                )
             }
         }
 
@@ -315,18 +331,21 @@ Item {
             if (active) {
                 var nextZoom = Math.max(0.5, Math.min(4.0, root.pinchStartZoom * scale))
                 var ratio = nextZoom / root.pinchStartZoom
-                root.mapZoom = nextZoom
-                root.mapPanX = centroid.position.x - (root.pinchStartX - root.pinchStartPanX) * ratio
-                root.mapPanY = centroid.position.y - (root.pinchStartY - root.pinchStartPanY) * ratio
-                chartCanvas.requestPaint()
+                root.setMapView(
+                    centroid.position.x - (root.pinchStartX - root.pinchStartPanX) * ratio,
+                    centroid.position.y - (root.pinchStartY - root.pinchStartPanY) * ratio,
+                    nextZoom
+                )
             }
         }
         onCentroidChanged: {
             if (active) {
                 var ratio = root.mapZoom / root.pinchStartZoom
-                root.mapPanX = centroid.position.x - (root.pinchStartX - root.pinchStartPanX) * ratio
-                root.mapPanY = centroid.position.y - (root.pinchStartY - root.pinchStartPanY) * ratio
-                chartCanvas.requestPaint()
+                root.setMapView(
+                    centroid.position.x - (root.pinchStartX - root.pinchStartPanX) * ratio,
+                    centroid.position.y - (root.pinchStartY - root.pinchStartPanY) * ratio,
+                    root.mapZoom
+                )
             }
         }
     }
