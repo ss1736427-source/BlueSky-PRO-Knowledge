@@ -6,6 +6,10 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
+    QCoreApplication::setOrganizationName(QStringLiteral("BlueSky PRO"));
+    QCoreApplication::setOrganizationDomain(QStringLiteral("blueskypro.local"));
+    QCoreApplication::setApplicationName(QStringLiteral("BlueSky PRO"));
+
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/qt/qml/BlueSky/PRO/qml/App.qml"));
 
