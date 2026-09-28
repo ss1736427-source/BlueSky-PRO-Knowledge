@@ -635,3 +635,14 @@ Final pixel geometry, final typography package and unresolved visual-baseline co
 - `MainContent.ui.qml` passes `missionReviewState` to `LeftPanel.qml`. The default is `REWORK` until a validation workflow explicitly marks the mission verified.
 - The Create Mission button now uses the system card surface (`root.card`) with the green `#64FF00` label; the previous solid green fill is removed.
 - Verify both runtime and Design Studio preview. Confirm the validation workflow updates `missionReviewState` to `VERIFIED` only after checks pass.
+
+
+## Panel line and outline standard — 2026-09-28
+
+- Structural panel seams and component outlines use a consistent 1 px stroke.
+- Shared horizontal seams have a single owner: TopHeader draws the header/workspace boundary; BottomToolbar draws the workspace/toolbar boundary. LeftPanel and RightPanel disable their top and bottom edges in MainContent to prevent duplicate lines.
+- Vertical seams are drawn once by the adjacent panel edge: LeftPanel right edge, RightPanel left and outer-right edges. The central Flight Chart does not add a competing panel frame.
+- The TopHeader structural dividers use the same 1 px logical stroke as the outer frame.
+- UAV cards keep a 1 px outline in every state; selection and warning are communicated by outline color, not by increasing thickness.
+- Neutral internal dividers use `#7F7F7F`; structural panel seams use cyan `#32FFFF`. Semantic status colors remain reserved for status indication.
+- The Flight Chart placeholder frame uses the neutral divider token rather than a near-black stroke.
