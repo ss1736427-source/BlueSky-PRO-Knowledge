@@ -18,10 +18,26 @@ Item {
     // Pan offset for mouse-driven map dragging (visual preview interaction).
     property real mapPanX: 0
     property real mapPanY: 0
+    property real mapZoom: 1.0
     property real dragStartMouseX: 0
     property real dragStartMouseY: 0
     property real dragStartPanX: 0
     property real dragStartPanY: 0
+    property real pinchStartZoom: 1.0
+    property real pinchStartPanX: 0
+    property real pinchStartPanY: 0
+    property real pinchStartX: 0
+    property real pinchStartY: 0
+
+    function zoomAt(factor, x, y) {
+        var nextZoom = Math.max(0.5, Math.min(4.0, mapZoom * factor))
+        var appliedFactor = nextZoom / mapZoom
+        mapPanX = x - (x - mapPanX) * appliedFactor
+        mapPanY = y - (y - mapPanY) * appliedFactor
+        mapZoom = nextZoom
+        chartCanvas.requestPaint()
+    }
+
     signal manualCompositionCompleted()
     signal mapDoubleClicked()
 
@@ -49,6 +65,7 @@ Item {
             // Pan map content while keeping the surrounding UI overlays fixed.
             ctx.save()
             ctx.translate(root.mapPanX, root.mapPanY)
+            ctx.scale(root.mapZoom, root.mapZoom)
 
             var step = 66
             ctx.lineWidth = 1
@@ -268,6 +285,50 @@ Item {
         }
 
         onDoubleClicked: root.mapDoubleClicked()
+    }
+
+    // Mouse wheel zoom, anchored at the pointer location.
+    WheelHandler {
+        target: null
+        onWheel: function(event) {
+            var factor = event.angleDelta.y > 0 ? 1.12 : (event.angleDelta.y < 0 ? 1 / 1.12 : 1.0)
+            if (factor !== 1.0) {
+                root.zoomAt(factor, event.position.x, event.position.y)
+                event.accepted = true
+            }
+        }
+    }
+
+    // Pinch-to-zoom for touchscreens/tablets; pan follows the gesture centroid.
+    PinchHandler {
+        target: null
+        onActiveChanged: {
+            if (active) {
+                root.pinchStartZoom = root.mapZoom
+                root.pinchStartPanX = root.mapPanX
+                root.pinchStartPanY = root.mapPanY
+                root.pinchStartX = centroid.position.x
+                root.pinchStartY = centroid.position.y
+            }
+        }
+        onScaleChanged: {
+            if (active) {
+                var nextZoom = Math.max(0.5, Math.min(4.0, root.pinchStartZoom * scale))
+                var ratio = nextZoom / root.pinchStartZoom
+                root.mapZoom = nextZoom
+                root.mapPanX = centroid.position.x - (root.pinchStartX - root.pinchStartPanX) * ratio
+                root.mapPanY = centroid.position.y - (root.pinchStartY - root.pinchStartPanY) * ratio
+                chartCanvas.requestPaint()
+            }
+        }
+        onCentroidChanged: {
+            if (active) {
+                var ratio = root.mapZoom / root.pinchStartZoom
+                root.mapPanX = centroid.position.x - (root.pinchStartX - root.pinchStartPanX) * ratio
+                root.mapPanY = centroid.position.y - (root.pinchStartY - root.pinchStartPanY) * ratio
+                chartCanvas.requestPaint()
+            }
+        }
     }
 
     Text {
