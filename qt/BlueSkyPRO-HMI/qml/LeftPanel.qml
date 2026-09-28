@@ -47,6 +47,12 @@ Item {
     // Automatic missions use the A-### identifier segment.
     readonly property bool missionIsAutomatic: missionId.indexOf("-A-") >= 0
     property color automaticMissionAccent: "#64FF00"
+    property color missionReworkAccent: "#FF00FF"
+    // Set to VERIFIED only after mission assembly and checks pass; otherwise REWORK.
+    property string missionReviewState: "REWORK"
+    readonly property color missionIdStatusColor: missionReviewState === "VERIFIED"
+        ? automaticMissionAccent
+        : missionReviewState === "REWORK" ? missionReworkAccent : text
     property string missionSummary: "3D картография территории"
     property bool missionIdExpanded: false
     readonly property string missionShortId: {
@@ -246,7 +252,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             elide: Text.ElideRight
             text: root.missionIdExpanded ? root.missionId : root.missionShortId
-            color: root.text
+            color: root.missionIdStatusColor
             font.family: "B612 Mono"
             font.pixelSize: 11
             font.bold: true
@@ -542,15 +548,15 @@ Item {
         width: parent.width - 20
         height: 44
         radius: 2
-        color: "#64FF00"
-        border.color: "#64FF00"
+        color: root.card
+        border.color: root.divider
         border.width: 1
         z: 30
 
         Text {
             anchors.fill: parent
             text: "СОЗДАТЬ МИССИЮ"
-            color: "#050A12"
+            color: root.automaticMissionAccent
             font.family: "B612"
             font.pixelSize: 12
             font.bold: true
