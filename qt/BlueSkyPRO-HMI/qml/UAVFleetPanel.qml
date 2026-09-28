@@ -91,6 +91,28 @@ Item {
         return Array.isArray(saved) ? saved.slice() : root.defaultParameters.slice()
     }
 
+    // Card geometry in UAVFleetPanel coordinates, matching the form's responsive grid.
+    function cardRect(index) {
+        if (index < 0 || index >= root.uavModel.length)
+            return Qt.rect(0, 0, 0, 0)
+
+        var columns = Math.max(1, form.gridColumns)
+        var gap = form.gridSpacing
+        var cardWidth = form.gridCardWidth
+        var cardHeight = form.gridCardHeight
+        var row = Math.floor(index / columns)
+        var column = index % columns
+        var itemsInRow = Math.min(columns, root.uavModel.length - row * columns)
+        var gridWidth = Math.max(0, root.width - 20)
+        var rowWidth = itemsInRow * cardWidth + (itemsInRow - 1) * gap
+        var cardX = 10 + Math.max(0, (gridWidth - rowWidth) / 2)
+                    + column * (cardWidth + gap)
+        var rowCount = Math.ceil(root.uavModel.length / columns)
+        var gridHeight = rowCount * cardHeight + Math.max(0, rowCount - 1) * gap
+        var cardY = root.height - gridHeight + row * (cardHeight + gap)
+        return Qt.rect(cardX, cardY, cardWidth, cardHeight)
+    }
+
     function parameterLabel(key, data) {
         if (key === "ALT") return data.height < 100 ? "HGT" : "ALT"
         if (key === "SPD") return "SPD"
