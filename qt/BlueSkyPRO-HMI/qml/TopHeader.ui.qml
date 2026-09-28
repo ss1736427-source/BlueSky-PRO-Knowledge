@@ -48,9 +48,9 @@ Item {
     // Design Studio preview is commonly rendered below 100% scene scale.
     // Keep divider geometry on integer logical coordinates and disable edge AA.
     property int structuralDividerHeight: 54
-    // Physical-pixel alignment: keeps a one-device-pixel stroke stable under fractional DPI.
+    // Canonical one-pixel stroke; shared panel outlines use the same logical width.
     property real devicePixelRatio: Screen.devicePixelRatio
-    property real pixelStrokeWidth: 1 / root.devicePixelRatio
+    property real pixelStrokeWidth: 1
 
     property bool tabletVariant: width < 1500
 
