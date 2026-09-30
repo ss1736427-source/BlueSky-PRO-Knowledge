@@ -130,6 +130,23 @@ Mission context and Mission Templates.
 - selecting a hidden template makes it visible and active/highlighted;
 - new tools/templates are appended at the bottom.
 
+### Task-first template selection
+
+Mission creation begins with the operator stating the task in the task-description field. The operator does not have to choose a template before describing the task.
+
+As the task is entered or refined, the system identifies the mission templates relevant to the requested work and automatically surfaces/highlights those templates in the Left Panel. This is a contextual recommendation/selection state, not silent execution of a mission.
+
+Rules:
+- The operator's task statement is the input; template matching is derived from the task.
+- All applicable templates may be highlighted when a task combines related work types.
+- Highlighting must distinguish templates that are applicable to the current task from templates that are merely available.
+- The operator can inspect, add or remove applicable templates before applying the mission configuration.
+- The system must not silently discard a relevant template or commit a mission configuration without operator confirmation.
+- If the task is ambiguous or no confident match exists, show the uncertainty and let the operator choose or clarify the task.
+- Once confirmed, the selected templates provide the corresponding planning algorithms/parameters; the mission remains one coherent mission context.
+- Re-evaluate the highlighted set when the task description changes, preserving explicit operator choices where they remain compatible and indicating any conflicts.
+- The full template catalogue remains accessible; contextual highlighting does not hide or delete templates.
+
 ### Mission context
 
 `HIDE`:
