@@ -185,6 +185,37 @@ Left Panel closes through:
 
 A single map click does not close it.
 
+
+### Approved interaction decision — task-first template activation (2026-09-30)
+
+**Decision:** The operator states the task first. BlueSky PRO identifies the applicable mission templates and highlights them in the Left Panel as the task is entered or refined.
+
+**Approved interaction sequence:**
+1. Operator enters the task in the task-description field.
+2. The system matches the task to one or more relevant templates.
+3. Applicable templates are surfaced and highlighted; unrelated templates remain available in the full catalogue but are not emphasized.
+4. If the task combines several work types, all applicable templates may be highlighted together.
+5. Operator reviews the proposed set and may add or remove templates.
+6. On operator confirmation, the selected templates provide the planning algorithms and parameters for one coherent mission.
+7. If the task changes, the system updates the highlighted set, preserves compatible explicit choices, and flags conflicts or ambiguity.
+
+**Interaction constraints:**
+- Do not require the operator to select a template before describing the task.
+- Highlighting is a recommendation/selection state, not mission execution.
+- Do not silently discard a relevant template or commit the configuration without confirmation.
+- If matching is ambiguous or confidence is insufficient, show that uncertainty and request clarification or operator selection.
+- Keep the complete template catalogue accessible; contextual highlighting must not hide, delete, or reorder templates.
+- Preserve the existing compact Left Panel and map-first workspace. This decision changes interaction behavior only; it does not introduce a new module or alter system architecture.
+
+**Acceptance criteria:**
+- A task description can be entered before any template is selected.
+- The applicable template set updates when the task text changes.
+- Multiple applicable templates can be highlighted for a combined task.
+- The operator can review and adjust the set before confirmation.
+- Ambiguous input is surfaced rather than silently mapped.
+- The confirmed templates remain part of one mission context and invoke their associated planning logic.
+
+
 ## 5. CENTER / FLIGHT CHART
 
 ### Role
