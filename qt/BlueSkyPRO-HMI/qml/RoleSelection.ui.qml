@@ -147,7 +147,7 @@ Item {
 
         Text {
             anchors.horizontalCenter: parent.horizontalCenter
-            text: "Вход в систему"
+            text: "Авторизация"
             color: root.textColor
             font.family: "B612"
             font.pixelSize: 30
@@ -171,7 +171,7 @@ Item {
         anchors.rightMargin: 34
         y: 260
         height: Math.min(500, parent.height * 0.50)
-        spacing: 18
+        spacing: 14
 
         Repeater {
             model: [
@@ -192,11 +192,17 @@ Item {
                     title: "ТЕХНИК",
                     icon: "🔧",
                     description: ["Выполнение работ", "Чек-листы", "Отчеты", "Статус оборудования"]
+                },
+                {
+                    role: "PILOT",
+                    title: "ПИЛОТ",
+                    icon: "✈",
+                    description: ["Управление полётом", "Планирование миссий", "Телеметрия", "Выполнение заданий"]
                 }
             ]
 
             delegate: Item {
-                width: (roleCards.width - roleCards.spacing * 2) / 3
+                width: (roleCards.width - roleCards.spacing * 3) / 4
                 height: roleCards.height
 
                 Rectangle {
