@@ -10,7 +10,7 @@ Item {
     property int toolbarHeight: 54
     property int headerHeight: toolbarHeight
     property int leftWidth: leftPanel.implicitWidth
-    property int rightWidth: rightPanel.implicitWidth
+    property int rightWidth: leftWidth
     property bool leftPanelOpen: true
     property bool rightPanelOpen: true
     // Mission workflow states: AUTO, HIDDEN, MANUAL, VALIDATING
