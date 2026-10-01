@@ -83,6 +83,7 @@ Item {
     // Checklist card — same rounded, outlined visual language as ATC.
     Rectangle {
         id: checklistCard
+        visible: panelSettingsPopup.enabledTools.indexOf("Checklist") >= 0
         x: 16
         y: 8
         width: parent.width - 32
@@ -95,6 +96,7 @@ Item {
     }
 
     Rectangle {
+        visible: checklistCard.visible
         x: checklistCard.x + 1
         y: checklistCard.y + 1
         width: checklistCard.width - 2
@@ -127,14 +129,15 @@ Item {
         }
     }
 
-    Text { x: checklistCard.x + 12; y: checklistCard.y + 41; text: "✓  Mission definition"; color: root.green; font.family: "B612"; font.pixelSize: 12 }
-    Text { x: checklistCard.x + 12; y: checklistCard.y + 62; text: "✓  UAV allocation"; color: root.green; font.family: "B612"; font.pixelSize: 12 }
-    Text { x: checklistCard.x + 12; y: checklistCard.y + 83; text: "✓  C2 availability"; color: root.green; font.family: "B612"; font.pixelSize: 12 }
-    Text { x: checklistCard.x + 12; y: checklistCard.y + 104; text: "⚠  Weather revalidation"; color: root.amber; font.family: "B612"; font.pixelSize: 12 }
+    Text { visible: checklistCard.visible; x: checklistCard.x + 12; y: checklistCard.y + 41; text: "✓  Mission definition"; color: root.green; font.family: "B612"; font.pixelSize: 12 }
+    Text { visible: checklistCard.visible; x: checklistCard.x + 12; y: checklistCard.y + 62; text: "✓  UAV allocation"; color: root.green; font.family: "B612"; font.pixelSize: 12 }
+    Text { visible: checklistCard.visible; x: checklistCard.x + 12; y: checklistCard.y + 83; text: "✓  C2 availability"; color: root.green; font.family: "B612"; font.pixelSize: 12 }
+    Text { visible: checklistCard.visible; x: checklistCard.x + 12; y: checklistCard.y + 104; text: "⚠  Weather revalidation"; color: root.amber; font.family: "B612"; font.pixelSize: 12 }
 
     // Warnings card — matching ATC/checklist frame and filled header.
     Rectangle {
         id: warningsCard
+        visible: panelSettingsPopup.enabledTools.indexOf("Warnings / Corrections") >= 0 || root.warningActive
         x: 16
         y: 154
         width: parent.width - 32
@@ -147,6 +150,7 @@ Item {
     }
 
     Rectangle {
+        visible: warningsCard.visible
         x: warningsCard.x + 1
         y: warningsCard.y + 1
         width: warningsCard.width - 2
@@ -180,6 +184,7 @@ Item {
     }
 
     Text {
+        visible: warningsCard.visible && root.warningActive
         x: warningsCard.x + 12
         y: warningsCard.y + 49
         width: warningsCard.width - 24
@@ -192,6 +197,7 @@ Item {
     }
 
     Text {
+        visible: warningsCard.visible && root.warningActive
         x: warningsCard.x + 12
         y: warningsCard.y + 77
         width: warningsCard.width - 24
@@ -204,6 +210,7 @@ Item {
     }
 
     Rectangle {
+        visible: warningsCard.visible && root.warningActive
         x: warningsCard.x + 12
         y: warningsCard.y + 110
         width: warningsCard.width - 24
@@ -215,6 +222,10 @@ Item {
     // all action controls, with a clear inset around every button.
     Rectangle {
         id: atcWorkArea
+        visible: panelSettingsPopup.enabledTools.indexOf("Readiness") >= 0
+                 || panelSettingsPopup.enabledTools.indexOf("Validation") >= 0
+                 || panelSettingsPopup.enabledTools.indexOf("Send Flight Plan") >= 0
+                 || panelSettingsPopup.enabledTools.indexOf("Start Mission") >= 0
         x: 16
         y: parent.height - (root.validationVisible ? 238 : 190)
         width: parent.width - 32
@@ -229,6 +240,7 @@ Item {
 
     // Header is a filled band, not a separate bordered card.
     Rectangle {
+        visible: panelSettingsPopup.enabledTools.indexOf("Readiness") >= 0
         x: atcWorkArea.x + 1
         y: atcWorkArea.y + 1
         width: atcWorkArea.width - 2
@@ -262,7 +274,7 @@ Item {
     }
 
     Rectangle {
-        visible: root.validationVisible
+        visible: root.validationVisible && panelSettingsPopup.enabledTools.indexOf("Validation") >= 0
         x: 26
         y: parent.height - 164
         width: parent.width - 52
@@ -274,7 +286,7 @@ Item {
     }
 
     Text {
-        visible: root.validationVisible
+        visible: root.validationVisible && panelSettingsPopup.enabledTools.indexOf("Validation") >= 0
         x: 26
         y: parent.height - 164
         width: parent.width - 52
@@ -291,6 +303,7 @@ Item {
 
     MouseArea {
         visible: root.manualCreationMode && !root.manualValidationStarted
+                 && panelSettingsPopup.enabledTools.indexOf("Validation") >= 0
         x: 26
         y: parent.height - 164
         width: parent.width - 52
@@ -308,6 +321,7 @@ Item {
     }
 
     Rectangle {
+        visible: panelSettingsPopup.enabledTools.indexOf("Send Flight Plan") >= 0
         x: 26
         y: parent.height - 116
         width: parent.width - 52
@@ -318,6 +332,7 @@ Item {
     }
 
     Text {
+        visible: panelSettingsPopup.enabledTools.indexOf("Send Flight Plan") >= 0
         x: 26
         y: parent.height - 116
         width: parent.width - 52
@@ -331,6 +346,7 @@ Item {
     }
 
     Rectangle {
+        visible: panelSettingsPopup.enabledTools.indexOf("Start Mission") >= 0
         x: 26
         y: parent.height - 68
         width: parent.width - 52
@@ -341,6 +357,7 @@ Item {
     }
 
     Text {
+        visible: panelSettingsPopup.enabledTools.indexOf("Start Mission") >= 0
         x: 26
         y: parent.height - 68
         width: parent.width - 52
@@ -355,6 +372,7 @@ Item {
     }
 
     MouseArea {
+        visible: panelSettingsPopup.enabledTools.indexOf("Start Mission") >= 0
         x: 26
         y: parent.height - 68
         width: parent.width - 52
@@ -377,10 +395,10 @@ Item {
         anchors.top: parent.top
         anchors.right: parent.right
         anchors.topMargin: 44
-        width: 260
-        height: 230
+        width: Math.min(parent.width - 16, Math.max(260, panelSettingsPopup.contentWidth))
+        height: Math.min(parent.height - 52, 86 + panelSettingsPopup.tools.length * 34)
         title: "RIGHT PANEL SETTINGS"
-        tools: ["Checklist", "Warnings / Corrections", "Readiness", "Validation", "Send Flight Plan", "Mission Actions", "Safety Gate"]
+        tools: ["Checklist", "Warnings / Corrections", "Readiness", "Validation", "Send Flight Plan", "Start Mission"]
         onClosed: open = false
     }
 }
