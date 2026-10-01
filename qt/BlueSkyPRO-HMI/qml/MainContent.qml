@@ -310,7 +310,7 @@ Item {
                 color: "#9FB4C9"
                 font.family: "B612"
                 font.pixelSize: 15
-                letterSpacing: 2
+                font.letterSpacing: 2
             }
         }
     }
