@@ -83,10 +83,12 @@ Item {
                 anchors.fill: parent
                 source: Qt.resolvedUrl("assets/bluesky_pro_logo.svg")
                 fillMode: Image.PreserveAspectFit
+                // Keep the embedded 2048x768 master raster at native resolution.
+                // Qt downsamples it to the display target; avoid a tiny pre-rasterized mip.
                 smooth: true
-                mipmap: true
-                sourceSize.width: Math.round(root.logoVisualWidth * root.logoScale / 100)
-                sourceSize.height: Math.round(root.logoVisualHeight * root.logoScale / 100)
+                mipmap: false
+                sourceSize.width: 2048
+                sourceSize.height: 768
             }
         }
     }
