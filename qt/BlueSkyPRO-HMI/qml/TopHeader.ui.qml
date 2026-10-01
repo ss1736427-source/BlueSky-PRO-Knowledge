@@ -31,13 +31,16 @@ Item {
     property string operatorLabel: "OPERATOR"
 
     // Adjustable composition parameters — working values, not frozen tokens.
+    // Header anchors align exactly with the side panels below.
     property int anchorWidth: 164
+    property int leftAnchorWidth: anchorWidth
+    property int rightAnchorWidth: anchorWidth
     property int centralSectorWidth: 112
     property int sectorGap: 0
     property int anchorPadding: 14
     property int logoScale: 100
-    property int logoVisualWidth: 132
-    property int logoVisualHeight: 34
+    property int logoVisualWidth: 196
+    property int logoVisualHeight: 40
     property int operatorIconSize: 34
     property int operatorLabelSize: 11
     property int headingSize: 11
@@ -64,7 +67,7 @@ Item {
     // LEFT ANCHOR — width is a composition parameter and contains the scalable logo.
     Item {
         id: logoBlock
-        width: root.anchorWidth
+        width: Math.max(0, Math.min(root.leftAnchorWidth, parent.width))
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.bottom: parent.bottom
@@ -91,7 +94,7 @@ Item {
     // RIGHT ANCHOR — outer geometry is intentionally identical to LOGO anchor.
     Item {
         id: operatorBlock
-        width: root.anchorWidth
+        width: Math.max(0, Math.min(root.rightAnchorWidth, parent.width))
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.bottom: parent.bottom
