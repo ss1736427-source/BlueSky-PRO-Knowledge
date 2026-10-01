@@ -70,8 +70,11 @@ Item {
             manualTemplateSelection = []
     }
 
-    // Keep the approved catalogue visible; current mission applicability is indicated separately.
+    // Automatic mission: show only templates used to assemble this mission.
+    // Manual creation: keep the full approved catalogue available.
     function templateIsVisible(index) {
+        if (missionIsAutomatic && !missionCreationMode)
+            return missionTemplateIndices.indexOf(index) >= 0
         return true
     }
 
