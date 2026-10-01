@@ -19,9 +19,8 @@ Item {
         text: "Миссии"
     }
 
-    // Width is driven by the widest visible content and the fixed right-side header controls.
-    implicitWidth: Math.max(270, Math.min(420,
-        Math.max(widestTemplateText.width + 44, headerTitleText.width + 84)))
+    // Keep the established compact panel width; long template names are elided.
+    implicitWidth: 270
     implicitHeight: 520
     // When hosted by MainContent the panel height is supplied by top/bottom anchors,
     // so it follows the workspace height automatically.
