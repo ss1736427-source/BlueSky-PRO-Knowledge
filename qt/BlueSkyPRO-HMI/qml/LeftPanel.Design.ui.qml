@@ -106,7 +106,7 @@ Item {
             x: parent.width - 28
             anchors.verticalCenter: parent.verticalCenter
             text: "≡"
-            color: root.panelConfigOpen ? root.cyan : root.secondary
+            color: root.panelConfigOpen ? root.text : root.cyan
             font.family: "B612 Mono"
             font.pixelSize: 16
         }
@@ -210,7 +210,7 @@ Item {
         x: 10
         y: 108
         width: parent.width - 20
-        height: 154
+        height: 112
         color: root.selectedSurface
         border.color: root.cyan
         border.width: 1
@@ -242,33 +242,16 @@ Item {
                 }
             }
             Text {
-                text: (root.instrumentsVisible ? "✓ " : "○ ") + "Приборы"
-                color: root.instrumentsVisible ? root.cyan : root.secondary
+                text: (root.templatesExpanded ? "✓ " : "○ ") + "Шаблоны миссий"
+                color: root.templatesExpanded ? root.cyan : root.secondary
                 font.family: "Noto Sans"
                 font.pixelSize: 10
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: root.instrumentsVisible = !root.instrumentsVisible
-                }
-            }
-            Text {
-                text: (root.atcVisible ? "✓ " : "○ ") + "УВД / Связь"
-                color: root.atcVisible ? root.cyan : root.secondary
-                font.family: "Noto Sans"
-                font.pixelSize: 10
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: root.atcVisible = !root.atcVisible
-                }
-            }
-            Text {
-                text: (root.diagnosticsVisible ? "✓ " : "○ ") + "Расширенная диагностика"
-                color: root.diagnosticsVisible ? root.cyan : root.secondary
-                font.family: "Noto Sans"
-                font.pixelSize: 10
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: root.diagnosticsVisible = !root.diagnosticsVisible
+                    onClicked: {
+                        root.templatesExpanded = !root.templatesExpanded
+                        root.panelConfigOpen = false
+                    }
                 }
             }
         }
