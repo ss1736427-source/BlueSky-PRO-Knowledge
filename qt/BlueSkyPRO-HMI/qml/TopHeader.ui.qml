@@ -259,6 +259,21 @@ Item {
         }
     }
 
+    // WARNING is an actionable header control: open/close the map alert review.
+    signal warningClicked()
+
+    MouseArea {
+        id: warningClickArea
+        visible: warningSector.visible
+        x: centralComposition.x + root.metricX("WARNING")
+        y: 0
+        width: centralComposition.width / Math.max(1, root.visibleMetricCount)
+        height: parent.height
+        z: 80
+        cursorShape: root.warningCount > 0 ? Qt.PointingHandCursor : Qt.ArrowCursor
+        onClicked: root.warningClicked()
+    }
+
     // Adaptive dividers follow only the currently enabled metrics.
     Repeater {
         model: Math.max(0, root.visibleMetricCount - 1)
