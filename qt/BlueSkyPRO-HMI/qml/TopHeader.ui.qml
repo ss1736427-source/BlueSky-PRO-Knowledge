@@ -37,10 +37,10 @@ Item {
     property int rightAnchorWidth: anchorWidth
     property int centralSectorWidth: 112
     property int sectorGap: 0
-    property int anchorPadding: 6
+    property int anchorPadding: 2
     property int logoScale: 100
-    property int logoVisualWidth: 260
-    property int logoVisualHeight: 52
+    property int logoVisualWidth: 266
+    property int logoVisualHeight: 50
     property int operatorIconSize: 34
     property int operatorLabelSize: 11
     property int headingSize: 11
