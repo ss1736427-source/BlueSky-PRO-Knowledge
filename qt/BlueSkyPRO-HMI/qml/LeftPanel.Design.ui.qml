@@ -310,13 +310,15 @@ Item {
                         color: root.cyan
                     }
                     Text {
-                        x: 16
-                        width: parent.width - 52
-                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.fill: parent
+                        anchors.leftMargin: 8
+                        anchors.rightMargin: 30
                         elide: Text.ElideRight
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
                         text: modelData
                         color: root.text
-                        font.family: "Noto Sans"
+                        font.family: "B612"
                         font.pixelSize: 12
                         font.bold: true
                     }
