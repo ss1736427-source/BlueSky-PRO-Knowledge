@@ -6,7 +6,7 @@ Item {
     // Prevent child controls from painting outside the panel when its
     // width is collapsed to zero by MainContent.
     clip: true
-    implicitWidth: 340
+    implicitWidth: 270
 
     property color bg: "#08111D"
     property color text: "#FFFFFF"
