@@ -37,10 +37,10 @@ Item {
     property int rightAnchorWidth: anchorWidth
     property int centralSectorWidth: 112
     property int sectorGap: 0
-    property int anchorPadding: 14
+    property int anchorPadding: 6
     property int logoScale: 100
-    property int logoVisualWidth: 196
-    property int logoVisualHeight: 40
+    property int logoVisualWidth: 260
+    property int logoVisualHeight: 52
     property int operatorIconSize: 34
     property int operatorLabelSize: 11
     property int headingSize: 11
@@ -238,7 +238,7 @@ Item {
     // Coordinates and width are snapped to the display pixel grid.
     Rectangle {
         x: Math.round((centralComposition.x) * root.devicePixelRatio) / root.devicePixelRatio
-        y: Math.round(((parent.height - root.structuralDividerHeight) / 2) * root.devicePixelRatio) / root.devicePixelRatio
+        y: Math.round(((parent.height - Math.min(root.structuralDividerHeight, parent.height - 16)) / 2) * root.devicePixelRatio) / root.devicePixelRatio
         width: root.pixelStrokeWidth
         height: Math.round(Math.min(root.structuralDividerHeight, parent.height - 16) * root.devicePixelRatio) / root.devicePixelRatio
         color: root.accent
@@ -248,7 +248,7 @@ Item {
 
     Rectangle {
         x: Math.round((centralComposition.x + centralComposition.width / 6) * root.devicePixelRatio) / root.devicePixelRatio
-        y: Math.round(((parent.height - root.structuralDividerHeight) / 2) * root.devicePixelRatio) / root.devicePixelRatio
+        y: Math.round(((parent.height - Math.min(root.structuralDividerHeight, parent.height - 16)) / 2) * root.devicePixelRatio) / root.devicePixelRatio
         width: root.pixelStrokeWidth
         height: Math.round(Math.min(root.structuralDividerHeight, parent.height - 16) * root.devicePixelRatio) / root.devicePixelRatio
         color: root.accent
@@ -258,7 +258,7 @@ Item {
 
     Rectangle {
         x: Math.round((centralComposition.x + centralComposition.width * 2 / 6) * root.devicePixelRatio) / root.devicePixelRatio
-        y: Math.round(((parent.height - root.structuralDividerHeight) / 2) * root.devicePixelRatio) / root.devicePixelRatio
+        y: Math.round(((parent.height - Math.min(root.structuralDividerHeight, parent.height - 16)) / 2) * root.devicePixelRatio) / root.devicePixelRatio
         width: root.pixelStrokeWidth
         height: Math.round(Math.min(root.structuralDividerHeight, parent.height - 16) * root.devicePixelRatio) / root.devicePixelRatio
         color: root.accent
@@ -268,7 +268,7 @@ Item {
 
     Rectangle {
         x: Math.round((centralComposition.x + centralComposition.width * 3 / 6) * root.devicePixelRatio) / root.devicePixelRatio
-        y: Math.round(((parent.height - root.structuralDividerHeight) / 2) * root.devicePixelRatio) / root.devicePixelRatio
+        y: Math.round(((parent.height - Math.min(root.structuralDividerHeight, parent.height - 16)) / 2) * root.devicePixelRatio) / root.devicePixelRatio
         width: root.pixelStrokeWidth
         height: Math.round(Math.min(root.structuralDividerHeight, parent.height - 16) * root.devicePixelRatio) / root.devicePixelRatio
         color: root.accent
@@ -278,7 +278,7 @@ Item {
 
     Rectangle {
         x: Math.round((centralComposition.x + centralComposition.width * 4 / 6) * root.devicePixelRatio) / root.devicePixelRatio
-        y: Math.round(((parent.height - root.structuralDividerHeight) / 2) * root.devicePixelRatio) / root.devicePixelRatio
+        y: Math.round(((parent.height - Math.min(root.structuralDividerHeight, parent.height - 16)) / 2) * root.devicePixelRatio) / root.devicePixelRatio
         width: root.pixelStrokeWidth
         height: Math.round(Math.min(root.structuralDividerHeight, parent.height - 16) * root.devicePixelRatio) / root.devicePixelRatio
         color: root.accent
@@ -288,7 +288,7 @@ Item {
 
     Rectangle {
         x: Math.round((centralComposition.x + centralComposition.width * 5 / 6) * root.devicePixelRatio) / root.devicePixelRatio
-        y: Math.round(((parent.height - root.structuralDividerHeight) / 2) * root.devicePixelRatio) / root.devicePixelRatio
+        y: Math.round(((parent.height - Math.min(root.structuralDividerHeight, parent.height - 16)) / 2) * root.devicePixelRatio) / root.devicePixelRatio
         width: root.pixelStrokeWidth
         height: Math.round(Math.min(root.structuralDividerHeight, parent.height - 16) * root.devicePixelRatio) / root.devicePixelRatio
         color: root.accent
@@ -298,7 +298,7 @@ Item {
 
     Rectangle {
         x: Math.round((centralComposition.x + centralComposition.width) * root.devicePixelRatio) / root.devicePixelRatio
-        y: Math.round(((parent.height - root.structuralDividerHeight) / 2) * root.devicePixelRatio) / root.devicePixelRatio
+        y: Math.round(((parent.height - Math.min(root.structuralDividerHeight, parent.height - 16)) / 2) * root.devicePixelRatio) / root.devicePixelRatio
         width: root.pixelStrokeWidth
         height: Math.round(Math.min(root.structuralDividerHeight, parent.height - 16) * root.devicePixelRatio) / root.devicePixelRatio
         color: root.accent
@@ -363,9 +363,9 @@ Item {
 
     PanelSettingsPopup {
         id: panelSettingsPopup
-        anchors.top: parent.top
+        anchors.top: parent.bottom
         anchors.right: parent.right
-        anchors.topMargin: 44
+        anchors.topMargin: 8
         width: 260
         height: 254
         title: "HEADER SETTINGS"
