@@ -6,7 +6,7 @@ The left panel is titled **Миссии**. It provides access to mission templat
 
 Status: WORKING REFERENCE
 
-## Right Panel — operational control, checklist, warnings and validation — controlled intermediate state
+## Right Panel — operational control, checklist, INFORMATION and validation — controlled intermediate state
 
 The Right Panel is an **operational panel**, not a duplicate telemetry dashboard. Detailed current telemetry belongs to the UAV Panel; spatial operational information belongs to the Map; non-immediate technical information, history, archives and journals belong to Administration / Technical State / Logs.
 
@@ -43,19 +43,19 @@ Completed items may be hidden without changing their underlying state or audit r
 
 The counter remains based on actual checklist state.
 
-### WARNING — Header and Right Panel
+### INFORMATION — system messages and pilot intervention
 
-Header `WARNING` and Right Panel `WARNINGS / CORRECTIONS` operate in parallel.
+The Right Panel section is titled **INFORMATION** and presents system failures, changes and warnings.
 
-When a warning appears:
-1. Header WARNING changes state;
-2. Right Panel warning area is highlighted;
-3. the warning expands automatically;
-4. the operator sees the situation and required/recommended action.
+- A new warning synchronizes the Header WARNING state and appears in the INFORMATION overview.
+- Selecting a message opens its details.
+- Messages requiring pilot intervention provide an entry to the contextual pilot-action area.
+- After reading and explicitly confirming a message, it disappears from the overview only. The underlying event remains in the Journal/Audit trail.
+- Confirmation acknowledges that the message was read; it does not itself perform or authorize the required operational action.
+- When no unacknowledged messages remain, the INFORMATION body is empty. Do not display a positive status message.
+- Critical information must not become inaccessible through panel filtering. Serious/critical warnings may also be surfaced over the Map.
 
-Closing the visual warning does not erase the event.
-
-Secondary warnings remain in the Right Panel. Serious/critical warnings are additionally shown as a large alert over the Map. Double-clicking the warning area closes the visual alert; the event remains in the journal. If another warning remains active, Header WARNING remains active.
+The current QML contains illustrative preview messages. Production event feed, durable acknowledgement, Journal/Audit recording and routing into the actual pilot-action workflow require integration with the corresponding system services.
 
 ### Weather forecast change warning
 
@@ -127,7 +127,7 @@ The event, assessment factors, system recommendation, operator decision and resu
 ### Normal Right Panel action hierarchy
 
 1. CHECKLIST
-2. active WARNINGS / CORRECTIONS
+2. INFORMATION — system messages and required operator actions
 3. Mission Readiness
 4. contextual validation confirmation after automatic re-check
 5. `SEND FLIGHT PLAN`
