@@ -50,18 +50,23 @@ Item {
     readonly property real contentWidth: toolLabelMetrics.width + 64
 
     visible: root.open
+    clip: true
     z: 500
 
     Rectangle {
         anchors.fill: parent
+        radius: 8
         color: "#08111D"
-        border.color: "#32FFFF"
+        border.color: "#236078"
         border.width: 1
+        antialiasing: true
     }
 
     Text {
         x: 14
         y: 12
+        width: parent.width - 28
+        elide: Text.ElideRight
         text: root.title
         color: "#FFFFFF"
         font.family: "B612"
