@@ -193,20 +193,18 @@ Item {
 
         Repeater {
             model: [
-                { shortName: "СЪЁМКА", fullName: "Аэрофотосъёмка и медиапроизводство" },
-                { shortName: "МАРШРУТ", fullName: "Обследование территории" },
-                { shortName: "ГРУППА БПЛА", fullName: "Групповое распределение" },
-                { shortName: "3D", fullName: "3D-картография и реконструкция" },
-                { shortName: "ТОЧКА", fullName: "Осмотр точки / объекта" },
-                { shortName: "ПЛОЩАДЬ", fullName: "Картографирование территории" },
+                { shortName: "КАРТОГРАФИЯ", fullName: "Картографирование территории" },
+                { shortName: "3D-МОДЕЛЬ", fullName: "3D-картография и реконструкция" },
                 { shortName: "ИНСПЕКЦИЯ", fullName: "Инспекция объектов и инфраструктуры" },
                 { shortName: "СТРОЙКА", fullName: "Мониторинг строительства" },
-                { shortName: "ПОИСК", fullName: "Поиск и спасение" },
+                { shortName: "ПЕРИМЕТР", fullName: "Мониторинг территории и периметра" },
+                { shortName: "ПОИСК / SAR", fullName: "Поиск и спасение" },
                 { shortName: "ПОЖАР / ЧС", fullName: "Пожарный мониторинг и ЧС" },
                 { shortName: "ЭКОЛОГИЯ", fullName: "Экологический и природный мониторинг" },
                 { shortName: "АГРО", fullName: "Сельское хозяйство" },
                 { shortName: "ДОСТАВКА", fullName: "Доставка грузов" },
-                { shortName: "СВЯЗЬ", fullName: "Ретрансляция связи" },
+                { shortName: "РЕТРАНСЛЯЦИЯ", fullName: "Ретрансляция связи" },
+                { shortName: "АЭРОСЪЁМКА", fullName: "Аэрофотосъёмка и медиапроизводство" },
                 { shortName: "C-UAS", fullName: "Обнаружение и наблюдение за БПЛА" }
             ]
 
@@ -331,6 +329,7 @@ Item {
                 ]
 
                 delegate: Row {
+                    id: keyRow
                     required property var modelData
                     width: parent.width
                     height: (parent.height - 56) / 4
@@ -340,7 +339,7 @@ Item {
                         model: modelData
                         delegate: Rectangle {
                             required property string modelData
-                            width: (parent.width - parent.spacing * (modelData.length - 1)) / modelData.length
+                            width: (keyRow.width - keyRow.spacing * (keyRow.modelData.length - 1)) / keyRow.modelData.length
                             height: parent.height
                             radius: 7
                             color: modelData === "BACKSPACE" || modelData === "ENTER" || modelData === "SHIFT" ? "#142D45" : "#263D54"
