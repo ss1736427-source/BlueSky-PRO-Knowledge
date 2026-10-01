@@ -31,6 +31,7 @@ Item {
     property bool manualValidationStarted: false
     property bool missionReady: false
     property bool warningActive: true
+    property bool validationVisible: manualCreationMode ? !manualValidationStarted : validationConfirmationRequired
     property real validationPulse: 1.0
     signal startMissionRequested()
     signal validateManualMissionRequested()
@@ -137,7 +138,7 @@ Item {
     // Keep mission readiness at the bottom edge of the right panel.
     Text {
         x: 16
-        y: parent.height - 66
+        y: parent.height - (root.validationVisible ? 226 : 178)
         text: "MISSION READINESS"
         color: root.secondary
         font.family: "B612"
@@ -147,7 +148,7 @@ Item {
 
     Text {
         x: 16
-        y: parent.height - 42
+        y: parent.height - (root.validationVisible ? 202 : 154)
         text: root.missionReady ? "READY" : "NOT READY"
         color: root.missionReady ? root.green : root.amber
         font.family: "B612 Mono"
@@ -156,9 +157,9 @@ Item {
     }
 
     Rectangle {
-        visible: root.manualCreationMode ? !root.manualValidationStarted : root.validationConfirmationRequired
+        visible: root.validationVisible
         x: 16
-        y: 286
+        y: parent.height - 164
         width: parent.width - 32
         height: 38
         color: "transparent"
@@ -168,9 +169,9 @@ Item {
     }
 
     Text {
-        visible: root.manualCreationMode ? !root.manualValidationStarted : root.validationConfirmationRequired
+        visible: root.validationVisible
         x: 16
-        y: 286
+        y: parent.height - 164
         width: parent.width - 32
         height: 38
         text: root.manualCreationMode ? "ВАЛИДАЦИЯ МИССИИ" : "VALIDATE MISSION"
@@ -186,7 +187,7 @@ Item {
     MouseArea {
         visible: root.manualCreationMode && !root.manualValidationStarted
         x: 16
-        y: 286
+        y: parent.height - 164
         width: parent.width - 32
         height: 38
         enabled: root.manualCompositionComplete
@@ -203,7 +204,7 @@ Item {
 
     Rectangle {
         x: 16
-        y: 334
+        y: parent.height - 116
         width: parent.width - 32
         height: 38
         color: "transparent"
@@ -213,7 +214,7 @@ Item {
 
     Text {
         x: 16
-        y: 334
+        y: parent.height - 116
         width: parent.width - 32
         height: 38
         text: "SEND FLIGHT PLAN"
@@ -226,7 +227,7 @@ Item {
 
     Rectangle {
         x: 16
-        y: 382
+        y: parent.height - 68
         width: parent.width - 32
         height: 38
         color: root.missionReady ? "transparent" : "#050505"
@@ -236,7 +237,7 @@ Item {
 
     Text {
         x: 16
-        y: 382
+        y: parent.height - 68
         width: parent.width - 32
         height: 38
         text: "START MISSION"
@@ -250,7 +251,7 @@ Item {
 
     MouseArea {
         x: 16
-        y: 382
+        y: parent.height - 68
         width: parent.width - 32
         height: 38
         enabled: root.missionReady
