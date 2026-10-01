@@ -151,6 +151,13 @@ Item {
         })
     }
 
+    function hasUnacknowledgedCriticalMessage() {
+        return systemMessages.some(function(message) {
+            return message.severity === "critical" &&
+                   acknowledgedMessageIds.indexOf(message.id) < 0
+        })
+    }
+
     function acknowledgeInformationMessage() {
         if (!selectedInformationMessage)
             return
@@ -165,7 +172,7 @@ Item {
     Rectangle {
         id: informationCard
         visible: panelSettingsPopup.enabledTools.indexOf("Information") >= 0
-                 || (root.warningActive && root.visibleSystemMessages().length > 0)
+                 || root.hasUnacknowledgedCriticalMessage()
         x: 16
         y: 154
         width: parent.width - 32
