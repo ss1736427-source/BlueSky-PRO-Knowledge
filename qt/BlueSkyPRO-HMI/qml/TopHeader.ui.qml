@@ -76,15 +76,14 @@ Item {
                              logoBlock.height - 2 * root.anchorPadding)
             anchors.centerIn: parent
 
-            // Temporary visual slot until the controlled master SVG is supplied.
-            Text {
-                anchors.centerIn: parent
-                text: "BlueSky PRO"
-                color: root.text
-                font.family: "B612"
-                font.pixelSize: Math.max(12, Math.round(22 * root.logoScale / 100))
-                font.bold: true
-                horizontalAlignment: Text.AlignHCenter
+            Image {
+                anchors.fill: parent
+                source: "qrc:/qml/assets/bluesky_pro_logo.svg"
+                fillMode: Image.PreserveAspectFit
+                smooth: true
+                mipmap: true
+                sourceSize.width: Math.round(root.logoVisualWidth * root.logoScale / 100)
+                sourceSize.height: Math.round(root.logoVisualHeight * root.logoScale / 100)
             }
         }
     }
