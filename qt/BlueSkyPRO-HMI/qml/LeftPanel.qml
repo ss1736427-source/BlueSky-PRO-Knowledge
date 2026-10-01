@@ -8,7 +8,7 @@ Item {
         font.family: "Noto Sans"
         font.pixelSize: 12
         font.bold: true
-        text: "Картографирование территории"
+        text: "Обнаружение и наблюдение за БПЛА (C-UAS)"
     }
 
     TextMetrics {
@@ -71,8 +71,9 @@ Item {
             manualTemplateSelection = []
     }
 
+    // Keep the approved catalogue visible; current mission applicability is indicated separately.
     function templateIsVisible(index) {
-        return missionCreationMode || missionTemplateIndices.indexOf(index) >= 0
+        return true
     }
 
     function templateIsSelected(index) {
@@ -107,22 +108,22 @@ Item {
     signal panelConfigurationChanged()
     signal missionHidden()
 
+    // Approved baseline: 13 mission templates (2026-10-01).
     ListModel {
         id: templateModel
         ListElement { title: "Картографирование территории"; subtitle: ""; accent: "#BFBFBF" }
-        ListElement { title: "Инспекция объектов (здания, ЛЭП, трубопроводы)"; subtitle: ""; accent: "#BFBFBF" }
-        ListElement { title: "3D-картография / реконструкция"; subtitle: ""; accent: "#32FFFF" }
-        ListElement { title: "Мониторинг территории"; subtitle: ""; accent: "#BFBFBF" }
-        ListElement { title: "Поиск человека"; subtitle: ""; accent: "#BFBFBF" }
-        ListElement { title: "Пожарный мониторинг"; subtitle: ""; accent: "#BFBFBF" }
-        ListElement { title: "Доставка"; subtitle: ""; accent: "#BFBFBF" }
-        ListElement { title: "Drone-in-a-Box"; subtitle: ""; accent: "#BFBFBF" }
-        ListElement { title: "BVLOS-мониторинг"; subtitle: ""; accent: "#BFBFBF" }
-        ListElement { title: "Экологический мониторинг"; subtitle: ""; accent: "#BFBFBF" }
+        ListElement { title: "3D-картография и реконструкция"; subtitle: ""; accent: "#32FFFF" }
+        ListElement { title: "Инспекция объектов и инфраструктуры"; subtitle: ""; accent: "#BFBFBF" }
+        ListElement { title: "Мониторинг строительства"; subtitle: ""; accent: "#BFBFBF" }
+        ListElement { title: "Мониторинг территории и периметра"; subtitle: ""; accent: "#BFBFBF" }
+        ListElement { title: "Поиск и спасение"; subtitle: ""; accent: "#BFBFBF" }
+        ListElement { title: "Пожарный мониторинг и ЧС"; subtitle: ""; accent: "#BFBFBF" }
+        ListElement { title: "Экологический и природный мониторинг"; subtitle: ""; accent: "#BFBFBF" }
+        ListElement { title: "Сельское хозяйство"; subtitle: ""; accent: "#BFBFBF" }
+        ListElement { title: "Доставка грузов"; subtitle: ""; accent: "#BFBFBF" }
         ListElement { title: "Ретрансляция связи"; subtitle: ""; accent: "#BFBFBF" }
-        ListElement { title: "C-UAS — обнаружение БПЛА"; subtitle: ""; accent: "#BFBFBF" }
-        ListElement { title: "Автоматическое обнаружение объектов"; subtitle: ""; accent: "#BFBFBF" }
-        ListElement { title: "Групповая / роёвая миссия"; subtitle: ""; accent: "#BFBFBF" }
+        ListElement { title: "Аэрофотосъёмка и медиапроизводство"; subtitle: ""; accent: "#BFBFBF" }
+        ListElement { title: "Обнаружение и наблюдение за БПЛА (C-UAS)"; subtitle: ""; accent: "#BFBFBF" }
     }
     Rectangle {
         anchors.fill: parent
@@ -423,6 +424,7 @@ Item {
                     height: 56
                     radius: 3
                     color: root.templateIsSelected(index) ? root.selectedSurface : root.card
+                    opacity: root.missionCreationMode || root.templateIsSelected(index) ? 1.0 : 0.58
                     border.color: root.templateIsSelected(index) ? root.cyan : root.divider
                     border.width: 1
 
@@ -457,6 +459,7 @@ Item {
                     }
                     MouseArea {
                         anchors.fill: parent
+                        enabled: root.missionCreationMode || root.templateIsSelected(index)
                         onClicked: {
                             if (root.missionCreationMode)
                                 root.toggleManualTemplate(index)
