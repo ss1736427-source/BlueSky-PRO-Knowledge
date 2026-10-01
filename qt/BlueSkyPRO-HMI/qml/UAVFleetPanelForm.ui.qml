@@ -503,21 +503,61 @@ Item {
                         height: 42
                         color: root.settingsParameters.indexOf(modelData.key) >= 0 ? root.selectedSurface : "transparent"
 
-                        MouseArea {
-                            anchors.left: parent.left
-                            anchors.right: upButton.left
-                            anchors.top: parent.top
-                            anchors.bottom: parent.bottom
-                            onClicked: root.parameterToggleRequested(modelData.key)
-                        }
-
-                        Text {
+                        Row {
+                            id: parameterOptionRow
                             x: 8
+                            anchors.left: parent.left
+                            anchors.leftMargin: 8
+                            anchors.right: upButton.left
+                            anchors.rightMargin: 8
                             anchors.verticalCenter: parent.verticalCenter
-                            text: (root.settingsParameters.indexOf(modelData.key) >= 0 ? "☑  " : "☐  ") + modelData.label
-                            color: root.settingsParameters.indexOf(modelData.key) >= 0 ? root.text : root.secondary
-                            font.family: "B612"
-                            font.pixelSize: 13
+                            spacing: 12
+
+                            readonly property bool parameterEnabled:
+                                root.settingsParameters.indexOf(modelData.key) >= 0
+
+                            Rectangle {
+                                id: parameterSwitch
+                                width: 42
+                                height: 22
+                                radius: 11
+                                color: parameterOptionRow.parameterEnabled ? root.green : "#263747"
+                                border.width: 1
+                                border.color: parameterOptionRow.parameterEnabled ? root.green : "#526579"
+
+                                Rectangle {
+                                    width: 16
+                                    height: 16
+                                    radius: 8
+                                    y: 2
+                                    x: parameterOptionRow.parameterEnabled
+                                       ? parent.width - width - 3 : 3
+                                    color: parameterOptionRow.parameterEnabled ? "#07111D" : "#BFC9D3"
+                                }
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: root.parameterToggleRequested(modelData.key)
+                                }
+                            }
+
+                            Text {
+                                width: Math.max(0, parameterOptionRow.width - parameterSwitch.width - parameterOptionRow.spacing)
+                                anchors.verticalCenter: parent.verticalCenter
+                                text: modelData.label
+                                color: parameterOptionRow.parameterEnabled ? root.text : root.secondary
+                                font.family: "B612"
+                                font.pixelSize: 13
+                                elide: Text.ElideRight
+                                verticalAlignment: Text.AlignVCenter
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: root.parameterToggleRequested(modelData.key)
+                                }
+                            }
                         }
 
                         Text {
