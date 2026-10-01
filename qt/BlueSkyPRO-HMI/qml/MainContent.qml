@@ -42,8 +42,10 @@ Item {
     property var missionTemplateIndices: [1]
     property string journalStatus: "READY"
     property string activeTool: bottomToolbar.activeTool
-    // Role selection is the application entry point; the workspace remains underneath.
+    // Entry flow: role authorization -> pilot task setup -> brief transition -> workspace.
     property bool roleSelectionVisible: true
+    property bool taskCreationVisible: false
+    property bool missionSplashVisible: false
     property string currentRole: ""
     readonly property bool uavPanelOpen: activeTool === "UAV"
     signal journalEvent(string eventType, int uavIndex, string decision)
@@ -234,8 +236,7 @@ Item {
         onToolActivated: root.contextOverlayOpen = false
     }
 
-    // Entry screen connected to the real workspace. Continue closes the
-    // role screen and activates the corresponding application context.
+    // Authorization is the first screen. Pilot proceeds to task composition.
     RoleSelection {
         id: roleSelection
         anchors.fill: parent
@@ -244,12 +245,73 @@ Item {
         onContinueRequested: function(role) {
             root.currentRole = role
             root.roleSelectionVisible = false
-            if (role === "ADMIN")
+            if (role === "PILOT") {
+                root.taskCreationVisible = true
+            } else if (role === "ADMIN") {
                 bottomToolbar.activateTool("ADMIN")
-            else if (role === "ENGINEER")
+            } else {
                 bottomToolbar.activateTool("UAV")
-            else
-                bottomToolbar.activateTool("UAV")
+            }
+        }
+    }
+
+    // Tablet-first task setup: all approved mission templates and the on-screen keyboard.
+    TaskCreation {
+        id: taskCreation
+        anchors.fill: parent
+        z: 1001
+        visible: root.taskCreationVisible
+        onMissionSetRequested: function(templateIndices, taskText) {
+            root.missionTemplateIndices = templateIndices
+            root.missionSummary = taskText.trim().length > 0
+                                  ? taskText.trim()
+                                  : "Выбрано шаблонов: " + templateIndices.length
+            root.missionState = "AUTO"
+            root.taskCreationVisible = false
+            root.missionSplashVisible = true
+            missionTransition.restart()
+        }
+    }
+
+    // Short visual hand-off before the main map workspace appears.
+    Timer {
+        id: missionTransition
+        interval: 1000
+        repeat: false
+        onTriggered: root.missionSplashVisible = false
+    }
+
+    Rectangle {
+        anchors.fill: parent
+        z: 1002
+        visible: root.missionSplashVisible
+        color: "#050A12"
+
+        Column {
+            anchors.centerIn: parent
+            spacing: 18
+            Text {
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: "BlueSky PRO"
+                color: "#E5F0FA"
+                font.family: "B612"
+                font.pixelSize: 38
+                font.bold: true
+            }
+            Rectangle {
+                width: 220
+                height: 2
+                color: "#20C8F4"
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+            Text {
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: "ФОРМИРОВАНИЕ МИССИИ"
+                color: "#9FB4C9"
+                font.family: "B612"
+                font.pixelSize: 15
+                letterSpacing: 2
+            }
         }
     }
 
