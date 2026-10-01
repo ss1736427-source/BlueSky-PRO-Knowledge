@@ -303,7 +303,7 @@ Item {
         Text {
             id: missionSummaryLabel
             x: missionIdLabel.x + missionIdLabel.width + 17
-            width: Math.max(0, parent.width - x - 98)
+            width: Math.max(0, parent.width - x - 12)
             anchors.verticalCenter: parent.verticalCenter
             elide: Text.ElideRight
             text: root.missionSummary
@@ -312,41 +312,6 @@ Item {
             font.pixelSize: 10
         }
 
-        Rectangle {
-            x: parent.width - 91
-            y: 8
-            width: 1
-            height: parent.height - 16
-            color: root.divider
-        }
-
-        Rectangle {
-            id: hideMissionButton
-            x: parent.width - 82
-            width: 72
-            height: 26
-            anchors.verticalCenter: parent.verticalCenter
-            radius: 2
-            color: root.selectedSurface
-            border.color: root.divider
-            border.width: 1
-
-            Text {
-                anchors.fill: parent
-                text: "⊘  СКРЫТЬ"
-                color: root.secondary
-                font.family: "B612 Mono"
-                font.pixelSize: 9
-                font.bold: true
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: root.hideMissionRequested()
-            }
-        }
     }
 
     // Panel configuration is presentation-only and independent of Bottom Toolbar configuration.
