@@ -135,37 +135,51 @@ Item {
 
     Rectangle { x: 16; y: 218; width: parent.width - 32; height: 1; color: root.divider }
 
-    // Unified work area enclosing the heading and mission action controls.
+    // Unified ATC work area. The rounded frame encloses the heading and
+    // all action controls, with a clear inset around every button.
     Rectangle {
+        id: atcWorkArea
         x: 16
         y: parent.height - (root.validationVisible ? 238 : 190)
         width: parent.width - 32
         height: root.validationVisible ? 218 : 170
+        radius: 8
         color: "transparent"
-        border.color: "#183B50"
+        border.color: "#236078"
         border.width: 1
-        antialiasing: false
+        antialiasing: true
         z: 0
     }
 
-    // Heading uses a simple filled strip; the work area owns the outline.
+    // Header is a filled band, not a separate bordered card.
     Rectangle {
-        x: 16
-        y: parent.height - (root.validationVisible ? 226 : 178)
-        width: parent.width - 32
-        height: 28
+        x: atcWorkArea.x + 1
+        y: atcWorkArea.y + 1
+        width: atcWorkArea.width - 2
+        height: 32
+        radius: 7
         color: "#0B1B2B"
+        antialiasing: true
+
+        // Square the lower corners of the header band so it joins the work area.
+        Rectangle {
+            x: 0
+            y: height / 2
+            width: parent.width
+            height: parent.height / 2
+            color: parent.color
+        }
 
         Text {
             anchors.left: parent.left
             anchors.leftMargin: 12
             anchors.right: parent.right
-            anchors.rightMargin: 6
+            anchors.rightMargin: 8
             anchors.verticalCenter: parent.verticalCenter
-            text: "MISSION READINESS"
+            text: "ATC"
             color: root.text
             font.family: "B612"
-            font.pixelSize: 12
+            font.pixelSize: 13
             font.bold: true
             verticalAlignment: Text.AlignVCenter
         }
