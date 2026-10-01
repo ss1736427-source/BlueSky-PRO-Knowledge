@@ -91,7 +91,7 @@ Item {
             x: parent.width - 58
             anchors.verticalCenter: parent.verticalCenter
             text: "+"
-            color: root.missionVisible ? root.muted : root.cyan
+            color: root.missionVisible ? root.cyan : root.text
             font.family: "B612 Mono"
             font.pixelSize: 18
             font.bold: true
