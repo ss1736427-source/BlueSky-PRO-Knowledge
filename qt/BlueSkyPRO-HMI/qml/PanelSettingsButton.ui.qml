@@ -9,9 +9,9 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        color: "#08111D"
-        border.color: "#202020"
-        border.width: 1
+        color: "transparent"
+        border.color: "transparent"
+        border.width: 0
         radius: 3
     }
 
