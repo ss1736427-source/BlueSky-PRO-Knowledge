@@ -29,8 +29,9 @@ Item {
         anchors.topMargin: root.headingValueGap
         text: root.value
         color: root.valueColor
-        font.family: "B612 Mono"
-        font.pixelSize: root.valueSize
+        // Use the platform's system UI font for the value row.
+        // Scale with the header height while respecting the configured value size.
+        font.pixelSize: Math.max(14, Math.min(root.valueSize, parent.height * 0.34))
         font.bold: true
         horizontalAlignment: Text.AlignHCenter
     }
