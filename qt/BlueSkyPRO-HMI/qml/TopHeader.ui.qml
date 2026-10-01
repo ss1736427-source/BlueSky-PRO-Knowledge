@@ -83,10 +83,10 @@ Item {
                 anchors.fill: parent
                 source: Qt.resolvedUrl("assets/bluesky_pro_logo.svg")
                 fillMode: Image.PreserveAspectFit
-                // Keep the embedded 2048x768 master raster at native resolution.
-                // Qt downsamples it to the display target; avoid a tiny pre-rasterized mip.
+                // Render from the full-resolution master and use mipmaps for clean downsampling.
                 smooth: true
-                mipmap: false
+                mipmap: true
+                cache: false
                 sourceSize.width: 2048
                 sourceSize.height: 768
             }
