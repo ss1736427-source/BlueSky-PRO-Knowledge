@@ -1,4 +1,5 @@
 ﻿import QtQuick
+import Qt.labs.settings
 
 Item {
     id: root
@@ -53,6 +54,14 @@ Item {
     signal uavDecisionRequested(string decision, int uavIndex)
     signal workspaceContextRequested(string context)
     property string workspaceContext: bottomToolbar.activeTool
+
+    // Persist the operator-positioned alert overlay across application launches.
+    Settings {
+        id: alertOverlaySettings
+        category: "BlueSkyPRO/AlertOverlay"
+        property real x: 330
+        property real y: 24
+    }
 
     Rectangle {
         anchors.fill: parent
