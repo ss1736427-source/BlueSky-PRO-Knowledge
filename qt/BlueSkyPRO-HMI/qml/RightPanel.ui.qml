@@ -135,23 +135,26 @@ Item {
 
     Rectangle { x: 16; y: 218; width: parent.width - 32; height: 1; color: root.divider }
 
-    // Mission-readiness section header, styled as a compact HMI panel title.
+    // Unified work area enclosing the heading and mission action controls.
+    Rectangle {
+        x: 16
+        y: parent.height - (root.validationVisible ? 238 : 190)
+        width: parent.width - 32
+        height: root.validationVisible ? 218 : 170
+        color: "transparent"
+        border.color: "#183B50"
+        border.width: 1
+        antialiasing: false
+        z: 0
+    }
+
+    // Heading uses a simple filled strip; the work area owns the outline.
     Rectangle {
         x: 16
         y: parent.height - (root.validationVisible ? 226 : 178)
         width: parent.width - 32
         height: 28
         color: "#0B1B2B"
-        border.color: "#183B50"
-        border.width: 1
-
-        Rectangle {
-            x: 0
-            y: 0
-            width: 3
-            height: parent.height
-            color: root.cyan
-        }
 
         Text {
             anchors.left: parent.left
