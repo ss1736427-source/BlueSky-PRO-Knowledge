@@ -7,10 +7,10 @@ Item {
 
     // BlueSky PRO — Qt Design Studio working screen.
     // Visual composition only. Core / Safety remain authoritative.
-    property int headerHeight: 86
-    property int leftWidth: leftPanel.implicitWidth
-    property int rightWidth: leftWidth
     property int toolbarHeight: 54
+    property int headerHeight: toolbarHeight
+    property int leftWidth: leftPanel.implicitWidth
+    property int rightWidth: rightPanel.implicitWidth
     property bool leftPanelOpen: true
     property bool rightPanelOpen: true
     // Mission workflow states: AUTO, HIDDEN, MANUAL, VALIDATING
@@ -63,6 +63,8 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         height: root.headerHeight
+        leftAnchorWidth: root.leftWidth
+        rightAnchorWidth: root.rightWidth
         tabletVariant: false
         ready: root.missionReady
         warningActive: root.warningActive
