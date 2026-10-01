@@ -93,9 +93,9 @@ Item {
                 readonly property bool toolEnabled: root.enabledTools.indexOf(modelData) >= 0
 
                 Text {
-                    anchors.left: parent.left
-                    anchors.right: toggleTrack.left
-                    anchors.rightMargin: 12
+                    anchors.left: toggleTrack.right
+                    anchors.leftMargin: 12
+                    anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
                     text: modelData
                     color: "#BFBFBF"
@@ -110,7 +110,7 @@ Item {
                     width: 36
                     height: 20
                     radius: height / 2
-                    anchors.right: parent.right
+                    anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
                     color: toolEnabled ? "#64FF00" : "#263748"
                     border.width: 1
