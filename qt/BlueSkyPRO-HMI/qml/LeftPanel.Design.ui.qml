@@ -21,7 +21,7 @@ Item {
     property string missionReviewState: "REWORK"
     readonly property color missionIdStatusColor: missionReviewState === "VERIFIED" ? "#64FF00" : "#FF00FF"
     property bool panelConfigOpen: false
-    property int selectedTemplate: 2
+    property int selectedTemplate: 1
     property bool analysisVisible: true
     property bool instrumentsVisible: false
     property bool atcVisible: false
