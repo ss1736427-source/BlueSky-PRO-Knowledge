@@ -28,6 +28,21 @@ Item {
     property string eta: "11:48"
     property bool ready: true
     property bool warningActive: true
+    property int warningCount: 0
+    property bool warningBlinkOn: true
+
+    Timer {
+        id: warningBlinkTimer
+        interval: 550
+        repeat: true
+        running: root.warningCount > 0
+        onTriggered: root.warningBlinkOn = !root.warningBlinkOn
+    }
+
+    onWarningCountChanged: {
+        if (warningCount <= 0)
+            warningBlinkOn = true
+    }
     // Supplied by the authenticated pilot profile; replace placeholder with actual profile binding.
     property string operatorLabel: "Фамилия И.О."
 
@@ -235,8 +250,9 @@ Item {
             width: centralComposition.width / Math.max(1, root.visibleMetricCount)
             height: parent.height
             title: "WARNING"
-            value: root.warningActive ? "!" : "—"
-            valueColor: root.warningActive ? root.amber : root.muted
+            value: root.warningCount > 0 ? String(root.warningCount) : ""
+            valueColor: root.warningCount > 0 ? root.amber : root.muted
+            opacity: root.warningCount > 0 && !root.warningBlinkOn ? 0.25 : 1.0
             headingSize: root.headingSize
             valueSize: root.valueSize
             headingValueGap: root.headingValueGap
