@@ -112,12 +112,40 @@ Item {
         antialiasing: false
     }
 
+    // Right-panel title bar: INFORMATION, with the panel menu aligned on the same row.
+    Rectangle {
+        id: rightPanelTitleBar
+        x: 10
+        y: 8
+        width: parent.width - 20
+        height: 38
+        color: "#0B1B2B"
+        border.color: "#236078"
+        border.width: 1
+        radius: 4
+        z: 10
+
+        Text {
+            anchors.left: parent.left
+            anchors.leftMargin: 12
+            anchors.right: panelSettings.left
+            anchors.rightMargin: 8
+            anchors.verticalCenter: parent.verticalCenter
+            text: "ALERTING"
+            color: root.text
+            font.family: "B612"
+            font.pixelSize: 13
+            font.bold: true
+            elide: Text.ElideRight
+        }
+    }
+
     // Checklist card — same rounded, outlined visual language as ATC.
     Rectangle {
         id: checklistCard
         visible: panelSettingsPopup.enabledTools.indexOf("Checklist") >= 0
         x: 16
-        y: 8
+        y: 54
         width: parent.width - 32
         height: 136
         radius: 8
@@ -197,7 +225,7 @@ Item {
         visible: panelSettingsPopup.enabledTools.indexOf("Information") >= 0
                  || root.hasUnacknowledgedCriticalMessage()
         x: 16
-        y: 154
+        y: checklistCard.y + checklistCard.height + 10
         width: parent.width - 32
         height: 220
         radius: 8
@@ -596,7 +624,7 @@ Item {
         anchors.topMargin: 44
         width: Math.min(parent.width - 16, Math.max(260, panelSettingsPopup.contentWidth))
         height: Math.min(parent.height - 52, 86 + panelSettingsPopup.tools.length * 34)
-        title: "RIGHT PANEL SETTINGS"
+        title: "INFORMATION SETTINGS"
         tools: ["Checklist", "Information", "Readiness", "Validation", "Send Flight Plan", "Start Mission"]
         onClosed: open = false
     }
