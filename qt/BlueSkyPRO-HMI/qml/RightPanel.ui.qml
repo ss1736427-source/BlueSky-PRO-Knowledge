@@ -135,25 +135,37 @@ Item {
 
     Rectangle { x: 16; y: 218; width: parent.width - 32; height: 1; color: root.divider }
 
-    // Keep mission readiness at the bottom edge of the right panel.
-    Text {
+    // Mission-readiness section header, styled as a compact HMI panel title.
+    Rectangle {
         x: 16
         y: parent.height - (root.validationVisible ? 226 : 178)
-        text: "MISSION READINESS"
-        color: root.secondary
-        font.family: "B612"
-        font.pixelSize: 12
-        font.bold: true
-    }
+        width: parent.width - 32
+        height: 28
+        color: "#0B1B2B"
+        border.color: "#183B50"
+        border.width: 1
 
-    Text {
-        x: 16
-        y: parent.height - (root.validationVisible ? 202 : 154)
-        text: root.missionReady ? "READY" : "NOT READY"
-        color: root.missionReady ? root.green : root.amber
-        font.family: "B612 Mono"
-        font.pixelSize: 13
-        font.bold: true
+        Rectangle {
+            x: 0
+            y: 0
+            width: 3
+            height: parent.height
+            color: root.cyan
+        }
+
+        Text {
+            anchors.left: parent.left
+            anchors.leftMargin: 12
+            anchors.right: parent.right
+            anchors.rightMargin: 6
+            anchors.verticalCenter: parent.verticalCenter
+            text: "MISSION READINESS"
+            color: root.text
+            font.family: "B612"
+            font.pixelSize: 12
+            font.bold: true
+            verticalAlignment: Text.AlignVCenter
+        }
     }
 
     Rectangle {
