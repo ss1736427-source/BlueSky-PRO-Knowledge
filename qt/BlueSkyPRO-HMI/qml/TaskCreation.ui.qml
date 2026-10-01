@@ -8,6 +8,7 @@ Item {
     property string taskText: ""
     property var selectedTemplateIndices: []
     property string keyboardLanguage: "RU"
+    property bool keyboardVisible: true
 
     signal missionSetRequested(var templateIndices, string taskText)
 
@@ -308,6 +309,7 @@ Item {
     // On-screen Russian keyboard is visible by default for tablet operation.
     Rectangle {
         id: keyboardPanel
+        visible: root.keyboardVisible
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
@@ -419,8 +421,8 @@ Item {
                     radius: 7
                     color: "#142D45"
                     border.color: "#304E68"
-                    Text { anchors.centerIn: parent; text: "Скрыть"; color: root.textColor; font.pixelSize: 13 }
-                    MouseArea { anchors.fill: parent; onClicked: keyboardPanel.visible = false }
+                    Text { anchors.centerIn: parent; text: root.keyboardVisible ? "Скрыть" : "⌨"; color: root.textColor; font.pixelSize: 13 }
+                    MouseArea { anchors.fill: parent; onClicked: root.keyboardVisible = !root.keyboardVisible }
                 }
             }
         }
