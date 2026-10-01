@@ -186,10 +186,11 @@ Item {
         anchors.rightMargin: parent.width * 0.045
         anchors.top: templateCaption.bottom
         anchors.topMargin: 10
-        columns: 7
+        property int columnCount: root.width >= 1500 ? 7 : root.width >= 1000 ? 5 : 3
+        columns: columnCount
         rowSpacing: 10
         columnSpacing: 12
-        property real tileWidth: (width - columnSpacing * 6) / 7
+        property real tileWidth: (width - columnSpacing * (columnCount - 1)) / columnCount
         property real tileHeight: Math.max(48, Math.min(76, root.height * 0.075))
 
         Repeater {
