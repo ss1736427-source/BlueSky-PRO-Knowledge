@@ -112,9 +112,9 @@ Item {
     // RIGHT ANCHOR — outer geometry is intentionally identical to LOGO anchor.
     Item {
         id: operatorBlock
-        visible: panelSettingsPopup.enabledTools.indexOf("Operator") >= 0
-        width: panelSettingsPopup.enabledTools.indexOf("Operator") >= 0
-               ? Math.max(0, Math.min(root.rightAnchorWidth, parent.width)) : 0
+        // Operator is a permanent right anchor, not a hideable header metric.
+        visible: true
+        width: Math.max(0, Math.min(root.rightAnchorWidth, parent.width))
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.bottom: parent.bottom
@@ -356,7 +356,7 @@ Item {
                     52 + panelSettingsPopup.tools.length * 30 + 48,
                     Math.max(180, Screen.height - 24))
         title: "HEADER SETTINGS"
-        tools: ["ETD", "TOT", "TRIP", "ETA", "READY", "WARNING", "Operator"]
+        tools: ["ETD", "TOT", "TRIP", "ETA", "READY", "WARNING"]
         onClosed: open = false
     }
 }
