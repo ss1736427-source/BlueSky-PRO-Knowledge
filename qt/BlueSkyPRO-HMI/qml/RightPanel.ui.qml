@@ -314,7 +314,7 @@ Item {
                 Rectangle {
                     anchors.fill: parent
                     radius: 4
-                    color: messageMouse.containsMouse ? "#102337" : "transparent"
+                    color: messageMouse.containsMouse ? "#102337" : "#000000"
                     border.width: modelData.severity === "critical" ? 1 : 0
                     border.color: root.red
                 }
@@ -339,7 +339,7 @@ Item {
                     width: parent.width - 8
                     height: 20
                     text: modelData.title
-                    color: root.secondary
+                    color: root.text
                     font.family: "B612"
                     font.pixelSize: 10
                     elide: Text.ElideRight
@@ -383,7 +383,7 @@ Item {
             text: root.interventionMode && root.selectedInformationMessage
                   ? "ТРЕБУЕТСЯ ДЕЙСТВИЕ ПИЛОТА"
                   : (root.selectedInformationMessage ? root.selectedInformationMessage.detail : "")
-            color: root.secondary
+            color: root.text
             font.family: "B612"
             font.pixelSize: 9
             wrapMode: Text.Wrap
