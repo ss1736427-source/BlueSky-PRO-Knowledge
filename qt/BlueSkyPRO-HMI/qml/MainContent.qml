@@ -28,6 +28,8 @@ Item {
     property real mapZoom: 1.0
     readonly property bool manualValidationStarted: missionState === "VALIDATING"
     property bool warningActive: true
+    // Explicit header-triggered map review; independent of the right-panel Map Alerts toggle.
+    property bool headerAlertsOpen: false
     readonly property int systemMessageCount: rightPanel.visibleSystemMessages().length
     property int selectedUavIndex: -1
     property bool contextOverlayOpen: false
@@ -82,6 +84,10 @@ Item {
         ready: root.missionReady
         warningActive: root.systemMessageCount > 0
         warningCount: root.systemMessageCount
+        onWarningClicked: {
+            if (root.systemMessageCount > 0)
+                root.headerAlertsOpen = !root.headerAlertsOpen
+        }
     }
 
     Item {
@@ -186,7 +192,8 @@ Item {
         // Drag the header to reposition; the last position is persisted in Settings.
         Item {
             id: alertOverlay
-            visible: rightPanel.mapAlertsEnabled && !root.rightPanelOpen
+            // Header WARNING opens this overlay regardless of the right-panel Map Alerts setting.
+            visible: root.headerAlertsOpen
                      && !root.roleSelectionVisible
                      && !root.taskCreationVisible
                      && !root.missionSplashVisible
