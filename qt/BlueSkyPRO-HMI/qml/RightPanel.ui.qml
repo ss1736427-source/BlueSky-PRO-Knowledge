@@ -42,6 +42,29 @@ Item {
     signal pilotInterventionRequested(string messageId)
     property bool validationVisible: manualCreationMode ? !manualValidationStarted : validationConfirmationRequired
     property real validationPulse: 1.0
+
+    // ATC work area sizes itself to the currently enabled action buttons.
+    property bool atcHeaderVisible: panelSettingsPopup.enabledTools.indexOf("Readiness") >= 0
+    property bool atcValidationVisible: root.validationVisible && panelSettingsPopup.enabledTools.indexOf("Validation") >= 0
+    property bool atcSendVisible: panelSettingsPopup.enabledTools.indexOf("Send Flight Plan") >= 0
+    property bool atcStartVisible: panelSettingsPopup.enabledTools.indexOf("Start Mission") >= 0
+    property int atcVisibleButtonCount: (atcValidationVisible ? 1 : 0)
+                                        + (atcSendVisible ? 1 : 0)
+                                        + (atcStartVisible ? 1 : 0)
+    property int atcButtonHeight: 38
+    property int atcButtonGap: 10
+    property int atcButtonStackTop: atcHeaderVisible ? 43 : 12
+    property int atcWorkAreaHeight: (atcHeaderVisible ? 33 : 12)
+                                    + (atcHeaderVisible && atcVisibleButtonCount > 0 ? atcButtonGap : 0)
+                                    + atcVisibleButtonCount * atcButtonHeight
+                                    + Math.max(0, atcVisibleButtonCount - 1) * atcButtonGap
+                                    + 12
+    property int atcValidationY: atcWorkArea.y + atcButtonStackTop
+    property int atcSendY: atcValidationY + (atcValidationVisible ? atcButtonHeight + atcButtonGap : 0)
+    property int atcStartY: atcValidationY
+                            + (atcValidationVisible ? atcButtonHeight + atcButtonGap : 0)
+                            + (atcSendVisible ? atcButtonHeight + atcButtonGap : 0)
+
     signal startMissionRequested()
     signal validateManualMissionRequested()
 
@@ -401,14 +424,11 @@ Item {
     // all action controls, with a clear inset around every button.
     Rectangle {
         id: atcWorkArea
-        visible: panelSettingsPopup.enabledTools.indexOf("Readiness") >= 0
-                 || panelSettingsPopup.enabledTools.indexOf("Validation") >= 0
-                 || panelSettingsPopup.enabledTools.indexOf("Send Flight Plan") >= 0
-                 || panelSettingsPopup.enabledTools.indexOf("Start Mission") >= 0
+        visible: root.atcHeaderVisible || root.atcVisibleButtonCount > 0
         x: 16
-        y: parent.height - (root.validationVisible ? 238 : 190)
+        y: parent.height - root.atcWorkAreaHeight - 20
         width: parent.width - 32
-        height: root.validationVisible ? 218 : 170
+        height: root.atcWorkAreaHeight
         radius: 8
         color: "transparent"
         border.color: "#236078"
@@ -419,7 +439,7 @@ Item {
 
     // Header is a filled band, not a separate bordered card.
     Rectangle {
-        visible: panelSettingsPopup.enabledTools.indexOf("Readiness") >= 0
+        visible: root.atcHeaderVisible
         x: atcWorkArea.x + 1
         y: atcWorkArea.y + 1
         width: atcWorkArea.width - 2
@@ -453,11 +473,11 @@ Item {
     }
 
     Rectangle {
-        visible: root.validationVisible && panelSettingsPopup.enabledTools.indexOf("Validation") >= 0
+        visible: root.atcValidationVisible
         x: 26
-        y: parent.height - 164
+        y: root.atcValidationY
         width: parent.width - 52
-        height: 38
+        height: root.atcButtonHeight
         color: "transparent"
         border.color: Qt.rgba(root.green.r, root.green.g, root.green.b, root.validationPulse)
         opacity: root.manualCreationMode && !root.manualCompositionComplete ? 0.55 : 1.0
@@ -465,11 +485,11 @@ Item {
     }
 
     Text {
-        visible: root.validationVisible && panelSettingsPopup.enabledTools.indexOf("Validation") >= 0
+        visible: root.atcValidationVisible
         x: 26
-        y: parent.height - 164
+        y: root.atcValidationY
         width: parent.width - 52
-        height: 38
+        height: root.atcButtonHeight
         text: root.manualCreationMode ? "ВАЛИДАЦИЯ МИССИИ" : "VALIDATE MISSION"
         opacity: root.manualCreationMode && !root.manualCompositionComplete ? 0.65 : 1.0
         color: root.green
@@ -484,9 +504,9 @@ Item {
         visible: root.manualCreationMode && !root.manualValidationStarted
                  && panelSettingsPopup.enabledTools.indexOf("Validation") >= 0
         x: 26
-        y: parent.height - 164
+        y: root.atcValidationY
         width: parent.width - 52
-        height: 38
+        height: root.atcButtonHeight
         enabled: root.manualCompositionComplete
         cursorShape: enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
         onClicked: root.validateManualMissionRequested()
@@ -500,22 +520,22 @@ Item {
     }
 
     Rectangle {
-        visible: panelSettingsPopup.enabledTools.indexOf("Send Flight Plan") >= 0
+        visible: root.atcSendVisible
         x: 26
-        y: parent.height - 116
+        y: root.atcSendY
         width: parent.width - 52
-        height: 38
+        height: root.atcButtonHeight
         color: "transparent"
         border.color: root.divider
         border.width: 1
     }
 
     Text {
-        visible: panelSettingsPopup.enabledTools.indexOf("Send Flight Plan") >= 0
+        visible: root.atcSendVisible
         x: 26
-        y: parent.height - 116
+        y: root.atcSendY
         width: parent.width - 52
-        height: 38
+        height: root.atcButtonHeight
         text: "SEND FLIGHT PLAN"
         color: root.secondary
         font.family: "B612"
@@ -525,22 +545,22 @@ Item {
     }
 
     Rectangle {
-        visible: panelSettingsPopup.enabledTools.indexOf("Start Mission") >= 0
+        visible: root.atcStartVisible
         x: 26
-        y: parent.height - 68
+        y: root.atcStartY
         width: parent.width - 52
-        height: 38
+        height: root.atcButtonHeight
         color: root.missionReady ? "transparent" : "#050505"
         border.color: root.missionReady ? root.green : root.divider
         border.width: 1
     }
 
     Text {
-        visible: panelSettingsPopup.enabledTools.indexOf("Start Mission") >= 0
+        visible: root.atcStartVisible
         x: 26
-        y: parent.height - 68
+        y: root.atcStartY
         width: parent.width - 52
-        height: 38
+        height: root.atcButtonHeight
         text: "START MISSION"
         color: root.missionReady ? root.green : root.muted
         font.family: "B612"
@@ -551,11 +571,11 @@ Item {
     }
 
     MouseArea {
-        visible: panelSettingsPopup.enabledTools.indexOf("Start Mission") >= 0
+        visible: root.atcStartVisible
         x: 26
-        y: parent.height - 68
+        y: root.atcStartY
         width: parent.width - 52
-        height: 38
+        height: root.atcButtonHeight
         enabled: root.missionReady
         onClicked: root.startMissionRequested()
     }
