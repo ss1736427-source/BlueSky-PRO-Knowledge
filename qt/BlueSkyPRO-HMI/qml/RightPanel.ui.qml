@@ -370,8 +370,7 @@ Item {
         Text {
             width: parent.width
             text: root.selectedInformationMessage ? root.selectedInformationMessage.title : ""
-            color: root.selectedInformationMessage && root.selectedInformationMessage.severity === "critical" ? root.red :
-                   root.selectedInformationMessage && root.selectedInformationMessage.severity === "warning" ? root.amber : root.text
+            color: root.text
             font.family: "B612"
             font.pixelSize: 10
             font.bold: true
