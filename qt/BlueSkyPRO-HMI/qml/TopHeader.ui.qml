@@ -28,7 +28,8 @@ Item {
     property string eta: "11:48"
     property bool ready: true
     property bool warningActive: true
-    property string operatorLabel: "OPERATOR"
+    // Supplied by the authenticated pilot profile; replace placeholder with actual profile binding.
+    property string operatorLabel: "Фамилия И.О."
 
     // Adjustable composition parameters — working values, not frozen tokens.
     // Header anchors align exactly with the side panels below.
@@ -96,6 +97,7 @@ Item {
     // RIGHT ANCHOR — outer geometry is intentionally identical to LOGO anchor.
     Item {
         id: operatorBlock
+        visible: panelSettingsPopup.enabledTools.indexOf("Operator") >= 0
         width: Math.max(0, Math.min(root.rightAnchorWidth, parent.width))
         anchors.right: parent.right
         anchors.top: parent.top
@@ -116,30 +118,13 @@ Item {
 
             Column {
                 anchors.centerIn: parent
-                spacing: 2
-
-                Rectangle {
-                    width: root.operatorIconSize
-                    height: root.operatorIconSize
-                    radius: width / 2
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    color: "#0C1725"
-                    border.color: root.secondary
-                    border.width: 1
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "OP"
-                        color: root.secondary
-                        font.pixelSize: Math.round(root.operatorIconSize * 0.42)
-                    }
-                }
+                spacing: 0
 
                 Text {
                     text: root.operatorLabel
                     color: root.secondary
                     font.family: "B612"
-                    font.pixelSize: root.operatorLabelSize
+                    font.pixelSize: Math.min(14, Math.max(10, root.operatorLabelSize + 2))
                     font.bold: true
                     horizontalAlignment: Text.AlignHCenter
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -159,6 +144,7 @@ Item {
 
         HeaderSector {
             id: etdSector
+            visible: panelSettingsPopup.enabledTools.indexOf("ETD") >= 0
             width: parent.width / 6
             height: parent.height
             title: "ETD"
@@ -172,6 +158,7 @@ Item {
 
         HeaderSector {
             id: totSector
+            visible: panelSettingsPopup.enabledTools.indexOf("TOT") >= 0
             width: parent.width / 6
             height: parent.height
             title: "TOT"
@@ -185,6 +172,7 @@ Item {
 
         HeaderSector {
             id: tripSector
+            visible: panelSettingsPopup.enabledTools.indexOf("TRIP") >= 0
             width: parent.width / 6
             height: parent.height
             title: "TRIP"
@@ -198,6 +186,7 @@ Item {
 
         HeaderSector {
             id: etaSector
+            visible: panelSettingsPopup.enabledTools.indexOf("ETA") >= 0
             width: parent.width / 6
             height: parent.height
             title: "ETA"
@@ -211,6 +200,7 @@ Item {
 
         HeaderSector {
             id: readySector
+            visible: panelSettingsPopup.enabledTools.indexOf("READY") >= 0
             width: parent.width / 6
             height: parent.height
             title: "READY"
@@ -224,6 +214,7 @@ Item {
 
         HeaderSector {
             id: warningSector
+            visible: panelSettingsPopup.enabledTools.indexOf("WARNING") >= 0
             width: parent.width / 6
             height: parent.height
             title: "WARNING"
@@ -367,9 +358,10 @@ Item {
         id: panelSettingsPopup
         anchors.top: parent.bottom
         anchors.right: parent.right
+        anchors.rightMargin: 8
         anchors.topMargin: 8
-        width: 260
-        height: 254
+        width: Math.min(320, Math.max(220, root.width - 16))
+        height: Math.min(360, Math.max(220, Screen.height * 0.55))
         title: "HEADER SETTINGS"
         tools: ["ETD", "TOT", "TRIP", "ETA", "READY", "WARNING", "Operator", "Optional Aggregate Status"]
         onClosed: open = false
