@@ -427,4 +427,31 @@ Item {
             }
         }
     }
+    Rectangle {
+        visible: !root.keyboardVisible
+        z: 10
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.rightMargin: 20
+        anchors.bottomMargin: 18
+        width: 58
+        height: 44
+        radius: 7
+        color: "#142D45"
+        border.color: root.cyan
+        Text {
+            anchors.centerIn: parent
+            text: "⌨"
+            color: root.textColor
+            font.pixelSize: 22
+        }
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                root.keyboardVisible = true
+                taskInput.forceActiveFocus()
+            }
+        }
+    }
+
 }
