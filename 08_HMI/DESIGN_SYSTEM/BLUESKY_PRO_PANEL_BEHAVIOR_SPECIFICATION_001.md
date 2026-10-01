@@ -229,7 +229,7 @@ Detailed current telemetry belongs to the UAV Panel. Spatial operational informa
 ### Normal action hierarchy
 
 1. CHECKLIST
-2. active WARNINGS / CORRECTIONS
+2. INFORMATION — system messages and required operator actions
 3. Mission Readiness
 4. contextual VALIDATE MISSION after automatic re-check
 5. SEND FLIGHT PLAN
@@ -239,17 +239,19 @@ RETURN is not a normal Right Panel action.
 
 ### Warning behavior
 
-Header WARNING and Right Panel WARNINGS / CORRECTIONS operate in parallel.
+Header WARNING remains synchronized with active warning state; the Right Panel presents system events in INFORMATION.
 
-When a warning appears:
-1. Header WARNING changes state.
-2. Right Panel warning area highlights.
-3. The relevant warning expands automatically.
-4. Required/recommended action is shown.
+INFORMATION displays system failures, changes and warnings. Each message has a stable event identity and severity, and may specify whether pilot intervention is required.
 
-Closing the visual warning does not erase the event.
+- A new warning updates the Header WARNING state and is surfaced in INFORMATION.
+- Selecting a message opens its detail.
+- If pilot intervention is required, the message provides an entry to the contextual pilot-action area.
+- After reading and explicitly confirming, the message is removed from the INFORMATION overview only.
+- Acknowledgement does not delete the event, alter system state or count as completion of the required intervention.
+- With no unacknowledged messages, the INFORMATION body remains empty; do not display a success/“all clear” message.
+- Serious/critical warnings may also appear as a large alert over the map. The event remains in the Journal/Audit trail.
 
-Serious/critical warnings may also appear as a large alert over the map. The event remains in the Journal/Audit trail.
+The current QML uses preview examples. Production messages, durable acknowledgement state, event journaling and actual intervention routing must be supplied by the system event/journal and operational workflow layers.
 
 ### Manual mission validation
 
