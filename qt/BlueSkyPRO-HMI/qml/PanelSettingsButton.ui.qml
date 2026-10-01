@@ -15,11 +15,19 @@ Item {
         radius: 3
     }
 
-    Text {
+    // Draw the system-tools glyph as geometry so it renders identically
+    // regardless of the installed font or Qt Design Studio glyph fallback.
+    Column {
         anchors.centerIn: parent
-        text: "☰"
-        color: "#32FFFF"
-        font.pixelSize: 16
+        spacing: 3
+        Repeater {
+            model: 3
+            delegate: Rectangle {
+                width: 12
+                height: 1.5
+                color: "#32FFFF"
+            }
+        }
     }
 
     MouseArea {
