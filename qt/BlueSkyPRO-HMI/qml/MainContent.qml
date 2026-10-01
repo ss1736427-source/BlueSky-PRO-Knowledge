@@ -180,6 +180,131 @@ Item {
             onStartMissionRequested: root.leftPanelOpen = false
         }
 
+        // Floating alerts remain visible over the map while the right panel is closed.
+        // Drag the header to reposition; the last position is persisted in Settings.
+        Item {
+            id: alertOverlay
+            visible: !root.rightPanelOpen
+                     && !root.roleSelectionVisible
+                     && !root.taskCreationVisible
+                     && !root.missionSplashVisible
+                     && rightPanel.visibleSystemMessages().length > 0
+            x: alertOverlaySettings.x
+            y: alertOverlaySettings.y
+            width: Math.min(330, Math.max(230, workspace.width - 24))
+            height: 38 + alertCards.implicitHeight + 8
+            z: 90
+
+            Rectangle {
+                anchors.fill: parent
+                radius: 8
+                color: "#08111D"
+                border.color: "#236078"
+                border.width: 1
+                antialiasing: true
+            }
+
+            Rectangle {
+                id: alertOverlayHeader
+                x: 1
+                y: 1
+                width: parent.width - 2
+                height: 30
+                radius: 7
+                color: "#0B1B2B"
+
+                Text {
+                    anchors.left: parent.left
+                    anchors.leftMargin: 10
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: "ALERTING"
+                    color: "#FFFFFF"
+                    font.family: "B612"
+                    font.pixelSize: 12
+                    font.bold: true
+                }
+                Text {
+                    anchors.right: parent.right
+                    anchors.rightMargin: 10
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: "⠿"
+                    color: "#32FFFF"
+                    font.pixelSize: 16
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.SizeAllCursor
+                    drag.target: alertOverlay
+                    drag.minimumX: 0
+                    drag.maximumX: Math.max(0, workspace.width - alertOverlay.width)
+                    drag.minimumY: 0
+                    drag.maximumY: Math.max(0, workspace.height - alertOverlay.height)
+                    onReleased: {
+                        alertOverlaySettings.x = alertOverlay.x
+                        alertOverlaySettings.y = alertOverlay.y
+                    }
+                }
+            }
+
+            Column {
+                id: alertCards
+                x: 8
+                y: 38
+                width: parent.width - 16
+                spacing: 6
+
+                Repeater {
+                    model: rightPanel.visibleSystemMessages()
+
+                    delegate: Item {
+                        width: alertCards.width
+                        height: alertText.implicitHeight + 18
+
+                        Rectangle {
+                            anchors.fill: parent
+                            radius: 4
+                            color: "#000000"
+                            border.width: 1
+                            border.color: modelData.severity === "critical" ? "#FF1E14"
+                                          : modelData.severity === "warning" ? "#FFD339"
+                                          : "#236078"
+                        }
+
+                        Text {
+                            id: alertText
+                            x: 8
+                            y: 5
+                            width: parent.width - 16
+                            text: (modelData.kind === "FAILURE" ? "✕  " :
+                                   modelData.kind === "WARNING" ? "⚠  " : "•  ")
+                                  + modelData.kind + "\n" + modelData.title
+                            color: "#FFFFFF"
+                            font.family: "B612"
+                            font.pixelSize: 10
+                            wrapMode: Text.Wrap
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                rightPanel.openSystemMessage(modelData)
+                                root.rightPanelOpen = true
+                            }
+                        }
+                    }
+                }
+            }
+
+            Component.onCompleted: {
+                x = Math.max(0, Math.min(workspace.width - width, alertOverlaySettings.x))
+                y = Math.max(0, Math.min(workspace.height - height, alertOverlaySettings.y))
+            }
+            onWidthChanged: x = Math.max(0, Math.min(workspace.width - width, x))
+            onHeightChanged: y = Math.max(0, Math.min(workspace.height - height, y))
+        }
+
         // Keep fleet and side panels in the same coordinate space so anchors
         // resolve correctly. Cards are centered within the available workspace.
         UAVFleetPanel {
