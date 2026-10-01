@@ -17,9 +17,9 @@ Item {
 
     Text {
         anchors.centerIn: parent
-        text: "⚙"
+        text: "☰"
         color: "#32FFFF"
-        font.pixelSize: 14
+        font.pixelSize: 16
     }
 
     MouseArea {
