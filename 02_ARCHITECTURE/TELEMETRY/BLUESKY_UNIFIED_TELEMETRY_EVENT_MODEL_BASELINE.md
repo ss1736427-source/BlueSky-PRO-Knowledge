@@ -104,6 +104,48 @@ NORMAL / DEGRADED / CRITICAL
 CONTINUE / LOCAL REPLAN / FULL REPLAN / RECOVERY / ABORT
 ```
 
+## 7.1 Operator-facing INFORMATION projection
+
+The normalized event model is authoritative. The Right Panel **INFORMATION** view is a presentation/projection of relevant system events; it is not a separate source of operational truth and shall not own fault detection, severity classification, mission-state transitions or safety decisions.
+
+For operator-facing events, the projection shall expose, where applicable:
+
+- stable event ID and event type;
+- occurrence/source timestamp and receipt timestamp where available;
+- source subsystem and affected UAV, mission, mission element or resource;
+- severity/classification;
+- concise summary and detailed explanation;
+- current operational/system response;
+- whether pilot intervention is required;
+- the applicable action/context reference;
+- acknowledgement state and event-resolution state as separate fields.
+
+The operator-message lifecycle shall be distinct from the underlying event lifecycle:
+
+```text
+EVENT DETECTED / RECEIVED
+        ↓
+NORMALIZE + CORRELATE + CLASSIFY
+        ↓
+PUBLISH TO INFORMATION PROJECTION
+        ↓
+UNACKNOWLEDGED → READ → ACKNOWLEDGED
+        ↓
+REMOVE FROM INFORMATION OVERVIEW
+        │
+        └── underlying event remains in event store / Journal / Audit
+```
+
+Acknowledgement means only that the operator has acknowledged reading the message. It shall not imply that a fault is cleared, a warning condition is resolved, an operational action is completed, or a safety/mission state has changed.
+
+Where intervention is required, the event shall carry a typed reference to the owning operational workflow/context. The HMI may navigate to that context, but the action itself must pass through the owning service/Core and its authorization, validation and Safety Engine constraints. QML shall not execute a safety-critical action merely because a message was selected or acknowledged.
+
+The INFORMATION overview shall contain only messages that remain unacknowledged under the configured presentation policy. If there are no such messages, the message list is empty; absence of messages shall not be interpreted as an independent “all clear” assertion.
+
+Critical/safety-relevant events shall remain discoverable and shall not be made inaccessible by ordinary HMI display filters. Their presentation may be additionally surfaced through the header, map alert or applicable local context. Hiding or acknowledging the INFORMATION card changes presentation only.
+
+The event store / Journal / Audit shall preserve the event and its provenance independently of the INFORMATION overview. Acknowledgement records shall include, where available, event ID, operator identity, acknowledgement timestamp and UI/client context. The implementation shall support durable acknowledgement state across the applicable session/device boundary and prevent duplicate event delivery from creating duplicate operator messages.
+
 ## 8. Planning feedback
 
 Operational data shall be available to planning decisions without coupling planning to a particular autopilot protocol.
