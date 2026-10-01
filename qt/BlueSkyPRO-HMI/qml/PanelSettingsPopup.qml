@@ -63,24 +63,31 @@ Item {
         x: 14
         y: 48
         width: parent.width - 28
-        spacing: 7
+        spacing: Math.max(5, Math.min(9, parent.height / 38))
 
         Repeater {
             model: root.tools
 
-            delegate: Text {
+            delegate: Item {
                 width: parent.width
-                text: (root.enabledTools.indexOf(modelData) >= 0 ? "☑  " : "☐  ") + modelData
+                height: Math.max(18, Math.min(26, (root.height - 76) / Math.max(1, root.tools.length)))
+
+                Text {
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: (root.enabledTools.indexOf(modelData) >= 0 ? "☑  " : "☐  ") + modelData
+                    color: "#BFBFBF"
+                    font.family: "B612"
+                    font.pixelSize: Math.max(10, Math.min(13, root.width / 25))
+                    elide: Text.ElideRight
+                }
+
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: {
-                        var enabled = root.enabledTools.indexOf(modelData) >= 0
-                        root.toggleTool(modelData)
-                    }
+                    onClicked: root.toggleTool(modelData)
+                    cursorShape: Qt.PointingHandCursor
                 }
-                color: "#BFBFBF"
-                font.family: "B612"
-                font.pixelSize: 10
             }
         }
     }
