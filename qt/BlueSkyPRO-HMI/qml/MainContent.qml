@@ -188,11 +188,10 @@ Item {
             onStartMissionRequested: root.leftPanelOpen = false
         }
 
-        // Floating alerts remain visible over the map while the right panel is closed.
+        // Floating alert review stays entirely on the map; opening a message never opens the right panel.
         // Drag the header to reposition; the last position is persisted in Settings.
         Item {
             id: alertOverlay
-            // Header WARNING opens this overlay regardless of the right-panel Map Alerts setting.
             visible: root.headerAlertsOpen
                      && !root.roleSelectionVisible
                      && !root.taskCreationVisible
@@ -200,8 +199,12 @@ Item {
                      && rightPanel.visibleSystemMessages().length > 0
             x: alertOverlaySettings.x
             y: alertOverlaySettings.y
-            width: Math.min(330, Math.max(230, workspace.width - 24))
-            height: 38 + alertCards.implicitHeight + 8
+            width: Math.max(180, Math.min(380, workspace.width - 24))
+            height: alertOverlayHeader.height + 8
+                    + (rightPanel.selectedInformationMessage
+                       ? alertDetails.implicitHeight
+                       : alertCards.implicitHeight)
+                    + 12
             z: 90
 
             Rectangle {
@@ -226,7 +229,9 @@ Item {
                     anchors.left: parent.left
                     anchors.leftMargin: 10
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "ALERTING"
+                    text: rightPanel.selectedInformationMessage
+                          ? rightPanel.selectedInformationMessage.kind
+                          : "ALERTING"
                     color: "#FFFFFF"
                     font.family: "B612"
                     font.pixelSize: 14
@@ -236,9 +241,10 @@ Item {
                     anchors.right: parent.right
                     anchors.rightMargin: 10
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "⠿"
+                    text: rightPanel.selectedInformationMessage ? "‹" : "⠿"
                     color: "#32FFFF"
-                    font.pixelSize: 16
+                    font.pixelSize: 18
+                    visible: !rightPanel.selectedInformationMessage
                 }
 
                 MouseArea {
@@ -258,6 +264,7 @@ Item {
 
             Column {
                 id: alertCards
+                visible: !rightPanel.selectedInformationMessage
                 x: 8
                 y: 38
                 width: parent.width - 16
@@ -298,9 +305,127 @@ Item {
                         MouseArea {
                             anchors.fill: parent
                             cursorShape: Qt.PointingHandCursor
+                            onClicked: rightPanel.openSystemMessage(modelData)
+                        }
+                    }
+                }
+            }
+
+            Column {
+                id: alertDetails
+                visible: !!rightPanel.selectedInformationMessage
+                x: 12
+                y: 38
+                width: parent.width - 24
+                spacing: 8
+
+                Text {
+                    width: parent.width
+                    text: rightPanel.selectedInformationMessage
+                          ? rightPanel.selectedInformationMessage.title : ""
+                    color: "#FFFFFF"
+                    font.family: "B612"
+                    font.pixelSize: 14
+                    font.bold: true
+                    wrapMode: Text.Wrap
+                }
+
+                Text {
+                    width: parent.width
+                    text: rightPanel.interventionMode
+                          ? "ТРЕБУЕТСЯ ДЕЙСТВИЕ ПИЛОТА"
+                          : (rightPanel.selectedInformationMessage
+                             ? rightPanel.selectedInformationMessage.detail : "")
+                    color: "#D8E4EF"
+                    font.family: "B612"
+                    font.pixelSize: 13
+                    wrapMode: Text.Wrap
+                }
+
+                Text {
+                    visible: !!rightPanel.selectedInformationMessage
+                             && rightPanel.selectedInformationMessage.requiresIntervention
+                    width: parent.width
+                    text: rightPanel.selectedInformationMessage
+                          ? rightPanel.selectedInformationMessage.action : ""
+                    color: "#32FFFF"
+                    font.family: "B612"
+                    font.pixelSize: 13
+                    wrapMode: Text.Wrap
+                }
+
+                Row {
+                    width: parent.width
+                    spacing: 8
+
+                    Rectangle {
+                        visible: !!rightPanel.selectedInformationMessage
+                                 && rightPanel.selectedInformationMessage.requiresIntervention
+                                 && !rightPanel.interventionMode
+                        width: (parent.width - parent.spacing) * 0.58
+                        height: 30
+                        radius: 3
+                        color: "#0B1B2B"
+                        border.color: "#32FFFF"
+
+                        Text {
+                            anchors.fill: parent
+                            text: "К ДЕЙСТВИЮ"
+                            color: "#32FFFF"
+                            font.family: "B612"
+                            font.pixelSize: 10
+                            font.bold: true
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                        }
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
                             onClicked: {
-                                rightPanel.openSystemMessage(modelData)
-                                root.rightPanelOpen = true
+                                rightPanel.interventionMode = true
+                                rightPanel.pilotInterventionRequested(
+                                    rightPanel.selectedInformationMessage.id)
+                            }
+                        }
+                    }
+
+                    Rectangle {
+                        width: (rightPanel.selectedInformationMessage
+                                && rightPanel.selectedInformationMessage.requiresIntervention
+                                && !rightPanel.interventionMode)
+                               ? (parent.width - parent.spacing) * 0.42
+                               : parent.width
+                        height: 30
+                        radius: 3
+                        color: "transparent"
+                        border.color: "#7F7F7F"
+
+                        Text {
+                            anchors.fill: parent
+                            text: rightPanel.selectedInformationMessage
+                                  && rightPanel.selectedInformationMessage.requiresIntervention
+                                  && !rightPanel.interventionMode
+                                  ? "НАЗАД" : "ПОДТВЕРДИТЬ"
+                            color: "#D8E4EF"
+                            font.family: "B612"
+                            font.pixelSize: 10
+                            font.bold: true
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                        }
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                if (rightPanel.selectedInformationMessage
+                                    && rightPanel.selectedInformationMessage.requiresIntervention
+                                    && !rightPanel.interventionMode) {
+                                    rightPanel.selectedInformationMessage = null
+                                } else {
+                                    rightPanel.acknowledgeInformationMessage()
+                                    if (rightPanel.visibleSystemMessages().length === 0)
+                                        root.headerAlertsOpen = false
+                                }
                             }
                         }
                     }
