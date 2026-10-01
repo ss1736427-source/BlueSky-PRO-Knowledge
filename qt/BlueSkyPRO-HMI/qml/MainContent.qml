@@ -28,6 +28,7 @@ Item {
     property real mapZoom: 1.0
     readonly property bool manualValidationStarted: missionState === "VALIDATING"
     property bool warningActive: true
+    readonly property int systemMessageCount: rightPanel.visibleSystemMessages().length
     property int selectedUavIndex: -1
     property bool contextOverlayOpen: false
     readonly property var selectedUav: selectedUavIndex >= 0 && selectedUavIndex < uavStatus.uavModel.length ? uavStatus.uavModel[selectedUavIndex] : null
@@ -79,7 +80,8 @@ Item {
         rightAnchorWidth: root.rightWidth
         tabletVariant: false
         ready: root.missionReady
-        warningActive: root.warningActive
+        warningActive: root.systemMessageCount > 0
+        warningCount: root.systemMessageCount
     }
 
     Item {
@@ -184,7 +186,7 @@ Item {
         // Drag the header to reposition; the last position is persisted in Settings.
         Item {
             id: alertOverlay
-            visible: !root.rightPanelOpen
+            visible: rightPanel.mapAlertsEnabled && !root.rightPanelOpen
                      && !root.roleSelectionVisible
                      && !root.taskCreationVisible
                      && !root.missionSplashVisible
@@ -220,7 +222,7 @@ Item {
                     text: "ALERTING"
                     color: "#FFFFFF"
                     font.family: "B612"
-                    font.pixelSize: 12
+                    font.pixelSize: 14
                     font.bold: true
                 }
                 Text {
@@ -281,7 +283,8 @@ Item {
                                   + modelData.kind + "\n" + modelData.title
                             color: "#FFFFFF"
                             font.family: "B612"
-                            font.pixelSize: 10
+                            font.pixelSize: 13
+                            lineHeight: 1.15
                             wrapMode: Text.Wrap
                         }
 
