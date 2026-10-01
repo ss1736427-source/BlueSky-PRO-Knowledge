@@ -25,6 +25,7 @@
         <file>qml/qmldir</file>
         <file>qml/RightPanel.ui.qml</file>
         <file>qml/RoleSelection.ui.qml</file>
+        <file>qml/TaskCreation.ui.qml</file>
         <file>qml/Theme.qml</file>
         <file>qml/ToolContext.ui.qml</file>
         <file>qml/TopHeader.ui.qml</file>
