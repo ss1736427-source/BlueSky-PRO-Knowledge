@@ -175,12 +175,11 @@ Item {
         y: 8
         width: parent.width - 20
         height: 38
-        color: root.selectedSurface
-        border.color: root.cyan
-        border.width: 1
+        color: "transparent"
+        border.width: 0
 
         Text {
-            x: 12
+            x: 10
             anchors.verticalCenter: parent.verticalCenter
             rightPadding: 70
             text: "Миссии"
@@ -277,19 +276,18 @@ Item {
         Text {
             id: missionIdLabel
             x: 10
-            width: root.missionIdExpanded ? Math.min(142, implicitWidth) : 48
+            width: Math.min(implicitWidth, Math.max(0, parent.width - x - 110))
             anchors.verticalCenter: parent.verticalCenter
-            elide: Text.ElideRight
-            text: root.missionIdExpanded ? root.missionId : root.missionShortId
+            elide: Text.ElideNone
+            text: root.missionId
+            fontSizeMode: Text.Fit
+            minimumPixelSize: 8
+            wrapMode: Text.NoWrap
             color: root.missionIdStatusColor
             font.family: "B612 Mono"
             font.pixelSize: 11
             font.bold: true
 
-            MouseArea {
-                anchors.fill: parent
-                onClicked: root.missionIdExpanded = !root.missionIdExpanded
-            }
         }
 
         Rectangle {
