@@ -31,6 +31,8 @@ Item {
     property bool manualValidationStarted: false
     property bool missionReady: false
     property bool warningActive: true
+    readonly property bool mapAlertsEnabled:
+        panelSettingsPopup.enabledTools.indexOf("Map Alerts") >= 0
     property var systemMessages: [
         { id: "SYS-C2-001", kind: "FAILURE", title: "Потеря связи C2", detail: "Связь с БПЛА требует проверки. Проверьте состояние канала и доступность аппарата.", action: "Проверить связь с БПЛА", requiresIntervention: true, severity: "critical" },
         { id: "SYS-WIND-001", kind: "WARNING", title: "Коррекция ветра требует подтверждения", detail: "Изменение ветровых условий повлияло на расчёт маршрута. Проверьте обновлённую коррекцию.", action: "Проверить коррекцию маршрута", requiresIntervention: true, severity: "warning" },
@@ -655,7 +657,7 @@ Item {
         width: Math.min(parent.width - 16, Math.max(260, panelSettingsPopup.contentWidth))
         height: Math.min(parent.height - 52, 86 + panelSettingsPopup.tools.length * 34)
         title: "INFORMATION SETTINGS"
-        tools: ["Checklist", "Information", "Readiness", "Validation", "Send Flight Plan", "Start Mission"]
+        tools: ["Checklist", "Information", "Readiness", "Validation", "Send Flight Plan", "Start Mission", "Map Alerts"]
         onClosed: open = false
     }
 }
