@@ -88,18 +88,46 @@ Item {
 
             delegate: Item {
                 width: parent.width
-                height: 26
+                height: 30
+
+                readonly property bool toolEnabled: root.enabledTools.indexOf(modelData) >= 0
 
                 Text {
                     anchors.left: parent.left
-                    anchors.right: parent.right
+                    anchors.right: toggleTrack.left
+                    anchors.rightMargin: 12
                     anchors.verticalCenter: parent.verticalCenter
-                    text: (root.enabledTools.indexOf(modelData) >= 0 ? "☑  " : "☐  ") + modelData
+                    text: modelData
                     color: "#BFBFBF"
                     font.family: "B612"
                     font.pixelSize: 13
                     elide: Text.ElideRight
                     verticalAlignment: Text.AlignVCenter
+                }
+
+                Rectangle {
+                    id: toggleTrack
+                    width: 36
+                    height: 20
+                    radius: height / 2
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    color: toolEnabled ? "#64FF00" : "#263748"
+                    border.width: 1
+                    border.color: toolEnabled ? "#64FF00" : "#536273"
+
+                    Rectangle {
+                        width: 14
+                        height: 14
+                        radius: width / 2
+                        anchors.verticalCenter: parent.verticalCenter
+                        x: toolEnabled ? parent.width - width - 3 : 3
+                        color: toolEnabled ? "#08111D" : "#BFBFBF"
+
+                        Behavior on x {
+                            NumberAnimation { duration: 120 }
+                        }
+                    }
                 }
 
                 MouseArea {
