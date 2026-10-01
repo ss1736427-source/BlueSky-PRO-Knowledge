@@ -187,9 +187,9 @@ Item {
 
     Rectangle {
         visible: root.validationVisible
-        x: 16
+        x: 26
         y: parent.height - 164
-        width: parent.width - 32
+        width: parent.width - 52
         height: 38
         color: "transparent"
         border.color: Qt.rgba(root.green.r, root.green.g, root.green.b, root.validationPulse)
@@ -199,9 +199,9 @@ Item {
 
     Text {
         visible: root.validationVisible
-        x: 16
+        x: 26
         y: parent.height - 164
-        width: parent.width - 32
+        width: parent.width - 52
         height: 38
         text: root.manualCreationMode ? "ВАЛИДАЦИЯ МИССИИ" : "VALIDATE MISSION"
         opacity: root.manualCreationMode && !root.manualCompositionComplete ? 0.65 : 1.0
@@ -215,9 +215,9 @@ Item {
 
     MouseArea {
         visible: root.manualCreationMode && !root.manualValidationStarted
-        x: 16
+        x: 26
         y: parent.height - 164
-        width: parent.width - 32
+        width: parent.width - 52
         height: 38
         enabled: root.manualCompositionComplete
         cursorShape: enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
@@ -232,9 +232,9 @@ Item {
     }
 
     Rectangle {
-        x: 16
+        x: 26
         y: parent.height - 116
-        width: parent.width - 32
+        width: parent.width - 52
         height: 38
         color: "transparent"
         border.color: root.divider
@@ -242,9 +242,9 @@ Item {
     }
 
     Text {
-        x: 16
+        x: 26
         y: parent.height - 116
-        width: parent.width - 32
+        width: parent.width - 52
         height: 38
         text: "SEND FLIGHT PLAN"
         color: root.secondary
@@ -255,9 +255,9 @@ Item {
     }
 
     Rectangle {
-        x: 16
+        x: 26
         y: parent.height - 68
-        width: parent.width - 32
+        width: parent.width - 52
         height: 38
         color: root.missionReady ? "transparent" : "#050505"
         border.color: root.missionReady ? root.green : root.divider
@@ -265,9 +265,9 @@ Item {
     }
 
     Text {
-        x: 16
+        x: 26
         y: parent.height - 68
-        width: parent.width - 32
+        width: parent.width - 52
         height: 38
         text: "START MISSION"
         color: root.missionReady ? root.green : root.muted
@@ -279,9 +279,9 @@ Item {
     }
 
     MouseArea {
-        x: 16
+        x: 26
         y: parent.height - 68
-        width: parent.width - 32
+        width: parent.width - 52
         height: 38
         enabled: root.missionReady
         onClicked: root.startMissionRequested()
