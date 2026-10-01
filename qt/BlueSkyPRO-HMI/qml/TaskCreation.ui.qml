@@ -188,9 +188,8 @@ Item {
         anchors.topMargin: 10
         property int columnCount: root.width >= 1500 ? 7 : root.width >= 1000 ? 5 : 3
         columns: columnCount
-        rowSpacing: 10
-        columnSpacing: 12
-        property real tileWidth: (width - columnSpacing * (columnCount - 1)) / columnCount
+        spacing: 12
+        property real tileWidth: (width - spacing * (columnCount - 1)) / columnCount
         property real tileHeight: Math.max(48, Math.min(76, root.height * 0.075))
 
         Repeater {
