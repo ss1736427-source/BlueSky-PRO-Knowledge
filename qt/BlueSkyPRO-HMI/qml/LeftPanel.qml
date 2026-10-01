@@ -61,9 +61,9 @@ Item {
     }
     property bool templatesExpanded: true
     property bool panelConfigOpen: false
-    property int selectedTemplate: 2
+    property int selectedTemplate: 1
     // Indices assigned to the current automatic mission; manual mode starts with no template selected.
-    property var missionTemplateIndices: [2]
+    property var missionTemplateIndices: [1]
     property var manualTemplateSelection: []
 
     onMissionCreationModeChanged: {
