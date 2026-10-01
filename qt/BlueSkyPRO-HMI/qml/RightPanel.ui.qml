@@ -188,7 +188,6 @@ Item {
         x: warningsCard.x + 12
         y: warningsCard.y + 49
         width: warningsCard.width - 24
-        visible: root.warningActive
         text: "Wind correction pending confirmation"
         color: root.amber
         font.family: "B612"
@@ -201,7 +200,6 @@ Item {
         x: warningsCard.x + 12
         y: warningsCard.y + 77
         width: warningsCard.width - 24
-        visible: root.warningActive
         text: "Battery degradation model applied"
         color: root.secondary
         font.family: "B612"
