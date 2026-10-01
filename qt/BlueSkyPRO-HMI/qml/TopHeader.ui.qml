@@ -113,7 +113,8 @@ Item {
     Item {
         id: operatorBlock
         visible: panelSettingsPopup.enabledTools.indexOf("Operator") >= 0
-        width: Math.max(0, Math.min(root.rightAnchorWidth, parent.width))
+        width: panelSettingsPopup.enabledTools.indexOf("Operator") >= 0
+               ? Math.max(0, Math.min(root.rightAnchorWidth, parent.width)) : 0
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.bottom: parent.bottom
@@ -169,7 +170,6 @@ Item {
             headingSize: root.headingSize
             valueSize: root.valueSize
             headingValueGap: root.headingValueGap
-            anchors.left: parent.left
         }
 
         HeaderSector {
