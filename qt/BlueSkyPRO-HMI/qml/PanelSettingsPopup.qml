@@ -31,6 +31,24 @@ Item {
 
     signal closed()
 
+    function longestToolLabel() {
+        var longest = ""
+        for (var i = 0; i < tools.length; ++i) {
+            if (String(tools[i]).length > longest.length)
+                longest = String(tools[i])
+        }
+        return longest
+    }
+
+    TextMetrics {
+        id: toolLabelMetrics
+        font.family: "B612"
+        font.pixelSize: 13
+        text: root.longestToolLabel()
+    }
+
+    readonly property real contentWidth: toolLabelMetrics.width + 64
+
     visible: root.open
     z: 500
 
@@ -63,14 +81,14 @@ Item {
         x: 14
         y: 48
         width: parent.width - 28
-        spacing: Math.max(5, Math.min(9, parent.height / 38))
+        spacing: 4
 
         Repeater {
             model: root.tools
 
             delegate: Item {
                 width: parent.width
-                height: Math.max(18, Math.min(26, (root.height - 76) / Math.max(1, root.tools.length)))
+                height: 26
 
                 Text {
                     anchors.left: parent.left
@@ -79,8 +97,9 @@ Item {
                     text: (root.enabledTools.indexOf(modelData) >= 0 ? "☑  " : "☐  ") + modelData
                     color: "#BFBFBF"
                     font.family: "B612"
-                    font.pixelSize: Math.max(10, Math.min(13, root.width / 25))
+                    font.pixelSize: 13
                     elide: Text.ElideRight
+                    verticalAlignment: Text.AlignVCenter
                 }
 
                 MouseArea {
