@@ -505,7 +505,6 @@ Item {
 
                         Row {
                             id: parameterOptionRow
-                            x: 8
                             anchors.left: parent.left
                             anchors.leftMargin: 8
                             anchors.right: upButton.left
