@@ -31,6 +31,15 @@ Item {
     property bool manualValidationStarted: false
     property bool missionReady: false
     property bool warningActive: true
+    property var systemMessages: [
+        { id: "SYS-C2-001", kind: "FAILURE", title: "Потеря связи C2", detail: "Связь с БПЛА требует проверки. Проверьте состояние канала и доступность аппарата.", action: "Проверить связь с БПЛА", requiresIntervention: true, severity: "critical" },
+        { id: "SYS-WIND-001", kind: "WARNING", title: "Коррекция ветра требует подтверждения", detail: "Изменение ветровых условий повлияло на расчёт маршрута. Проверьте обновлённую коррекцию.", action: "Проверить коррекцию маршрута", requiresIntervention: true, severity: "warning" },
+        { id: "SYS-BAT-001", kind: "CHANGE", title: "Применена модель деградации батареи", detail: "Расчёт производительности учитывает деградацию аккумулятора.", action: "", requiresIntervention: false, severity: "info" }
+    ]
+    property var acknowledgedMessageIds: []
+    property var selectedInformationMessage: null
+    property bool interventionMode: false
+    signal pilotInterventionRequested(string messageId)
     property bool validationVisible: manualCreationMode ? !manualValidationStarted : validationConfirmationRequired
     property real validationPulse: 1.0
     signal startMissionRequested()
@@ -134,14 +143,33 @@ Item {
     Text { visible: checklistCard.visible; x: checklistCard.x + 12; y: checklistCard.y + 83; text: "✓  C2 availability"; color: root.green; font.family: "B612"; font.pixelSize: 12 }
     Text { visible: checklistCard.visible; x: checklistCard.x + 12; y: checklistCard.y + 104; text: "⚠  Weather revalidation"; color: root.amber; font.family: "B612"; font.pixelSize: 12 }
 
-    // Warnings card — matching ATC/checklist frame and filled header.
+    // INFORMATION: acknowledgement hides an item from this overview only.
+    // Source events remain in the system journal/audit trail.
+    function visibleSystemMessages() {
+        return systemMessages.filter(function(message) {
+            return acknowledgedMessageIds.indexOf(message.id) < 0
+        })
+    }
+
+    function acknowledgeInformationMessage() {
+        if (!selectedInformationMessage)
+            return
+        var next = acknowledgedMessageIds.slice()
+        if (next.indexOf(selectedInformationMessage.id) < 0)
+            next.push(selectedInformationMessage.id)
+        acknowledgedMessageIds = next
+        selectedInformationMessage = null
+        interventionMode = false
+    }
+
     Rectangle {
-        id: warningsCard
-        visible: panelSettingsPopup.enabledTools.indexOf("Warnings / Corrections") >= 0 || root.warningActive
+        id: informationCard
+        visible: panelSettingsPopup.enabledTools.indexOf("Information") >= 0
+                 || (root.warningActive && root.visibleSystemMessages().length > 0)
         x: 16
         y: 154
         width: parent.width - 32
-        height: 168
+        height: 220
         radius: 8
         color: "transparent"
         border.color: "#236078"
@@ -150,10 +178,10 @@ Item {
     }
 
     Rectangle {
-        visible: warningsCard.visible
-        x: warningsCard.x + 1
-        y: warningsCard.y + 1
-        width: warningsCard.width - 2
+        visible: informationCard.visible
+        x: informationCard.x + 1
+        y: informationCard.y + 1
+        width: informationCard.width - 2
         height: 32
         radius: 7
         color: "#0B1B2B"
@@ -173,7 +201,7 @@ Item {
             anchors.right: parent.right
             anchors.rightMargin: 8
             anchors.verticalCenter: parent.verticalCenter
-            text: "WARNINGS / CORRECTIONS"
+            text: "INFORMATION"
             color: root.text
             font.family: "B612"
             font.pixelSize: 12
@@ -183,37 +211,183 @@ Item {
         }
     }
 
-    Text {
-        visible: warningsCard.visible && root.warningActive
-        x: warningsCard.x + 12
-        y: warningsCard.y + 49
-        width: warningsCard.width - 24
-        text: "Wind correction pending confirmation"
-        color: root.amber
-        font.family: "B612"
-        font.pixelSize: 11
-        wrapMode: Text.Wrap
+    // Empty body is intentional: no unacknowledged messages means no alert text.
+    Column {
+        id: informationOverview
+        visible: informationCard.visible && !root.selectedInformationMessage
+        x: informationCard.x + 10
+        y: informationCard.y + 39
+        width: informationCard.width - 20
+        spacing: 2
+
+        Repeater {
+            model: root.visibleSystemMessages()
+
+            delegate: Item {
+                width: parent.width
+                height: 39
+
+                Rectangle {
+                    anchors.fill: parent
+                    radius: 4
+                    color: messageMouse.containsMouse ? "#102337" : "transparent"
+                    border.width: modelData.severity === "critical" ? 1 : 0
+                    border.color: root.red
+                }
+
+                Text {
+                    x: 4
+                    y: 2
+                    width: parent.width - 8
+                    height: 15
+                    text: (modelData.kind === "FAILURE" ? "✕  " :
+                           modelData.kind === "WARNING" ? "⚠  " : "•  ") + modelData.kind
+                    color: modelData.severity === "critical" ? root.red :
+                           modelData.severity === "warning" ? root.amber : root.cyan
+                    font.family: "B612"
+                    font.pixelSize: 9
+                    font.bold: true
+                }
+
+                Text {
+                    x: 4
+                    y: 17
+                    width: parent.width - 8
+                    height: 20
+                    text: modelData.title
+                    color: root.secondary
+                    font.family: "B612"
+                    font.pixelSize: 10
+                    elide: Text.ElideRight
+                    verticalAlignment: Text.AlignVCenter
+                }
+
+                MouseArea {
+                    id: messageMouse
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: {
+                        root.selectedInformationMessage = modelData
+                        root.interventionMode = false
+                    }
+                }
+            }
+        }
     }
 
-    Text {
-        visible: warningsCard.visible && root.warningActive
-        x: warningsCard.x + 12
-        y: warningsCard.y + 77
-        width: warningsCard.width - 24
-        text: "Battery degradation model applied"
-        color: root.secondary
-        font.family: "B612"
-        font.pixelSize: 10
-        wrapMode: Text.Wrap
-    }
+    Column {
+        visible: informationCard.visible && !!root.selectedInformationMessage
+        x: informationCard.x + 12
+        y: informationCard.y + 40
+        width: informationCard.width - 24
+        spacing: 5
 
-    Rectangle {
-        visible: warningsCard.visible && root.warningActive
-        x: warningsCard.x + 12
-        y: warningsCard.y + 110
-        width: warningsCard.width - 24
-        height: 1
-        color: root.divider
+        Text {
+            width: parent.width
+            text: root.selectedInformationMessage ? root.selectedInformationMessage.title : ""
+            color: root.selectedInformationMessage && root.selectedInformationMessage.severity === "critical" ? root.red :
+                   root.selectedInformationMessage && root.selectedInformationMessage.severity === "warning" ? root.amber : root.text
+            font.family: "B612"
+            font.pixelSize: 10
+            font.bold: true
+            wrapMode: Text.Wrap
+        }
+
+        Text {
+            width: parent.width
+            text: root.interventionMode && root.selectedInformationMessage
+                  ? "ТРЕБУЕТСЯ ДЕЙСТВИЕ ПИЛОТА"
+                  : (root.selectedInformationMessage ? root.selectedInformationMessage.detail : "")
+            color: root.secondary
+            font.family: "B612"
+            font.pixelSize: 9
+            wrapMode: Text.Wrap
+        }
+
+        Text {
+            visible: !!root.selectedInformationMessage && root.selectedInformationMessage.requiresIntervention
+            width: parent.width
+            text: root.interventionMode && root.selectedInformationMessage
+                  ? root.selectedInformationMessage.action
+                  : "Нажмите, чтобы открыть область действий пилота."
+            color: root.cyan
+            font.family: "B612"
+            font.pixelSize: 9
+            wrapMode: Text.Wrap
+        }
+
+        Row {
+            width: parent.width
+            spacing: 6
+
+            Rectangle {
+                visible: !!root.selectedInformationMessage &&
+                         root.selectedInformationMessage.requiresIntervention &&
+                         !root.interventionMode
+                width: (parent.width - parent.spacing) * 0.58
+                height: 26
+                radius: 3
+                color: "#0B1B2B"
+                border.color: root.cyan
+
+                Text {
+                    anchors.fill: parent
+                    text: "К ДЕЙСТВИЮ"
+                    color: root.cyan
+                    font.family: "B612"
+                    font.pixelSize: 8
+                    font.bold: true
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        root.interventionMode = true
+                        root.pilotInterventionRequested(root.selectedInformationMessage.id)
+                    }
+                }
+            }
+
+            Rectangle {
+                width: root.selectedInformationMessage &&
+                       root.selectedInformationMessage.requiresIntervention &&
+                       !root.interventionMode
+                       ? (parent.width - parent.spacing) * 0.42 : parent.width
+                height: 26
+                radius: 3
+                color: "transparent"
+                border.color: root.divider
+
+                Text {
+                    anchors.fill: parent
+                    text: root.selectedInformationMessage &&
+                          root.selectedInformationMessage.requiresIntervention &&
+                          !root.interventionMode ? "НАЗАД" : "ПОДТВЕРДИТЬ"
+                    color: root.secondary
+                    font.family: "B612"
+                    font.pixelSize: 8
+                    font.bold: true
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        if (root.selectedInformationMessage &&
+                            root.selectedInformationMessage.requiresIntervention &&
+                            !root.interventionMode) {
+                            root.selectedInformationMessage = null
+                        } else {
+                            root.acknowledgeInformationMessage()
+                        }
+                    }
+                }
+            }
+        }
     }
 
     // Unified ATC work area. The rounded frame encloses the heading and
@@ -396,7 +570,7 @@ Item {
         width: Math.min(parent.width - 16, Math.max(260, panelSettingsPopup.contentWidth))
         height: Math.min(parent.height - 52, 86 + panelSettingsPopup.tools.length * 34)
         title: "RIGHT PANEL SETTINGS"
-        tools: ["Checklist", "Warnings / Corrections", "Readiness", "Validation", "Send Flight Plan", "Start Mission"]
+        tools: ["Checklist", "Information", "Readiness", "Validation", "Send Flight Plan", "Start Mission"]
         onClosed: open = false
     }
 }
