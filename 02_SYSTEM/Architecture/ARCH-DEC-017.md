@@ -458,6 +458,28 @@ Notifications should identify:
 - validation status;
 - operator action required.
 
+## Operator Notification and Acknowledgement Contract
+
+Operator notification is a presentation of the authoritative abnormal-condition/event model, not an independent fault-management subsystem.
+
+For relevant events, the system shall publish an operator-facing message to the HMI INFORMATION projection. The message shall identify, as applicable, the condition, severity, affected resource/mission element, current response, available options, safety/validation status, and whether pilot intervention is required.
+
+The message and the underlying condition have separate lifecycles:
+
+- **Message acknowledgement:** the operator has read/acknowledged the notification.
+- **Condition resolution:** the originating condition is cleared, resolved, superseded or otherwise closed by the authoritative subsystem.
+- **Required operational action:** the owning workflow reports whether the requested intervention has been completed and validated.
+
+These states shall not be conflated. Acknowledging a message shall not clear a fault, satisfy a required intervention, change mission readiness, authorize a command or bypass validation/Safety Engine controls.
+
+After explicit acknowledgement, the message may be removed from the INFORMATION overview. The event, its provenance and acknowledgement record shall remain available in the event store / Journal / Audit. The record should include event ID, operator identity, acknowledgement time and client/session context where available.
+
+When no unacknowledged messages remain, the INFORMATION overview shall be empty rather than displaying a synthetic success message. Critical/safety-relevant conditions shall remain surfaced through applicable critical-alert and local operational-context mechanisms, regardless of ordinary INFORMATION display filtering.
+
+If pilot intervention is required, the notification shall reference the owning operational workflow/context. Selecting the message may navigate to that context; it shall not itself execute the action. The owning service/Core shall enforce authorization, validation, readiness and Safety Engine constraints.
+
+The event/message presentation shall tolerate duplicate and out-of-order delivery using stable event identity, correlation and sequence/time metadata. Repeated delivery of the same event shall not create duplicate active notifications. A changed condition may update or supersede the projection while preserving the event history.
+
 ## Traceability
 
 Error and recovery decisions shall remain traceable to:
