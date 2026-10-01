@@ -112,17 +112,13 @@ Item {
         antialiasing: false
     }
 
-    // Right-panel title bar: INFORMATION, with the panel menu aligned on the same row.
-    Rectangle {
+    // Overall right-panel title: plain text, with the menu on the same row.
+    Item {
         id: rightPanelTitleBar
         x: 10
         y: 8
         width: parent.width - 20
         height: 38
-        color: "#0B1B2B"
-        border.color: "#236078"
-        border.width: 1
-        radius: 4
         z: 10
 
         Text {
@@ -131,7 +127,7 @@ Item {
             anchors.right: panelSettings.left
             anchors.rightMargin: 8
             anchors.verticalCenter: parent.verticalCenter
-            text: "ALERTING"
+            text: "INFORMATION"
             color: root.text
             font.family: "B612"
             font.pixelSize: 13
@@ -176,16 +172,46 @@ Item {
         Text {
             anchors.left: parent.left
             anchors.leftMargin: 12
-            anchors.right: parent.right
+            anchors.right: checklistCounts.left
             anchors.rightMargin: 8
             anchors.verticalCenter: parent.verticalCenter
-            text: "CHECKLIST 5/8 ✓"
+            text: "CHECKLIST"
             color: root.text
             font.family: "B612"
-            font.pixelSize: 15
+            font.pixelSize: 13
             font.bold: true
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
+        }
+
+        Row {
+            id: checklistCounts
+            anchors.right: parent.right
+            anchors.rightMargin: 10
+            anchors.verticalCenter: parent.verticalCenter
+            spacing: 3
+
+            Text {
+                text: "5"
+                color: root.green
+                font.family: "B612"
+                font.pixelSize: 13
+                font.bold: true
+            }
+            Text {
+                text: "/"
+                color: root.secondary
+                font.family: "B612"
+                font.pixelSize: 13
+                font.bold: true
+            }
+            Text {
+                text: "3"
+                color: "#FF00D4"
+                font.family: "B612"
+                font.pixelSize: 13
+                font.bold: true
+            }
         }
     }
 
@@ -259,10 +285,10 @@ Item {
             anchors.right: parent.right
             anchors.rightMargin: 8
             anchors.verticalCenter: parent.verticalCenter
-            text: "INFORMATION"
+            text: "ALERTING"
             color: root.text
             font.family: "B612"
-            font.pixelSize: 12
+            font.pixelSize: 13
             font.bold: true
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
