@@ -1,4 +1,4 @@
-﻿import QtQuick
+import QtQuick
 
 Item {
     id: root
@@ -253,6 +253,13 @@ Item {
         interventionMode = false
     }
 
+    // The message card grows with its content but stops before the ATC work area.
+    // Long content remains readable by wrapping; the card never covers ATC.
+    readonly property real informationAvailableHeight:
+        Math.max(72, atcWorkArea.visible
+            ? atcWorkArea.y - informationCard.y - 10
+            : parent.height - informationCard.y - 20)
+
     Rectangle {
         id: informationCard
         visible: panelSettingsPopup.enabledTools.indexOf("Information") >= 0
@@ -260,7 +267,10 @@ Item {
         x: 16
         y: checklistCard.y + checklistCard.height + 10
         width: parent.width - 32
-        height: 220
+        height: Math.min(root.informationAvailableHeight,
+                         Math.max(72, (root.selectedInformationMessage
+                                      ? informationDetails.implicitHeight
+                                      : informationOverview.implicitHeight) + 52))
         radius: 8
         color: "transparent"
         border.color: "#236078"
@@ -315,8 +325,9 @@ Item {
             model: root.visibleSystemMessages()
 
             delegate: Item {
-                width: parent.width
-                height: 39
+                width: informationOverview.width
+                // Card height follows the wrapped message text, not a fixed row size.
+                height: Math.max(39, messageBody.implicitHeight + 22)
 
                 Rectangle {
                     anchors.fill: parent
@@ -341,16 +352,16 @@ Item {
                 }
 
                 Text {
+                    id: messageBody
                     x: 4
                     y: 17
                     width: parent.width - 8
-                    height: 20
                     text: modelData.title
                     color: root.text
                     font.family: "B612"
                     font.pixelSize: 13
-                    elide: Text.ElideRight
-                    verticalAlignment: Text.AlignVCenter
+                    wrapMode: Text.WordWrap
+                    horizontalAlignment: Text.AlignLeft
                 }
 
                 MouseArea {
@@ -368,6 +379,7 @@ Item {
     }
 
     Column {
+        id: informationDetails
         visible: informationCard.visible && !!root.selectedInformationMessage
         x: informationCard.x + 12
         y: informationCard.y + 40
