@@ -81,7 +81,7 @@ Item {
             font.family: "B612"
             font.pixelSize: Math.max(18, Math.min(28, parent.height * 0.32))
             font.bold: true
-            letterSpacing: 1
+            font.letterSpacing: 1
         }
 
         Text {
@@ -174,7 +174,7 @@ Item {
         font.family: "B612"
         font.pixelSize: Math.max(11, Math.min(15, root.width * 0.008))
         font.bold: true
-        letterSpacing: 1
+        font.letterSpacing: 1
     }
 
     // All 13 mission templates are shown at entry; multiple templates may be selected.
