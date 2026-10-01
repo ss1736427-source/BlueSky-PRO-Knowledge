@@ -228,6 +228,22 @@ Item {
             }
 
             Text {
+                visible: !root.missionCreationMode && root.missionIsAutomatic
+                width: 18
+                horizontalAlignment: Text.AlignHCenter
+                text: "+"
+                color: root.missionVisible ? root.cyan : root.text
+                font.family: "B612 Mono"
+                font.pixelSize: 18
+                font.bold: true
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: root.restoreMissionRequested()
+                }
+            }
+
+            Text {
                 width: 18
                 horizontalAlignment: Text.AlignHCenter
                 text: "≡"
