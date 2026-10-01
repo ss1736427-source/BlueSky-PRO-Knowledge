@@ -234,7 +234,7 @@ Item {
                 width: 18
                 horizontalAlignment: Text.AlignHCenter
                 text: "≡"
-                color: root.panelConfigOpen ? root.cyan : root.secondary
+                color: root.panelConfigOpen ? root.text : root.cyan
                 font.family: "B612 Mono"
                 font.pixelSize: 16
 
@@ -342,7 +342,7 @@ Item {
         x: 10
         y: 90
         width: parent.width - 20
-        height: 154
+        height: 112
         color: root.selectedSurface
         border.color: root.cyan
         border.width: 1
@@ -367,9 +367,7 @@ Item {
             Repeater {
                 model: [
                     { "label": "Анализ миссии", "key": "analysis", "enabled": root.analysisVisible },
-                    { "label": "Приборы", "key": "instruments", "enabled": root.instrumentsVisible },
-                    { "label": "УВД / Связь", "key": "atc", "enabled": root.atcVisible },
-                    { "label": "Расширенная диагностика", "key": "diagnostics", "enabled": root.diagnosticsVisible }
+                    { "label": "Шаблоны миссий", "key": "templates", "enabled": root.templatesExpanded }
                 ]
 
                 delegate: Text {
@@ -383,10 +381,12 @@ Item {
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
-                            if (modelData.key === "analysis") root.analysisVisible = !root.analysisVisible
-                            else if (modelData.key === "instruments") root.instrumentsVisible = !root.instrumentsVisible
-                            else if (modelData.key === "atc") root.atcVisible = !root.atcVisible
-                            else if (modelData.key === "diagnostics") root.diagnosticsVisible = !root.diagnosticsVisible
+                            if (modelData.key === "analysis") {
+                                root.analysisVisible = !root.analysisVisible
+                            } else if (modelData.key === "templates") {
+                                root.templatesExpanded = !root.templatesExpanded
+                                root.panelConfigOpen = false
+                            }
                             root.panelConfigurationChanged()
                         }
                     }
