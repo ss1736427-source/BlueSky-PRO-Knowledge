@@ -220,6 +220,11 @@ Item {
     Text { visible: checklistCard.visible; x: checklistCard.x + 12; y: checklistCard.y + 83; text: "✓  C2 availability"; color: root.green; font.family: "B612"; font.pixelSize: 12 }
     Text { visible: checklistCard.visible; x: checklistCard.x + 12; y: checklistCard.y + 104; text: "⚠  Weather revalidation"; color: root.amber; font.family: "B612"; font.pixelSize: 12 }
 
+    function openSystemMessage(message) {
+        selectedInformationMessage = message
+        interventionMode = false
+    }
+
     // INFORMATION: acknowledgement hides an item from this overview only.
     // Source events remain in the system journal/audit trail.
     function visibleSystemMessages() {
