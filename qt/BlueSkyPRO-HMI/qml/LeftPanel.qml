@@ -97,9 +97,6 @@ Item {
         manualTemplateSelectionCommitted(manualTemplateSelection)
     }
     property bool analysisVisible: true
-    property bool instrumentsVisible: false
-    property bool atcVisible: false
-    property bool diagnosticsVisible: false
 
     signal hideMissionRequested()
     signal restoreMissionRequested()
@@ -545,7 +542,7 @@ Item {
         visible: root.missionVisible && !root.templatesExpanded
         x: 16
         y: 250
-        text: "Анализ  |  Приборы  |  УВД  |  Диагностика"
+        text: "Анализ миссии  |  Шаблоны"
         color: root.secondary
         font.family: "Noto Sans"
         font.pixelSize: 10
