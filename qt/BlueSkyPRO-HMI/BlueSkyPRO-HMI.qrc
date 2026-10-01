@@ -6,6 +6,7 @@
         <file>qml/assets/uav_heavy_multirotor.svg</file>
         <file>qml/assets/uav_multirotor.svg</file>
         <file>qml/assets/uav_vtol.svg</file>
+        <file>qml/assets/bluesky_pro_logo.svg</file>
         <file>qml/BlueSkyPRO-Interface-Preview.ui.qml</file>
         <file>qml/BottomToolbar.Design.ui.qml</file>
         <file>qml/BottomToolbar.qml</file>
