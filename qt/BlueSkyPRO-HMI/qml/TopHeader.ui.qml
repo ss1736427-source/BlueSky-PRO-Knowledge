@@ -56,6 +56,22 @@ Item {
     property real devicePixelRatio: Screen.devicePixelRatio
     property real pixelStrokeWidth: 1
 
+    property var metricOrder: ["ETD", "TOT", "TRIP", "ETA", "READY", "WARNING"]
+    readonly property int visibleMetricCount: metricOrder.filter(function(name) {
+        return panelSettingsPopup.enabledTools.indexOf(name) >= 0
+    }).length
+
+    function metricX(name) {
+        var visibleBefore = 0
+        for (var i = 0; i < metricOrder.length; ++i) {
+            if (metricOrder[i] === name)
+                break
+            if (panelSettingsPopup.enabledTools.indexOf(metricOrder[i]) >= 0)
+                ++visibleBefore
+        }
+        return centralComposition.width * visibleBefore / Math.max(1, visibleMetricCount)
+    }
+
     property bool tabletVariant: width < 1500
 
     Rectangle {
@@ -69,7 +85,6 @@ Item {
     Item {
         id: logoBlock
         width: Math.max(0, Math.min(root.leftAnchorWidth, parent.width))
-        anchors.left: parent.left
         anchors.top: parent.top
         anchors.bottom: parent.bottom
 
@@ -145,7 +160,8 @@ Item {
         HeaderSector {
             id: etdSector
             visible: panelSettingsPopup.enabledTools.indexOf("ETD") >= 0
-            width: parent.width / 6
+            x: root.metricX("ETD")
+            width: centralComposition.width / Math.max(1, root.visibleMetricCount)
             height: parent.height
             title: "ETD"
             value: root.etd
@@ -159,7 +175,8 @@ Item {
         HeaderSector {
             id: totSector
             visible: panelSettingsPopup.enabledTools.indexOf("TOT") >= 0
-            width: parent.width / 6
+            x: root.metricX("TOT")
+            width: centralComposition.width / Math.max(1, root.visibleMetricCount)
             height: parent.height
             title: "TOT"
             value: root.tot
@@ -167,13 +184,13 @@ Item {
             headingSize: root.headingSize
             valueSize: root.valueSize
             headingValueGap: root.headingValueGap
-            anchors.left: etdSector.right
         }
 
         HeaderSector {
             id: tripSector
             visible: panelSettingsPopup.enabledTools.indexOf("TRIP") >= 0
-            width: parent.width / 6
+            x: root.metricX("TRIP")
+            width: centralComposition.width / Math.max(1, root.visibleMetricCount)
             height: parent.height
             title: "TRIP"
             value: root.trip
@@ -181,13 +198,13 @@ Item {
             headingSize: root.headingSize
             valueSize: root.valueSize
             headingValueGap: root.headingValueGap
-            anchors.left: totSector.right
         }
 
         HeaderSector {
             id: etaSector
             visible: panelSettingsPopup.enabledTools.indexOf("ETA") >= 0
-            width: parent.width / 6
+            x: root.metricX("ETA")
+            width: centralComposition.width / Math.max(1, root.visibleMetricCount)
             height: parent.height
             title: "ETA"
             value: root.eta
@@ -195,13 +212,13 @@ Item {
             headingSize: root.headingSize
             valueSize: root.valueSize
             headingValueGap: root.headingValueGap
-            anchors.left: tripSector.right
         }
 
         HeaderSector {
             id: readySector
             visible: panelSettingsPopup.enabledTools.indexOf("READY") >= 0
-            width: parent.width / 6
+            x: root.metricX("READY")
+            width: centralComposition.width / Math.max(1, root.visibleMetricCount)
             height: parent.height
             title: "READY"
             value: root.ready ? "READY" : "NOT READY"
@@ -209,13 +226,13 @@ Item {
             headingSize: root.headingSize
             valueSize: root.valueSize
             headingValueGap: root.headingValueGap
-            anchors.left: etaSector.right
         }
 
         HeaderSector {
             id: warningSector
             visible: panelSettingsPopup.enabledTools.indexOf("WARNING") >= 0
-            width: parent.width / 6
+            x: root.metricX("WARNING")
+            width: centralComposition.width / Math.max(1, root.visibleMetricCount)
             height: parent.height
             title: "WARNING"
             value: root.warningActive ? "!" : "—"
@@ -223,80 +240,26 @@ Item {
             headingSize: root.headingSize
             valueSize: root.valueSize
             headingValueGap: root.headingValueGap
-            anchors.left: readySector.right
         }
     }
 
-    // Structural dividers — one physical device pixel each.
-    // Coordinates and width are snapped to the display pixel grid.
-    Rectangle {
-        x: Math.round((centralComposition.x) * root.devicePixelRatio) / root.devicePixelRatio
-        y: Math.round(((parent.height - Math.min(root.structuralDividerHeight, parent.height - 16)) / 2) * root.devicePixelRatio) / root.devicePixelRatio
-        width: root.pixelStrokeWidth
-        height: Math.round(Math.min(root.structuralDividerHeight, parent.height - 16) * root.devicePixelRatio) / root.devicePixelRatio
-        color: root.accent
-        antialiasing: false
-        z: 90
-    }
-
-    Rectangle {
-        x: Math.round((centralComposition.x + centralComposition.width / 6) * root.devicePixelRatio) / root.devicePixelRatio
-        y: Math.round(((parent.height - Math.min(root.structuralDividerHeight, parent.height - 16)) / 2) * root.devicePixelRatio) / root.devicePixelRatio
-        width: root.pixelStrokeWidth
-        height: Math.round(Math.min(root.structuralDividerHeight, parent.height - 16) * root.devicePixelRatio) / root.devicePixelRatio
-        color: root.accent
-        antialiasing: false
-        z: 90
-    }
-
-    Rectangle {
-        x: Math.round((centralComposition.x + centralComposition.width * 2 / 6) * root.devicePixelRatio) / root.devicePixelRatio
-        y: Math.round(((parent.height - Math.min(root.structuralDividerHeight, parent.height - 16)) / 2) * root.devicePixelRatio) / root.devicePixelRatio
-        width: root.pixelStrokeWidth
-        height: Math.round(Math.min(root.structuralDividerHeight, parent.height - 16) * root.devicePixelRatio) / root.devicePixelRatio
-        color: root.accent
-        antialiasing: false
-        z: 90
-    }
-
-    Rectangle {
-        x: Math.round((centralComposition.x + centralComposition.width * 3 / 6) * root.devicePixelRatio) / root.devicePixelRatio
-        y: Math.round(((parent.height - Math.min(root.structuralDividerHeight, parent.height - 16)) / 2) * root.devicePixelRatio) / root.devicePixelRatio
-        width: root.pixelStrokeWidth
-        height: Math.round(Math.min(root.structuralDividerHeight, parent.height - 16) * root.devicePixelRatio) / root.devicePixelRatio
-        color: root.accent
-        antialiasing: false
-        z: 90
-    }
-
-    Rectangle {
-        x: Math.round((centralComposition.x + centralComposition.width * 4 / 6) * root.devicePixelRatio) / root.devicePixelRatio
-        y: Math.round(((parent.height - Math.min(root.structuralDividerHeight, parent.height - 16)) / 2) * root.devicePixelRatio) / root.devicePixelRatio
-        width: root.pixelStrokeWidth
-        height: Math.round(Math.min(root.structuralDividerHeight, parent.height - 16) * root.devicePixelRatio) / root.devicePixelRatio
-        color: root.accent
-        antialiasing: false
-        z: 90
-    }
-
-    Rectangle {
-        x: Math.round((centralComposition.x + centralComposition.width * 5 / 6) * root.devicePixelRatio) / root.devicePixelRatio
-        y: Math.round(((parent.height - Math.min(root.structuralDividerHeight, parent.height - 16)) / 2) * root.devicePixelRatio) / root.devicePixelRatio
-        width: root.pixelStrokeWidth
-        height: Math.round(Math.min(root.structuralDividerHeight, parent.height - 16) * root.devicePixelRatio) / root.devicePixelRatio
-        color: root.accent
-        antialiasing: false
-        z: 90
-    }
-
-    Rectangle {
-        x: Math.round((centralComposition.x + centralComposition.width) * root.devicePixelRatio) / root.devicePixelRatio
-        y: Math.round(((parent.height - Math.min(root.structuralDividerHeight, parent.height - 16)) / 2) * root.devicePixelRatio) / root.devicePixelRatio
-        width: root.pixelStrokeWidth
-        height: Math.round(Math.min(root.structuralDividerHeight, parent.height - 16) * root.devicePixelRatio) / root.devicePixelRatio
-        color: root.accent
-        antialiasing: false
-        z: 90
+    // Adaptive dividers follow only the currently enabled metrics.
+    Repeater {
+        model: Math.max(0, root.visibleMetricCount - 1)
+        delegate: Rectangle {
+            required property int index
+            x: Math.round((centralComposition.x
+                + centralComposition.width * (index + 1) / Math.max(1, root.visibleMetricCount))
+                * root.devicePixelRatio) / root.devicePixelRatio
+            y: Math.round(((root.height - Math.min(root.structuralDividerHeight, root.height - 16)) / 2)
+                * root.devicePixelRatio) / root.devicePixelRatio
+            width: root.pixelStrokeWidth
+            height: Math.round(Math.min(root.structuralDividerHeight, root.height - 16)
+                * root.devicePixelRatio) / root.devicePixelRatio
+            color: root.accent
+            antialiasing: false
+            z: 90
+        }
     }
 
     // Outer frame: explicit 1px primitives, same as every structural divider.
@@ -363,7 +326,7 @@ Item {
         width: Math.min(320, Math.max(220, root.width - 16))
         height: Math.min(360, Math.max(220, Screen.height * 0.55))
         title: "HEADER SETTINGS"
-        tools: ["ETD", "TOT", "TRIP", "ETA", "READY", "WARNING", "Operator", "Optional Aggregate Status"]
+        tools: ["ETD", "TOT", "TRIP", "ETA", "READY", "WARNING", "Operator"]
         onClosed: open = false
     }
 }
