@@ -276,7 +276,7 @@ Item {
     }
 
     Rectangle {
-        x: Math.round(centralComposition.x + centralComposition.width
+        x: Math.round((centralComposition.x + centralComposition.width)
             * root.devicePixelRatio) / root.devicePixelRatio
         y: Math.round(((root.height - Math.min(root.structuralDividerHeight, root.height - 16)) / 2)
             * root.devicePixelRatio) / root.devicePixelRatio
