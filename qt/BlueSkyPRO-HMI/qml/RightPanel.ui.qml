@@ -80,60 +80,136 @@ Item {
         antialiasing: false
     }
 
-    Text {
+    // Checklist card — same rounded, outlined visual language as ATC.
+    Rectangle {
+        id: checklistCard
         x: 16
-        y: 14
-        text: "CHECKLIST 5/8 ✓"
-        color: root.text
-        font.family: "B612"
-        font.pixelSize: 16
-        font.bold: true
+        y: 8
+        width: parent.width - 32
+        height: 136
+        radius: 8
+        color: "transparent"
+        border.color: "#236078"
+        border.width: 1
+        antialiasing: true
     }
-
-    Text { x: 16; y: 43; text: "✓ Mission definition"; color: root.green; font.family: "B612"; font.pixelSize: 12 }
-    Text { x: 16; y: 64; text: "✓ UAV allocation"; color: root.green; font.family: "B612"; font.pixelSize: 12 }
-    Text { x: 16; y: 85; text: "✓ C2 availability"; color: root.green; font.family: "B612"; font.pixelSize: 12 }
-    Text { x: 16; y: 106; text: "⚠ Weather revalidation"; color: root.amber; font.family: "B612"; font.pixelSize: 12 }
 
     Rectangle {
+        x: checklistCard.x + 1
+        y: checklistCard.y + 1
+        width: checklistCard.width - 2
+        height: 32
+        radius: 7
+        color: "#0B1B2B"
+        antialiasing: true
+
+        Rectangle {
+            x: 0
+            y: height / 2
+            width: parent.width
+            height: parent.height / 2
+            color: parent.color
+        }
+
+        Text {
+            anchors.left: parent.left
+            anchors.leftMargin: 12
+            anchors.right: parent.right
+            anchors.rightMargin: 8
+            anchors.verticalCenter: parent.verticalCenter
+            text: "CHECKLIST 5/8 ✓"
+            color: root.text
+            font.family: "B612"
+            font.pixelSize: 15
+            font.bold: true
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
+        }
+    }
+
+    Text { x: checklistCard.x + 12; y: checklistCard.y + 41; text: "✓  Mission definition"; color: root.green; font.family: "B612"; font.pixelSize: 12 }
+    Text { x: checklistCard.x + 12; y: checklistCard.y + 62; text: "✓  UAV allocation"; color: root.green; font.family: "B612"; font.pixelSize: 12 }
+    Text { x: checklistCard.x + 12; y: checklistCard.y + 83; text: "✓  C2 availability"; color: root.green; font.family: "B612"; font.pixelSize: 12 }
+    Text { x: checklistCard.x + 12; y: checklistCard.y + 104; text: "⚠  Weather revalidation"; color: root.amber; font.family: "B612"; font.pixelSize: 12 }
+
+    // Warnings card — matching ATC/checklist frame and filled header.
+    Rectangle {
+        id: warningsCard
         x: 16
-        y: 130
+        y: 154
         width: parent.width - 32
-        height: 1
-        color: root.divider
+        height: 168
+        radius: 8
+        color: "transparent"
+        border.color: "#236078"
+        border.width: 1
+        antialiasing: true
+    }
+
+    Rectangle {
+        x: warningsCard.x + 1
+        y: warningsCard.y + 1
+        width: warningsCard.width - 2
+        height: 32
+        radius: 7
+        color: "#0B1B2B"
+        antialiasing: true
+
+        Rectangle {
+            x: 0
+            y: height / 2
+            width: parent.width
+            height: parent.height / 2
+            color: parent.color
+        }
+
+        Text {
+            anchors.left: parent.left
+            anchors.leftMargin: 12
+            anchors.right: parent.right
+            anchors.rightMargin: 8
+            anchors.verticalCenter: parent.verticalCenter
+            text: "WARNINGS / CORRECTIONS"
+            color: root.text
+            font.family: "B612"
+            font.pixelSize: 12
+            font.bold: true
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
+        }
     }
 
     Text {
-        x: 16
-        y: 147
-        text: "WARNINGS / CORRECTIONS"
-        color: root.secondary
-        font.family: "B612"
-        font.pixelSize: 12
-        font.bold: true
-    }
-
-    Text {
-        x: 16
-        y: 174
+        x: warningsCard.x + 12
+        y: warningsCard.y + 49
+        width: warningsCard.width - 24
         visible: root.warningActive
         text: "Wind correction pending confirmation"
         color: root.amber
         font.family: "B612"
         font.pixelSize: 11
+        wrapMode: Text.Wrap
     }
 
     Text {
-        x: 16
-        y: 195
+        x: warningsCard.x + 12
+        y: warningsCard.y + 77
+        width: warningsCard.width - 24
         visible: root.warningActive
         text: "Battery degradation model applied"
         color: root.secondary
         font.family: "B612"
         font.pixelSize: 10
+        wrapMode: Text.Wrap
     }
 
-    Rectangle { x: 16; y: 218; width: parent.width - 32; height: 1; color: root.divider }
+    Rectangle {
+        x: warningsCard.x + 12
+        y: warningsCard.y + 110
+        width: warningsCard.width - 24
+        height: 1
+        color: root.divider
+    }
 
     // Unified ATC work area. The rounded frame encloses the heading and
     // all action controls, with a clear inset around every button.
