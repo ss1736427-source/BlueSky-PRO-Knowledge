@@ -262,6 +262,32 @@ Item {
         }
     }
 
+    // Fixed anchor boundaries: never move or disappear when metrics are toggled.
+    Rectangle {
+        x: Math.round(logoBlock.width * root.devicePixelRatio) / root.devicePixelRatio
+        y: Math.round(((root.height - Math.min(root.structuralDividerHeight, root.height - 16)) / 2)
+            * root.devicePixelRatio) / root.devicePixelRatio
+        width: root.pixelStrokeWidth
+        height: Math.round(Math.min(root.structuralDividerHeight, root.height - 16)
+            * root.devicePixelRatio) / root.devicePixelRatio
+        color: root.accent
+        antialiasing: false
+        z: 95
+    }
+
+    Rectangle {
+        x: Math.round(centralComposition.x + centralComposition.width
+            * root.devicePixelRatio) / root.devicePixelRatio
+        y: Math.round(((root.height - Math.min(root.structuralDividerHeight, root.height - 16)) / 2)
+            * root.devicePixelRatio) / root.devicePixelRatio
+        width: root.pixelStrokeWidth
+        height: Math.round(Math.min(root.structuralDividerHeight, root.height - 16)
+            * root.devicePixelRatio) / root.devicePixelRatio
+        color: root.accent
+        antialiasing: false
+        z: 95
+    }
+
     // Outer frame: explicit 1px primitives, same as every structural divider.
     // Do not use Rectangle.border here: its rasterization differs from the divider
     // rectangles, especially at Design Studio zoom levels.
@@ -323,8 +349,12 @@ Item {
         anchors.right: parent.right
         anchors.rightMargin: 8
         anchors.topMargin: 8
-        width: Math.min(320, Math.max(220, root.width - 16))
-        height: Math.min(360, Math.max(220, Screen.height * 0.55))
+        width: Math.min(
+                   Math.max(220, panelSettingsPopup.contentWidth),
+                   Math.max(180, Math.min(420, Screen.width - 16, root.width - 16)))
+        height: Math.min(
+                    52 + panelSettingsPopup.tools.length * 30 + 48,
+                    Math.max(180, Screen.height - 24))
         title: "HEADER SETTINGS"
         tools: ["ETD", "TOT", "TRIP", "ETA", "READY", "WARNING", "Operator"]
         onClosed: open = false
