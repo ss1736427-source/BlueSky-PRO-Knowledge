@@ -134,9 +134,10 @@ Item {
 
     Rectangle { x: 16; y: 218; width: parent.width - 32; height: 1; color: root.divider }
 
+    // Keep mission readiness at the bottom edge of the right panel.
     Text {
         x: 16
-        y: 235
+        y: parent.height - 66
         text: "MISSION READINESS"
         color: root.secondary
         font.family: "B612"
@@ -146,7 +147,7 @@ Item {
 
     Text {
         x: 16
-        y: 260
+        y: parent.height - 42
         text: root.missionReady ? "READY" : "NOT READY"
         color: root.missionReady ? root.green : root.amber
         font.family: "B612 Mono"
@@ -254,47 +255,6 @@ Item {
         height: 38
         enabled: root.missionReady
         onClicked: root.startMissionRequested()
-    }
-
-    Text {
-        x: 16
-        y: 437
-        text: root.missionReady
-              ? "Ready state active; safety gate remains authoritative."
-              : "START remains inactive until full readiness."
-        color: root.muted
-        font.family: "B612"
-        font.pixelSize: 9
-    }
-
-    Rectangle { x: 16; y: 462; width: parent.width - 32; height: 1; color: root.divider }
-
-    Text {
-        x: 16
-        y: 480
-        text: "SAFETY GATE"
-        color: root.secondary
-        font.family: "B612"
-        font.pixelSize: 12
-        font.bold: true
-    }
-
-    Text {
-        x: 16
-        y: 505
-        text: "Core / Safety authority active"
-        color: root.text
-        font.family: "B612"
-        font.pixelSize: 11
-    }
-
-    Text {
-        x: 16
-        y: 525
-        text: "AI recommendations: advisory only"
-        color: root.secondary
-        font.family: "B612"
-        font.pixelSize: 10
     }
 
     PanelSettingsButton {
