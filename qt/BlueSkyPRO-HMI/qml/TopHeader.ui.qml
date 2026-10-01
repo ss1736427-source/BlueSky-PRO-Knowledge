@@ -78,7 +78,7 @@ Item {
 
             Image {
                 anchors.fill: parent
-                source: "assets/bluesky_pro_logo.svg"
+                source: Qt.resolvedUrl("assets/bluesky_pro_logo.svg")
                 fillMode: Image.PreserveAspectFit
                 smooth: true
                 mipmap: true
