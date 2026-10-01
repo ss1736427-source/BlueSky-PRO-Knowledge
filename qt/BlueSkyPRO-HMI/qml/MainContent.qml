@@ -39,7 +39,7 @@ Item {
     // Populated by the mission/task aggregation layer; current value is a design-preview example.
     property string missionSummary: "3D картография территории"
     // Example current automatic mission composition; supplied by mission/task aggregation in production.
-    property var missionTemplateIndices: [2]
+    property var missionTemplateIndices: [1]
     property string journalStatus: "READY"
     property string activeTool: bottomToolbar.activeTool
     // Role selection is the application entry point; the workspace remains underneath.
