@@ -322,10 +322,14 @@ Item {
             spacing: 10
 
             Repeater {
-                model: [
+                model: root.keyboardLanguage === "RU" ? [
                     ["Й","Ц","У","К","Е","Н","Г","Ш","Щ","З","Х","BACKSPACE"],
                     ["Ф","Ы","В","А","П","Р","О","Л","Д","Ж","Э","ENTER"],
                     ["SHIFT","Я","Ч","С","М","И","Т","Ь","Б","Ю","Ё","SHIFT"]
+                ] : [
+                    ["Q","W","E","R","T","Y","U","I","O","P","BACKSPACE"],
+                    ["A","S","D","F","G","H","J","K","L","ENTER"],
+                    ["SHIFT","Z","X","C","V","B","N","M","SHIFT"]
                 ]
 
                 delegate: Row {
