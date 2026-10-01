@@ -348,7 +348,7 @@ Item {
                     text: modelData.title
                     color: root.text
                     font.family: "B612"
-                    font.pixelSize: 10
+                    font.pixelSize: 13
                     elide: Text.ElideRight
                     verticalAlignment: Text.AlignVCenter
                 }
@@ -379,7 +379,7 @@ Item {
             text: root.selectedInformationMessage ? root.selectedInformationMessage.title : ""
             color: root.text
             font.family: "B612"
-            font.pixelSize: 10
+            font.pixelSize: 13
             font.bold: true
             wrapMode: Text.Wrap
         }
@@ -391,7 +391,7 @@ Item {
                   : (root.selectedInformationMessage ? root.selectedInformationMessage.detail : "")
             color: root.text
             font.family: "B612"
-            font.pixelSize: 9
+            font.pixelSize: 13
             wrapMode: Text.Wrap
         }
 
@@ -403,7 +403,7 @@ Item {
                   : "Нажмите, чтобы открыть область действий пилота."
             color: root.cyan
             font.family: "B612"
-            font.pixelSize: 9
+            font.pixelSize: 13
             wrapMode: Text.Wrap
         }
 
