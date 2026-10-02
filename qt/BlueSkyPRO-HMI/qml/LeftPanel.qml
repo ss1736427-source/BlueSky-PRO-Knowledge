@@ -101,6 +101,7 @@ Item {
     signal hideMissionRequested()
     signal restoreMissionRequested()
     signal missionTemplateMenuRequested()
+    signal missionProfileRequested()
     signal templateSelected(int index)
     signal manualTemplateSelectionCommitted(var indices)
     signal createMissionRequested()
@@ -410,7 +411,7 @@ Item {
         x: 10
         y: root.missionVisible ? 110 : 50
         width: parent.width - 20
-        height: Math.max(0, parent.height - y - createMissionButton.height - 20)
+        height: Math.max(0, Math.min(templateColumn.implicitHeight, parent.height - y - createMissionButton.height - 20 - (root.analysisVisible && !root.panelConfigOpen ? missionProfileButton.height + 12 : 0)))
         contentWidth: width
         contentHeight: templateColumn.implicitHeight
         clip: true
@@ -485,7 +486,36 @@ Item {
         }
     }
 
-    // Fixed primary action: remains at the bottom in every mission-panel state.
+    // Mission profile button in the reserved area below the template list.
+    Rectangle {
+        id: missionProfileButton
+        visible: root.analysisVisible && !root.panelConfigOpen
+        x: 10
+        y: templateList.y + templateList.height + 8
+        width: parent.width - 20
+        height: 44
+        radius: 2
+        color: root.selectedSurface
+        border.color: root.cyan
+        border.width: 1
+        z: 30
+
+        Text {
+            anchors.fill: parent
+            text: String.fromCharCode(1055, 1056, 1054, 1060, 1048, 1051, 1068, 32, 1052, 1048, 1057, 1057, 1048, 1048)
+            color: root.text
+            font.family: 'B612'
+            font.pixelSize: 12
+            font.bold: true
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: root.missionProfileRequested()
+        }
+    }
     Rectangle {
         id: createMissionButton
         x: 10
