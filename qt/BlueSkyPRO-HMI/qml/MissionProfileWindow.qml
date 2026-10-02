@@ -1002,13 +1002,9 @@ Item {
                                     wrapMode: Text.Wrap
                                 }
 
-                                MouseArea {
-                                    x: 0
-                                    y: 0
-                                    width: parent.width
-                                    height: parent.height
-                                    onClicked: root.toggleParameter(parameterRow.parameterKey)
-                                    cursorShape: Qt.PointingHandCursor
+                                TapHandler {
+                                    acceptedButtons: Qt.LeftButton
+                                    onTapped: root.toggleParameter(parameterRow.parameterKey)
                                 }
                             }
                         }
