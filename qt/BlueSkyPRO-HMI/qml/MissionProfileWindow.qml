@@ -121,7 +121,7 @@ Item {
                 }
             }
             if (matching >= 0) {
-                rows.push({ pointType: "Обязательная", pointName: source.pointName, coordinates: source.coordinates,
+                rows.push({ pointType: "Обязательная", pointName: "Обязательная точка " + root.mandatoryOrdinal(mandatory[matching].id), coordinates: source.coordinates,
                     course: source.course, distance: source.distance, altitude: Math.round(Number(mandatory[matching].altitude)),
                     airspeed: source.airspeed, groundspeed: source.groundspeed, time: source.time,
                     deltaHeight: source.deltaHeight, energy: source.energy, note: "Обязательная точка",
