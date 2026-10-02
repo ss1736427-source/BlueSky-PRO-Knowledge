@@ -749,7 +749,7 @@ Item {
                                     width: 38
                                     height: 21
                                     radius: 11
-                                    anchors.verticalCenter: parent.verticalCenter
+                                    y: (parent.height - height) / 2
                                     color: parameterRow.parameterChecked ? root.switchGreen : "#263847"
                                     border.width: 1
                                     border.color: parameterRow.parameterChecked ? root.switchGreen : "#547084"
