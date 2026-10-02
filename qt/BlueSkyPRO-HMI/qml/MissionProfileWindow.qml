@@ -51,7 +51,7 @@ Item {
         })
         var cursor = 0
         for (var i = 0; i < visible.length; ++i) {
-            cursor += visible[i].w / total * tableHeader.width
+            cursor += visible[i].w * tableHeader.width
             if (x < cursor) return visible[i].key
         }
         return visible.length ? visible[visible.length - 1].key : ""
