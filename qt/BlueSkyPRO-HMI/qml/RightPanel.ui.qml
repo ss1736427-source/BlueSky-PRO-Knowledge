@@ -162,7 +162,7 @@ Item {
         x: 16
         y: 54
         width: parent.width - 32
-        height: 222
+        height: Math.min(42 + root.visibleChecklistItems().length * 18, Math.max(90, parent.height * 0.34))
         radius: 8
         color: "transparent"
         border.color: "#236078"
@@ -234,29 +234,40 @@ Item {
         }
     }
 
-    Column {
+    Flickable {
+        id: checklistScroller
         x: checklistCard.x + 12
         y: checklistCard.y + 39
         width: checklistCard.width - 24
-        spacing: 1
+        height: Math.max(0, checklistCard.height - 48)
+        contentWidth: width
+        contentHeight: checklistList.implicitHeight
+        clip: true
+        boundsBehavior: Flickable.StopAtBounds
+        flickableDirection: Flickable.VerticalFlick
         visible: checklistCard.visible
 
-        Repeater {
-            model: root.checklistItems
-            delegate: Text {
-                width: parent.width
-                height: 17
-                text: (modelData.status === "PASS" ? "✓" :
-                       modelData.status === "FAIL" ? "✕" :
-                       modelData.status === "WARNING" ? "⚠" : "○")
-                      + "  " + modelData.label
-                color: modelData.status === "PASS" ? root.green :
-                       modelData.status === "FAIL" ? root.red :
-                       modelData.status === "WARNING" ? root.amber : root.secondary
-                font.family: "B612"
-                font.pixelSize: 11
-                elide: Text.ElideRight
-                verticalAlignment: Text.AlignVCenter
+        Column {
+            id: checklistList
+            width: checklistScroller.width
+            spacing: 1
+            Repeater {
+                model: root.visibleChecklistItems()
+                delegate: Text {
+                    width: checklistList.width
+                    height: 17
+                    text: (modelData.status === "PASS" ? "✓" :
+                           modelData.status === "FAIL" ? "✕" :
+                           modelData.status === "WARNING" ? "⚠" : "○")
+                          + "  " + modelData.label
+                    color: modelData.status === "PASS" ? root.green :
+                           modelData.status === "FAIL" ? root.red :
+                           modelData.status === "WARNING" ? root.amber : root.secondary
+                    font.family: "B612"
+                    font.pixelSize: 11
+                    elide: Text.ElideRight
+                    verticalAlignment: Text.AlignVCenter
+                }
             }
         }
     }
@@ -338,8 +349,13 @@ Item {
     // Source events remain in the system journal/audit trail.
     function visibleSystemMessages() {
         return systemMessages.filter(function(message) {
-            return acknowledgedMessageIds.indexOf(message.id) < 0
+            return acknowledgedMessageIds.indexOf(message.id) < 0 &&
+                   (message.requiresIntervention || message.severity === "critical" || message.severity === "warning")
         })
+    }
+
+    function visibleChecklistItems() {
+        return checklistItems.filter(function(item) { return item.status !== "PASS" })
     }
 
     function hasUnacknowledgedCriticalMessage() {
