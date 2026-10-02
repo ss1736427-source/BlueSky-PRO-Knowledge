@@ -293,6 +293,13 @@ Each item uses one of four states: `PASS`, `WARNING`, `FAIL`, or `PENDING`. The 
 
 RETURN is not a normal Right Panel action.
 
+### Compact content and panel control node
+
+- CHECKLIST shows only items that are not `PASS`. The header counter continues to report completed checks against the total; completed routine checks are not repeated as individual rows.
+- INFORMATION overview shows only events requiring operator attention/intervention, including critical failures and active warnings. Routine informational changes already handled by the system remain in the journal/audit trail and are omitted from the panel overview.
+- Checklist, WEATHER/NOTAM details, and INFORMATION detail content adapt to their content within the space available between the panel header and ATC work area. When content exceeds the available height, the content area scrolls; it must not paint over adjacent cards or ATC controls.
+- Panel settings are organized in expandable branches in the panel control node: `MONITORING` (Checklist, Weather, NOTAM, Information), `MISSION CONTROL` (Readiness, Validation, Send Flight Plan, Start Mission), and `MAP` (Map Alerts). Each tool retains an independent enable/disable control.
+- The settings list itself scrolls when its expanded branches exceed the available popup height. Group expansion and tool enablement are configuration state only and do not alter mission or safety state.
 ### Warning behavior
 
 Header WARNING remains synchronized with active warning state; the Right Panel presents system events in INFORMATION.
