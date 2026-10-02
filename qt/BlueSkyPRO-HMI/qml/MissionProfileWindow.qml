@@ -372,6 +372,8 @@ Item {
                         MouseArea {
                             id: splitMouse
                             anchors.fill: parent
+                            // Keep a practical drag target while the visual gap is 1 px.
+                            anchors.margins: -5
                             hoverEnabled: true
                             cursorShape: Qt.SplitVCursor
                             property real lastY: 0
