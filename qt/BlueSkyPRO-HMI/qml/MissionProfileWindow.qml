@@ -17,7 +17,7 @@ Item {
     readonly property color textColor: "#DCE8F2"
     readonly property color muted: "#91A8BA"
     readonly property color switchGreen: "#39D353"
-    property bool parameterPanelOpen: true
+    property bool parameterPanelOpen: false
     property real tableSplitRatio: 0.47
     // Live telemetry inputs; connect these to the flight-data source when available.
     property bool liveFlightActive: false
