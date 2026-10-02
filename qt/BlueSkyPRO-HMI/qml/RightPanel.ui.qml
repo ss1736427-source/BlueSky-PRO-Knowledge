@@ -33,6 +33,10 @@ Item {
     property bool warningActive: true
     // Preview state only. Live weather/NOTAM providers must supply authoritative data.
     property string selectedOperationalTool: ""
+    // Set only by the authoritative route-planning/revalidation result.
+    // HMI must not infer pilot attention from weather/NOTAM presence alone.
+    property bool weatherPilotAttentionRequired: false
+    property bool notamPilotAttentionRequired: false
     property var checklistItems: [
         { label: "Mission definition", status: "PENDING" },
         { label: "UAV allocation", status: "PENDING" },
@@ -52,7 +56,7 @@ Item {
         panelSettingsPopup.enabledTools.indexOf("Map Alerts") >= 0
     property var systemMessages: [
         { id: "SYS-C2-001", kind: "FAILURE", title: "Потеря связи C2", detail: "Связь с БПЛА требует проверки. Проверьте состояние канала и доступность аппарата.", action: "Проверить связь с БПЛА", requiresIntervention: true, severity: "critical" },
-        { id: "SYS-WIND-001", kind: "WARNING", title: "Коррекция ветра требует подтверждения", detail: "Изменение ветровых условий повлияло на расчёт маршрута. Проверьте обновлённую коррекцию.", action: "Проверить коррекцию маршрута", requiresIntervention: true, severity: "warning" },
+        { id: "SYS-WIND-001", kind: "WARNING", title: "Коррекция ветра требует подтверждения", detail: "Изменение ветровых условий повлияло на расчёт маршрута. Проверьте обновлённую коррекцию.", action: "Проверить коррекцию маршрута", requiresIntervention: true, severity: "warning", sourceTool: "WEATHER" },
         { id: "SYS-BAT-001", kind: "CHANGE", title: "Применена модель деградации батареи", detail: "Расчёт производительности учитывает деградацию аккумулятора.", action: "", requiresIntervention: false, severity: "info" }
     ]
     property var acknowledgedMessageIds: []
@@ -276,8 +280,10 @@ Item {
     // report missing data rather than implying a successful operational check.
     Rectangle {
         id: operationalCard
-        visible: panelSettingsPopup.enabledTools.indexOf("Weather") >= 0
-                 || panelSettingsPopup.enabledTools.indexOf("NOTAM") >= 0
+        visible: (panelSettingsPopup.enabledTools.indexOf("Weather") >= 0
+                  && root.weatherPilotAttentionRequired)
+                 || (panelSettingsPopup.enabledTools.indexOf("NOTAM") >= 0
+                     && root.notamPilotAttentionRequired)
         x: 16
         y: (checklistCard.visible ? checklistCard.y + checklistCard.height : 54) + 10
         width: parent.width - 32
@@ -306,6 +312,7 @@ Item {
 
             Row {
                 visible: panelSettingsPopup.enabledTools.indexOf("Weather") >= 0
+                         && root.weatherPilotAttentionRequired
                 width: parent.width; height: 23
                 spacing: 8
                 Text { id: weatherStatusLabel; width: parent.width * 0.42; text: "WEATHER"; color: root.text; font.family: "B612"; font.pixelSize: 11; verticalAlignment: Text.AlignVCenter }
@@ -314,6 +321,7 @@ Item {
             }
             Row {
                 visible: panelSettingsPopup.enabledTools.indexOf("NOTAM") >= 0
+                         && root.notamPilotAttentionRequired
                 width: parent.width; height: 23
                 spacing: 8
                 Text { id: notamStatusLabel; width: parent.width * 0.42; text: "NOTAM"; color: root.text; font.family: "B612"; font.pixelSize: 11; verticalAlignment: Text.AlignVCenter }
@@ -328,7 +336,8 @@ Item {
             contentWidth: width; contentHeight: operationalDetailColumn.implicitHeight
             clip: true; boundsBehavior: Flickable.StopAtBounds
             flickableDirection: Flickable.VerticalFlick
-            visible: root.selectedOperationalTool !== ""
+            visible: (root.selectedOperationalTool === "WEATHER" && root.weatherPilotAttentionRequired)
+                     || (root.selectedOperationalTool === "NOTAM" && root.notamPilotAttentionRequired)
             Column {
                 id: operationalDetailColumn
                 width: operationalDetails.width
@@ -358,7 +367,11 @@ Item {
     // Source events remain in the system journal/audit trail.
     function visibleSystemMessages() {
         return systemMessages.filter(function(message) {
+            var sourceRequiresAttention =
+                    message.sourceTool === "WEATHER" ? root.weatherPilotAttentionRequired :
+                    message.sourceTool === "NOTAM" ? root.notamPilotAttentionRequired : true
             return acknowledgedMessageIds.indexOf(message.id) < 0 &&
+                   sourceRequiresAttention &&
                    (message.requiresIntervention || message.severity === "critical" || message.severity === "warning")
         })
     }
