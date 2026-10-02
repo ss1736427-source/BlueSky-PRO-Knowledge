@@ -29,6 +29,10 @@ Item {
     property real liveDistanceKm: 0
     property real liveElapsedSeconds: 0
     property real liveAltitudeM: 0
+    property bool mandatoryPointSet: false
+    property real mandatoryProgress: 0.60
+    property real mandatoryAltitudeM: 180
+    property int mandatoryRouteIndex: -1
     readonly property real plannedDistanceKm: 78.4
     readonly property real plannedDurationSeconds: 78 * 60
     property var parameterVisibility: ({
@@ -88,7 +92,7 @@ Item {
         var row = routeModel.get(rowIndex)
         if (!row) return ""
         var values = {
-            number: String(rowIndex + 1), type: row.pointType,
+            number: String(rowIndex + 1), type: rowIndex === root.mandatoryRouteIndex ? "Обязательная" : row.pointType,
             point: row.pointName + "\n" + row.coordinates,
             course: row.course, distance: row.distance, altitude: row.altitude,
             airspeed: row.airspeed, groundspeed: row.groundspeed, time: row.time,
@@ -111,10 +115,19 @@ Item {
         category: "BlueSkyPRO/MissionProfile"
         property string columnOrderJson: ""
         property real tableSplitRatio: 0.47
+        property bool mandatoryPointSet: false
+        property real mandatoryProgress: 0.60
+        property real mandatoryAltitudeM: 180
+        property int mandatoryRouteIndex: -1
     }
 
     Component.onCompleted: {
         root.tableSplitRatio = Math.max(0.25, Math.min(0.75, profileSettings.tableSplitRatio))
+        root.mandatoryPointSet = profileSettings.mandatoryPointSet
+        root.mandatoryProgress = Math.max(0, Math.min(1, profileSettings.mandatoryProgress))
+        root.mandatoryAltitudeM = Math.max(0, Math.min(400, profileSettings.mandatoryAltitudeM))
+        root.mandatoryRouteIndex = profileSettings.mandatoryRouteIndex
+        if (root.mandatoryRouteIndex >= routeModel.count) root.mandatoryRouteIndex = -1
         if (profileSettings.columnOrderJson.length > 0) {
             try {
                 var saved = JSON.parse(profileSettings.columnOrderJson)
@@ -125,6 +138,10 @@ Item {
     }
 
     onTableSplitRatioChanged: profileSettings.tableSplitRatio = tableSplitRatio
+    onMandatoryPointSetChanged: profileSettings.mandatoryPointSet = mandatoryPointSet
+    onMandatoryProgressChanged: profileSettings.mandatoryProgress = mandatoryProgress
+    onMandatoryAltitudeMChanged: profileSettings.mandatoryAltitudeM = mandatoryAltitudeM
+    onMandatoryRouteIndexChanged: profileSettings.mandatoryRouteIndex = mandatoryRouteIndex
 
     anchors.fill: parent
     z: 80
@@ -437,6 +454,10 @@ Item {
                                     function onLiveDistanceKmChanged() { profileCanvas.requestPaint() }
                                     function onLiveElapsedSecondsChanged() { profileCanvas.requestPaint() }
                                     function onLiveAltitudeMChanged() { profileCanvas.requestPaint() }
+                                    function onMandatoryPointSetChanged() { profileCanvas.requestPaint() }
+                                    function onMandatoryProgressChanged() { profileCanvas.requestPaint() }
+                                    function onMandatoryAltitudeMChanged() { profileCanvas.requestPaint() }
+                                    function onMandatoryRouteIndexChanged() { profileCanvas.requestPaint() }
                                 }
                                 onPaint: {
                                     var ctx = getContext("2d")
@@ -481,8 +502,21 @@ Item {
                                         var mx = left + plotW * m / (alts.length - 1)
                                         var my = bottom - (alts[m] / 400) * plotH
                                         ctx.beginPath(); ctx.arc(mx, my, 4, 0, Math.PI * 2)
-                                        ctx.fillStyle = "#EAF7FF"; ctx.fill()
-                                        ctx.strokeStyle = root.cyan; ctx.lineWidth = 2; ctx.stroke()
+                                        var isMandatoryRoutePoint = root.mandatoryPointSet && root.mandatoryRouteIndex === m
+                                        ctx.fillStyle = isMandatoryRoutePoint ? "#155BFF" : "#EAF7FF"; ctx.fill()
+                                        ctx.strokeStyle = isMandatoryRoutePoint ? "#B8D4FF" : root.cyan; ctx.lineWidth = 2; ctx.stroke()
+                                    }
+                                    if (root.mandatoryPointSet) {
+                                        var mandatoryX = left + plotW * root.mandatoryProgress
+                                        var mandatoryY = bottom - (root.mandatoryAltitudeM / 400) * plotH
+                                        ctx.strokeStyle = "#155BFF"; ctx.lineWidth = 2; ctx.setLineDash([4, 3])
+                                        ctx.beginPath(); ctx.moveTo(mandatoryX, mandatoryY + 10); ctx.lineTo(mandatoryX, bottom); ctx.stroke()
+                                        ctx.setLineDash([])
+                                        ctx.beginPath(); ctx.arc(mandatoryX, mandatoryY, 9, 0, Math.PI * 2)
+                                        ctx.fillStyle = "#155BFF"; ctx.fill()
+                                        ctx.strokeStyle = "#B8D4FF"; ctx.lineWidth = 2; ctx.stroke()
+                                        ctx.fillStyle = "#FFFFFF"; ctx.font = "bold 11px sans-serif"
+                                        ctx.fillText("ОБЯЗАТЕЛЬНАЯ", Math.min(right - 100, mandatoryX + 13), Math.max(top + 13, mandatoryY - 13))
                                     }
                                     ctx.fillStyle = "#DCE8F2"; ctx.font = "11px sans-serif"
                                     ctx.fillText("Высота, м", 3, 12)
@@ -567,6 +601,45 @@ Item {
                                             ctx.fillText(liveLabel, Math.min(right - 35, aircraftX + 10), Math.max(top + 28, aircraftY + 25))
                                         }
                                     }
+                                }
+
+                                MouseArea {
+                                    id: mandatoryPointMouse
+                                    anchors.fill: parent
+                                    z: 5
+                                    hoverEnabled: true
+                                    cursorShape: pressed ? Qt.ClosedHandCursor : Qt.CrossCursor
+                                    property int dragRouteIndex: -1
+                                    property real plotLeft: 42
+                                    property real plotRight: width - 12
+                                    property real plotTop: 18
+                                    property real plotBottom: height - 28
+
+                                    function updateMandatoryPoint(mouseX, mouseY) {
+                                        var progress = Math.max(0, Math.min(1, (mouseX - plotLeft) / Math.max(1, plotRight - plotLeft)))
+                                        var altitude = Math.max(0, Math.min(400, (plotBottom - mouseY) / Math.max(1, plotBottom - plotTop) * 400))
+                                        root.mandatoryProgress = dragRouteIndex >= 0 ? dragRouteIndex / (routeModel.count - 1) : progress
+                                        root.mandatoryAltitudeM = Math.round(altitude)
+                                        root.mandatoryPointSet = true
+                                        if (dragRouteIndex >= 0)
+                                            routeModel.setProperty(dragRouteIndex, "altitude", String(root.mandatoryAltitudeM))
+                                    }
+
+                                    onPressed: {
+                                        if (mouse.x < plotLeft || mouse.x > plotRight || mouse.y < plotTop || mouse.y > plotBottom) {
+                                            mouse.accepted = false
+                                            return
+                                        }
+                                        var nearest = Math.round((mouse.x - plotLeft) / Math.max(1, plotRight - plotLeft) * (routeModel.count - 1))
+                                        var nearestX = plotLeft + (plotRight - plotLeft) * nearest / (routeModel.count - 1)
+                                        dragRouteIndex = Math.abs(mouse.x - nearestX) <= 14 ? nearest : -1
+                                        root.mandatoryRouteIndex = dragRouteIndex
+                                        updateMandatoryPoint(mouse.x, mouse.y)
+                                    }
+                                    onPositionChanged: {
+                                        if (pressed) updateMandatoryPoint(mouse.x, mouse.y)
+                                    }
+                                    onReleased: dragRouteIndex = -1
                                 }
                             }
 
