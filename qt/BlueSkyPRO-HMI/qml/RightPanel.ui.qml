@@ -212,7 +212,7 @@ Item {
 
             Text {
                 text: String(root.checklistPassedCount)
-                color: root.green
+                color: root.checklistPassedCount === root.checklistItems.length ? root.green : root.amber
                 font.family: "B612"
                 font.pixelSize: 13
                 font.bold: true
@@ -245,7 +245,7 @@ Item {
             model: root.checklistItems
             delegate: Text {
                 width: parent.width
-                height: 18
+                height: 17
                 text: (modelData.status === "PASS" ? "✓" :
                        modelData.status === "FAIL" ? "✕" :
                        modelData.status === "WARNING" ? "⚠" : "○")
@@ -303,7 +303,7 @@ Item {
             Row {
                 visible: panelSettingsPopup.enabledTools.indexOf("NOTAM") >= 0
                 width: parent.width; height: 23
-                Text { width: parent.width * 0.55; text: "NOTAM / AIRSPACE"; color: root.text; font.family: "B612"; font.pixelSize: 11; verticalAlignment: Text.AlignVCenter }
+                Text { width: parent.width * 0.55; text: "NOTAM"; color: root.text; font.family: "B612"; font.pixelSize: 11; verticalAlignment: Text.AlignVCenter }
                 Text { width: parent.width * 0.45; text: "NOT CHECKED"; color: root.amber; font.family: "B612"; font.pixelSize: 10; font.bold: true; horizontalAlignment: Text.AlignRight; verticalAlignment: Text.AlignVCenter }
                 MouseArea { anchors.fill: parent; cursorShape: Qt.PointingHandCursor; onClicked: root.selectedOperationalTool = "NOTAM" }
             }
