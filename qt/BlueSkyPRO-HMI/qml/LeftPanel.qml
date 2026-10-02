@@ -1,4 +1,4 @@
-﻿import QtQuick
+import QtQuick
 
 Item {
     id: root
@@ -342,7 +342,7 @@ Item {
 
             Repeater {
                 model: [
-                    { "label": "Анализ миссии", "key": "analysis", "enabled": root.analysisVisible },
+                    { "label": "Профиль миссии", "key": "analysis", "enabled": root.analysisVisible },
                     { "label": "Шаблоны миссий", "key": "templates", "enabled": root.templatesExpanded }
                 ]
 
