@@ -250,8 +250,8 @@ Item {
                             if (modelData.key === "analysis") {
                                 root.analysisVisible = !root.analysisVisible
                             } else if (modelData.key === "templates") {
+                                // Toggle visibility of the selected mission templates.
                                 root.templatesExpanded = !root.templatesExpanded
-                                root.panelConfigOpen = false
                             }
                         }
                     }
@@ -262,7 +262,7 @@ Item {
 
     Flickable {
         id: templateList
-        visible: (root.missionVisible || root.missionCreationMode) && !root.panelConfigOpen
+        visible: (root.missionVisible || root.missionCreationMode) && root.templatesExpanded && !root.panelConfigOpen
         x: 10
         y: 92
         width: parent.width - 20
