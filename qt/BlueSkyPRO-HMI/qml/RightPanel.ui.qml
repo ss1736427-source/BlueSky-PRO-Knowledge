@@ -390,7 +390,7 @@ Item {
         x: 16
         y: (operationalCard.visible ? operationalCard.y + operationalCard.height : (checklistCard.visible ? checklistCard.y + checklistCard.height : 54)) + 10
         width: parent.width - 32
-        height: Math.max(72, root.informationAvailableHeight)
+        height: Math.max(72, Math.min(root.informationAvailableHeight, (root.selectedInformationMessage ? informationDetailsColumn.implicitHeight : informationList.implicitHeight) + 48))
         radius: 8
         color: "transparent"
         border.color: "#236078"
@@ -433,21 +433,29 @@ Item {
     }
 
     // Empty body is intentional: no unacknowledged messages means no alert text.
-    Column {
+    Flickable {
         id: informationOverview
         visible: informationCard.visible && !root.selectedInformationMessage
         x: informationCard.x + 10
         y: informationCard.y + 39
         width: informationCard.width - 20
         height: Math.max(0, informationCard.height - 48)
+        contentWidth: width
+        contentHeight: informationList.implicitHeight
         clip: true
-        spacing: 2
+        boundsBehavior: Flickable.StopAtBounds
+        flickableDirection: Flickable.VerticalFlick
+
+        Column {
+            id: informationList
+            width: informationOverview.width
+            spacing: 2
 
         Repeater {
             model: root.visibleSystemMessages()
 
             delegate: Item {
-                width: informationOverview.width
+                width: informationList.width
                 // Card height follows the wrapped message text, not a fixed row size.
                 height: Math.max(39, messageBody.implicitHeight + 22)
 
@@ -497,18 +505,27 @@ Item {
                     }
                 }
             }
+            }
         }
     }
 
-    Column {
+    Flickable {
         id: informationDetails
         visible: informationCard.visible && !!root.selectedInformationMessage
         x: informationCard.x + 12
         y: informationCard.y + 40
         width: informationCard.width - 24
         height: Math.max(0, informationCard.height - 48)
+        contentWidth: width
+        contentHeight: informationDetailsColumn.implicitHeight
         clip: true
-        spacing: 5
+        boundsBehavior: Flickable.StopAtBounds
+        flickableDirection: Flickable.VerticalFlick
+
+        Column {
+            id: informationDetailsColumn
+            width: informationDetails.width
+            spacing: 5
 
         Text {
             width: parent.width
@@ -612,6 +629,7 @@ Item {
                         }
                     }
                 }
+            }
             }
         }
     }
