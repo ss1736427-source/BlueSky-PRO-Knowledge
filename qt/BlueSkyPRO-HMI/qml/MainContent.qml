@@ -41,10 +41,17 @@ Item {
     // Mission review status is independent of flight readiness.
     property string missionReviewState: "REWORK"
     // Populated by the mission/task aggregation layer; current value is a design-preview example.
-    property string missionSummary: "3D картография территории"
+    property string missionSummary: "Картография · 3D-реконструкция · Экомониторинг"
+    // Design Studio fixture only. Production assignments must come from the planning allocator.
+    property var missionAssignments: [
+        { uavId: "BS-001", templateIndex: 1, task: "3D-картография", sector: "Северный склон" },
+        { uavId: "BS-002", templateIndex: 1, task: "3D-картография", sector: "Южный склон" },
+        { uavId: "BS-003", templateIndex: 1, task: "3D-картография", sector: "Западный склон" },
+        { uavId: "BS-004", templateIndex: 7, task: "Экомониторинг", sector: "Периметр" }
+    ]
     property bool missionProfileOpen: false
     // Example current automatic mission composition; supplied by mission/task aggregation in production.
-    property var missionTemplateIndices: [1]
+    property var missionTemplateIndices: [0, 1, 7]
     property string journalStatus: "READY"
     property string activeTool: bottomToolbar.activeTool
     // Entry flow: role authorization -> pilot task setup -> brief transition -> workspace.
@@ -154,6 +161,7 @@ Item {
             missionReviewState: root.missionReviewState
             missionTemplateIndices: root.missionTemplateIndices
             uavModel: uavStatus.uavModel
+            missionAssignments: root.missionAssignments
             selectedUavIndex: root.selectedUavIndex
             onUavSelectionRequested: function(index) { root.selectedUavIndex = index }
             onCloseRequested: root.missionProfileOpen = false
