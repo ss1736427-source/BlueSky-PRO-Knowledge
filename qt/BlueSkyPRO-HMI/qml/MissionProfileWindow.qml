@@ -88,6 +88,23 @@ Item {
     }
     property var tableRows: []
 
+    function mandatoryRoutePosition(point) {
+        var routeIndex = point.routeIndex === undefined ? -1 : Number(point.routeIndex)
+        if (routeIndex >= 0 && routeModel.count > 1)
+            return routeIndex / (routeModel.count - 1)
+        return Number(point.progress)
+    }
+
+    function mandatoryOrdinal(pointId) {
+        var ordered = root.mandatoryPoints.slice(0)
+        ordered.sort(function(a, b) {
+            return root.mandatoryRoutePosition(a) - root.mandatoryRoutePosition(b)
+        })
+        for (var i = 0; i < ordered.length; i++)
+            if (ordered[i].id === pointId) return i + 1
+        return 0
+    }
+
     function rebuildTableRows() {
         var rows = []
         var mandatory = root.mandatoryPoints.slice(0)
@@ -131,7 +148,7 @@ Item {
                     var coords = isFinite(latA) && isFinite(lonA) && isFinite(latB) && isFinite(lonB)
                                  ? (latA + (latB-latA)*fraction).toFixed(4) + ", " + (lonA + (lonB-lonA)*fraction).toFixed(4)
                                  : "—"
-                    rows.push({ pointType: "Обязательная", pointName: "Обязательная точка", coordinates: coords,
+                    rows.push({ pointType: "Обязательная", pointName: "Обязательная точка " + root.mandatoryOrdinal(mandatory[j].id), coordinates: coords,
                         course: "—", distance: "—", altitude: Math.round(Number(mandatory[j].altitude)),
                         airspeed: "—", groundspeed: "—", time: "—", deltaHeight: "—", energy: "—",
                         note: "Требует пересчёта", isMandatory: true, mandatoryId: mandatory[j].id, routeIndex: -1 })
@@ -624,7 +641,7 @@ Item {
                                         // The draggable marker itself is a QML overlay above this Canvas.
                                         // Canvas retains the guide line and label only.
                                         ctx.fillStyle = "#FFFFFF"; ctx.font = "bold 11px sans-serif"
-                                        ctx.fillText("ОБЯЗАТЕЛЬНАЯ", Math.min(right - 100, mandatoryX + 13), Math.max(top + 13, mandatoryY - 13))
+                                        ctx.fillText("ОБЯЗАТЕЛЬНАЯ " + root.mandatoryOrdinal(mandatory.id), Math.min(right - 125, mandatoryX + 13), Math.max(top + 13, mandatoryY - 13))
                                     }
                                     ctx.fillStyle = "#DCE8F2"; ctx.font = "11px sans-serif"
                                     ctx.fillText("Высота, м", 3, 12)
