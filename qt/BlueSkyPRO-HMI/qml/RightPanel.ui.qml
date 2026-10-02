@@ -281,7 +281,7 @@ Item {
         x: 16
         y: (checklistCard.visible ? checklistCard.y + checklistCard.height : 54) + 10
         width: parent.width - 32
-        height: root.selectedOperationalTool === "" ? 94 : 132
+        height: root.selectedOperationalTool === "" ? 94 : Math.min(parent.height * 0.25, Math.max(94, operationalDetailColumn.implicitHeight + 50))
         radius: 8
         color: "transparent"
         border.color: "#236078"
