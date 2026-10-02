@@ -86,17 +86,81 @@ Item {
         root.columnOrder = next
         profileSettings.columnOrderJson = JSON.stringify(next)
     }
-    function columnValue(rowIndex, key) {
-        var row = routeModel.get(rowIndex)
-        if (!row) return ""
-        var values = {
-            number: String(rowIndex + 1), type: row.pointType,
-            point: row.pointName + "\n" + row.coordinates,
-            course: row.course, distance: row.distance, altitude: row.altitude,
-            airspeed: row.airspeed, groundspeed: row.groundspeed, time: row.time,
-            deltaHeight: row.deltaHeight, energy: row.energy, note: row.note
+    property var tableRows: []
+
+    function rebuildTableRows() {
+        var rows = []
+        var mandatory = root.mandatoryPoints.slice(0)
+        mandatory.sort(function(a, b) { return Number(a.progress) - Number(b.progress) })
+        for (var i = 0; i < routeModel.count; i++) {
+            var source = routeModel.get(i)
+            var progress = i / Math.max(1, routeModel.count - 1)
+            var matching = -1
+            for (var m = 0; m < mandatory.length; m++) {
+                if (Math.abs(Number(mandatory[m].progress) - progress) < 0.012) { matching = m; break }
+            }
+            if (matching >= 0) {
+                rows.push({ pointType: "Обязательная", pointName: source.pointName, coordinates: source.coordinates,
+                    course: source.course, distance: source.distance, altitude: Math.round(Number(mandatory[matching].altitude)),
+                    airspeed: source.airspeed, groundspeed: source.groundspeed, time: source.time,
+                    deltaHeight: source.deltaHeight, energy: source.energy, note: "Обязательная точка",
+                    isMandatory: true, mandatoryId: mandatory[matching].id, routeIndex: i })
+            } else {
+                rows.push({ pointType: source.pointType, pointName: source.pointName, coordinates: source.coordinates,
+                    course: source.course, distance: source.distance, altitude: source.altitude,
+                    airspeed: source.airspeed, groundspeed: source.groundspeed, time: source.time,
+                    deltaHeight: source.deltaHeight, energy: source.energy, note: source.note,
+                    isMandatory: false, routeIndex: i })
+            }
+            for (var j = 0; j < mandatory.length; j++) {
+                var mp = Number(mandatory[j].progress)
+                if (Math.abs(mp - progress) < 0.012) continue
+                var nextProgress = (i + 1) / Math.max(1, routeModel.count - 1)
+                if (mp > progress && mp < nextProgress) {
+                    var lower = source
+                    var upper = routeModel.get(Math.min(i + 1, routeModel.count - 1))
+                    var fraction = (mp - progress) * Math.max(1, routeModel.count - 1)
+                    var lowerCoords = String(lower.coordinates).split(",")
+                    var upperCoords = String(upper.coordinates).split(",")
+                    var latA = Number(lowerCoords[0]), lonA = Number(lowerCoords[1])
+                    var latB = Number(upperCoords[0]), lonB = Number(upperCoords[1])
+                    var coords = isFinite(latA) && isFinite(lonA) && isFinite(latB) && isFinite(lonB)
+                                 ? (latA + (latB-latA)*fraction).toFixed(4) + ", " + (lonA + (lonB-lonA)*fraction).toFixed(4)
+                                 : "—"
+                    rows.push({ pointType: "Обязательная", pointName: "Обязательная точка", coordinates: coords,
+                        course: "—", distance: "—", altitude: Math.round(Number(mandatory[j].altitude)),
+                        airspeed: "—", groundspeed: "—", time: "—", deltaHeight: "—", energy: "—",
+                        note: "Требует пересчёта", isMandatory: true, mandatoryId: mandatory[j].id, routeIndex: -1 })
+                }
+            }
         }
+        root.tableRows = rows
+    }
+
+    function columnValue(rowIndex, key) {
+        var row = root.tableRows[rowIndex]
+        if (!row) return ""
+        var values = { number: String(rowIndex + 1), type: row.pointType,
+            point: row.pointName + "\n" + row.coordinates, course: row.course,
+            distance: row.distance, altitude: row.altitude, airspeed: row.airspeed,
+            groundspeed: row.groundspeed, time: row.time, deltaHeight: row.deltaHeight,
+            energy: row.energy, note: row.note }
         return values[key] === undefined ? "" : values[key]
+    }
+
+    function setTableAltitude(rowIndex, value) {
+        var row = root.tableRows[rowIndex], altitude = Number(value)
+        if (!row || !isFinite(altitude) || altitude < 0 || altitude > 5000) return
+        if (row.isMandatory) {
+            var next = root.mandatoryPoints.slice(0)
+            for (var i = 0; i < next.length; i++) {
+                if (next[i].id === row.mandatoryId) {
+                    next[i] = { id: next[i].id, progress: next[i].progress, altitude: altitude }
+                    root.mandatoryPoints = next
+                    return
+                }
+            }
+        } else if (row.routeIndex >= 0) routeModel.setProperty(row.routeIndex, "altitude", String(altitude))
     }
     function parameterKey(i) {
         return ["number", "type", "point", "course", "distance", "altitude",
@@ -124,6 +188,7 @@ Item {
         } catch (e) {
             root.mandatoryPoints = []
         }
+        root.rebuildTableRows()
         if (profileSettings.columnOrderJson.length > 0) {
             try {
                 var saved = JSON.parse(profileSettings.columnOrderJson)
@@ -134,7 +199,11 @@ Item {
     }
 
     onTableSplitRatioChanged: profileSettings.tableSplitRatio = tableSplitRatio
-    onMandatoryPointsChanged: profileSettings.mandatoryPointsJson = JSON.stringify(mandatoryPoints)
+    onMandatoryPointsChanged: {
+        profileSettings.mandatoryPointsJson = JSON.stringify(mandatoryPoints)
+        rebuildTableRows()
+        profileCanvas.requestPaint()
+    }
 
     anchors.fill: parent
     z: 80
@@ -307,7 +376,7 @@ Item {
                                 width: parent.width
                                 height: parent.height - tableHeader.height
                                 clip: true
-                                model: routeModel
+                                model: root.tableRows
                                 delegate: Row {
                                     id: routeRowDelegate
                                     width: routeTable.width
@@ -353,7 +422,7 @@ Item {
                                                     verticalAlignment: Text.AlignVCenter
                                                     selectByMouse: true
                                                     validator: IntValidator { bottom: 0; top: 5000 }
-                                                    onEditingFinished: routeModel.setProperty(routeRowDelegate.rowIndex, "altitude", text)
+                                                    onEditingFinished: root.setTableAltitude(routeRowDelegate.rowIndex, text)
                                                 }
                                             }
                                         }
@@ -620,7 +689,7 @@ Item {
                                     property real dragOffsetX: 0
                                     property real dragOffsetY: 0
 
-                                    function pointAt(x, y) {
+                                    function mandatoryPointAt(x, y) {
                                         var best = -1, bestD = 18 * 18
                                         for (var i = 0; i < root.mandatoryPoints.length; i++) {
                                             var px = plotLeft + Number(root.mandatoryPoints[i].progress) * (plotRight - plotLeft)
@@ -629,6 +698,24 @@ Item {
                                             if (d <= bestD) { best = i; bestD = d }
                                         }
                                         return best
+                                    }
+                                    function routePointAt(x, y) {
+                                        var best = -1, bestD = 16 * 16
+                                        for (var i = 0; i < routeModel.count; i++) {
+                                            var px = plotLeft + i / Math.max(1, routeModel.count - 1) * (plotRight - plotLeft)
+                                            var py = plotBottom - Number(routeModel.get(i).altitude) / 400 * (plotBottom - plotTop)
+                                            var dx = x - px, dy = y - py, d = dx * dx + dy * dy
+                                            if (d <= bestD) { best = i; bestD = d }
+                                        }
+                                        return best
+                                    }
+                                    function addMandatoryPoint(progress, altitude) {
+                                        var next = root.mandatoryPoints.slice(0)
+                                        next.push({ id: "mandatory-" + Date.now().toString() + "-" + next.length,
+                                            progress: Math.max(0, Math.min(1, progress)),
+                                            altitude: Math.round(Math.max(0, Math.min(400, altitude))) })
+                                        root.mandatoryPoints = next
+                                        return next.length - 1
                                     }
 
                                     function updateMandatoryPoint(index, mouseX, mouseY) {
@@ -655,7 +742,7 @@ Item {
                                             mouse.accepted = false
                                             return
                                         }
-                                        var hit = pointAt(mouse.x, mouse.y)
+                                        var hit = mandatoryPointAt(mouse.x, mouse.y)
                                         if (mouse.button === Qt.RightButton) {
                                             if (hit >= 0) removeMandatoryPoint(hit)
                                             else mouse.accepted = false
@@ -668,6 +755,16 @@ Item {
                                             return
                                         }
 
+                                        var routeHit = routePointAt(mouse.x, mouse.y)
+                                        if (routeHit >= 0) {
+                                            var routeProgress = routeHit / Math.max(1, routeModel.count - 1)
+                                            var routeAltitude = Number(routeModel.get(routeHit).altitude)
+                                            var exists = false
+                                            for (var r = 0; r < root.mandatoryPoints.length; r++)
+                                                if (Math.abs(Number(root.mandatoryPoints[r].progress) - routeProgress) < 0.012) exists = true
+                                            if (!exists) dragMandatoryIndex = addMandatoryPoint(routeProgress, routeAltitude)
+                                            return
+                                        }
                                         var progress = (mouse.x - plotLeft) / Math.max(1, plotRight - plotLeft)
                                         var routePosition = progress * (routeModel.count - 1)
                                         var lower = Math.max(0, Math.min(routeModel.count - 2, Math.floor(routePosition)))
@@ -679,11 +776,8 @@ Item {
                                             mouse.accepted = false
                                             return
                                         }
-                                        var next = root.mandatoryPoints.slice(0)
-                                        next.push({ id: Date.now().toString(), progress: progress,
-                                                    altitude: Math.round(Math.max(0, Math.min(400, (plotBottom - mouse.y) / Math.max(1, plotBottom - plotTop) * 400))) })
-                                        root.mandatoryPoints = next
-                                        dragMandatoryIndex = next.length - 1
+                                        dragMandatoryIndex = addMandatoryPoint(progress,
+                                            (plotBottom - mouse.y) / Math.max(1, plotBottom - plotTop) * 400)
                                     }
                                     onPositionChanged: {
                                         if (pressed && dragMandatoryIndex >= 0)
@@ -691,7 +785,7 @@ Item {
                                     }
                                     onReleased: dragMandatoryIndex = -1
                                     onDoubleClicked: {
-                                        var hit = pointAt(mouse.x, mouse.y)
+                                        var hit = mandatoryPointAt(mouse.x, mouse.y)
                                         if (hit >= 0) removeMandatoryPoint(hit)
                                     }
                                 }
