@@ -809,9 +809,14 @@ Item {
         anchors.right: parent.right
         anchors.topMargin: 44
         width: Math.min(parent.width - 16, Math.max(260, panelSettingsPopup.contentWidth))
-        height: Math.min(parent.height - 52, 86 + panelSettingsPopup.tools.length * 34)
-        title: "INFORMATION SETTINGS"
+        height: Math.min(parent.height - 52, panelSettingsPopup.contentHeight + 30)
+        title: "PANEL CONTROL"
         tools: ["Checklist", "Weather", "NOTAM", "Information", "Readiness", "Validation", "Send Flight Plan", "Start Mission", "Map Alerts"]
+        toolGroups: [
+            { key: "monitoring", title: "MONITORING", expandedByDefault: true, tools: ["Checklist", "Weather", "NOTAM", "Information"] },
+            { key: "mission", title: "MISSION CONTROL", expandedByDefault: true, tools: ["Readiness", "Validation", "Send Flight Plan", "Start Mission"] },
+            { key: "map", title: "MAP", expandedByDefault: false, tools: ["Map Alerts"] }
+        ]
         onClosed: open = false
     }
 }
