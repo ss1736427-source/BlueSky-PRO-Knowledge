@@ -18,6 +18,14 @@ The Route model is a deterministic planning-domain object. It does not authorize
 
 A route is always traceable to the Mission Version that produced it.
 
+## Multi-UAV mission allocation
+
+A mission may contain multiple selected templates and multiple participating UAVs. The mission-planning/allocation layer produces explicit task-assignment records before vehicle-specific route compilation. Each assignment identifies the UAV, source template/task, role or spatial sector, and its route candidate/version. One template may produce assignments for several UAVs; the assignments must describe distinct work scopes where applicable.
+
+The allocator handles routine initial distribution automatically. If it cannot produce a complete feasible allocation, it returns a structured exception for operator intervention. Routine allocation does not constitute flight authorization and does not bypass canonical route validation, restrictions, vehicle feasibility, safety gates, or required approvals.
+
+Each participating UAV has its own route candidate and vehicle-specific planning context. The map presents the combined mission-wide set of routes; selecting a UAV filters/emphasizes its route in the table and flight profile without removing other routes from the map. UI-local preview data is not authoritative route or assignment storage.
+
 ## Minimum model
 
 - immutable route identity and version;
