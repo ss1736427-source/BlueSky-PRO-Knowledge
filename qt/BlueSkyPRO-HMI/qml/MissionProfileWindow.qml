@@ -706,7 +706,8 @@ Item {
                                         return best
                                     }
                                     function routePointAt(x, y) {
-                                        var best = -1, bestD = 16 * 16
+                                        // Match the visible route nodes with a forgiving touch/mouse hit area.
+                                        var best = -1, bestD = 28 * 28
                                         for (var i = 0; i < routeModel.count; i++) {
                                             var px = plotLeft + i / Math.max(1, routeModel.count - 1) * (plotRight - plotLeft)
                                             var py = plotBottom - Number(routeModel.get(i).altitude) / 400 * (plotBottom - plotTop)
@@ -714,6 +715,26 @@ Item {
                                             if (d <= bestD) { best = i; bestD = d }
                                         }
                                         return best
+                                    }
+
+                                    function nearestRouteProgress(x, y) {
+                                        // Project the pointer onto every visible profile segment.
+                                        var bestProgress = -1, bestDistance = 28 * 28
+                                        for (var i = 0; i < routeModel.count - 1; i++) {
+                                            var x1 = plotLeft + i / Math.max(1, routeModel.count - 1) * (plotRight - plotLeft)
+                                            var x2 = plotLeft + (i + 1) / Math.max(1, routeModel.count - 1) * (plotRight - plotLeft)
+                                            var y1 = plotBottom - Number(routeModel.get(i).altitude) / 400 * (plotBottom - plotTop)
+                                            var y2 = plotBottom - Number(routeModel.get(i + 1).altitude) / 400 * (plotBottom - plotTop)
+                                            var dx = x2 - x1, dy = y2 - y1
+                                            var t = Math.max(0, Math.min(1, ((x-x1)*dx + (y-y1)*dy) / Math.max(1, dx*dx + dy*dy)))
+                                            var qx = x1 + t*dx, qy = y1 + t*dy
+                                            var ex = x-qx, ey = y-qy, d = ex*ex + ey*ey
+                                            if (d < bestDistance) {
+                                                bestDistance = d
+                                                bestProgress = (i+t) / Math.max(1, routeModel.count - 1)
+                                            }
+                                        }
+                                        return bestProgress
                                     }
                                     function addMandatoryPoint(progress, altitude) {
                                         var next = root.mandatoryPoints.slice(0)
@@ -775,19 +796,15 @@ Item {
                                             }
                                             return
                                         }
-                                        var progress = (mouse.x - plotLeft) / Math.max(1, plotRight - plotLeft)
-                                        var routePosition = progress * (routeModel.count - 1)
-                                        var lower = Math.max(0, Math.min(routeModel.count - 2, Math.floor(routePosition)))
-                                        var fraction = routePosition - lower
-                                        var lowerY = plotBottom - Number(routeModel.get(lower).altitude) / 400 * (plotBottom - plotTop)
-                                        var upperY = plotBottom - Number(routeModel.get(lower + 1).altitude) / 400 * (plotBottom - plotTop)
-                                        var routeY = lowerY + (upperY - lowerY) * fraction
-                                        if (Math.abs(mouse.y - routeY) > 16) {
+                                        var progress = nearestRouteProgress(mouse.x, mouse.y)
+                                        if (progress < 0) {
                                             mouse.accepted = false
                                             return
                                         }
                                         dragMandatoryIndex = addMandatoryPoint(progress,
                                             (plotBottom - mouse.y) / Math.max(1, plotBottom - plotTop) * 400)
+                                        dragOffsetX = 0
+                                        dragOffsetY = 0
                                     }
                                     onPositionChanged: {
                                         if (pressed && dragMandatoryIndex >= 0)
