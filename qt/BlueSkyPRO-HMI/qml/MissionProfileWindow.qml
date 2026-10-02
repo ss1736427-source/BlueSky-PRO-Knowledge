@@ -94,16 +94,6 @@ Item {
         return Number(point.progress)
     }
 
-    function mandatoryOrdinal(pointId) {
-        var ordered = root.mandatoryPoints.slice(0)
-        ordered.sort(function(a, b) {
-            return root.mandatoryRoutePosition(a) - root.mandatoryRoutePosition(b)
-        })
-        for (var i = 0; i < ordered.length; i++)
-            if (ordered[i].id === pointId) return i + 1
-        return 0
-    }
-
     function rebuildTableRows() {
         var rows = []
         var mandatory = root.mandatoryPoints.slice(0)
@@ -118,7 +108,7 @@ Item {
                 }
             }
             if (matching >= 0) {
-                rows.push({ pointType: "Обязательная", pointName: "Обязательная точка " + root.mandatoryOrdinal(mandatory[matching].id), coordinates: source.coordinates,
+                rows.push({ pointType: "Обязательная", pointName: source.pointName, coordinates: source.coordinates,
                     course: source.course, distance: source.distance, altitude: Math.round(Number(mandatory[matching].altitude)),
                     airspeed: source.airspeed, groundspeed: source.groundspeed, time: source.time,
                     deltaHeight: source.deltaHeight, energy: source.energy, note: "Обязательная точка",
@@ -145,7 +135,7 @@ Item {
                     var coords = isFinite(latA) && isFinite(lonA) && isFinite(latB) && isFinite(lonB)
                                  ? (latA + (latB-latA)*fraction).toFixed(4) + ", " + (lonA + (lonB-lonA)*fraction).toFixed(4)
                                  : "—"
-                    rows.push({ pointType: "Обязательная", pointName: "Обязательная точка " + root.mandatoryOrdinal(mandatory[j].id), coordinates: coords,
+                    rows.push({ pointType: "Обязательная", pointName: "Обязательная точка", coordinates: coords,
                         course: "—", distance: "—", altitude: Math.round(Number(mandatory[j].altitude)),
                         airspeed: "—", groundspeed: "—", time: "—", deltaHeight: "—", energy: "—",
                         note: "Требует пересчёта", isMandatory: true, mandatoryId: mandatory[j].id, routeIndex: -1 })
@@ -593,7 +583,9 @@ Item {
                                         profileNodes.push({
                                             progress: boundMandatory ? Number(boundMandatory.progress) : wi / Math.max(1, alts.length - 1),
                                             altitude: boundMandatory ? Number(boundMandatory.altitude) : alts[wi],
-                                            waypoint: wi
+                                            waypoint: wi,
+                                            mandatory: boundMandatory !== null,
+                                            mandatoryId: boundMandatory ? boundMandatory.id : ""
                                         })
                                     }
                                     for (var mi = 0; mi < root.mandatoryPoints.length; mi++) {
@@ -601,9 +593,11 @@ Item {
                                         if (Number(mp.routeIndex) >= 0) continue
                                         profileNodes.push({ progress: Math.max(0, Math.min(1, Number(mp.progress))),
                                                             altitude: Math.max(0, Math.min(400, Number(mp.altitude))),
-                                                            mandatoryIndex: mi })
+                                                            mandatory: true, mandatoryId: mp.id })
                                     }
                                     profileNodes.sort(function(a, b) { return a.progress - b.progress })
+                                    for (var pn = 0; pn < profileNodes.length; pn++)
+                                        profileNodes[pn].routeNumber = pn + 1
                                     ctx.beginPath()
                                     for (var p = 0; p < profileNodes.length; p++) {
                                         var px = left + plotW * profileNodes[p].progress
@@ -611,6 +605,21 @@ Item {
                                         if (p === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py)
                                     }
                                     ctx.strokeStyle = root.cyan; ctx.lineWidth = 3; ctx.stroke()
+                                    // Number every route node in the same sequence as the table.
+                                    for (var rn = 0; rn < profileNodes.length; rn++) {
+                                        var routeNode = profileNodes[rn]
+                                        var labelX = left + plotW * routeNode.progress
+                                        var labelY = bottom - (routeNode.altitude / 400) * plotH - 17
+                                        ctx.beginPath(); ctx.arc(labelX, labelY, 8, 0, Math.PI * 2)
+                                        ctx.fillStyle = routeNode.mandatory ? "#155BFF" : "#071321"
+                                        ctx.fill()
+                                        ctx.strokeStyle = routeNode.mandatory ? "#8DB7FF" : root.cyan
+                                        ctx.lineWidth = 1.5; ctx.stroke()
+                                        ctx.fillStyle = "#FFFFFF"; ctx.font = "bold 10px sans-serif"
+                                        ctx.textAlign = "center"; ctx.textBaseline = "middle"
+                                        ctx.fillText(String(routeNode.routeNumber), labelX, labelY)
+                                    }
+                                    ctx.textAlign = "start"; ctx.textBaseline = "alphabetic"
                                     for (var m = 0; m < alts.length; m++) {
                                         var nodeProgress = m / Math.max(1, alts.length - 1)
                                         var nodeAltitude = alts[m]
@@ -638,7 +647,7 @@ Item {
                                         // The draggable marker itself is a QML overlay above this Canvas.
                                         // Canvas retains the guide line and label only.
                                         ctx.fillStyle = "#FFFFFF"; ctx.font = "bold 11px sans-serif"
-                                        ctx.fillText("ОБЯЗАТЕЛЬНАЯ ТОЧКА " + root.mandatoryOrdinal(mandatory.id), Math.min(right - 175, mandatoryX + 13), Math.max(top + 13, mandatoryY - 13))
+                                        ctx.fillText("ОБЯЗАТЕЛЬНАЯ", Math.min(right - 105, mandatoryX + 13), Math.max(top + 13, mandatoryY - 25))
                                     }
                                     ctx.fillStyle = "#DCE8F2"; ctx.font = "11px sans-serif"
                                     ctx.fillText("Высота, м", 3, 12)
