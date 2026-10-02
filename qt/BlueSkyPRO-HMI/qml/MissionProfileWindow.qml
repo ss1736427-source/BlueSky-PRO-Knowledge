@@ -18,6 +18,7 @@ Item {
     readonly property color muted: "#91A8BA"
     readonly property color switchGreen: "#39D353"
     property bool parameterPanelOpen: true
+    property real tableSplitRatio: 0.47
     property var parameterVisibility: ({
         course: true, distance: true, altitude: true, airspeed: true,
         groundspeed: true, time: true, deltaHeight: true, energy: true, note: true
@@ -97,9 +98,11 @@ Item {
         id: profileSettings
         category: "BlueSkyPRO/MissionProfile"
         property string columnOrderJson: ""
+        property real tableSplitRatio: 0.47
     }
 
     Component.onCompleted: {
+        root.tableSplitRatio = Math.max(0.25, Math.min(0.75, profileSettings.tableSplitRatio))
         if (profileSettings.columnOrderJson.length > 0) {
             try {
                 var saved = JSON.parse(profileSettings.columnOrderJson)
@@ -108,6 +111,8 @@ Item {
             } catch (e) { }
         }
     }
+
+    onTableSplitRatioChanged: profileSettings.tableSplitRatio = tableSplitRatio
 
     anchors.fill: parent
     z: 80
@@ -208,7 +213,7 @@ Item {
                     Rectangle {
                         id: tablePanel
                         width: parent.width
-                        height: Math.round((parent.height - parent.spacing) * 0.47)
+                        height: Math.round((mainColumn.height - splitHandle.height - 2 * mainColumn.spacing) * root.tableSplitRatio)
                         color: root.bg
                         border.color: root.line
                         radius: 3
@@ -336,10 +341,48 @@ Item {
                         }
                     }
 
+                    // Transparent vertical splitter: drag up/down to resize the
+                    // table viewport and the flight-profile plot proportionally.
+                    Item {
+                        id: splitHandle
+                        width: parent.width
+                        height: 12
+                        z: 2
+
+                        Rectangle {
+                            anchors.centerIn: parent
+                            width: parent.width
+                            height: 1
+                            color: splitMouse.containsMouse ? root.cyan : root.line
+                            opacity: splitMouse.containsMouse ? 0.95 : 0.65
+                        }
+
+                        MouseArea {
+                            id: splitMouse
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.SplitVCursor
+                            property real lastY: 0
+
+                            onPressed: lastY = mouse.y
+                            onPositionChanged: {
+                                if (!pressed) return
+                                var delta = mouse.y - lastY
+                                lastY = mouse.y
+                                var available = mainColumn.height - splitHandle.height - 2 * mainColumn.spacing
+                                var minTable = 150
+                                var minProfile = 190
+                                var nextHeight = tablePanel.height + delta
+                                nextHeight = Math.max(minTable, Math.min(available - minProfile, nextHeight))
+                                root.tableSplitRatio = nextHeight / available
+                            }
+                        }
+                    }
+
                     Rectangle {
                         id: profilePanel
                         width: parent.width
-                        height: parent.height - tablePanel.height - parent.spacing
+                        height: mainColumn.height - tablePanel.height - splitHandle.height - 2 * mainColumn.spacing
                         color: root.bg
                         border.color: root.line
                         radius: 3
@@ -372,6 +415,8 @@ Item {
                                 id: profileCanvas
                                 width: parent.width
                                 height: parent.height - 66
+                                onWidthChanged: requestPaint()
+                                onHeightChanged: requestPaint()
                                 onPaint: {
                                     var ctx = getContext("2d")
                                     ctx.clearRect(0, 0, width, height)
