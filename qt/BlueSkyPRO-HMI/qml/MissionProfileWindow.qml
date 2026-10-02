@@ -630,11 +630,34 @@ Item {
                                             mouse.accepted = false
                                             return
                                         }
-                                        var nearest = Math.round((mouse.x - plotLeft) / Math.max(1, plotRight - plotLeft) * (routeModel.count - 1))
+                                        var progress = (mouse.x - plotLeft) / Math.max(1, plotRight - plotLeft)
+                                        var routePosition = progress * (routeModel.count - 1)
+                                        var nearest = Math.max(0, Math.min(routeModel.count - 1, Math.round(routePosition)))
                                         var nearestX = plotLeft + (plotRight - plotLeft) * nearest / (routeModel.count - 1)
-                                        dragRouteIndex = Math.abs(mouse.x - nearestX) <= 14 ? nearest : -1
+                                        var nearestY = plotBottom - Number(routeModel.get(nearest).altitude) / 400 * (plotBottom - plotTop)
+                                        var nearWaypoint = Math.abs(mouse.x - nearestX) <= 14 && Math.abs(mouse.y - nearestY) <= 16
+
+                                        // Only start a new constraint when the operator clicks
+                                        // on the route line or one of its waypoint markers.
+                                        var lower = Math.max(0, Math.min(routeModel.count - 2, Math.floor(routePosition)))
+                                        var fraction = routePosition - lower
+                                        var lowerY = plotBottom - Number(routeModel.get(lower).altitude) / 400 * (plotBottom - plotTop)
+                                        var upperY = plotBottom - Number(routeModel.get(lower + 1).altitude) / 400 * (plotBottom - plotTop)
+                                        var routeY = lowerY + (upperY - lowerY) * fraction
+                                        if (!nearWaypoint && Math.abs(mouse.y - routeY) > 16) {
+                                            mouse.accepted = false
+                                            return
+                                        }
+
+                                        dragRouteIndex = nearWaypoint ? nearest : -1
                                         root.mandatoryRouteIndex = dragRouteIndex
-                                        updateMandatoryPoint(mouse.x, mouse.y)
+                                        if (nearWaypoint) {
+                                            root.mandatoryProgress = nearest / (routeModel.count - 1)
+                                            root.mandatoryAltitudeM = Number(routeModel.get(nearest).altitude)
+                                            root.mandatoryPointSet = true
+                                        } else {
+                                            updateMandatoryPoint(mouse.x, mouse.y)
+                                        }
                                     }
                                     onPositionChanged: {
                                         if (pressed) updateMandatoryPoint(mouse.x, mouse.y)
