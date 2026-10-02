@@ -388,18 +388,18 @@ Item {
                     id: uavTabs
                     anchors.left: missionIdText.right
                     anchors.leftMargin: 14
-                    anchors.right: collapsedToolsToggle.left
-                    anchors.rightMargin: 12
                     anchors.verticalCenter: parent.verticalCenter
+                    width: Math.min(implicitWidth, Math.max(0, collapsedToolsToggle.x - x - 12))
                     height: 26
                     spacing: 6
+                    clip: true
 
                     Repeater {
                         model: root.uavModel
                         delegate: Rectangle {
                             required property int index
                             required property var modelData
-                            width: Math.max(48, (uavTabs.width - uavTabs.spacing * Math.max(0, root.uavModel.length - 1)) / Math.max(1, root.uavModel.length))
+                            width: Math.max(48, tabLabel.implicitWidth + 16)
                             height: uavTabs.height
                             radius: 3
                             color: index === root.selectedUavIndex ? "#102B3A" : "#091725"
@@ -407,6 +407,7 @@ Item {
                             border.width: index === root.selectedUavIndex ? 1.5 : 1
 
                             Text {
+                                id: tabLabel
                                 anchors.fill: parent
                                 anchors.leftMargin: 5
                                 anchors.rightMargin: 5
