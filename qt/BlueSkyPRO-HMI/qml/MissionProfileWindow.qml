@@ -287,7 +287,7 @@ Item {
                     anchors.left: parent.left
                     anchors.leftMargin: 10
                     y: (parent.height - height) / 2
-                    text: "ПРОФИЛЬ МИССИИ"
+                    text: "МИССИЯ"
                     color: root.cyan
                     font.family: "B612"
                     font.pixelSize: 15
