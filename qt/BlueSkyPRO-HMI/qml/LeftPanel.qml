@@ -390,8 +390,9 @@ Item {
                             if (modelData.key === "analysis") {
                                 root.analysisVisible = !root.analysisVisible
                             } else if (modelData.key === "templates") {
+                                // Show/hide the mission templates assigned to the current mission.
+                                // Keep settings open so the operator can see and reverse the toggle.
                                 root.templatesExpanded = !root.templatesExpanded
-                                root.panelConfigOpen = false
                             }
                             root.panelConfigurationChanged()
                         }
