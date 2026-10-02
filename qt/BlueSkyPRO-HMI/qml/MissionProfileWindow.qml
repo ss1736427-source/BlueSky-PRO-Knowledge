@@ -97,8 +97,9 @@ Item {
             var progress = i / Math.max(1, routeModel.count - 1)
             var matching = -1
             for (var m = 0; m < mandatory.length; m++) {
-                if ((Number(mandatory[m].routeIndex) === i && Number(mandatory[m].routeIndex) >= 0)
-                    || (Number(mandatory[m].routeIndex) < 0 && Math.abs(Number(mandatory[m].progress) - progress) < 0.012)) {
+                var boundRouteIndex = mandatory[m].routeIndex === undefined ? -1 : Number(mandatory[m].routeIndex)
+                if ((boundRouteIndex === i && boundRouteIndex >= 0)
+                    || (boundRouteIndex < 0 && Math.abs(Number(mandatory[m].progress) - progress) < 0.012)) {
                     matching = m; break
                 }
             }
