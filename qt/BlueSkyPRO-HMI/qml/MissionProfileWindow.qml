@@ -899,6 +899,8 @@ Item {
 
                 Rectangle {
                     id: parameterPanel
+                    // Keep the settings panel above the profile drag MouseArea.
+                    z: 40
                     width: root.parameterPanelOpen ? 270 : 0
                     height: parent.height
                     color: root.bg
