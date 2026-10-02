@@ -268,7 +268,7 @@ Item {
         visible: panelSettingsPopup.enabledTools.indexOf("Weather") >= 0
                  || panelSettingsPopup.enabledTools.indexOf("NOTAM") >= 0
         x: 16
-        y: checklistCard.y + checklistCard.height + 10
+        y: (checklistCard.visible ? checklistCard.y + checklistCard.height : 54) + 10
         width: parent.width - 32
         height: root.selectedOperationalTool === "" ? 94 : 132
         radius: 8
@@ -370,7 +370,7 @@ Item {
         visible: panelSettingsPopup.enabledTools.indexOf("Information") >= 0
                  || root.hasUnacknowledgedCriticalMessage()
         x: 16
-        y: (operationalCard.visible ? operationalCard.y + operationalCard.height : checklistCard.y + checklistCard.height) + 10
+        y: (operationalCard.visible ? operationalCard.y + operationalCard.height : (checklistCard.visible ? checklistCard.y + checklistCard.height : 54)) + 10
         width: parent.width - 32
         height: Math.min(root.informationAvailableHeight,
                          Math.max(72, (root.selectedInformationMessage
