@@ -240,10 +240,30 @@ Item {
                                         MouseArea {
                                             id: headerDragArea
                                             anchors.fill: parent
-                                            cursorShape: Qt.SizeAllCursor
+                                            cursorShape: pressed ? Qt.ClosedHandCursor : Qt.OpenHandCursor
+                                            drag.target: null
+                                            property real pressX: 0
+                                            property real pressY: 0
+                                            property bool didDrag: false
+
+                                            onPressed: {
+                                                pressX = mouse.x
+                                                pressY = mouse.y
+                                                didDrag = false
+                                            }
+
+                                            onPositionChanged: {
+                                                if (pressed &&
+                                                    (Math.abs(mouse.x - pressX) > Qt.styleHints.startDragDistance ||
+                                                     Math.abs(mouse.y - pressY) > Qt.styleHints.startDragDistance)) {
+                                                    didDrag = true
+                                                }
+                                            }
+
                                             onReleased: {
-                                                var xInHeader = headerCell.x + mouse.x
-                                                root.moveColumn(modelData.key, root.columnAtX(xInHeader))
+                                                if (!didDrag) return
+                                                var p = headerDragArea.mapToItem(tableHeader, mouse.x, mouse.y)
+                                                root.moveColumn(modelData.key, root.columnAtX(p.x))
                                             }
                                         }
                                     }
