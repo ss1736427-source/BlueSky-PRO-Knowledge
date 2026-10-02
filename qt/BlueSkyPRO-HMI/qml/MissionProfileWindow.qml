@@ -679,7 +679,11 @@ Item {
 
                                 MouseArea {
                                     id: mandatoryPointMouse
-                                    anchors.fill: parent
+                                    // Keep pointer coordinates in the same local space as Canvas.
+                                    x: profileCanvas.x
+                                    y: profileCanvas.y
+                                    width: profileCanvas.width
+                                    height: profileCanvas.height
                                     z: 5
                                     hoverEnabled: true
                                     cursorShape: pressed ? Qt.ClosedHandCursor : Qt.CrossCursor
