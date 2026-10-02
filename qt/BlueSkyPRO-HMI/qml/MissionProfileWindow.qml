@@ -586,9 +586,8 @@ Item {
                                         ctx.strokeStyle = "#155BFF"; ctx.lineWidth = 2; ctx.setLineDash([4, 3])
                                         ctx.beginPath(); ctx.moveTo(mandatoryX, mandatoryY + 10); ctx.lineTo(mandatoryX, bottom); ctx.stroke()
                                         ctx.setLineDash([])
-                                        ctx.beginPath(); ctx.arc(mandatoryX, mandatoryY, 9, 0, Math.PI * 2)
-                                        ctx.fillStyle = "#155BFF"; ctx.fill()
-                                        ctx.strokeStyle = "#B8D4FF"; ctx.lineWidth = 2; ctx.stroke()
+                                        // The draggable marker itself is a QML overlay above this Canvas.
+                                        // Canvas retains the guide line and label only.
                                         ctx.fillStyle = "#FFFFFF"; ctx.font = "bold 11px sans-serif"
                                         ctx.fillText("ОБЯЗАТЕЛЬНАЯ", Math.min(right - 100, mandatoryX + 13), Math.max(top + 13, mandatoryY - 13))
                                     }
@@ -819,6 +818,62 @@ Item {
                                     onDoubleClicked: {
                                         var hit = mandatoryPointAt(mouse.x, mouse.y)
                                         if (hit >= 0) removeMandatoryPoint(hit)
+                                    }
+                                }
+
+                                // Independent QML handles sit above the Canvas. This prevents
+                                // the painted marker from appearing draggable while remaining static.
+                                Repeater {
+                                    id: mandatoryPointHandles
+                                    model: root.mandatoryPoints
+                                    delegate: Item {
+                                        id: mandatoryHandle
+                                        width: 22
+                                        height: 22
+                                        z: 20
+                                        x: 42 + Number(modelData.progress) * (profileCanvas.width - 54) - width / 2
+                                        y: profileCanvas.height - 28
+                                           - (Number(modelData.altitude) / 400) * (profileCanvas.height - 46)
+                                           - height / 2
+
+                                        Rectangle {
+                                            anchors.fill: parent
+                                            radius: width / 2
+                                            color: "#155BFF"
+                                            border.color: "#B8D4FF"
+                                            border.width: 2
+                                        }
+
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            acceptedButtons: Qt.LeftButton | Qt.RightButton
+                                            preventStealing: true
+                                            hoverEnabled: true
+                                            cursorShape: pressed ? Qt.ClosedHandCursor : Qt.OpenHandCursor
+                                            property real grabOffsetX: 0
+                                            property real grabOffsetY: 0
+
+                                            onPressed: {
+                                                if (mouse.button === Qt.RightButton) {
+                                                    mandatoryPointMouse.removeMandatoryPoint(index)
+                                                    return
+                                                }
+                                                var p = mapToItem(profileCanvas, mouse.x, mouse.y)
+                                                grabOffsetX = p.x - (42 + Number(modelData.progress) * (profileCanvas.width - 54))
+                                                grabOffsetY = p.y - (profileCanvas.height - 28
+                                                    - Number(modelData.altitude) / 400 * (profileCanvas.height - 46))
+                                            }
+                                            onPositionChanged: {
+                                                if (!pressed || drag.button === Qt.RightButton) return
+                                                var p = mapToItem(profileCanvas, mouse.x, mouse.y)
+                                                mandatoryPointMouse.updateMandatoryPoint(index,
+                                                    p.x - grabOffsetX, p.y - grabOffsetY)
+                                            }
+                                            onReleased: {
+                                                if (mouse.button === Qt.RightButton) return
+                                            }
+                                            onDoubleClicked: mandatoryPointMouse.removeMandatoryPoint(index)
+                                        }
                                     }
                                 }
                             }
