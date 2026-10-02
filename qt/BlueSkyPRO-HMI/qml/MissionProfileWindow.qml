@@ -5,6 +5,8 @@ Item {
     id: root
     property string missionId: ""
     property var uavModel: []
+    // Assignment result supplied by mission planning; the HMI does not infer task allocation.
+    property var missionAssignments: []
     property int selectedUavIndex: -1
     signal uavSelectionRequested(int index)
     property var routeDataByUav: ({})
@@ -390,7 +392,7 @@ Item {
                     anchors.leftMargin: 14
                     anchors.verticalCenter: parent.verticalCenter
                     width: Math.min(implicitWidth, Math.max(0, collapsedToolsToggle.x - x - 12))
-                    height: 26
+                    height: 34
                     spacing: 6
                     clip: true
 
@@ -399,7 +401,7 @@ Item {
                         delegate: Rectangle {
                             required property int index
                             required property var modelData
-                            width: Math.max(48, tabLabel.implicitWidth + 16)
+                            width: Math.max(120, Math.min(250, tabLabel.implicitWidth + 16))
                             height: uavTabs.height
                             radius: 3
                             color: index === root.selectedUavIndex ? "#102B3A" : "#091725"
@@ -411,7 +413,11 @@ Item {
                                 anchors.fill: parent
                                 anchors.leftMargin: 5
                                 anchors.rightMargin: 5
-                                text: (index + 1) + " · " + root.compactMissionFunction() + " · " + modelData.id
+                                property var assignment: index < root.missionAssignments.length
+                                    ? root.missionAssignments[index] : null
+                                text: (index + 1) + " · " + (assignment ? assignment.task : "Задача не назначена")
+                                      + "\\n" + (assignment ? assignment.sector : "Сектор не назначен")
+                                      + " · " + modelData.id
                                 color: index === root.selectedUavIndex ? root.cyan : root.textColor
                                 font.family: "B612"
                                 font.pixelSize: 10
