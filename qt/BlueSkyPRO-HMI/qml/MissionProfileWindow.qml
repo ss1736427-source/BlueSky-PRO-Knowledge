@@ -490,7 +490,9 @@ Item {
                                     ctx.beginPath(); ctx.moveTo(left, top + plotH * 0.12); ctx.lineTo(right, top + plotH * 0.12); ctx.stroke()
                                     ctx.setLineDash([])
                                     // Planned route profile
-                                    var alts = [120,150,150,180,150,120]
+                                    var alts = []
+                                    for (var ai = 0; ai < routeModel.count; ai++)
+                                        alts.push(Number(routeModel.get(ai).altitude))
                                     ctx.beginPath()
                                     for (var p = 0; p < alts.length; p++) {
                                         var px = left + plotW * p / (alts.length - 1)
