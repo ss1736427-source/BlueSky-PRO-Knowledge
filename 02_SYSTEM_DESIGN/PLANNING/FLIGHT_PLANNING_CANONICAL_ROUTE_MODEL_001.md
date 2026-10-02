@@ -41,6 +41,12 @@ A route is always traceable to the Mission Version that produced it.
 6. Vehicle-specific executable semantics are created only after route validation and later compilation.
 7. AI may propose route variants later, but the canonical Route object is accepted only through deterministic validation and the existing proposal/safety/authorization boundaries.
 
+## Interactive profile synchronization
+
+The flight profile, waypoint table and map are synchronized editing surfaces over the canonical mission/route data. Profile edits must update the canonical route candidate, trigger validation and the required recalculation, then publish a consistent result to all dependent views. UI-local state and display preferences are not authoritative storage for route constraints.
+
+See the approved [Interactive Flight Profile — Data Synchronization and Recalculation](../../02_SYSTEM/Design/Interface/Interactive%20Flight%20Profile%20%E2%80%94%20Data%20Synchronization%20and%20Recalculation.md) requirement.
+
 ## Next block
 
 Implement deterministic **Route Constraint Validation** against the canonical Route model, followed by terrain/obstacle and airspace adapters.
