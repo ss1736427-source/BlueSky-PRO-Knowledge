@@ -34,8 +34,8 @@ Item {
     // Preview state only. Live weather/NOTAM providers must supply authoritative data.
     property string selectedOperationalTool: ""
     property var checklistItems: [
-        { label: "Mission definition", status: "PASS" },
-        { label: "UAV allocation", status: "PASS" },
+        { label: "Mission definition", status: "PENDING" },
+        { label: "UAV allocation", status: "PENDING" },
         { label: "Route validation", status: "PENDING" },
         { label: "NOTAM / Airspace", status: "PENDING" },
         { label: "Weather", status: "PENDING" },
@@ -225,7 +225,7 @@ Item {
                 font.bold: true
             }
             Text {
-                text: String(root.checklistItems.length - root.checklistPassedCount)
+                text: String(root.checklistItems.length)
                 color: "#FF00D4"
                 font.family: "B612"
                 font.pixelSize: 13
