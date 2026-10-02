@@ -564,6 +564,10 @@ Item {
                                 onHeightChanged: requestPaint()
                                 Connections {
                                     target: root
+                                    // Redraw route-node labels whenever a mandatory point moves,
+                                    // is added, or is removed. The Canvas computes numbering from
+                                    // the current progress-sorted route nodes during onPaint.
+                                    function onMandatoryPointsChanged() { profileCanvas.requestPaint() }
                                     function onLiveFlightActiveChanged() { profileCanvas.requestPaint() }
                                     function onLiveDistanceKmChanged() { profileCanvas.requestPaint() }
                                     function onLiveElapsedSecondsChanged() { profileCanvas.requestPaint() }
