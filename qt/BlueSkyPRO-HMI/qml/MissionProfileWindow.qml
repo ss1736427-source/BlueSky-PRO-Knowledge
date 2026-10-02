@@ -19,6 +19,13 @@ Item {
     readonly property color switchGreen: "#39D353"
     property bool parameterPanelOpen: true
     property real tableSplitRatio: 0.47
+    // Live telemetry inputs; connect these to the flight-data source when available.
+    property bool liveFlightActive: false
+    property real liveDistanceKm: 0
+    property real liveElapsedSeconds: 0
+    property real liveAltitudeM: 0
+    readonly property real plannedDistanceKm: 78.4
+    readonly property real plannedDurationSeconds: 78 * 60
     property var parameterVisibility: ({
         course: true, distance: true, altitude: true, airspeed: true,
         groundspeed: true, time: true, deltaHeight: true, energy: true, note: true
@@ -201,7 +208,7 @@ Item {
             Row {
                 id: contentRow
                 width: parent.width
-                height: parent.height - titleBar.height - footer.height - 14
+                height: parent.height - titleBar.height - 7
                 spacing: 8
 
                 Column {
@@ -417,6 +424,13 @@ Item {
                                 height: parent.height - 66
                                 onWidthChanged: requestPaint()
                                 onHeightChanged: requestPaint()
+                                Connections {
+                                    target: root
+                                    function onLiveFlightActiveChanged() { profileCanvas.requestPaint() }
+                                    function onLiveDistanceKmChanged() { profileCanvas.requestPaint() }
+                                    function onLiveElapsedSecondsChanged() { profileCanvas.requestPaint() }
+                                    function onLiveAltitudeMChanged() { profileCanvas.requestPaint() }
+                                }
                                 onPaint: {
                                     var ctx = getContext("2d")
                                     ctx.clearRect(0, 0, width, height)
@@ -465,10 +479,51 @@ Item {
                                     }
                                     ctx.fillStyle = "#DCE8F2"; ctx.font = "11px sans-serif"
                                     ctx.fillText("Высота, м", 3, 12)
-                                    ctx.fillText("Дистанция по маршруту, км", Math.max(45, width / 2 - 70), height - 4)
-                                    ctx.fillText("0", left - 14, bottom + 14)
+                                    // Time axis: elapsed mission time, from departure to planned ETA.
+                                    ctx.fillText("Время полёта", Math.max(45, width / 2 - 35), height - 4)
+                                    ctx.fillText("00:00", left - 18, bottom + 14)
                                     ctx.fillText("400", left - 32, top + 4)
-                                    ctx.fillText("78.4", right - 20, bottom + 14)
+                                    ctx.fillText("01:18", right - 24, bottom + 14)
+                                    for (var ti = 1; ti < 8; ti++) {
+                                        var totalMinutes = 78 * ti / 8
+                                        var label = (totalMinutes < 10 ? "0" : "") + Math.floor(totalMinutes) + ":00"
+                                        ctx.fillText(label, left + plotW * ti / 8 - 15, bottom + 14)
+                                    }
+
+                                    // Live aircraft projection. Distance progress is mapped to
+                                    // the planned altitude profile; actual altitude is shown
+                                    // by the aircraft marker when valid telemetry is supplied.
+                                    if (root.liveFlightActive) {
+                                        var progress = Math.max(0, Math.min(1, root.liveDistanceKm / root.plannedDistanceKm))
+                                        var seg = progress * (alts.length - 1)
+                                        var segIndex = Math.min(alts.length - 2, Math.floor(seg))
+                                        var frac = seg - segIndex
+                                        var routeAlt = alts[segIndex] + (alts[segIndex + 1] - alts[segIndex]) * frac
+                                        var markerAlt = root.liveAltitudeM > 0 ? root.liveAltitudeM : routeAlt
+                                        var aircraftX = left + plotW * progress
+                                        var aircraftY = bottom - (markerAlt / 400) * plotH
+                                        ctx.save()
+                                        ctx.translate(aircraftX, aircraftY)
+                                        ctx.rotate(-Math.PI / 2)
+                                        ctx.fillStyle = "#FFFFFF"
+                                        ctx.strokeStyle = root.cyan
+                                        ctx.lineWidth = 2
+                                        ctx.beginPath()
+                                        ctx.moveTo(0, -10)
+                                        ctx.lineTo(6, 7)
+                                        ctx.lineTo(0, 4)
+                                        ctx.lineTo(-6, 7)
+                                        ctx.closePath()
+                                        ctx.fill()
+                                        ctx.stroke()
+                                        ctx.restore()
+                                        ctx.fillStyle = "#FFFFFF"
+                                        ctx.font = "10px sans-serif"
+                                        var liveTime = Math.max(0, Math.floor(root.liveElapsedSeconds))
+                                        var liveLabel = (Math.floor(liveTime / 3600) < 10 ? "0" : "") + Math.floor(liveTime / 3600) + ":" +
+                                                        (Math.floor((liveTime % 3600) / 60) < 10 ? "0" : "") + Math.floor((liveTime % 3600) / 60)
+                                        ctx.fillText(liveLabel, Math.min(right - 35, aircraftX + 10), Math.max(top + 12, aircraftY - 12))
+                                    }
                                 }
                             }
                             Row {
@@ -615,30 +670,6 @@ Item {
                     }
                 }            }
 
-            Row {
-                id: footer
-                width: parent.width
-                height: 34
-                spacing: 8
-                Rectangle {
-                    width: 125; height: parent.height
-                    color: root.panel; border.color: root.line; radius: 2
-                    Text { anchors.centerIn: parent; text: "ЭКСПОРТ  ▾"; color: root.textColor; font.family: "B612"; font.pixelSize: 11 }
-                }
-                Item { width: parent.width - 125 - 110 - 130 - 24; height: 1 }
-                Rectangle {
-                    width: 110; height: parent.height
-                    color: root.panel; border.color: root.line; radius: 2
-                    Text { anchors.centerIn: parent; text: "ОТМЕНА"; color: root.textColor; font.family: "B612"; font.pixelSize: 11 }
-                    MouseArea { anchors.fill: parent; onClicked: root.closeRequested(); cursorShape: Qt.PointingHandCursor }
-                }
-                Rectangle {
-                    width: 130; height: parent.height
-                    color: root.cyan; border.color: root.cyan; radius: 2
-                    Text { anchors.centerIn: parent; text: "ПРИМЕНИТЬ"; color: "#04111B"; font.family: "B612"; font.pixelSize: 11; font.bold: true }
-                    MouseArea { anchors.fill: parent; onClicked: root.applyRequested(); cursorShape: Qt.PointingHandCursor }
-                }
-            }
         }
     }
 
