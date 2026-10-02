@@ -45,6 +45,8 @@ A route is always traceable to the Mission Version that produced it.
 
 The flight profile, waypoint table and map are synchronized editing surfaces over the canonical mission/route data. Profile edits must update the canonical route candidate, trigger validation and the required recalculation, then publish a consistent result to all dependent views. UI-local state and display preferences are not authoritative storage for route constraints.
 
+All route points use one sequential route numbering, from start to finish, shared by the table, map and profile. Mandatory status is an attribute of a route point, not a separate numbering system: a mandatory point retains its route number and is additionally marked as mandatory. A newly inserted mandatory point becomes a route node and receives its position in the same sequence.
+
 See the approved [Interactive Flight Profile — Data Synchronization and Recalculation](../../02_SYSTEM/Design/Interface/Interactive%20Flight%20Profile%20%E2%80%94%20Data%20Synchronization%20and%20Recalculation.md) requirement.
 
 ## Next block
