@@ -23,6 +23,7 @@ Item {
     property bool panelConfigOpen: false
     property int selectedTemplate: 1
     property bool analysisVisible: true
+    property bool templatesExpanded: true
     property bool instrumentsVisible: false
     property bool atcVisible: false
     property bool diagnosticsVisible: false
@@ -82,7 +83,7 @@ Item {
             text: "Миссии"
             color: root.text
             font.family: "B612"
-            font.pixelSize: 14
+            font.pixelSize: 13
             font.bold: true
         }
 
@@ -92,7 +93,7 @@ Item {
             text: "+"
             color: root.missionVisible ? root.cyan : root.text
             font.family: "B612 Mono"
-            font.pixelSize: 18
+            font.pixelSize: 16
             font.bold: true
 
             MouseArea {
@@ -177,7 +178,7 @@ Item {
         x: 10
         y: 108
         width: parent.width - 20
-        height: 112
+        height: 104
         color: root.selectedSurface
         border.color: root.cyan
         border.width: 1
@@ -188,36 +189,71 @@ Item {
             y: 10
             text: "ИНСТРУМЕНТЫ ПАНЕЛИ"
             color: root.secondary
-            font.family: "Noto Sans"
-            font.pixelSize: 10
+            font.family: "B612"
+            font.pixelSize: 12
             font.bold: true
         }
 
         Column {
             x: 12
             y: 34
-            spacing: 8
+            width: parent.width - 24
+            spacing: 7
 
-            Text {
-                text: (root.analysisVisible ? "✓ " : "○ ") + "Анализ миссии"
-                color: root.analysisVisible ? root.cyan : root.secondary
-                font.family: "Noto Sans"
-                font.pixelSize: 10
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: root.analysisVisible = !root.analysisVisible
-                }
-            }
-            Text {
-                text: (root.templatesExpanded ? "✓ " : "○ ") + "Шаблоны миссий"
-                color: root.templatesExpanded ? root.cyan : root.secondary
-                font.family: "Noto Sans"
-                font.pixelSize: 10
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        root.templatesExpanded = !root.templatesExpanded
-                        root.panelConfigOpen = false
+            Repeater {
+                model: [
+                    { "label": "Анализ миссии", "key": "analysis", "enabled": root.analysisVisible },
+                    { "label": "Шаблоны миссий", "key": "templates", "enabled": root.templatesExpanded }
+                ]
+
+                delegate: Item {
+                    required property var modelData
+                    width: parent.width
+                    height: 22
+
+                    Text {
+                        anchors.left: parent.left
+                        anchors.right: toggleTrack.left
+                        anchors.rightMargin: 10
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: modelData.label
+                        color: modelData.enabled ? root.text : root.secondary
+                        font.family: "B612"
+                        font.pixelSize: 12
+                        elide: Text.ElideRight
+                    }
+
+                    Rectangle {
+                        id: toggleTrack
+                        anchors.right: parent.right
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: 34
+                        height: 18
+                        radius: 9
+                        color: modelData.enabled ? "#64FF00" : "#263747"
+                        border.color: modelData.enabled ? "#64FF00" : "#536575"
+                        border.width: 1
+
+                        Rectangle {
+                            x: modelData.enabled ? parent.width - width - 2 : 2
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: 14
+                            height: 14
+                            radius: 7
+                            color: modelData.enabled ? "#082014" : "#BFBFBF"
+                        }
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            if (modelData.key === "analysis") {
+                                root.analysisVisible = !root.analysisVisible
+                            } else if (modelData.key === "templates") {
+                                root.templatesExpanded = !root.templatesExpanded
+                                root.panelConfigOpen = false
+                            }
+                        }
                     }
                 }
             }
