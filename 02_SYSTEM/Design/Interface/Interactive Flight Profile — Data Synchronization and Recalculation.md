@@ -113,3 +113,13 @@ See [Canonical Route Model (PLAN-DATA-001)](../../../02_SYSTEM_DESIGN/PLANNING/F
 4. Right-click removes the selected point on desktop; double tap removes it on a tablet.
 5. All route views show mandatory points in `#155BFF` and agree on their identity and position.
 6. Each change is validated and recalculated through the controlled transaction in Section 4; an invalid candidate is not presented as accepted/READY.
+
+### 9.5 Unified route-point numbering
+
+- Every route point has one shared sequential route number, ordered from route start to route finish.
+- The same route number must be shown in the waypoint table, map and flight profile.
+- A mandatory point does not receive a separate mandatory-point ordinal. It retains the number of its corresponding route point.
+- Mandatory status is shown separately by the blue marker (`#155BFF`) and the status/type label “Обязательная”.
+- A mandatory point inserted between existing route points becomes a node in the ordered route sequence and receives the corresponding shared route number.
+- Reordering or moving route points must update numbering consistently across all route views.
+- Acceptance: the sequence of point numbers on the map and profile exactly matches the table's `#` column; no view maintains an independent numbering scheme.
