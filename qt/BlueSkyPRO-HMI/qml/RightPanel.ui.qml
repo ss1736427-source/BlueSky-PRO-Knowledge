@@ -296,15 +296,17 @@ Item {
             Row {
                 visible: panelSettingsPopup.enabledTools.indexOf("Weather") >= 0
                 width: parent.width; height: 23
-                Text { width: parent.width * 0.55; text: "WEATHER"; color: root.text; font.family: "B612"; font.pixelSize: 11; verticalAlignment: Text.AlignVCenter }
-                Text { width: parent.width * 0.45; text: "NO DATA"; color: root.amber; font.family: "B612"; font.pixelSize: 10; font.bold: true; horizontalAlignment: Text.AlignRight; verticalAlignment: Text.AlignVCenter }
+                spacing: 8
+                Text { width: parent.width * 0.42; text: "WEATHER"; color: root.text; font.family: "B612"; font.pixelSize: 11; verticalAlignment: Text.AlignVCenter }
+                Text { width: parent.width - parent.children[0].width - parent.spacing; text: "NO DATA"; color: root.amber; font.family: "B612"; font.pixelSize: 10; font.bold: true; horizontalAlignment: Text.AlignRight; verticalAlignment: Text.AlignVCenter }
                 MouseArea { anchors.fill: parent; cursorShape: Qt.PointingHandCursor; onClicked: root.selectedOperationalTool = "WEATHER" }
             }
             Row {
                 visible: panelSettingsPopup.enabledTools.indexOf("NOTAM") >= 0
                 width: parent.width; height: 23
-                Text { width: parent.width * 0.55; text: "NOTAM"; color: root.text; font.family: "B612"; font.pixelSize: 11; verticalAlignment: Text.AlignVCenter }
-                Text { width: parent.width * 0.45; text: "NOT CHECKED"; color: root.amber; font.family: "B612"; font.pixelSize: 10; font.bold: true; horizontalAlignment: Text.AlignRight; verticalAlignment: Text.AlignVCenter }
+                spacing: 8
+                Text { width: parent.width * 0.42; text: "NOTAM"; color: root.text; font.family: "B612"; font.pixelSize: 11; verticalAlignment: Text.AlignVCenter }
+                Text { width: parent.width - parent.children[0].width - parent.spacing; text: "NOT CHECKED"; color: root.amber; font.family: "B612"; font.pixelSize: 10; font.bold: true; horizontalAlignment: Text.AlignRight; verticalAlignment: Text.AlignVCenter }
                 MouseArea { anchors.fill: parent; cursorShape: Qt.PointingHandCursor; onClicked: root.selectedOperationalTool = "NOTAM" }
             }
         }
@@ -372,10 +374,7 @@ Item {
         x: 16
         y: (operationalCard.visible ? operationalCard.y + operationalCard.height : (checklistCard.visible ? checklistCard.y + checklistCard.height : 54)) + 10
         width: parent.width - 32
-        height: Math.min(root.informationAvailableHeight,
-                         Math.max(72, (root.selectedInformationMessage
-                                      ? informationDetails.implicitHeight
-                                      : informationOverview.implicitHeight) + 52))
+        height: Math.max(72, root.informationAvailableHeight)
         radius: 8
         color: "transparent"
         border.color: "#236078"
@@ -424,6 +423,8 @@ Item {
         x: informationCard.x + 10
         y: informationCard.y + 39
         width: informationCard.width - 20
+        height: Math.max(0, informationCard.height - 48)
+        clip: true
         spacing: 2
 
         Repeater {
@@ -489,6 +490,8 @@ Item {
         x: informationCard.x + 12
         y: informationCard.y + 40
         width: informationCard.width - 24
+        height: Math.max(0, informationCard.height - 48)
+        clip: true
         spacing: 5
 
         Text {
