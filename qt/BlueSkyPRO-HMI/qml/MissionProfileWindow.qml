@@ -15,6 +15,19 @@ Item {
     readonly property color cyan: "#00DDF2"
     readonly property color textColor: "#DCE8F2"
     readonly property color muted: "#91A8BA"
+    property var parameterVisibility: ({
+        course: true, distance: true, altitude: true, airspeed: true,
+        groundspeed: true, time: true, deltaHeight: true, energy: true, note: true
+    })
+    function parameterKey(i) {
+        return ["number", "type", "point", "course", "distance", "altitude",
+                "airspeed", "groundspeed", "time", "deltaHeight", "energy", "note"][i]
+    }
+    function toggleParameter(key) {
+        var next = Object.assign({}, root.parameterVisibility)
+        next[key] = !next[key]
+        root.parameterVisibility = next
+    }
 
     anchors.fill: parent
     z: 80
@@ -111,9 +124,9 @@ Item {
                                 spacing: 0
                                 Repeater {
                                     model: [
-                                        { label: "#", w: 0.035 },
-                                        { label: "ТИП", w: 0.075 },
-                                        { label: "ТОЧКА / ШИРОТА, ДОЛГОТА", w: 0.17 },
+                                        { label: "#", w: 0.035, key: "number" },
+                                        { label: "ТИП", w: 0.075, key: "type" },
+                                        { label: "ТОЧКА / ШИРОТА, ДОЛГОТА", w: 0.17, key: "point" },
                                         { label: "КУРС\n°", w: 0.065 },
                                         { label: "ДИСТАНЦИЯ\nкм", w: 0.075 },
                                         { label: "ВЫСОТА\nм", w: 0.075 },
@@ -122,11 +135,12 @@ Item {
                                         { label: "ВРЕМЯ\nмин", w: 0.075 },
                                         { label: "Δh\nм", w: 0.06 },
                                         { label: "ЭНЕРГИЯ\n%", w: 0.07 },
-                                        { label: "ПРИМЕЧАНИЕ", w: 0.17 }
+                                        { label: "ПРИМЕЧАНИЕ", w: 0.15, key: "note" }
                                     ]
                                     delegate: Rectangle {
                                         width: tableHeader.width * modelData.w
                                         height: tableHeader.height
+                                        visible: root.parameterVisibility[modelData.key] !== false
                                         color: "#0B1B2B"
                                         border.color: root.line
                                         Text {
@@ -166,7 +180,8 @@ Item {
                                         delegate: Rectangle {
                                             width: routeTable.width * parent.widths[index]
                                             height: parent.height
-                                            color: routeTable.currentIndex === rowIndex ? "#102B3A" : (rowIndex % 2 ? "#091725" : "#0C1D2C")
+                                            visible: root.parameterVisibility[root.parameterKey(index)] !== false
+                                            color: routeTable.currentIndex === routeRowDelegate.rowIndex ? "#102B3A" : (rowIndex % 2 ? "#091725" : "#0C1D2C")
                                             border.color: root.line
                                             Text {
                                                 anchors.fill: parent
@@ -355,7 +370,8 @@ Item {
                                 width: parent.width
                                 height: 22
                                 spacing: 7
-                                property bool parameterChecked: true
+                                property string parameterKey: ["course", "distance", "altitude", "airspeed", "groundspeed", "time", "deltaHeight", "energy", "note"][index]
+                                property bool parameterChecked: root.parameterVisibility[parameterKey] !== false
                                 Rectangle {
                                     width: 14; height: 14
                                     anchors.verticalCenter: parent.verticalCenter
@@ -375,7 +391,7 @@ Item {
                                 }
                                 MouseArea {
                                     anchors.fill: parent
-                                    onClicked: parent.parameterChecked = !parent.parameterChecked
+                                    onClicked: root.toggleParameter(parent.parameterKey)
                                     cursorShape: Qt.PointingHandCursor
                                 }
                             }
