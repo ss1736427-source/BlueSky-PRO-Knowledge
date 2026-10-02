@@ -79,6 +79,26 @@ Item {
                     font.family: "B612 Mono"
                     font.pixelSize: 12
                 }
+                // When the parameter panel is collapsed, keep its tools button
+                // visible in the title bar, immediately left of the close button.
+                Text {
+                    id: collapsedToolsToggle
+                    visible: !root.parameterPanelOpen
+                    anchors.right: parent.right
+                    anchors.rightMargin: 42
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: "☰"
+                    color: root.cyan
+                    font.pixelSize: 22
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    MouseArea {
+                        anchors.fill: parent
+                        anchors.margins: -8
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: root.parameterPanelOpen = true
+                    }
+                }
                 Text {
                     anchors.right: parent.right
                     anchors.rightMargin: 10
