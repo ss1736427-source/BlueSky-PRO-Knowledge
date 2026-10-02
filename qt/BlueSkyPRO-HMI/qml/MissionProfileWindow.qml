@@ -1,5 +1,5 @@
 import QtQuick
-import Qt.labs.settings 1.1
+import QtCore
 
 Item {
     id: root
@@ -175,7 +175,7 @@ Item {
                 Text {
                     anchors.left: parent.left
                     anchors.leftMargin: 10
-                    anchors.verticalCenter: parent.verticalCenter
+                    y: (parent.height - height) / 2
                     text: "ПРОФИЛЬ МИССИИ"
                     color: root.cyan
                     font.family: "B612"
