@@ -364,6 +364,7 @@ Item {
                 height: 34
                 color: root.panel
                 Text {
+                    id: missionTitleText
                     anchors.left: parent.left
                     anchors.leftMargin: 10
                     y: (parent.height - height) / 2
@@ -374,9 +375,9 @@ Item {
                     font.bold: true
                 }
                 Text {
-                    anchors.left: parent.left
                     id: missionIdText
-                    anchors.leftMargin: 205
+                    anchors.left: missionTitleText.right
+                    anchors.leftMargin: 12
                     anchors.verticalCenter: parent.verticalCenter
                     text: root.missionId
                     color: root.cyan
