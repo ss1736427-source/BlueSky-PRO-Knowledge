@@ -9,6 +9,7 @@ Item {
     signal uavSelectionRequested(int index)
     property var routeDataByUav: ({})
     property var mandatoryPointsByUav: ({})
+    property string loadedUavId: ""
     property string missionSummary: ""
     property string missionReviewState: ""
     property var missionTemplateIndices: []
@@ -241,7 +242,7 @@ Item {
     }
 
     function saveCurrentAircraftData() {
-        var id = root.selectedAircraftId()
+        var id = root.loadedUavId.length > 0 ? root.loadedUavId : root.selectedAircraftId()
         var routes = Object.assign({}, root.routeDataByUav)
         var points = Object.assign({}, root.mandatoryPointsByUav)
         var snapshot = []
@@ -261,6 +262,7 @@ Item {
     function loadAircraftData(index) {
         var id = index >= 0 && index < root.uavModel.length
                  ? String(root.uavModel[index].id) : "DEFAULT"
+        root.loadedUavId = id
         var routes = root.routeDataByUav[id]
         if (Array.isArray(routes) && routes.length > 0) {
             routeModel.clear()
@@ -449,7 +451,10 @@ Item {
                         anchors.fill: parent
                         anchors.margins: -7
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: root.closeRequested()
+                        onClicked: {
+                            root.saveCurrentAircraftData()
+                            root.closeRequested()
+                        }
                     }
                 }
             }
