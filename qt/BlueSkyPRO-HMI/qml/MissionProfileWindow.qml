@@ -90,7 +90,7 @@ Item {
         var row = routeModel.get(rowIndex)
         if (!row) return ""
         var values = {
-            number: String(rowIndex + 1), type: rowIndex === root.mandatoryRouteIndex ? "Обязательная" : row.pointType,
+            number: String(rowIndex + 1), type: row.pointType,
             point: row.pointName + "\n" + row.coordinates,
             course: row.course, distance: row.distance, altitude: row.altitude,
             airspeed: row.airspeed, groundspeed: row.groundspeed, time: row.time,
