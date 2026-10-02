@@ -863,8 +863,8 @@ Item {
                                     }
                                 }
 
-                                // Independent QML handles sit above the Canvas. This prevents
-                                // the painted marker from appearing draggable while remaining static.
+                                // Visual marker delegates only. All pointer input is handled by
+                                // the persistent mandatoryPointMouse above.
                                 Repeater {
                                     id: mandatoryPointHandles
                                     model: root.mandatoryPoints
@@ -886,9 +886,6 @@ Item {
                                             border.color: "#B8D4FF"
                                             border.width: 2
                                         }
-
-                                    }
-
                                     }
                                 }
                             }
