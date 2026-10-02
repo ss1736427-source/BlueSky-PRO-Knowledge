@@ -97,51 +97,86 @@ Item {
     function rebuildTableRows() {
         var rows = []
         var mandatory = root.mandatoryPoints.slice(0)
-        mandatory.sort(function(a, b) { return Number(a.progress) - Number(b.progress) })
+        var denominator = Math.max(1, routeModel.count - 1)
+
+        // Route-bound mandatory points retain the identity and sequence slot
+        // of their route waypoint. Standalone mandatory points are inserted
+        // into the same ordered list below.
         for (var i = 0; i < routeModel.count; i++) {
             var source = routeModel.get(i)
-            var progress = i / Math.max(1, routeModel.count - 1)
-            var matching = -1
+            var progress = i / denominator
+            var bound = null
             for (var m = 0; m < mandatory.length; m++) {
-                if (Math.abs(root.mandatoryRoutePosition(mandatory[m]) - progress) < 0.012) {
-                    matching = m; break
+                if (Number(mandatory[m].routeIndex) === i && Number(mandatory[m].routeIndex) >= 0) {
+                    bound = mandatory[m]
+                    break
                 }
             }
-            if (matching >= 0) {
-                rows.push({ pointType: "Обязательная", pointName: source.pointName, coordinates: source.coordinates,
-                    course: source.course, distance: source.distance, altitude: Math.round(Number(mandatory[matching].altitude)),
-                    airspeed: source.airspeed, groundspeed: source.groundspeed, time: source.time,
-                    deltaHeight: source.deltaHeight, energy: source.energy, note: "Обязательная точка",
-                    isMandatory: true, mandatoryId: mandatory[matching].id, routeIndex: i })
-            } else {
-                rows.push({ pointType: source.pointType, pointName: source.pointName, coordinates: source.coordinates,
-                    course: source.course, distance: source.distance, altitude: source.altitude,
-                    airspeed: source.airspeed, groundspeed: source.groundspeed, time: source.time,
-                    deltaHeight: source.deltaHeight, energy: source.energy, note: source.note,
-                    isMandatory: false, routeIndex: i })
-            }
-            for (var j = 0; j < mandatory.length; j++) {
-                var mp = root.mandatoryRoutePosition(mandatory[j])
-                if (Math.abs(mp - progress) < 0.012) continue
-                var nextProgress = (i + 1) / Math.max(1, routeModel.count - 1)
-                if (mp > progress && mp < nextProgress) {
-                    var lower = source
-                    var upper = routeModel.get(Math.min(i + 1, routeModel.count - 1))
-                    var fraction = (mp - progress) * Math.max(1, routeModel.count - 1)
-                    var lowerCoords = String(lower.coordinates).split(",")
-                    var upperCoords = String(upper.coordinates).split(",")
-                    var latA = Number(lowerCoords[0]), lonA = Number(lowerCoords[1])
-                    var latB = Number(upperCoords[0]), lonB = Number(upperCoords[1])
-                    var coords = isFinite(latA) && isFinite(lonA) && isFinite(latB) && isFinite(lonB)
-                                 ? (latA + (latB-latA)*fraction).toFixed(4) + ", " + (lonA + (lonB-lonA)*fraction).toFixed(4)
-                                 : "—"
-                    rows.push({ pointType: "Обязательная", pointName: "Обязательная точка", coordinates: coords,
-                        course: "—", distance: "—", altitude: Math.round(Number(mandatory[j].altitude)),
-                        airspeed: "—", groundspeed: "—", time: "—", deltaHeight: "—", energy: "—",
-                        note: "Требует пересчёта", isMandatory: true, mandatoryId: mandatory[j].id, routeIndex: -1 })
-                }
-            }
+            rows.push({
+                progress: bound ? Number(bound.progress) : progress,
+                order: i,
+                pointType: bound ? "Обязательная" : source.pointType,
+                pointName: source.pointName,
+                coordinates: source.coordinates,
+                course: source.course,
+                distance: source.distance,
+                altitude: bound ? Math.round(Number(bound.altitude)) : source.altitude,
+                airspeed: source.airspeed,
+                groundspeed: source.groundspeed,
+                time: source.time,
+                deltaHeight: source.deltaHeight,
+                energy: source.energy,
+                note: bound ? "Обязательная точка" : source.note,
+                isMandatory: bound !== null,
+                mandatoryId: bound ? bound.id : "",
+                routeIndex: i
+            })
         }
+
+        // Unbound mandatory points become route nodes between the surrounding
+        // waypoints and receive the same sequential number as every other node.
+        for (var j = 0; j < mandatory.length; j++) {
+            var point = mandatory[j]
+            if (Number(point.routeIndex) >= 0) continue
+            var mp = Math.max(0, Math.min(1, Number(point.progress)))
+            var segment = mp * denominator
+            var lowerIndex = Math.min(routeModel.count - 1, Math.floor(segment))
+            var upperIndex = Math.min(routeModel.count - 1, lowerIndex + 1)
+            var fraction = segment - lowerIndex
+            var lower = routeModel.get(lowerIndex)
+            var upper = routeModel.get(upperIndex)
+            var lowerCoords = String(lower.coordinates).split(",")
+            var upperCoords = String(upper.coordinates).split(",")
+            var latA = Number(lowerCoords[0]), lonA = Number(lowerCoords[1])
+            var latB = Number(upperCoords[0]), lonB = Number(upperCoords[1])
+            var coords = isFinite(latA) && isFinite(lonA) && isFinite(latB) && isFinite(lonB)
+                         ? (latA + (latB-latA)*fraction).toFixed(4) + ", " + (lonA + (lonB-lonA)*fraction).toFixed(4)
+                         : "—"
+            rows.push({
+                progress: mp,
+                order: segment + 0.5,
+                pointType: "Обязательная",
+                pointName: "Обязательная точка",
+                coordinates: coords,
+                course: "—",
+                distance: "—",
+                altitude: Math.round(Number(point.altitude)),
+                airspeed: "—",
+                groundspeed: "—",
+                time: "—",
+                deltaHeight: "—",
+                energy: "—",
+                note: "Требует пересчёта",
+                isMandatory: true,
+                mandatoryId: point.id,
+                routeIndex: -1
+            })
+        }
+
+        rows.sort(function(a, b) {
+            if (a.progress !== b.progress) return a.progress - b.progress
+            return a.order - b.order
+        })
         root.tableRows = rows
     }
 
