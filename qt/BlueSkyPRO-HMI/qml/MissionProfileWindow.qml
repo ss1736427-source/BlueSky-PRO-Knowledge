@@ -238,6 +238,13 @@ Item {
         property string mandatoryPointsByUavJson: "{}"
     }
 
+    function assignmentForUav(uavId) {
+        for (var i = 0; i < root.missionAssignments.length; ++i)
+            if (String(root.missionAssignments[i].uavId) === String(uavId))
+                return root.missionAssignments[i]
+        return null
+    }
+
     function selectedAircraftId() {
         return root.selectedUavIndex >= 0 && root.selectedUavIndex < root.uavModel.length
                ? String(root.uavModel[root.selectedUavIndex].id) : "DEFAULT"
@@ -413,8 +420,7 @@ Item {
                                 anchors.fill: parent
                                 anchors.leftMargin: 5
                                 anchors.rightMargin: 5
-                                property var assignment: index < root.missionAssignments.length
-                                    ? root.missionAssignments[index] : null
+                                property var assignment: root.assignmentForUav(modelData.id)
                                 text: (index + 1) + " · " + (assignment ? assignment.task : "Задача не назначена")
                                       + "\n" + (assignment ? assignment.sector : "Сектор не назначен")
                                       + " · " + modelData.id
