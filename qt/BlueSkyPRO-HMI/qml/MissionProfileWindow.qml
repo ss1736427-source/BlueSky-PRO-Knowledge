@@ -134,7 +134,7 @@ Item {
                     isMandatory: false, routeIndex: i })
             }
             for (var j = 0; j < mandatory.length; j++) {
-                var mp = Number(mandatory[j].progress)
+                var mp = root.mandatoryRoutePosition(mandatory[j])
                 if (Math.abs(mp - progress) < 0.012) continue
                 var nextProgress = (i + 1) / Math.max(1, routeModel.count - 1)
                 if (mp > progress && mp < nextProgress) {
@@ -641,7 +641,7 @@ Item {
                                         // The draggable marker itself is a QML overlay above this Canvas.
                                         // Canvas retains the guide line and label only.
                                         ctx.fillStyle = "#FFFFFF"; ctx.font = "bold 11px sans-serif"
-                                        ctx.fillText("ОБЯЗАТЕЛЬНАЯ " + root.mandatoryOrdinal(mandatory.id), Math.min(right - 125, mandatoryX + 13), Math.max(top + 13, mandatoryY - 13))
+                                        ctx.fillText("ОБЯЗАТЕЛЬНАЯ ТОЧКА " + root.mandatoryOrdinal(mandatory.id), Math.min(right - 175, mandatoryX + 13), Math.max(top + 13, mandatoryY - 13))
                                     }
                                     ctx.fillStyle = "#DCE8F2"; ctx.font = "11px sans-serif"
                                     ctx.fillText("Высота, м", 3, 12)
