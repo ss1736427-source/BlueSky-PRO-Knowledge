@@ -830,8 +830,8 @@ Item {
                                         id: mandatoryHandle
                                         width: 22
                                         height: 22
-                                        // Visual handle only; the single Canvas MouseArea owns input.
-                                        z: 4
+                                        // Interactive handle is aligned to the exact Canvas plot geometry.
+                                        z: 20
                                         x: 42 + Number(modelData.progress) * (profileCanvas.width - 54) - width / 2
                                         y: profileCanvas.height - 28
                                            - (Number(modelData.altitude) / 400) * (profileCanvas.height - 46)
@@ -843,6 +843,34 @@ Item {
                                             color: "#155BFF"
                                             border.color: "#B8D4FF"
                                             border.width: 2
+                                        }
+
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            acceptedButtons: Qt.LeftButton | Qt.RightButton
+                                            preventStealing: true
+                                            hoverEnabled: true
+                                            cursorShape: pressed ? Qt.ClosedHandCursor : Qt.OpenHandCursor
+                                            property real grabOffsetX: 0
+                                            property real grabOffsetY: 0
+
+                                            onPressed: {
+                                                if (mouse.button === Qt.RightButton) {
+                                                    mandatoryPointMouse.removeMandatoryPoint(index)
+                                                    return
+                                                }
+                                                var p = mapToItem(profileCanvas, mouse.x, mouse.y)
+                                                grabOffsetX = p.x - (42 + Number(modelData.progress) * (profileCanvas.width - 54))
+                                                grabOffsetY = p.y - (profileCanvas.height - 28
+                                                    - Number(modelData.altitude) / 400 * (profileCanvas.height - 46))
+                                            }
+                                            onPositionChanged: {
+                                                if (!pressed) return
+                                                var p = mapToItem(profileCanvas, mouse.x, mouse.y)
+                                                mandatoryPointMouse.updateMandatoryPoint(index,
+                                                    p.x - grabOffsetX, p.y - grabOffsetY)
+                                            }
+                                            onDoubleClicked: mandatoryPointMouse.removeMandatoryPoint(index)
                                         }
 
                                     }
