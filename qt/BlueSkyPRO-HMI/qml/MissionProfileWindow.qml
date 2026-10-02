@@ -361,14 +361,16 @@ Item {
                         anchors.margins: root.parameterPanelOpen ? 8 : 4
                         spacing: 8
 
-                        Row {
+                        Item {
                             width: parent.width
                             height: 38
-                            spacing: 4
 
                             Text {
                                 visible: root.parameterPanelOpen
-                                width: parent.width - panelToggle.width - parent.spacing
+                                anchors.left: parent.left
+                                anchors.right: panelToggle.left
+                                anchors.rightMargin: 4
+                                anchors.verticalCenter: parent.verticalCenter
                                 text: "ОТОБРАЖЕНИЕ ПАРАМЕТРОВ"
                                 color: root.textColor
                                 font.family: "B612"
@@ -380,6 +382,8 @@ Item {
 
                             Text {
                                 id: panelToggle
+                                anchors.right: parent.right
+                                anchors.verticalCenter: parent.verticalCenter
                                 width: 28
                                 height: 32
                                 text: "☰"
