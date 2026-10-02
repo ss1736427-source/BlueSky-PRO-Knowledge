@@ -717,7 +717,9 @@ Item {
                                     y: 0
                                     width: parent.width
                                     height: parent.height
-                                    z: 5
+                                    // Keep this MouseArea alive above the Repeater handles.
+                                    // Repeater delegates are recreated when mandatoryPoints changes.
+                                    z: 30
                                     hoverEnabled: true
                                     preventStealing: true
                                     cursorShape: pressed ? Qt.ClosedHandCursor : Qt.CrossCursor
@@ -885,33 +887,7 @@ Item {
                                             border.width: 2
                                         }
 
-                                        MouseArea {
-                                            anchors.fill: parent
-                                            acceptedButtons: Qt.LeftButton | Qt.RightButton
-                                            preventStealing: true
-                                            hoverEnabled: true
-                                            cursorShape: pressed ? Qt.ClosedHandCursor : Qt.OpenHandCursor
-                                            property real grabOffsetX: 0
-                                            property real grabOffsetY: 0
-
-                                            onPressed: {
-                                                if (mouse.button === Qt.RightButton) {
-                                                    mandatoryPointMouse.removeMandatoryPoint(index)
-                                                    return
-                                                }
-                                                var p = mapToItem(profileCanvas, mouse.x, mouse.y)
-                                                grabOffsetX = p.x - (42 + Number(modelData.progress) * (profileCanvas.width - 54))
-                                                grabOffsetY = p.y - (profileCanvas.height - 28
-                                                    - Number(modelData.altitude) / 400 * (profileCanvas.height - 46))
-                                            }
-                                            onPositionChanged: {
-                                                if (!pressed) return
-                                                var p = mapToItem(profileCanvas, mouse.x, mouse.y)
-                                                mandatoryPointMouse.updateMandatoryPoint(index,
-                                                    p.x - grabOffsetX, p.y - grabOffsetY)
-                                            }
-                                            onDoubleClicked: mandatoryPointMouse.removeMandatoryPoint(index)
-                                        }
+                                    }
 
                                     }
                                 }
