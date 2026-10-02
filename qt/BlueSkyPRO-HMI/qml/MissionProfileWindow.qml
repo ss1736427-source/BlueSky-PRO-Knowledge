@@ -241,6 +241,16 @@ Item {
                ? String(root.uavModel[root.selectedUavIndex].id) : "DEFAULT"
     }
 
+    function compactMissionFunction() {
+        var summary = String(root.missionSummary).toLowerCase()
+        if (summary.indexOf("3d") >= 0 && summary.indexOf("карт") >= 0) return "3D-картография"
+        if (summary.indexOf("карт") >= 0 || summary.indexOf("съём") >= 0 || summary.indexOf("съем") >= 0) return "Картография"
+        if (summary.indexOf("инспек") >= 0) return "Инспекция"
+        if (summary.indexOf("монитор") >= 0) return "Мониторинг"
+        if (summary.indexOf("лидар") >= 0 || summary.indexOf("lidar") >= 0) return "Лидар"
+        return root.missionSummary
+    }
+
     function saveCurrentAircraftData() {
         var id = root.loadedUavId.length > 0 ? root.loadedUavId : root.selectedAircraftId()
         var routes = Object.assign({}, root.routeDataByUav)
@@ -399,7 +409,7 @@ Item {
                                 anchors.fill: parent
                                 anchors.leftMargin: 5
                                 anchors.rightMargin: 5
-                                text: (index + 1) + " · " + root.missionSummary + " · " + modelData.id
+                                text: (index + 1) + " · " + root.compactMissionFunction() + " · " + modelData.id
                                 color: index === root.selectedUavIndex ? root.cyan : root.textColor
                                 font.family: "B612"
                                 font.pixelSize: 10
