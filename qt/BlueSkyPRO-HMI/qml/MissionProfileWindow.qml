@@ -88,10 +88,9 @@ Item {
     }
     property var tableRows: []
 
+    // The profile's horizontal progress is the shared ordering source for
+    // both marker labels and table rows. routeIndex may be stale after dragging.
     function mandatoryRoutePosition(point) {
-        var routeIndex = point.routeIndex === undefined ? -1 : Number(point.routeIndex)
-        if (routeIndex >= 0 && routeModel.count > 1)
-            return routeIndex / (routeModel.count - 1)
         return Number(point.progress)
     }
 
@@ -114,9 +113,7 @@ Item {
             var progress = i / Math.max(1, routeModel.count - 1)
             var matching = -1
             for (var m = 0; m < mandatory.length; m++) {
-                var boundRouteIndex = mandatory[m].routeIndex === undefined ? -1 : Number(mandatory[m].routeIndex)
-                if ((boundRouteIndex === i && boundRouteIndex >= 0)
-                    || (boundRouteIndex < 0 && Math.abs(Number(mandatory[m].progress) - progress) < 0.012)) {
+                if (Math.abs(root.mandatoryRoutePosition(mandatory[m]) - progress) < 0.012) {
                     matching = m; break
                 }
             }
