@@ -49,7 +49,6 @@ Item {
         var visible = root.orderedColumns().filter(function(col) {
             return root.parameterVisibility[col.key] !== false
         })
-        var total = visible.reduce(function(sum, col) { return sum + col.w }, 0)
         var cursor = 0
         for (var i = 0; i < visible.length; ++i) {
             cursor += visible[i].w / total * tableHeader.width
@@ -263,9 +262,8 @@ Item {
                                     height: Math.max(37, Math.min(48, routeTable.height / 6))
                                     spacing: 0
                                     property int rowIndex: index
-                    property var widths: [0.035,0.075,0.17,0.065,0.075,0.075,0.075,0.075,0.075,0.06,0.07,0.17]
                                     Repeater {
-                                        model: root.orderedColumns()]
+                                        model: root.orderedColumns()
                                         delegate: Rectangle {
                                             width: routeTable.width * modelData.w
                                             height: parent.height
