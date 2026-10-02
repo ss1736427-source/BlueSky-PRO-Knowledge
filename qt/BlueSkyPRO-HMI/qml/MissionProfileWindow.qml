@@ -158,8 +158,14 @@ Item {
             var next = root.mandatoryPoints.slice(0)
             for (var i = 0; i < next.length; i++) {
                 if (next[i].id === row.mandatoryId) {
-                    next[i] = { id: next[i].id, progress: next[i].progress, altitude: altitude }
+                    next[i] = { id: next[i].id, progress: next[i].progress, altitude: altitude,
+                        routeIndex: next[i].routeIndex === undefined ? -1 : next[i].routeIndex }
+                    var boundIndex = Number(next[i].routeIndex)
+                    if (boundIndex >= 0 && boundIndex < routeModel.count)
+                        routeModel.setProperty(boundIndex, "altitude", String(altitude))
                     root.mandatoryPoints = next
+                    root.rebuildTableRows()
+                    profileCanvas.requestPaint()
                     return
                 }
             }
