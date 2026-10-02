@@ -185,7 +185,7 @@ Item {
             text: "Миссии"
             color: root.text
             font.family: "B612"
-            font.pixelSize: 14
+            font.pixelSize: 13
             font.bold: true
         }
 
@@ -233,7 +233,7 @@ Item {
                 text: "+"
                 color: root.missionVisible ? root.cyan : root.text
                 font.family: "B612 Mono"
-                font.pixelSize: 18
+                font.pixelSize: 16
                 font.bold: true
 
                 MouseArea {
@@ -318,7 +318,7 @@ Item {
         x: 10
         y: 90
         width: parent.width - 20
-        height: 112
+        height: 104
         color: root.selectedSurface
         border.color: root.cyan
         border.width: 1
@@ -346,13 +346,43 @@ Item {
                     { "label": "Шаблоны миссий", "key": "templates", "enabled": root.templatesExpanded }
                 ]
 
-                delegate: Text {
+                delegate: Item {
                     required property var modelData
                     width: parent.width
-                    text: (modelData.enabled ? "✓ " : "○ ") + modelData.label
-                    color: modelData.enabled ? root.cyan : root.secondary
-                    font.family: "Noto Sans"
-                    font.pixelSize: 10
+                    height: 22
+
+                    Text {
+                        anchors.left: parent.left
+                        anchors.right: toggleTrack.left
+                        anchors.rightMargin: 10
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: modelData.label
+                        color: modelData.enabled ? root.text : root.secondary
+                        font.family: "B612"
+                        font.pixelSize: 12
+                        elide: Text.ElideRight
+                    }
+
+                    Rectangle {
+                        id: toggleTrack
+                        anchors.right: parent.right
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: 34
+                        height: 18
+                        radius: 9
+                        color: modelData.enabled ? "#64FF00" : "#263747"
+                        border.color: modelData.enabled ? "#64FF00" : "#536575"
+                        border.width: 1
+
+                        Rectangle {
+                            x: modelData.enabled ? parent.width - width - 2 : 2
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: 14
+                            height: 14
+                            radius: 7
+                            color: modelData.enabled ? "#082014" : "#BFBFBF"
+                        }
+                    }
 
                     MouseArea {
                         anchors.fill: parent
