@@ -4,6 +4,11 @@ import QtCore
 Item {
     id: root
     property string missionId: ""
+    property var uavModel: []
+    property int selectedUavIndex: -1
+    signal uavSelectionRequested(int index)
+    property var routeDataByUav: ({})
+    property var mandatoryPointsByUav: ({})
     property string missionSummary: ""
     property string missionReviewState: ""
     property var missionTemplateIndices: []
@@ -226,18 +231,80 @@ Item {
         category: "BlueSkyPRO/MissionProfile"
         property string columnOrderJson: ""
         property real tableSplitRatio: 0.47
-        property string mandatoryPointsJson: "[]"
+        property string routeDataByUavJson: "{}"
+        property string mandatoryPointsByUavJson: "{}"
     }
+
+    function selectedAircraftId() {
+        return root.selectedUavIndex >= 0 && root.selectedUavIndex < root.uavModel.length
+               ? String(root.uavModel[root.selectedUavIndex].id) : "DEFAULT"
+    }
+
+    function saveCurrentAircraftData() {
+        var id = root.selectedAircraftId()
+        var routes = Object.assign({}, root.routeDataByUav)
+        var points = Object.assign({}, root.mandatoryPointsByUav)
+        var snapshot = []
+        for (var i = 0; i < routeModel.count; ++i) {
+            var item = routeModel.get(i), copy = {}
+            for (var key in item) copy[key] = item[key]
+            snapshot.push(copy)
+        }
+        routes[id] = snapshot
+        points[id] = root.mandatoryPoints
+        root.routeDataByUav = routes
+        root.mandatoryPointsByUav = points
+        profileSettings.routeDataByUavJson = JSON.stringify(routes)
+        profileSettings.mandatoryPointsByUavJson = JSON.stringify(points)
+    }
+
+    function loadAircraftData(index) {
+        var id = index >= 0 && index < root.uavModel.length
+                 ? String(root.uavModel[index].id) : "DEFAULT"
+        var routes = root.routeDataByUav[id]
+        if (Array.isArray(routes) && routes.length > 0) {
+            routeModel.clear()
+            for (var i = 0; i < routes.length; ++i) routeModel.append(routes[i])
+        }
+        root.mandatoryPoints = Array.isArray(root.mandatoryPointsByUav[id])
+                               ? root.mandatoryPointsByUav[id] : []
+        root.rebuildTableRows()
+        profileCanvas.requestPaint()
+    }
+
+    function selectAircraft(index) {
+        if (index < 0 || index >= root.uavModel.length || index === root.selectedUavIndex) return
+        root.saveCurrentAircraftData()
+        root.uavSelectionRequested(index)
+    }
+
+    onSelectedUavIndexChanged: root.loadAircraftData(root.selectedUavIndex)
 
     Component.onCompleted: {
         root.tableSplitRatio = Math.max(0.25, Math.min(0.75, profileSettings.tableSplitRatio))
-        try {
-            var savedPoints = JSON.parse(profileSettings.mandatoryPointsJson)
-            root.mandatoryPoints = Array.isArray(savedPoints) ? savedPoints : []
-        } catch (e) {
-            root.mandatoryPoints = []
+        try { root.routeDataByUav = JSON.parse(profileSettings.routeDataByUavJson) || ({}) }
+        catch (e) { root.routeDataByUav = ({}) }
+        try { root.mandatoryPointsByUav = JSON.parse(profileSettings.mandatoryPointsByUavJson) || ({}) }
+        catch (e) { root.mandatoryPointsByUav = ({}) }
+        var initialRoute = []
+        for (var ri = 0; ri < routeModel.count; ++ri) {
+            var source = routeModel.get(ri), item = {}
+            for (var key in source) item[key] = source[key]
+            initialRoute.push(item)
         }
-        root.rebuildTableRows()
+        var initialId = root.selectedAircraftId()
+        var routes = Object.assign({}, root.routeDataByUav)
+        var points = Object.assign({}, root.mandatoryPointsByUav)
+        for (var ui = 0; ui < root.uavModel.length; ++ui) {
+            var uid = String(root.uavModel[ui].id)
+            if (!Array.isArray(routes[uid])) routes[uid] = initialRoute
+            if (!Array.isArray(points[uid])) points[uid] = []
+        }
+        if (!Array.isArray(routes[initialId])) routes[initialId] = initialRoute
+        if (!Array.isArray(points[initialId])) points[initialId] = []
+        root.routeDataByUav = routes
+        root.mandatoryPointsByUav = points
+        root.loadAircraftData(root.selectedUavIndex)
         if (profileSettings.columnOrderJson.length > 0) {
             try {
                 var saved = JSON.parse(profileSettings.columnOrderJson)
@@ -249,7 +316,8 @@ Item {
 
     onTableSplitRatioChanged: profileSettings.tableSplitRatio = tableSplitRatio
     onMandatoryPointsChanged: {
-        profileSettings.mandatoryPointsJson = JSON.stringify(mandatoryPoints)
+        root.mandatoryPointsByUav[root.selectedAircraftId()] = mandatoryPoints
+        profileSettings.mandatoryPointsByUavJson = JSON.stringify(root.mandatoryPointsByUav)
         rebuildTableRows()
         profileCanvas.requestPaint()
     }
@@ -295,6 +363,7 @@ Item {
                 }
                 Text {
                     anchors.left: parent.left
+                    id: missionIdText
                     anchors.leftMargin: 205
                     anchors.verticalCenter: parent.verticalCenter
                     text: root.missionId
@@ -302,6 +371,53 @@ Item {
                     font.family: "B612 Mono"
                     font.pixelSize: 12
                 }
+                Row {
+                    id: uavTabs
+                    anchors.left: missionIdText.right
+                    anchors.leftMargin: 14
+                    anchors.right: collapsedToolsToggle.left
+                    anchors.rightMargin: 12
+                    anchors.verticalCenter: parent.verticalCenter
+                    height: 26
+                    spacing: 6
+
+                    Repeater {
+                        model: root.uavModel
+                        delegate: Rectangle {
+                            required property int index
+                            required property var modelData
+                            width: Math.max(48, (uavTabs.width - uavTabs.spacing * Math.max(0, root.uavModel.length - 1)) / Math.max(1, root.uavModel.length))
+                            height: uavTabs.height
+                            radius: 3
+                            color: index === root.selectedUavIndex ? "#102B3A" : "#091725"
+                            border.color: index === root.selectedUavIndex ? root.cyan : root.line
+                            border.width: index === root.selectedUavIndex ? 1.5 : 1
+
+                            Text {
+                                anchors.fill: parent
+                                anchors.leftMargin: 5
+                                anchors.rightMargin: 5
+                                text: (index + 1) + " · " + root.missionSummary + " · " + modelData.id
+                                color: index === root.selectedUavIndex ? root.cyan : root.textColor
+                                font.family: "B612"
+                                font.pixelSize: 10
+                                font.bold: index === root.selectedUavIndex
+                                fontSizeMode: Text.Fit
+                                minimumPixelSize: 7
+                                elide: Text.ElideRight
+                                wrapMode: Text.NoWrap
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                            MouseArea {
+                                anchors.fill: parent
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: root.selectAircraft(index)
+                            }
+                        }
+                    }
+                }
+
                 // When the parameter panel is collapsed, keep its tools button
                 // visible in the title bar, immediately left of the close button.
                 Text {
