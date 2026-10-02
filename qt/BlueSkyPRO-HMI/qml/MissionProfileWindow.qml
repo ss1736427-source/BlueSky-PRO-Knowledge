@@ -486,7 +486,10 @@ Item {
                                     ctx.fillText("01:18", right - 24, bottom + 14)
                                     for (var ti = 1; ti < 8; ti++) {
                                         var totalMinutes = Math.floor(78 * ti / 8)
-                                        var label = "00:" + (totalMinutes < 10 ? "0" : "") + totalMinutes
+                                        var hours = Math.floor(totalMinutes / 60)
+                                        var minutes = totalMinutes % 60
+                                        var label = (hours < 10 ? "0" : "") + hours + ":" +
+                                                    (minutes < 10 ? "0" : "") + minutes
                                         ctx.fillText(label, left + plotW * ti / 8 - 15, bottom + 14)
                                     }
 
