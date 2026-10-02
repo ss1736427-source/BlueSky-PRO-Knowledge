@@ -1,4 +1,5 @@
 import QtQuick
+import Qt.labs.settings 1.1
 
 Item {
     id: root
@@ -21,6 +22,63 @@ Item {
         course: true, distance: true, altitude: true, airspeed: true,
         groundspeed: true, time: true, deltaHeight: true, energy: true, note: true
     })
+    property var columns: [
+        { label: "#", w: 0.035, key: "number" },
+        { label: "ТИП", w: 0.075, key: "type" },
+        { label: "ТОЧКА / ШИРОТА, ДОЛГОТА", w: 0.17, key: "point" },
+        { label: "КУРС\\n°", w: 0.065, key: "course" },
+        { label: "ДИСТАНЦИЯ\\nкм", w: 0.075, key: "distance" },
+        { label: "ВЫСОТА\\nм", w: 0.075, key: "altitude" },
+        { label: "V_ВОЗД\\nм/с", w: 0.075, key: "airspeed" },
+        { label: "V_ПУТ\\nм/с", w: 0.075, key: "groundspeed" },
+        { label: "ВРЕМЯ\\nмин", w: 0.075, key: "time" },
+        { label: "Δh\\nм", w: 0.06, key: "deltaHeight" },
+        { label: "ЭНЕРГИЯ\\n%", w: 0.07, key: "energy" },
+        { label: "ПРИМЕЧАНИЕ", w: 0.15, key: "note" }
+    ]
+    property var columnOrder: ["number", "type", "point", "course", "distance", "altitude",
+                               "airspeed", "groundspeed", "time", "deltaHeight", "energy", "note"]
+    function orderedColumns() {
+        var result = []
+        for (var i = 0; i < root.columnOrder.length; ++i)
+            for (var j = 0; j < root.columns.length; ++j)
+                if (root.columns[j].key === root.columnOrder[i]) result.push(root.columns[j])
+        return result
+    }
+    function columnAtX(x) {
+        var visible = root.orderedColumns().filter(function(col) {
+            return root.parameterVisibility[col.key] !== false
+        })
+        var total = visible.reduce(function(sum, col) { return sum + col.w }, 0)
+        var cursor = 0
+        for (var i = 0; i < visible.length; ++i) {
+            cursor += visible[i].w / total * tableHeader.width
+            if (x < cursor) return visible[i].key
+        }
+        return visible.length ? visible[visible.length - 1].key : ""
+    }
+    function moveColumn(fromKey, toKey) {
+        if (!fromKey || !toKey || fromKey === toKey) return
+        var next = root.columnOrder.slice(0)
+        var from = next.indexOf(fromKey), to = next.indexOf(toKey)
+        if (from < 0 || to < 0) return
+        next.splice(from, 1)
+        next.splice(to, 0, fromKey)
+        root.columnOrder = next
+        profileSettings.columnOrderJson = JSON.stringify(next)
+    }
+    function columnValue(rowIndex, key) {
+        var row = routeModel.get(rowIndex)
+        if (!row) return ""
+        var values = {
+            number: String(rowIndex + 1), type: row.pointType,
+            point: row.pointName + "\\n" + row.coordinates,
+            course: row.course, distance: row.distance, altitude: row.altitude,
+            airspeed: row.airspeed, groundspeed: row.groundspeed, time: row.time,
+            deltaHeight: row.deltaHeight, energy: row.energy, note: row.note
+        }
+        return values[key] === undefined ? "" : values[key]
+    }
     function parameterKey(i) {
         return ["number", "type", "point", "course", "distance", "altitude",
                 "airspeed", "groundspeed", "time", "deltaHeight", "energy", "note"][i]
@@ -29,6 +87,22 @@ Item {
         var next = Object.assign({}, root.parameterVisibility)
         next[key] = !next[key]
         root.parameterVisibility = next
+    }
+
+    Settings {
+        id: profileSettings
+        category: "BlueSkyPRO/MissionProfile"
+        property string columnOrderJson: ""
+    }
+
+    Component.onCompleted: {
+        if (profileSettings.columnOrderJson.length > 0) {
+            try {
+                var saved = JSON.parse(profileSettings.columnOrderJson)
+                if (Array.isArray(saved) && saved.length === root.columns.length)
+                    root.columnOrder = saved
+            } catch (e) { }
+        }
     }
 
     anchors.fill: parent
@@ -145,25 +219,13 @@ Item {
                                 height: 40
                                 spacing: 0
                                 Repeater {
-                                    model: [
-                                        { label: "#", w: 0.035, key: "number" },
-                                        { label: "ТИП", w: 0.075, key: "type" },
-                                        { label: "ТОЧКА / ШИРОТА, ДОЛГОТА", w: 0.17, key: "point" },
-                                        { label: "КУРС\\n°", w: 0.065, key: "course" },
-                                        { label: "ДИСТАНЦИЯ\\nкм", w: 0.075, key: "distance" },
-                                        { label: "ВЫСОТА\\nм", w: 0.075, key: "altitude" },
-                                        { label: "V_ВОЗД\\nм/с", w: 0.075, key: "airspeed" },
-                                        { label: "V_ПУТ\\nм/с", w: 0.075, key: "groundspeed" },
-                                        { label: "ВРЕМЯ\\nмин", w: 0.075, key: "time" },
-                                        { label: "Δh\\nм", w: 0.06, key: "deltaHeight" },
-                                        { label: "ЭНЕРГИЯ\\n%", w: 0.07, key: "energy" },
-                                        { label: "ПРИМЕЧАНИЕ", w: 0.15, key: "note" }
-                                    ]
+                                    model: root.orderedColumns()
                                     delegate: Rectangle {
+                                        id: headerCell
                                         width: tableHeader.width * modelData.w
                                         height: tableHeader.height
                                         visible: root.parameterVisibility[modelData.key] !== false
-                                        color: "#0B1B2B"
+                                        color: headerDragArea.pressed ? "#12394A" : "#0B1B2B"
                                         border.color: root.line
                                         Text {
                                             anchors.fill: parent
@@ -175,6 +237,15 @@ Item {
                                             horizontalAlignment: Text.AlignHCenter
                                             verticalAlignment: Text.AlignVCenter
                                             wrapMode: Text.Wrap
+                                        }
+                                        MouseArea {
+                                            id: headerDragArea
+                                            anchors.fill: parent
+                                            cursorShape: Qt.SizeAllCursor
+                                            onReleased: {
+                                                var xInHeader = headerCell.x + mouse.x
+                                                root.moveColumn(modelData.key, root.columnAtX(xInHeader))
+                                            }
                                         }
                                     }
                                 }
@@ -194,22 +265,18 @@ Item {
                                     property int rowIndex: index
                     property var widths: [0.035,0.075,0.17,0.065,0.075,0.075,0.075,0.075,0.075,0.06,0.07,0.17]
                                     Repeater {
-                                        model: [
-                                            String(index + 1), pointType, pointName + "\n" + coordinates,
-                                            course, distance, altitude, airspeed, groundspeed, time,
-                                            deltaHeight, energy, note
-                                        ]
+                                        model: root.orderedColumns()]
                                         delegate: Rectangle {
-                                            width: routeTable.width * parent.widths[index]
+                                            width: routeTable.width * modelData.w
                                             height: parent.height
-                                            visible: root.parameterVisibility[root.parameterKey(index)] !== false
+                                            visible: root.parameterVisibility[modelData.key] !== false
                                             color: routeTable.currentIndex === routeRowDelegate.rowIndex ? "#102B3A" : (rowIndex % 2 ? "#091725" : "#0C1D2C")
                                             border.color: root.line
                                             Text {
                                                 anchors.fill: parent
                                                 anchors.margins: 4
-                                                text: modelData
-                                                color: index === 10 ? (Number(modelData) > 70 ? "#64FF00" : "#FFD339") : root.textColor
+                                                text: root.columnValue(routeRowDelegate.rowIndex, modelData.key)
+                                                color: modelData.key === "energy" ? (Number(root.columnValue(routeRowDelegate.rowIndex, modelData.key)) > 70 ? "#64FF00" : "#FFD339") : root.textColor
                                                 font.family: "B612"
                                                 font.pixelSize: 10
                                                 horizontalAlignment: Text.AlignHCenter
@@ -219,7 +286,7 @@ Item {
                                             }
                                             // Altitude cells are editable in the design preview.
                                             Rectangle {
-                                                visible: index === 5
+                                                visible: modelData.key === "altitude"
                                                 anchors.fill: parent
                                                 anchors.margins: 5
                                                 color: "transparent"
@@ -228,7 +295,7 @@ Item {
                                                 TextInput {
                                                     anchors.fill: parent
                                                     anchors.margins: 2
-                                                    text: modelData
+                                                    text: root.columnValue(routeRowDelegate.rowIndex, "altitude")
                                                     color: root.textColor
                                                     font.family: "B612 Mono"
                                                     font.pixelSize: 11
