@@ -449,7 +449,7 @@ Item {
                     Text {
                         anchors.fill: parent
                         anchors.leftMargin: 8
-                        anchors.rightMargin: 30
+                        anchors.rightMargin: 8
                         elide: Text.ElideRight
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
@@ -476,7 +476,7 @@ Item {
         }
     }
 
-    // Mission profile button in the reserved area below the template list.
+    // Mission profile button is fixed above Create Mission, independent of template-list length.
     Rectangle {
         id: missionProfileButton
         visible: root.analysisVisible && !root.panelConfigOpen
