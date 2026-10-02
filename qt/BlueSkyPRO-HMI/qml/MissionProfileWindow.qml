@@ -97,7 +97,10 @@ Item {
             var progress = i / Math.max(1, routeModel.count - 1)
             var matching = -1
             for (var m = 0; m < mandatory.length; m++) {
-                if (Math.abs(Number(mandatory[m].progress) - progress) < 0.012) { matching = m; break }
+                if ((Number(mandatory[m].routeIndex) === i && Number(mandatory[m].routeIndex) >= 0)
+                    || (Number(mandatory[m].routeIndex) < 0 && Math.abs(Number(mandatory[m].progress) - progress) < 0.012)) {
+                    matching = m; break
+                }
             }
             if (matching >= 0) {
                 rows.push({ pointType: "Обязательная", pointName: source.pointName, coordinates: source.coordinates,
@@ -556,10 +559,24 @@ Item {
                                     for (var ai = 0; ai < routeModel.count; ai++)
                                         alts.push(Number(routeModel.get(ai).altitude))
                                     var profileNodes = []
-                                    for (var wi = 0; wi < alts.length; wi++)
-                                        profileNodes.push({ progress: wi / (alts.length - 1), altitude: alts[wi], waypoint: wi })
+                                    for (var wi = 0; wi < alts.length; wi++) {
+                                        var boundMandatory = null
+                                        for (var bm = 0; bm < root.mandatoryPoints.length; bm++) {
+                                            if (Number(root.mandatoryPoints[bm].routeIndex) === wi
+                                                && Number(root.mandatoryPoints[bm].routeIndex) >= 0) {
+                                                boundMandatory = root.mandatoryPoints[bm]
+                                                break
+                                            }
+                                        }
+                                        profileNodes.push({
+                                            progress: boundMandatory ? Number(boundMandatory.progress) : wi / Math.max(1, alts.length - 1),
+                                            altitude: boundMandatory ? Number(boundMandatory.altitude) : alts[wi],
+                                            waypoint: wi
+                                        })
+                                    }
                                     for (var mi = 0; mi < root.mandatoryPoints.length; mi++) {
                                         var mp = root.mandatoryPoints[mi]
+                                        if (Number(mp.routeIndex) >= 0) continue
                                         profileNodes.push({ progress: Math.max(0, Math.min(1, Number(mp.progress))),
                                                             altitude: Math.max(0, Math.min(400, Number(mp.altitude))),
                                                             mandatoryIndex: mi })
@@ -573,8 +590,18 @@ Item {
                                     }
                                     ctx.strokeStyle = root.cyan; ctx.lineWidth = 3; ctx.stroke()
                                     for (var m = 0; m < alts.length; m++) {
-                                        var mx = left + plotW * m / (alts.length - 1)
-                                        var my = bottom - (alts[m] / 400) * plotH
+                                        var nodeProgress = m / Math.max(1, alts.length - 1)
+                                        var nodeAltitude = alts[m]
+                                        for (var bm2 = 0; bm2 < root.mandatoryPoints.length; bm2++) {
+                                            if (Number(root.mandatoryPoints[bm2].routeIndex) === m
+                                                && Number(root.mandatoryPoints[bm2].routeIndex) >= 0) {
+                                                nodeProgress = Number(root.mandatoryPoints[bm2].progress)
+                                                nodeAltitude = Number(root.mandatoryPoints[bm2].altitude)
+                                                break
+                                            }
+                                        }
+                                        var mx = left + plotW * nodeProgress
+                                        var my = bottom - (nodeAltitude / 400) * plotH
                                         ctx.beginPath(); ctx.arc(mx, my, 4, 0, Math.PI * 2)
                                         ctx.fillStyle = "#EAF7FF"; ctx.fill()
                                         ctx.strokeStyle = root.cyan; ctx.lineWidth = 2; ctx.stroke()
@@ -736,11 +763,12 @@ Item {
                                         }
                                         return bestProgress
                                     }
-                                    function addMandatoryPoint(progress, altitude) {
+                                    function addMandatoryPoint(progress, altitude, routeIndex) {
                                         var next = root.mandatoryPoints.slice(0)
                                         next.push({ id: "mandatory-" + Date.now().toString() + "-" + next.length,
                                             progress: Math.max(0, Math.min(1, progress)),
-                                            altitude: Math.round(Math.max(0, Math.min(400, altitude))) })
+                                            altitude: Math.round(Math.max(0, Math.min(400, altitude))),
+                                            routeIndex: routeIndex === undefined ? -1 : routeIndex })
                                         root.mandatoryPoints = next
                                         return next.length - 1
                                     }
@@ -749,14 +777,19 @@ Item {
                                         if (index < 0 || index >= root.mandatoryPoints.length) return
                                         var next = root.mandatoryPoints.slice(0)
                                         var selected = next[index]
+                                        var nextProgress = Math.max(0, Math.min(1, (mouseX - plotLeft) / Math.max(1, plotRight - plotLeft)))
+                                        var nextAltitude = Math.round(Math.max(0, Math.min(400, (plotBottom - mouseY) / Math.max(1, plotBottom - plotTop) * 400)))
                                         next[index] = {
                                             id: selected.id,
-                                            progress: Math.max(0, Math.min(1, (mouseX - plotLeft) / Math.max(1, plotRight - plotLeft))),
-                                            altitude: Math.round(Math.max(0, Math.min(400, (plotBottom - mouseY) / Math.max(1, plotBottom - plotTop) * 400)))
+                                            progress: nextProgress,
+                                            altitude: nextAltitude,
+                                            routeIndex: selected.routeIndex === undefined ? -1 : Number(selected.routeIndex)
                                         }
-                                        // Replace the array and explicitly redraw the same Canvas that
-                                        // renders both the mandatory marker and the route polyline.
+                                        var boundIndex = Number(selected.routeIndex)
+                                        if (boundIndex >= 0 && boundIndex < routeModel.count)
+                                            routeModel.setProperty(boundIndex, "altitude", String(nextAltitude))
                                         root.mandatoryPoints = next
+                                        root.rebuildTableRows()
                                         profileCanvas.requestPaint()
                                     }
 
@@ -794,7 +827,7 @@ Item {
                                             for (var r = 0; r < root.mandatoryPoints.length; r++)
                                                 if (Math.abs(Number(root.mandatoryPoints[r].progress) - routeProgress) < 0.012) exists = true
                                             if (!exists) {
-                                                dragMandatoryIndex = addMandatoryPoint(routeProgress, routeAltitude)
+                                                dragMandatoryIndex = addMandatoryPoint(routeProgress, routeAltitude, routeHit)
                                                 dragOffsetX = mouse.x - (plotLeft + routeProgress * (plotRight - plotLeft))
                                                 dragOffsetY = mouse.y - (plotBottom - routeAltitude / 400 * (plotBottom - plotTop))
                                             }
