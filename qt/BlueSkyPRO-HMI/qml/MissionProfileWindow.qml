@@ -220,12 +220,12 @@ Item {
                     id: mainColumn
                     width: parent.width - parameterPanel.width - parent.spacing
                     height: parent.height
-                    spacing: 8
+                    spacing: 0
 
                     Rectangle {
                         id: tablePanel
                         width: parent.width
-                        height: Math.round((mainColumn.height - splitHandle.height - 2 * mainColumn.spacing) * root.tableSplitRatio)
+                        height: Math.round((mainColumn.height - splitHandle.height) * root.tableSplitRatio)
                         color: root.bg
                         border.color: root.line
                         radius: 3
@@ -358,7 +358,7 @@ Item {
                     Item {
                         id: splitHandle
                         width: parent.width
-                        height: 12
+                        height: 1
                         z: 2
 
                         Rectangle {
@@ -381,7 +381,7 @@ Item {
                                 if (!pressed) return
                                 var delta = mouse.y - lastY
                                 lastY = mouse.y
-                                var available = mainColumn.height - splitHandle.height - 2 * mainColumn.spacing
+                                var available = mainColumn.height - splitHandle.height
                                 var minTable = 150
                                 var minProfile = 190
                                 var nextHeight = tablePanel.height + delta
@@ -394,7 +394,7 @@ Item {
                     Rectangle {
                         id: profilePanel
                         width: parent.width
-                        height: mainColumn.height - tablePanel.height - splitHandle.height - 2 * mainColumn.spacing
+                        height: mainColumn.height - tablePanel.height - splitHandle.height
                         color: root.bg
                         border.color: root.line
                         radius: 3
@@ -426,7 +426,7 @@ Item {
                             Canvas {
                                 id: profileCanvas
                                 width: parent.width
-                                height: parent.height - 66
+                                height: parent.height - 30
                                 onWidthChanged: requestPaint()
                                 onHeightChanged: requestPaint()
                                 Connections {
@@ -567,33 +567,7 @@ Item {
                                     }
                                 }
                             }
-                            Row {
-                                width: parent.width
-                                height: 28
-                                spacing: 5
-                                Repeater {
-                                    model: [
-                                        ["ДИСТАНЦИЯ", "78.4 км"],
-                                        ["ВРЕМЯ ПОЛЁТА", "01:18"],
-                                        ["СРЕДНЯЯ V_ПУТ", "25.8 м/с"],
-                                        ["МИН / МАКС ВЫСОТА", "120 / 180 м"],
-                                        ["НАБОР / СНИЖЕНИЕ", "+90 / -90 м"],
-                                        ["РАСХОД ЭНЕРГИИ", "58 %"],
-                                        ["ОСТАТОК ЭНЕРГИИ", "42 %"]
-                                    ]
-                                    delegate: Rectangle {
-                                        width: (parent.width - 6 * 5) / 7
-                                        height: parent.height
-                                        color: "#0B1B2B"
-                                        border.color: root.line
-                                        Column {
-                                            anchors.centerIn: parent
-                                            Text { text: modelData[0]; color: root.muted; font.pixelSize: 8; font.family: "B612" }
-                                            Text { text: modelData[1]; color: root.textColor; font.pixelSize: 11; font.bold: true; font.family: "B612 Mono" }
-                                        }
-                                    }
-                                }
-                            }
+
                         }
                     }
                 }
