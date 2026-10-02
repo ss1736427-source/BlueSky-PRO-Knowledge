@@ -367,21 +367,36 @@ Item {
                         Repeater {
                             model: ["Курс", "Дистанция", "Высота", "V_возд", "V_пут", "Время", "Δh (набор/снижение)", "Энергия", "Примечание"]
                             delegate: Row {
+                                id: parameterRow
                                 width: parent.width
-                                height: 22
-                                spacing: 7
+                                height: 24
+                                spacing: 9
                                 property string parameterKey: ["course", "distance", "altitude", "airspeed", "groundspeed", "time", "deltaHeight", "energy", "note"][index]
                                 property bool parameterChecked: root.parameterVisibility[parameterKey] !== false
+
+                                // Compact two-state switch; the whole row remains clickable.
                                 Rectangle {
-                                    width: 14; height: 14
+                                    id: parameterSwitch
+                                    width: 32
+                                    height: 18
+                                    radius: 9
                                     anchors.verticalCenter: parent.verticalCenter
-                                    color: parent.parameterChecked ? root.cyan : "transparent"
-                                    border.color: root.cyan
-                                    radius: 2
-                                    Text { anchors.centerIn: parent; text: parent.parent.parameterChecked ? "✓" : ""; color: "#06111D"; font.pixelSize: 10 }
+                                    color: parameterRow.parameterChecked ? root.cyan : "#263847"
+                                    border.width: 1
+                                    border.color: parameterRow.parameterChecked ? root.cyan : "#547084"
+
+                                    Rectangle {
+                                        width: 12
+                                        height: 12
+                                        radius: 6
+                                        y: (parameterSwitch.height - height) / 2
+                                        x: parameterRow.parameterChecked ? parameterSwitch.width - width - 3 : 3
+                                        color: parameterRow.parameterChecked ? "#06111D" : "#B7C7D3"
+                                        Behavior on x { NumberAnimation { duration: 120 } }
+                                    }
                                 }
                                 Text {
-                                    width: parent.width - 22
+                                    width: parent.width - parameterSwitch.width - parent.spacing
                                     text: modelData
                                     color: root.textColor
                                     font.family: "B612"
@@ -391,7 +406,7 @@ Item {
                                 }
                                 MouseArea {
                                     anchors.fill: parent
-                                    onClicked: root.toggleParameter(parent.parameterKey)
+                                    onClicked: root.toggleParameter(parameterRow.parameterKey)
                                     cursorShape: Qt.PointingHandCursor
                                 }
                             }
