@@ -155,7 +155,8 @@ Item {
                                     width: routeTable.width
                                     height: Math.max(37, Math.min(48, routeTable.height / 6))
                                     spacing: 0
-                                    property var widths: [0.035,0.075,0.17,0.065,0.075,0.075,0.075,0.075,0.075,0.06,0.07,0.17]
+                                    property int rowIndex: index
+                    property var widths: [0.035,0.075,0.17,0.065,0.075,0.075,0.075,0.075,0.075,0.06,0.07,0.17]
                                     Repeater {
                                         model: [
                                             String(index + 1), pointType, pointName + "\n" + coordinates,
@@ -165,7 +166,7 @@ Item {
                                         delegate: Rectangle {
                                             width: routeTable.width * parent.widths[index]
                                             height: parent.height
-                                            color: routeTable.currentIndex === index ? "#102B3A" : (rowIndex % 2 ? "#091725" : "#0C1D2C")
+                                            color: routeTable.currentIndex === rowIndex ? "#102B3A" : (rowIndex % 2 ? "#091725" : "#0C1D2C")
                                             border.color: root.line
                                             Text {
                                                 anchors.fill: parent
