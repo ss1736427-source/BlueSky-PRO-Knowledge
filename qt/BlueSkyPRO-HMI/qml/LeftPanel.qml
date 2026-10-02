@@ -459,16 +459,6 @@ Item {
                         font.pixelSize: 12
                         font.bold: true
                     }
-                    Text {
-                        visible: root.templateIsSelected(index)
-                        x: parent.width - 30
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "✓"
-                        color: root.cyan
-                        font.family: "B612 Mono"
-                        font.pixelSize: 15
-                        font.bold: true
-                    }
                     MouseArea {
                         anchors.fill: parent
                         enabled: root.missionCreationMode || root.templateIsSelected(index)
@@ -491,7 +481,8 @@ Item {
         id: missionProfileButton
         visible: root.analysisVisible && !root.panelConfigOpen
         x: 10
-        y: templateList.y + templateList.height + 8
+        // Fixed to the bottom control zone, directly above Create Mission.
+        y: createMissionButton.y - height - 12
         width: parent.width - 20
         height: 44
         radius: 2
