@@ -416,7 +416,7 @@ Item {
                                 property var assignment: index < root.missionAssignments.length
                                     ? root.missionAssignments[index] : null
                                 text: (index + 1) + " · " + (assignment ? assignment.task : "Задача не назначена")
-                                      + "\\n" + (assignment ? assignment.sector : "Сектор не назначен")
+                                      + "\n" + (assignment ? assignment.sector : "Сектор не назначен")
                                       + " · " + modelData.id
                                 color: index === root.selectedUavIndex ? root.cyan : root.textColor
                                 font.family: "B612"
