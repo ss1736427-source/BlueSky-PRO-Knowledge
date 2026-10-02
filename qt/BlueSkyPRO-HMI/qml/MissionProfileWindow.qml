@@ -21,6 +21,11 @@ Item {
     property real tableSplitRatio: 0.47
     // Live telemetry inputs; connect these to the flight-data source when available.
     property bool liveFlightActive: false
+    // Design-time marker keeps the aircraft visible in Qt Design Studio.
+    // A connected telemetry feed overrides this preview position.
+    property bool showAircraftPreview: true
+    property real previewDistanceKm: 46.7
+    property real previewAltitudeM: 180
     property real liveDistanceKm: 0
     property real liveElapsedSeconds: 0
     property real liveAltitudeM: 0
@@ -493,26 +498,46 @@ Item {
                                         ctx.fillText(label, left + plotW * ti / 8 - 15, bottom + 14)
                                     }
 
-                                    // Live aircraft projection. Distance progress is mapped to
-                                    // the planned altitude profile; actual altitude is shown
-                                    // by the aircraft marker when valid telemetry is supplied.
-                                    if (root.liveFlightActive) {
-                                        var progress = Math.max(0, Math.min(1, root.liveDistanceKm / root.plannedDistanceKm))
+                                    // Aircraft marker: live telemetry takes priority. In the
+                                    // design preview, show a clearly marked sample position.
+                                    if (root.liveFlightActive || root.showAircraftPreview) {
+                                        var markerDistance = root.liveFlightActive ? root.liveDistanceKm : root.previewDistanceKm
+                                        var progress = Math.max(0, Math.min(1, markerDistance / root.plannedDistanceKm))
                                         var seg = progress * (alts.length - 1)
                                         var segIndex = Math.min(alts.length - 2, Math.floor(seg))
                                         var frac = seg - segIndex
                                         var routeAlt = alts[segIndex] + (alts[segIndex + 1] - alts[segIndex]) * frac
-                                        var markerAlt = root.liveAltitudeM > 0 ? root.liveAltitudeM : routeAlt
+                                        var markerAlt = root.liveFlightActive && root.liveAltitudeM > 0
+                                                        ? root.liveAltitudeM
+                                                        : (root.liveFlightActive ? routeAlt : root.previewAltitudeM)
                                         var aircraftX = left + plotW * progress
                                         var aircraftY = bottom - (markerAlt / 400) * plotH
+
+                                        // Halo and vertical leader make the aircraft easy to locate.
+                                        ctx.strokeStyle = "#FFFFFF"
+                                        ctx.lineWidth = 1
+                                        ctx.setLineDash([3, 3])
+                                        ctx.beginPath()
+                                        ctx.moveTo(aircraftX, aircraftY + 13)
+                                        ctx.lineTo(aircraftX, bottom)
+                                        ctx.stroke()
+                                        ctx.setLineDash([])
+                                        ctx.beginPath()
+                                        ctx.arc(aircraftX, aircraftY, 13, 0, Math.PI * 2)
+                                        ctx.fillStyle = "#00DDF2"
+                                        ctx.fill()
+                                        ctx.strokeStyle = "#FFFFFF"
+                                        ctx.lineWidth = 2
+                                        ctx.stroke()
+
                                         ctx.save()
                                         ctx.translate(aircraftX, aircraftY)
                                         ctx.rotate(-Math.PI / 2)
-                                        ctx.fillStyle = "#FFFFFF"
-                                        ctx.strokeStyle = root.cyan
-                                        ctx.lineWidth = 2
+                                        ctx.fillStyle = "#07111E"
+                                        ctx.strokeStyle = "#FFFFFF"
+                                        ctx.lineWidth = 1.5
                                         ctx.beginPath()
-                                        ctx.moveTo(0, -10)
+                                        ctx.moveTo(0, -9)
                                         ctx.lineTo(6, 7)
                                         ctx.lineTo(0, 4)
                                         ctx.lineTo(-6, 7)
@@ -520,12 +545,25 @@ Item {
                                         ctx.fill()
                                         ctx.stroke()
                                         ctx.restore()
+
                                         ctx.fillStyle = "#FFFFFF"
-                                        ctx.font = "10px sans-serif"
-                                        var liveTime = Math.max(0, Math.floor(root.liveElapsedSeconds))
-                                        var liveLabel = (Math.floor(liveTime / 3600) < 10 ? "0" : "") + Math.floor(liveTime / 3600) + ":" +
-                                                        (Math.floor((liveTime % 3600) / 60) < 10 ? "0" : "") + Math.floor((liveTime % 3600) / 60)
-                                        ctx.fillText(liveLabel, Math.min(right - 35, aircraftX + 10), Math.max(top + 12, aircraftY - 12))
+                                        ctx.font = "bold 11px sans-serif"
+                                        var aircraftLabel = root.liveFlightActive ? "БПЛА" : "БПЛА · ПРИМЕР"
+                                        var labelWidth = ctx.measureText(aircraftLabel).width
+                                        var labelX = Math.max(left, Math.min(right - labelWidth, aircraftX + 16))
+                                        var labelY = Math.max(top + 14, aircraftY - 17)
+                                        ctx.fillStyle = "#07111E"
+                                        ctx.fillRect(labelX - 3, labelY - 11, labelWidth + 6, 16)
+                                        ctx.fillStyle = "#FFFFFF"
+                                        ctx.fillText(aircraftLabel, labelX, labelY)
+
+                                        if (root.liveFlightActive) {
+                                            var liveTime = Math.max(0, Math.floor(root.liveElapsedSeconds))
+                                            var liveLabel = (Math.floor(liveTime / 3600) < 10 ? "0" : "") + Math.floor(liveTime / 3600) + ":" +
+                                                            (Math.floor((liveTime % 3600) / 60) < 10 ? "0" : "") + Math.floor((liveTime % 3600) / 60)
+                                            ctx.font = "10px sans-serif"
+                                            ctx.fillText(liveLabel, Math.min(right - 35, aircraftX + 10), Math.max(top + 28, aircraftY + 25))
+                                        }
                                     }
                                 }
                             }
