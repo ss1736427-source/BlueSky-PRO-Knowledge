@@ -31,6 +31,23 @@ Item {
     property bool manualValidationStarted: false
     property bool missionReady: false
     property bool warningActive: true
+    // Preview state only. Live weather/NOTAM providers must supply authoritative data.
+    property string selectedOperationalTool: ""
+    property var checklistItems: [
+        { label: "Mission definition", status: "PASS" },
+        { label: "UAV allocation", status: "PASS" },
+        { label: "Route validation", status: "PENDING" },
+        { label: "NOTAM / Airspace", status: "PENDING" },
+        { label: "Weather", status: "PENDING" },
+        { label: "Terrain / Obstacles", status: "PENDING" },
+        { label: "Battery / Payload", status: "PENDING" },
+        { label: "C2 / GNSS", status: "PENDING" },
+        { label: "Permissions", status: "PENDING" },
+        { label: "Final validation", status: "PENDING" }
+    ]
+    readonly property int checklistPassedCount: checklistItems.filter(function(item) {
+        return item.status === "PASS"
+    }).length
     readonly property bool mapAlertsEnabled:
         panelSettingsPopup.enabledTools.indexOf("Map Alerts") >= 0
     property var systemMessages: [
@@ -145,7 +162,7 @@ Item {
         x: 16
         y: 54
         width: parent.width - 32
-        height: 136
+        height: 222
         radius: 8
         color: "transparent"
         border.color: "#236078"
@@ -194,7 +211,7 @@ Item {
             spacing: 3
 
             Text {
-                text: "5"
+                text: String(root.checklistPassedCount)
                 color: root.green
                 font.family: "B612"
                 font.pixelSize: 13
@@ -208,7 +225,7 @@ Item {
                 font.bold: true
             }
             Text {
-                text: "3"
+                text: String(root.checklistItems.length - root.checklistPassedCount)
                 color: "#FF00D4"
                 font.family: "B612"
                 font.pixelSize: 13
@@ -217,10 +234,98 @@ Item {
         }
     }
 
-    Text { visible: checklistCard.visible; x: checklistCard.x + 12; y: checklistCard.y + 41; text: "✓  Mission definition"; color: root.green; font.family: "B612"; font.pixelSize: 12 }
-    Text { visible: checklistCard.visible; x: checklistCard.x + 12; y: checklistCard.y + 62; text: "✓  UAV allocation"; color: root.green; font.family: "B612"; font.pixelSize: 12 }
-    Text { visible: checklistCard.visible; x: checklistCard.x + 12; y: checklistCard.y + 83; text: "✓  C2 availability"; color: root.green; font.family: "B612"; font.pixelSize: 12 }
-    Text { visible: checklistCard.visible; x: checklistCard.x + 12; y: checklistCard.y + 104; text: "⚠  Weather revalidation"; color: root.amber; font.family: "B612"; font.pixelSize: 12 }
+    Column {
+        x: checklistCard.x + 12
+        y: checklistCard.y + 39
+        width: checklistCard.width - 24
+        spacing: 1
+        visible: checklistCard.visible
+
+        Repeater {
+            model: root.checklistItems
+            delegate: Text {
+                width: parent.width
+                height: 18
+                text: (modelData.status === "PASS" ? "✓" :
+                       modelData.status === "FAIL" ? "✕" :
+                       modelData.status === "WARNING" ? "⚠" : "○")
+                      + "  " + modelData.label
+                color: modelData.status === "PASS" ? root.green :
+                       modelData.status === "FAIL" ? root.red :
+                       modelData.status === "WARNING" ? root.amber : root.secondary
+                font.family: "B612"
+                font.pixelSize: 11
+                elide: Text.ElideRight
+                verticalAlignment: Text.AlignVCenter
+            }
+        }
+    }
+
+    // Weather and NOTAM are dedicated tools. Until connected, they explicitly
+    // report missing data rather than implying a successful operational check.
+    Rectangle {
+        id: operationalCard
+        visible: panelSettingsPopup.enabledTools.indexOf("Weather") >= 0
+                 || panelSettingsPopup.enabledTools.indexOf("NOTAM") >= 0
+        x: 16
+        y: checklistCard.y + checklistCard.height + 10
+        width: parent.width - 32
+        height: root.selectedOperationalTool === "" ? 94 : 132
+        radius: 8
+        color: "transparent"
+        border.color: "#236078"
+        border.width: 1
+        antialiasing: true
+
+        Rectangle {
+            x: 1; y: 1; width: parent.width - 2; height: 32
+            radius: 7; color: "#0B1B2B"
+            Rectangle { x: 0; y: height / 2; width: parent.width; height: parent.height / 2; color: parent.color }
+            Text {
+                anchors.left: parent.left; anchors.leftMargin: 12
+                anchors.verticalCenter: parent.verticalCenter
+                text: "FLIGHT CONDITIONS"
+                color: root.text; font.family: "B612"; font.pixelSize: 12; font.bold: true
+            }
+        }
+
+        Column {
+            x: 8; y: 38; width: parent.width - 16; spacing: 3
+            visible: root.selectedOperationalTool === ""
+
+            Row {
+                visible: panelSettingsPopup.enabledTools.indexOf("Weather") >= 0
+                width: parent.width; height: 23
+                Text { width: parent.width * 0.55; text: "WEATHER"; color: root.text; font.family: "B612"; font.pixelSize: 11; verticalAlignment: Text.AlignVCenter }
+                Text { width: parent.width * 0.45; text: "NO DATA"; color: root.amber; font.family: "B612"; font.pixelSize: 10; font.bold: true; horizontalAlignment: Text.AlignRight; verticalAlignment: Text.AlignVCenter }
+                MouseArea { anchors.fill: parent; cursorShape: Qt.PointingHandCursor; onClicked: root.selectedOperationalTool = "WEATHER" }
+            }
+            Row {
+                visible: panelSettingsPopup.enabledTools.indexOf("NOTAM") >= 0
+                width: parent.width; height: 23
+                Text { width: parent.width * 0.55; text: "NOTAM / AIRSPACE"; color: root.text; font.family: "B612"; font.pixelSize: 11; verticalAlignment: Text.AlignVCenter }
+                Text { width: parent.width * 0.45; text: "NOT CHECKED"; color: root.amber; font.family: "B612"; font.pixelSize: 10; font.bold: true; horizontalAlignment: Text.AlignRight; verticalAlignment: Text.AlignVCenter }
+                MouseArea { anchors.fill: parent; cursorShape: Qt.PointingHandCursor; onClicked: root.selectedOperationalTool = "NOTAM" }
+            }
+        }
+
+        Column {
+            x: 10; y: 39; width: parent.width - 20; spacing: 4
+            visible: root.selectedOperationalTool !== ""
+            Text {
+                width: parent.width
+                text: root.selectedOperationalTool === "WEATHER"
+                      ? "WEATHER · Данные источника не подключены. Проверка условий не выполнена."
+                      : "NOTAM / AIRSPACE · Источник ограничений не подключён. Маршрут не проверен."
+                color: root.text; font.family: "B612"; font.pixelSize: 11; wrapMode: Text.WordWrap
+            }
+            Text {
+                text: "‹ НАЗАД"
+                color: root.cyan; font.family: "B612"; font.pixelSize: 10
+                MouseArea { anchors.fill: parent; anchors.margins: -4; cursorShape: Qt.PointingHandCursor; onClicked: root.selectedOperationalTool = "" }
+            }
+        }
+    }
 
     function openSystemMessage(message) {
         selectedInformationMessage = message
@@ -265,7 +370,7 @@ Item {
         visible: panelSettingsPopup.enabledTools.indexOf("Information") >= 0
                  || root.hasUnacknowledgedCriticalMessage()
         x: 16
-        y: checklistCard.y + checklistCard.height + 10
+        y: (operationalCard.visible ? operationalCard.y + operationalCard.height : checklistCard.y + checklistCard.height) + 10
         width: parent.width - 32
         height: Math.min(root.informationAvailableHeight,
                          Math.max(72, (root.selectedInformationMessage
@@ -669,7 +774,7 @@ Item {
         width: Math.min(parent.width - 16, Math.max(260, panelSettingsPopup.contentWidth))
         height: Math.min(parent.height - 52, 86 + panelSettingsPopup.tools.length * 34)
         title: "INFORMATION SETTINGS"
-        tools: ["Checklist", "Information", "Readiness", "Validation", "Send Flight Plan", "Start Mission", "Map Alerts"]
+        tools: ["Checklist", "Weather", "NOTAM", "Information", "Readiness", "Validation", "Send Flight Plan", "Start Mission", "Map Alerts"]
         onClosed: open = false
     }
 }
