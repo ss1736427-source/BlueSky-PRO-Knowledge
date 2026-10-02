@@ -78,3 +78,38 @@ The HMI initiates edits and presents results. It does not independently implemen
 ## Related canonical specification
 
 See [Canonical Route Model (PLAN-DATA-001)](../../../02_SYSTEM_DESIGN/PLANNING/FLIGHT_PLANNING_CANONICAL_ROUTE_MODEL_001.md) and [Flight Profile Interaction](Flight%20Profile%20Interaction.md).
+
+
+## 9. Mandatory profile points — interaction and shared display
+
+### 9.1 Multiple points and route geometry
+
+- The operator may create and retain multiple mandatory points simultaneously.
+- Every mandatory point is a node/constraint in the common route profile, not an overlay independent of the route.
+- The profile line must pass through each mandatory point in route order. With one mandatory point, the line connects the preceding route point to the mandatory point and then to the following route point, preserving one continuous profile.
+- Moving a mandatory point updates the adjoining profile segments and the common route geometry. Other mandatory points remain intact.
+- The route/profile must preserve the rest of the route unless the planner explicitly changes it as part of recalculation.
+- Mandatory points must be represented in the canonical route/mission model. A UI-only list or saved display preference is not an operational source of truth.
+
+### 9.2 Removal and input methods
+
+- Desktop: remove a mandatory point with the right mouse button on that point.
+- Tablet/touch: remove a mandatory point with a double tap on that point.
+- Point selection and dragging must distinguish an existing mandatory point from a normal route waypoint and from empty chart space.
+- Input handling must avoid accidental deletion or creation during a drag gesture.
+
+### 9.3 Shared visual identity
+
+- Mandatory points use the same blue color in every view: `#155BFF`.
+- They must be visible in every active representation that displays the route, including the flight profile, map and route/waypoint table where applicable.
+- The same canonical point identity, coordinates, altitude and mandatory status must be shown consistently across all views.
+- Creating, moving or removing a point updates all affected views from the same route state.
+
+### 9.4 Acceptance criteria for mandatory points
+
+1. Two or more mandatory points can coexist and remain individually selectable.
+2. The profile line passes through all mandatory points in route order.
+3. Moving one point updates the two adjoining profile segments without removing or moving other mandatory points.
+4. Right-click removes the selected point on desktop; double tap removes it on a tablet.
+5. All route views show mandatory points in `#155BFF` and agree on their identity and position.
+6. Each change is validated and recalculated through the controlled transaction in Section 4; an invalid candidate is not presented as accepted/READY.
