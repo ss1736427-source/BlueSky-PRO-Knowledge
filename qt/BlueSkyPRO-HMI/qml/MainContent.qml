@@ -153,6 +153,9 @@ Item {
             missionSummary: root.missionSummary
             missionReviewState: root.missionReviewState
             missionTemplateIndices: root.missionTemplateIndices
+            uavModel: uavStatus.uavModel
+            selectedUavIndex: root.selectedUavIndex
+            onUavSelectionRequested: function(index) { root.selectedUavIndex = index }
             onCloseRequested: root.missionProfileOpen = false
             onApplyRequested: root.missionProfileOpen = false
         }
