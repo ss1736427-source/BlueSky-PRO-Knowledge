@@ -281,9 +281,9 @@ Item {
     Rectangle {
         id: operationalCard
         visible: (panelSettingsPopup.enabledTools.indexOf("Weather") >= 0
-                  && root.weatherPilotAttentionRequired)
+                  || root.weatherPilotAttentionRequired)
                  || (panelSettingsPopup.enabledTools.indexOf("NOTAM") >= 0
-                     && root.notamPilotAttentionRequired)
+                     || root.notamPilotAttentionRequired)
         x: 16
         y: (checklistCard.visible ? checklistCard.y + checklistCard.height : 54) + 10
         width: parent.width - 32
@@ -312,7 +312,7 @@ Item {
 
             Row {
                 visible: panelSettingsPopup.enabledTools.indexOf("Weather") >= 0
-                         && root.weatherPilotAttentionRequired
+                         || root.weatherPilotAttentionRequired
                 width: parent.width; height: 23
                 spacing: 8
                 Text { id: weatherStatusLabel; width: parent.width * 0.42; text: "WEATHER"; color: root.text; font.family: "B612"; font.pixelSize: 11; verticalAlignment: Text.AlignVCenter }
@@ -321,7 +321,7 @@ Item {
             }
             Row {
                 visible: panelSettingsPopup.enabledTools.indexOf("NOTAM") >= 0
-                         && root.notamPilotAttentionRequired
+                         || root.notamPilotAttentionRequired
                 width: parent.width; height: 23
                 spacing: 8
                 Text { id: notamStatusLabel; width: parent.width * 0.42; text: "NOTAM"; color: root.text; font.family: "B612"; font.pixelSize: 11; verticalAlignment: Text.AlignVCenter }
@@ -336,8 +336,10 @@ Item {
             contentWidth: width; contentHeight: operationalDetailColumn.implicitHeight
             clip: true; boundsBehavior: Flickable.StopAtBounds
             flickableDirection: Flickable.VerticalFlick
-            visible: (root.selectedOperationalTool === "WEATHER" && root.weatherPilotAttentionRequired)
-                     || (root.selectedOperationalTool === "NOTAM" && root.notamPilotAttentionRequired)
+            visible: (root.selectedOperationalTool === "WEATHER"
+                       && (panelSettingsPopup.enabledTools.indexOf("Weather") >= 0 || root.weatherPilotAttentionRequired))
+                     || (root.selectedOperationalTool === "NOTAM"
+                         && (panelSettingsPopup.enabledTools.indexOf("NOTAM") >= 0 || root.notamPilotAttentionRequired))
             Column {
                 id: operationalDetailColumn
                 width: operationalDetails.width
