@@ -322,20 +322,29 @@ Item {
             }
         }
 
-        Column {
-            x: 10; y: 39; width: parent.width - 20; spacing: 4
+        Flickable {
+            id: operationalDetails
+            x: 10; y: 39; width: parent.width - 20; height: Math.max(0, parent.height - 45)
+            contentWidth: width; contentHeight: operationalDetailColumn.implicitHeight
+            clip: true; boundsBehavior: Flickable.StopAtBounds
+            flickableDirection: Flickable.VerticalFlick
             visible: root.selectedOperationalTool !== ""
-            Text {
-                width: parent.width
-                text: root.selectedOperationalTool === "WEATHER"
-                      ? "WEATHER · Данные источника не подключены. Проверка условий не выполнена."
-                      : "NOTAM / AIRSPACE · Источник ограничений не подключён. Маршрут не проверен."
-                color: root.text; font.family: "B612"; font.pixelSize: 11; wrapMode: Text.WordWrap
-            }
-            Text {
-                text: "‹ НАЗАД"
-                color: root.cyan; font.family: "B612"; font.pixelSize: 10
-                MouseArea { anchors.fill: parent; anchors.margins: -4; cursorShape: Qt.PointingHandCursor; onClicked: root.selectedOperationalTool = "" }
+            Column {
+                id: operationalDetailColumn
+                width: operationalDetails.width
+                spacing: 4
+                Text {
+                    width: parent.width
+                    text: root.selectedOperationalTool === "WEATHER"
+                          ? "WEATHER · Данные источника не подключены. Проверка условий не выполнена."
+                          : "NOTAM / AIRSPACE · Источник ограничений не подключён. Маршрут не проверен."
+                    color: root.text; font.family: "B612"; font.pixelSize: 11; wrapMode: Text.WordWrap
+                }
+                Text {
+                    text: "‹ НАЗАД"
+                    color: root.cyan; font.family: "B612"; font.pixelSize: 10
+                    MouseArea { anchors.fill: parent; anchors.margins: -4; cursorShape: Qt.PointingHandCursor; onClicked: root.selectedOperationalTool = "" }
+                }
             }
         }
     }
