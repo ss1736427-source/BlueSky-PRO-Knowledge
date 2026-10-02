@@ -15,6 +15,8 @@ Item {
     readonly property color cyan: "#00DDF2"
     readonly property color textColor: "#DCE8F2"
     readonly property color muted: "#91A8BA"
+    readonly property color switchGreen: "#39D353"
+    property bool parameterPanelOpen: true
     property var parameterVisibility: ({
         course: true, distance: true, altitude: true, airspeed: true,
         groundspeed: true, time: true, deltaHeight: true, energy: true, note: true
@@ -347,63 +349,103 @@ Item {
 
                 Rectangle {
                     id: parameterPanel
-                    width: Math.max(150, Math.min(205, parent.width * 0.16))
+                    width: root.parameterPanelOpen ? 270 : 38
                     height: parent.height
                     color: root.bg
                     border.color: root.line
                     radius: 3
+                    Behavior on width { NumberAnimation { duration: 160 } }
+
                     Column {
                         anchors.fill: parent
-                        anchors.margins: 8
-                        spacing: 6
-                        Text {
-                            text: "ОТОБРАЖЕНИЕ\nПАРАМЕТРОВ"
-                            color: root.textColor
-                            font.family: "B612"
-                            font.pixelSize: 10
-                            font.bold: true
+                        anchors.margins: root.parameterPanelOpen ? 8 : 4
+                        spacing: 8
+
+                        Row {
+                            width: parent.width
+                            height: 38
+                            spacing: 4
+
+                            Text {
+                                visible: root.parameterPanelOpen
+                                width: parent.width - panelToggle.width - parent.spacing
+                                text: "ОТОБРАЖЕНИЕ ПАРАМЕТРОВ"
+                                color: root.textColor
+                                font.family: "B612"
+                                font.pixelSize: 14
+                                font.bold: true
+                                wrapMode: Text.Wrap
+                                verticalAlignment: Text.AlignVCenter
+                            }
+
+                            Text {
+                                id: panelToggle
+                                width: 28
+                                height: 32
+                                text: "☰"
+                                color: root.parameterPanelOpen ? "#FFFFFF" : root.cyan
+                                font.pixelSize: 22
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    anchors.margins: -4
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: root.parameterPanelOpen = !root.parameterPanelOpen
+                                }
+                            }
                         }
-                        Rectangle { width: parent.width; height: 1; color: root.line }
+
+                        Rectangle {
+                            visible: root.parameterPanelOpen
+                            width: parent.width
+                            height: 1
+                            color: root.line
+                        }
+
                         Repeater {
                             model: ["Курс", "Дистанция", "Высота", "V_возд", "V_пут", "Время", "Δh (набор/снижение)", "Энергия", "Примечание"]
                             delegate: Row {
                                 id: parameterRow
+                                visible: root.parameterPanelOpen
                                 width: parent.width
-                                height: 24
-                                spacing: 9
+                                height: 30
+                                spacing: 10
                                 property string parameterKey: ["course", "distance", "altitude", "airspeed", "groundspeed", "time", "deltaHeight", "energy", "note"][index]
                                 property bool parameterChecked: root.parameterVisibility[parameterKey] !== false
 
-                                // Compact two-state switch; the whole row remains clickable.
                                 Rectangle {
                                     id: parameterSwitch
-                                    width: 32
-                                    height: 18
-                                    radius: 9
+                                    width: 38
+                                    height: 21
+                                    radius: 11
                                     anchors.verticalCenter: parent.verticalCenter
-                                    color: parameterRow.parameterChecked ? root.cyan : "#263847"
+                                    color: parameterRow.parameterChecked ? root.switchGreen : "#263847"
                                     border.width: 1
-                                    border.color: parameterRow.parameterChecked ? root.cyan : "#547084"
+                                    border.color: parameterRow.parameterChecked ? root.switchGreen : "#547084"
 
                                     Rectangle {
-                                        width: 12
-                                        height: 12
-                                        radius: 6
+                                        width: 15
+                                        height: 15
+                                        radius: 8
                                         y: (parameterSwitch.height - height) / 2
                                         x: parameterRow.parameterChecked ? parameterSwitch.width - width - 3 : 3
-                                        color: parameterRow.parameterChecked ? "#06111D" : "#B7C7D3"
+                                        color: parameterRow.parameterChecked ? "#07111E" : "#B7C7D3"
                                         Behavior on x { NumberAnimation { duration: 120 } }
                                     }
                                 }
+
                                 Text {
                                     width: parent.width - parameterSwitch.width - parent.spacing
                                     text: modelData
                                     color: root.textColor
                                     font.family: "B612"
-                                    font.pixelSize: 10
+                                    font.pixelSize: 18
                                     anchors.verticalCenter: parent.verticalCenter
                                     wrapMode: Text.Wrap
                                 }
+
                                 MouseArea {
                                     anchors.fill: parent
                                     onClicked: root.toggleParameter(parameterRow.parameterKey)
@@ -412,8 +454,7 @@ Item {
                             }
                         }
                     }
-                }
-            }
+                }            }
 
             Row {
                 id: footer
