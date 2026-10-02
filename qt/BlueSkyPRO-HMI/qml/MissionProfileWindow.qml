@@ -395,7 +395,9 @@ Item {
                                                 anchors.fill: parent
                                                 anchors.margins: 4
                                                 text: root.columnValue(routeRowDelegate.rowIndex, modelData.key)
-                                                color: modelData.key === "energy" ? (Number(root.columnValue(routeRowDelegate.rowIndex, modelData.key)) > 70 ? "#64FF00" : "#FFD339") : root.textColor
+                                                color: modelData.key === "energy"
+                                                       ? (Number(root.columnValue(routeRowDelegate.rowIndex, modelData.key)) > 70 ? "#64FF00" : "#FFD339")
+                                                       : (modelData.key === "type" && root.tableRows[routeRowDelegate.rowIndex].isMandatory ? "#155BFF" : root.textColor)
                                                 font.family: "B612"
                                                 font.pixelSize: 10
                                                 horizontalAlignment: Text.AlignHCenter
