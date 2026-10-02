@@ -2,7 +2,6 @@ import QtQuick
 
 Item {
     id: root
-    property bool visible: false
     property string missionId: ""
     property string missionSummary: ""
     property string missionReviewState: ""
@@ -152,6 +151,7 @@ Item {
                                 clip: true
                                 model: routeModel
                                 delegate: Row {
+                                    id: routeRowDelegate
                                     width: routeTable.width
                                     height: Math.max(37, Math.min(48, routeTable.height / 6))
                                     spacing: 0
@@ -199,7 +199,7 @@ Item {
                                                     verticalAlignment: Text.AlignVCenter
                                                     selectByMouse: true
                                                     validator: IntValidator { bottom: 0; top: 5000 }
-                                                    onEditingFinished: routeModel.setProperty(rowIndex, "altitude", text)
+                                                    onEditingFinished: routeModel.setProperty(routeRowDelegate.rowIndex, "altitude", text)
                                                 }
                                             }
                                         }
@@ -355,14 +355,14 @@ Item {
                                 width: parent.width
                                 height: 22
                                 spacing: 7
-                                property bool enabled: true
+                                property bool parameterChecked: true
                                 Rectangle {
                                     width: 14; height: 14
                                     anchors.verticalCenter: parent.verticalCenter
-                                    color: parent.enabled ? root.cyan : "transparent"
+                                    color: parent.parameterChecked ? root.cyan : "transparent"
                                     border.color: root.cyan
                                     radius: 2
-                                    Text { anchors.centerIn: parent; text: parent.parent.enabled ? "✓" : ""; color: "#06111D"; font.pixelSize: 10 }
+                                    Text { anchors.centerIn: parent; text: parent.parent.parameterChecked ? "✓" : ""; color: "#06111D"; font.pixelSize: 10 }
                                 }
                                 Text {
                                     width: parent.width - 22
@@ -375,7 +375,7 @@ Item {
                                 }
                                 MouseArea {
                                     anchors.fill: parent
-                                    onClicked: parent.enabled = !parent.enabled
+                                    onClicked: parent.parameterChecked = !parent.parameterChecked
                                     cursorShape: Qt.PointingHandCursor
                                 }
                             }
