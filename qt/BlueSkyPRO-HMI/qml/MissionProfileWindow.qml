@@ -771,12 +771,15 @@ Item {
                                     color: root.textColor
                                     font.family: "B612"
                                     font.pixelSize: 18
-                                    anchors.verticalCenter: parent.verticalCenter
+                                    y: (parent.height - height) / 2
                                     wrapMode: Text.Wrap
                                 }
 
                                 MouseArea {
-                                    anchors.fill: parent
+                                    x: 0
+                                    y: 0
+                                    width: parent.width
+                                    height: parent.height
                                     onClicked: root.toggleParameter(parameterRow.parameterKey)
                                     cursorShape: Qt.PointingHandCursor
                                 }
