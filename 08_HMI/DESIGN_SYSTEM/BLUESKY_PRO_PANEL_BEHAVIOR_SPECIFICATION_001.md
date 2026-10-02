@@ -265,6 +265,14 @@ Each tool has a compact status row and an expandable detail state. Details must 
 
 Until the live data providers and route-assessment services are integrated, the HMI must explicitly show that data are unavailable and the check has not been completed. Design-time examples are not operational evidence.
 
+### Conditional WEATHER / NOTAM presentation
+
+WEATHER and NOTAM are not persistent status cards on the INFORMATION panel. Their details are surfaced to the pilot only when the authoritative route-planning/revalidation result marks the corresponding item as requiring pilot attention—for example, when weather constraints prevent automatic route completion, a NOTAM/airspace restriction intersects the proposed route, or an unresolved condition requires a pilot decision.
+
+When the route is automatically composed and validated successfully, and neither source requires pilot action, the WEATHER/NOTAM cards and their related alert messages remain hidden from the panel. The system retains source data and check results in the relevant subsystem/journal; the panel does not repeat routine successful checks.
+
+The HMI must consume explicit planner outputs such as `weatherPilotAttentionRequired` and `notamPilotAttentionRequired`. It must not infer an issue merely because weather/NOTAM data exist, nor infer success from missing data. If unavailable or stale data prevent the planner from validating the route, the planning/safety layer must return a pending/blocked result and an explicit attention requirement where pilot action is needed. These flags are currently HMI interface properties; they are not yet connected to the production planner.
+
 ### Readiness checklist
 
 The checklist contains these ten checks:
