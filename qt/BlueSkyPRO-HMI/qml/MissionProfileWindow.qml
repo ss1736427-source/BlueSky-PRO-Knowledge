@@ -686,6 +686,7 @@ Item {
                                     height: parent.height
                                     z: 5
                                     hoverEnabled: true
+                                    preventStealing: true
                                     cursorShape: pressed ? Qt.ClosedHandCursor : Qt.CrossCursor
                                     property int dragMandatoryIndex: -1
                                     property real plotLeft: 42
@@ -748,12 +749,16 @@ Item {
                                     function updateMandatoryPoint(index, mouseX, mouseY) {
                                         if (index < 0 || index >= root.mandatoryPoints.length) return
                                         var next = root.mandatoryPoints.slice(0)
+                                        var selected = next[index]
                                         next[index] = {
-                                            id: next[index].id,
+                                            id: selected.id,
                                             progress: Math.max(0, Math.min(1, (mouseX - plotLeft) / Math.max(1, plotRight - plotLeft))),
                                             altitude: Math.round(Math.max(0, Math.min(400, (plotBottom - mouseY) / Math.max(1, plotBottom - plotTop) * 400)))
                                         }
+                                        // Replace the array and explicitly redraw the same Canvas that
+                                        // renders both the mandatory marker and the route polyline.
                                         root.mandatoryPoints = next
+                                        profileCanvas.requestPaint()
                                     }
 
                                     function removeMandatoryPoint(index) {
@@ -807,7 +812,7 @@ Item {
                                         dragOffsetY = 0
                                     }
                                     onPositionChanged: {
-                                        if (pressed && dragMandatoryIndex >= 0)
+                                        if (dragMandatoryIndex >= 0)
                                             updateMandatoryPoint(dragMandatoryIndex, mouse.x - dragOffsetX, mouse.y - dragOffsetY)
                                     }
                                     onReleased: dragMandatoryIndex = -1
