@@ -127,14 +127,14 @@ Item {
                                         { label: "#", w: 0.035, key: "number" },
                                         { label: "ТИП", w: 0.075, key: "type" },
                                         { label: "ТОЧКА / ШИРОТА, ДОЛГОТА", w: 0.17, key: "point" },
-                                        { label: "КУРС\n°", w: 0.065 },
-                                        { label: "ДИСТАНЦИЯ\nкм", w: 0.075 },
-                                        { label: "ВЫСОТА\nм", w: 0.075 },
-                                        { label: "V_ВОЗД\nм/с", w: 0.075 },
-                                        { label: "V_ПУТ\nм/с", w: 0.075 },
-                                        { label: "ВРЕМЯ\nмин", w: 0.075 },
-                                        { label: "Δh\nм", w: 0.06 },
-                                        { label: "ЭНЕРГИЯ\n%", w: 0.07 },
+                                        { label: "КУРС\\n°", w: 0.065, key: "course" },
+                                        { label: "ДИСТАНЦИЯ\\nкм", w: 0.075, key: "distance" },
+                                        { label: "ВЫСОТА\\nм", w: 0.075, key: "altitude" },
+                                        { label: "V_ВОЗД\\nм/с", w: 0.075, key: "airspeed" },
+                                        { label: "V_ПУТ\\nм/с", w: 0.075, key: "groundspeed" },
+                                        { label: "ВРЕМЯ\\nмин", w: 0.075, key: "time" },
+                                        { label: "Δh\\nм", w: 0.06, key: "deltaHeight" },
+                                        { label: "ЭНЕРГИЯ\\n%", w: 0.07, key: "energy" },
                                         { label: "ПРИМЕЧАНИЕ", w: 0.15, key: "note" }
                                     ]
                                     delegate: Rectangle {
