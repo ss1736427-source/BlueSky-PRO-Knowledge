@@ -145,83 +145,16 @@ Item {
             onMapDoubleClicked: root.leftPanelOpen = false
         }
 
-        // Mission profile preview window.
-        Rectangle {
+        // Expanded mission profile: route table and flight profile use the available workspace.
+        MissionProfileWindow {
             id: missionProfileWindow
             visible: root.missionProfileOpen
-            z: 80
-            width: Math.min(640, workspace.width - 32)
-            height: 300
-            x: Math.max(8, (workspace.width - width) / 2)
-            y: Math.max(8, (workspace.height - height) / 2)
-            color: "#08111D"
-            border.color: "#32FFFF"
-            border.width: 1
-            radius: 4
-
-            Rectangle {
-                id: profileHeader
-                x: 1; y: 1
-                width: parent.width - 2; height: 38
-                color: "#0C1725"
-
-                Text {
-                    anchors.left: parent.left
-                    anchors.leftMargin: 14
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: String.fromCharCode(1055,1056,1054,1060,1048,1051,1068,32,1052,1048,1057,1057,1048,1048)
-                    color: "#32FFFF"
-                    font.family: "B612"
-                    font.pixelSize: 13
-                    font.bold: true
-                }
-                Text {
-                    anchors.right: parent.right
-                    anchors.rightMargin: 14
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "X"
-                    color: "#32FFFF"
-                    font.pixelSize: 16
-                    MouseArea {
-                        anchors.fill: parent
-                        anchors.margins: -8
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: root.missionProfileOpen = false
-                    }
-                }
-            }
-
-            Column {
-                x: 16; y: 56
-                width: parent.width - 32
-                spacing: 14
-                Text {
-                    text: "MISSION ID: " + root.missionId
-                    color: "#64FF00"
-                    font.family: "B612 Mono"
-                    font.pixelSize: 13
-                }
-                Text {
-                    text: "TASK: " + root.missionSummary
-                    color: "#FFFFFF"
-                    font.family: "B612"
-                    font.pixelSize: 13
-                    wrapMode: Text.Wrap
-                    width: parent.width
-                }
-                Text {
-                    text: "REVIEW: " + root.missionReviewState
-                    color: root.missionReviewState === "VERIFIED" ? "#64FF00" : "#FF00FF"
-                    font.family: "B612"
-                    font.pixelSize: 12
-                }
-                Text {
-                    text: "SELECTED TEMPLATES: " + root.missionTemplateIndices.length
-                    color: "#BFD0DF"
-                    font.family: "B612"
-                    font.pixelSize: 12
-                }
-            }
+            missionId: root.missionId
+            missionSummary: root.missionSummary
+            missionReviewState: root.missionReviewState
+            missionTemplateIndices: root.missionTemplateIndices
+            onCloseRequested: root.missionProfileOpen = false
+            onApplyRequested: root.missionProfileOpen = false
         }
 
         ToolContext {
