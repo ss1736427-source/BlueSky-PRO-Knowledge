@@ -254,6 +254,34 @@ Operational control, checklist, warnings and readiness.
 
 Detailed current telemetry belongs to the UAV Panel. Spatial operational information belongs to the map. Non-immediate technical/history/archive information belongs to Administration / Technical State / Logs.
 
+### Operational readiness tools: WEATHER and NOTAM
+
+The Right Panel includes two dedicated operational tools:
+
+- **WEATHER** — weather conditions relevant to the planned route and time window, including wind and gusts, direction, temperature, precipitation and visibility where data are available. The assessment must use the limits of the assigned UAV and mission. A material change in weather/forecast triggers revalidation.
+- **NOTAM / AIRSPACE** — current notices and airspace restrictions evaluated against the mission route, altitude and time window. The result identifies relevant notices, route intersections, effective periods/altitudes and whether an authorization is required.
+
+Each tool has a compact status row and an expandable detail state. Details must identify data source, retrieval/update time, validity/freshness and the assessment result. Missing or stale data must never be presented as a successful check.
+
+Until the live data providers and route-assessment services are integrated, the HMI must explicitly show that data are unavailable and the check has not been completed. Design-time examples are not operational evidence.
+
+### Readiness checklist
+
+The checklist contains these ten checks:
+
+1. Mission definition
+2. UAV allocation
+3. Route validation
+4. NOTAM / Airspace
+5. Weather
+6. Terrain / Obstacles
+7. Battery / Payload
+8. C2 / GNSS
+9. Permissions
+10. Final validation
+
+Each item uses one of four states: `PASS`, `WARNING`, `FAIL`, or `PENDING`. The displayed count is calculated from the checklist model and authoritative check results; it must not be hard-coded. Until authoritative results are connected, items remain `PENDING`. The HMI must not infer a pass from missing data or from the presence of a UI element.
+
 ### Normal action hierarchy
 
 1. CHECKLIST
@@ -302,6 +330,16 @@ When validation succeeds and operator confirmation is required:
 - after confirmation it stops and disappears.
 
 When validation fails, the corresponding warning/error is shown.
+
+### Readiness and safety invariants
+
+- NOTAM/airspace checks are evaluated against route geometry, altitude and mission time, not merely by detecting that notices exist.
+- Weather is evaluated against the assigned UAV and task constraints. A relevant change triggers revalidation.
+- Every external result carries its source, timestamp and freshness/validity status.
+- Missing, stale or inconclusive inputs are `PENDING` or `WARNING`, never `PASS`.
+- Critical restrictions, C2 failures or insufficient energy reserve block the relevant readiness transition. INFORMATION acknowledgement cannot clear a safety block.
+- For multi-UAV missions, checks are associated with each assigned UAV; mission readiness aggregates all required per-UAV and mission-wide results.
+- HMI status is a representation of authoritative subsystem results. It cannot override Safety, grant permissions or independently authorize execution.
 
 ### Start Mission
 
@@ -384,3 +422,15 @@ HMI, planning, optimization, AI and simulation do not bypass safety authority.
 ## 11. Status and source boundary
 
 This is a working reference derived from the controlled 2026-09-19 HMI commits. It is not a certification approval and does not freeze final geometry, typography or pixel dimensions.
+
+
+## 12. Right Panel implementation scope — WEATHER / NOTAM
+
+Implementation is staged:
+
+1. Update the Right Panel HMI with WEATHER and NOTAM tools, compact statuses, detail states, the ten-item readiness checklist and explicit unavailable/pending states.
+2. Define data contracts for weather, NOTAM/airspace, source metadata, timestamps, freshness and route-assessment results.
+3. Integrate the authoritative weather, restriction, planning and telemetry sources.
+4. Verify safety behavior and tests for route/NOTAM intersections, effective time/altitude, stale or missing data, weather changes, C2 loss and insufficient energy reserve.
+
+The current HMI change implements the presentation layer only. Live providers, route evaluation, authoritative checklist state and Safety integration remain separate work and must not be represented as complete.
