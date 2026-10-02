@@ -402,6 +402,7 @@ Item {
                                             color: routeTable.currentIndex === routeRowDelegate.rowIndex ? "#102B3A" : (rowIndex % 2 ? "#091725" : "#0C1D2C")
                                             border.color: root.line
                                             Text {
+                                                visible: modelData.key !== "altitude"
                                                 anchors.fill: parent
                                                 anchors.margins: 4
                                                 text: root.columnValue(routeRowDelegate.rowIndex, modelData.key)
@@ -880,11 +881,13 @@ Item {
                                            - height / 2
 
                                         Rectangle {
-                                            anchors.fill: parent
+                                            width: 10
+                                            height: 10
+                                            anchors.centerIn: parent
                                             radius: width / 2
                                             color: "#155BFF"
                                             border.color: "#B8D4FF"
-                                            border.width: 2
+                                            border.width: 1.5
                                         }
                                     }
                                 }
