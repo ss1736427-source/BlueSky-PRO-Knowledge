@@ -349,7 +349,7 @@ Item {
 
                 Rectangle {
                     id: parameterPanel
-                    width: root.parameterPanelOpen ? 270 : 38
+                    width: root.parameterPanelOpen ? 270 : 0
                     height: parent.height
                     color: root.bg
                     border.color: root.line
@@ -358,7 +358,7 @@ Item {
 
                     Column {
                         anchors.fill: parent
-                        anchors.margins: root.parameterPanelOpen ? 8 : 4
+                        anchors.margins: root.parameterPanelOpen ? 8 : 0
                         spacing: 8
 
                         Item {
