@@ -193,6 +193,34 @@ Left Panel closes through:
 
 A single map click does not close it.
 
+## 4A. Automatic multi-UAV task allocation and mission tabs
+
+### Allocation authority
+
+- For an automatically composed mission, the mission-planning/allocation layer proposes and applies the initial distribution of selected templates across available, eligible UAVs.
+- The operator is not asked to approve a successful routine allocation. Allocation is an internal planning step, not a separate operator confirmation gate.
+- The allocator must return an explicit assignment per participating UAV: UAV identity, source template/task, assigned role or sector/side, and the corresponding route/route version.
+- A template may be assigned to multiple UAVs. Each assignment must explain the division of work (for example, north/south/west slope); repeating only the template title is insufficient.
+- The UI displays the allocation result; it must not invent task names, sectors, or assignments. Missing/ambiguous assignment data is shown as unavailable, not fabricated.
+- If the allocator cannot produce a feasible, complete assignment, or detects unresolved constraints/conflicts, it raises a specific exception and requests operator intervention with the reason and available corrective choices.
+- Successful allocation does not bypass route validation, airspace/NOTAM constraints, vehicle feasibility, readiness, safety gates, required permissions, or the applicable operator authorization to execute.
+
+### Mission tabs
+
+Each compact, adaptive UAV tab displays, in order:
+1. sequence number;
+2. assigned task/template;
+3. assigned sector, side, or role;
+4. UAV tail number.
+
+If several UAVs share a template, the template label may repeat, while sector/role differentiates each tab. Selecting a tab selects that UAV's own route, waypoint table, and flight profile. The Flight Chart remains the mission-wide view and shows all assigned UAV routes together, with distinguishable UAV/route labels. Selection may emphasize one route without removing the others.
+
+### Initial allocation vs. in-flight redistribution
+
+Initial task allocation during mission planning is automatic as described above. This does not conflict with the separate controlled operation required for redistribution after mission start or in response to an operational decision. In-flight redistribution must be explicitly assessed, validated, and recorded; it is not silently performed by the local recommendation layer.
+
+The current QML allocation records are Design Studio preview fixtures only. Production assignment records must be supplied by the mission-planning/allocation layer and linked to authoritative per-UAV routes. The HMI preview is not evidence that the allocator or route generation is implemented.
+
 ## 5. CENTER / FLIGHT CHART
 
 ### Role
