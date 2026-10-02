@@ -2,11 +2,11 @@
     <qresource>
         <file>BlueSkyPRO-HMI.qmlproject</file>
         <file>qml/App.qml</file>
+        <file>qml/assets/bluesky_pro_logo.svg</file>
         <file>qml/assets/uav_fixed_wing.svg</file>
         <file>qml/assets/uav_heavy_multirotor.svg</file>
         <file>qml/assets/uav_multirotor.svg</file>
         <file>qml/assets/uav_vtol.svg</file>
-        <file>qml/assets/bluesky_pro_logo.svg</file>
         <file>qml/BlueSkyPRO-Interface-Preview.ui.qml</file>
         <file>qml/BottomToolbar.Design.ui.qml</file>
         <file>qml/BottomToolbar.qml</file>
@@ -20,6 +20,7 @@
         <file>qml/LeftPanel.qml</file>
         <file>qml/Main.qml</file>
         <file>qml/MainContent.qml</file>
+        <file>qml/MissionProfileWindow.qml</file>
         <file>qml/PanelSettingsButton.ui.qml</file>
         <file>qml/PanelSettingsPopup.qml</file>
         <file>qml/qmldir</file>
