@@ -5,7 +5,11 @@ Item {
 
     property string title: "PANEL SETTINGS"
     property var tools: []
+    property var toolGroups: []
     property bool open: false
+    property var expandedGroups: []
+    property int rowHeight: 30
+    property int groupHeaderHeight: 30
     property var enabledTools: root.tools.slice()
     signal toolToggled(string tool, bool enabled)
 
@@ -15,6 +19,34 @@ Item {
 
     function firstEnabled() {
         return enabledTools.length > 0 ? enabledTools[0] : ""
+    }
+
+    function groupExpanded(groupKey) {
+        return expandedGroups.indexOf(groupKey) >= 0
+    }
+
+    function toggleGroup(groupKey) {
+        var next = expandedGroups.slice()
+        var i = next.indexOf(groupKey)
+        if (i >= 0) next.splice(i, 1)
+        else next.push(groupKey)
+        expandedGroups = next
+    }
+
+    function visibleRowCount() {
+        var count = 0
+        for (var i = 0; i < toolGroups.length; ++i) {
+            count += 1
+            if (groupExpanded(toolGroups[i].key)) count += toolGroups[i].tools.length
+        }
+        return count
+    }
+
+    function syncGroups() {
+        var next = []
+        for (var i = 0; i < toolGroups.length; ++i)
+            if (toolGroups[i].expandedByDefault) next.push(toolGroups[i].key)
+        expandedGroups = next
     }
 
     function toggleTool(tool) {
@@ -47,10 +79,12 @@ Item {
         text: root.longestToolLabel()
     }
 
-    readonly property real contentWidth: toolLabelMetrics.width + 64
+    readonly property real contentWidth: Math.max(toolLabelMetrics.width + 64, 260)
+    readonly property real contentHeight: 64 + visibleRowCount() * 34
 
     visible: root.open
     clip: true
+    Component.onCompleted: root.syncGroups()
     z: 500
 
     Rectangle {
@@ -82,68 +116,83 @@ Item {
         color: "#202020"
     }
 
-    Column {
-        x: 14
-        y: 48
-        width: parent.width - 28
-        spacing: 4
+    Flickable {
+        id: settingsScroller
+        x: 10
+        y: 46
+        width: parent.width - 20
+        height: Math.max(0, parent.height - 82)
+        contentWidth: width
+        contentHeight: settingsColumn.implicitHeight
+        clip: true
+        boundsBehavior: Flickable.StopAtBounds
+        flickableDirection: Flickable.VerticalFlick
 
-        Repeater {
-            model: root.tools
+        Column {
+            id: settingsColumn
+            width: settingsScroller.width
+            spacing: 4
 
-            delegate: Item {
-                width: parent.width
-                height: 30
-
-                readonly property bool toolEnabled: root.enabledTools.indexOf(modelData) >= 0
-
-                Text {
-                    anchors.left: toggleTrack.right
-                    anchors.leftMargin: 12
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: modelData
-                    color: "#BFBFBF"
-                    font.family: "B612"
-                    font.pixelSize: 13
-                    elide: Text.ElideRight
-                    verticalAlignment: Text.AlignVCenter
-                }
-
-                Rectangle {
-                    id: toggleTrack
-                    width: 36
-                    height: 20
-                    radius: height / 2
-                    anchors.left: parent.left
-                    anchors.verticalCenter: parent.verticalCenter
-                    color: toolEnabled ? "#64FF00" : "#263748"
-                    border.width: 1
-                    border.color: toolEnabled ? "#64FF00" : "#536273"
-
+            Repeater {
+                model: root.toolGroups
+                delegate: Column {
+                    width: settingsColumn.width
+                    spacing: 2
+                    property var groupData: modelData
                     Rectangle {
-                        width: 14
-                        height: 14
-                        radius: width / 2
-                        anchors.verticalCenter: parent.verticalCenter
-                        x: toolEnabled ? parent.width - width - 3 : 3
-                        color: toolEnabled ? "#08111D" : "#BFBFBF"
-
-                        Behavior on x {
-                            NumberAnimation { duration: 120 }
+                        width: parent.width
+                        height: root.groupHeaderHeight
+                        radius: 4
+                        color: "#0C1725"
+                        border.color: "#263748"
+                        border.width: 1
+                        Text {
+                            anchors.left: parent.left
+                            anchors.leftMargin: 8
+                            anchors.right: parent.right
+                            anchors.rightMargin: 8
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: (root.groupExpanded(groupData.key) ? "▾  " : "▸  ") + groupData.title
+                            color: "#FFFFFF"
+                            font.family: "B612"
+                            font.pixelSize: 11
+                            font.bold: true
+                            elide: Text.ElideRight
+                        }
+                        MouseArea { anchors.fill: parent; onClicked: root.toggleGroup(groupData.key); cursorShape: Qt.PointingHandCursor }
+                    }
+                    Repeater {
+                        model: root.groupExpanded(groupData.key) ? groupData.tools : []
+                        delegate: Item {
+                            width: parent.width
+                            height: root.rowHeight
+                            property string toolKey: modelData
+                            property bool toolEnabled: root.enabledTools.indexOf(toolKey) >= 0
+                            Rectangle {
+                                x: 8; anchors.verticalCenter: parent.verticalCenter
+                                width: 32; height: 18; radius: 9
+                                color: toolEnabled ? "#64FF00" : "#263748"
+                                border.color: toolEnabled ? "#64FF00" : "#536273"; border.width: 1
+                                Rectangle { width: 12; height: 12; radius: 6; anchors.verticalCenter: parent.verticalCenter; x: toolEnabled ? parent.width - width - 2 : 2; color: toolEnabled ? "#08111D" : "#BFBFBF" }
+                            }
+                            Text { anchors.left: parent.left; anchors.leftMargin: 50; anchors.right: parent.right; anchors.rightMargin: 4; anchors.verticalCenter: parent.verticalCenter; text: toolKey; color: "#BFBFBF"; font.family: "B612"; font.pixelSize: 12; elide: Text.ElideRight }
+                            MouseArea { anchors.fill: parent; onClicked: root.toggleTool(toolKey); cursorShape: Qt.PointingHandCursor }
                         }
                     }
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: root.toggleTool(modelData)
-                    cursorShape: Qt.PointingHandCursor
                 }
             }
         }
     }
 
+    Rectangle {
+        visible: settingsScroller.contentHeight > settingsScroller.height
+        width: 2
+        height: Math.max(18, settingsScroller.height * settingsScroller.height / settingsScroller.contentHeight)
+        x: parent.width - 5
+        y: settingsScroller.y + (settingsScroller.contentY / Math.max(1, settingsScroller.contentHeight - settingsScroller.height)) * (settingsScroller.height - height)
+        radius: 1
+        color: "#32FFFF"
+    }
     Text {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
