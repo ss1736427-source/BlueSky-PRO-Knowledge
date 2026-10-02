@@ -46,15 +46,20 @@ Item {
         return result
     }
     function columnAtX(x) {
-        var visible = root.orderedColumns().filter(function(col) {
-            return root.parameterVisibility[col.key] !== false
-        })
+        var all = root.orderedColumns()
         var cursor = 0
-        for (var i = 0; i < visible.length; ++i) {
-            cursor += visible[i].w * tableHeader.width
-            if (x < cursor) return visible[i].key
+        var candidates = []
+        for (var i = 0; i < all.length; ++i) {
+            var left = cursor
+            cursor += all[i].w * tableHeader.width
+            if (root.parameterVisibility[all[i].key] !== false) {
+                candidates.push({ key: all[i].key, center: (left + cursor) / 2 })
+            }
         }
-        return visible.length ? visible[visible.length - 1].key : ""
+        if (candidates.length === 0) return ""
+        for (var j = 0; j < candidates.length; ++j)
+            if (x < candidates[j].center) return candidates[j].key
+        return candidates[candidates.length - 1].key
     }
     function moveColumn(fromKey, toKey) {
         if (!fromKey || !toKey || fromKey === toKey) return
