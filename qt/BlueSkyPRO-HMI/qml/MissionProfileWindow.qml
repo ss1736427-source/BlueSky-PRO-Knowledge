@@ -572,7 +572,6 @@ Item {
                                     function onLiveDistanceKmChanged() { profileCanvas.requestPaint() }
                                     function onLiveElapsedSecondsChanged() { profileCanvas.requestPaint() }
                                     function onLiveAltitudeMChanged() { profileCanvas.requestPaint() }
-                                    function onMandatoryPointsChanged() { profileCanvas.requestPaint() }
                                 }
                                 onPaint: {
                                     var ctx = getContext("2d")
