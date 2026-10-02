@@ -764,7 +764,11 @@ Item {
                                             var exists = false
                                             for (var r = 0; r < root.mandatoryPoints.length; r++)
                                                 if (Math.abs(Number(root.mandatoryPoints[r].progress) - routeProgress) < 0.012) exists = true
-                                            if (!exists) dragMandatoryIndex = addMandatoryPoint(routeProgress, routeAltitude)
+                                            if (!exists) {
+                                                dragMandatoryIndex = addMandatoryPoint(routeProgress, routeAltitude)
+                                                dragOffsetX = mouse.x - (plotLeft + routeProgress * (plotRight - plotLeft))
+                                                dragOffsetY = mouse.y - (plotBottom - routeAltitude / 400 * (plotBottom - plotTop))
+                                            }
                                             return
                                         }
                                         var progress = (mouse.x - plotLeft) / Math.max(1, plotRight - plotLeft)
